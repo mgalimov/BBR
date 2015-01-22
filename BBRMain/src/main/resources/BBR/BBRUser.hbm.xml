@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="BBR">
+    <class name="BBRUser" table="users">
+        <id name="id" column="USER_ID">
+            <generator class="native"/>
+        </id>
+        <property name="email" column="EMAIL"/>
+        <property name="firstName" column="FIRSTNAME"/>
+        <property name="lastName" column="LASTNAME"/>
+        <many-to-one name="shop"
+            column="SHOP_ID"
+            class="BBRShop"/>
+    </class>
+</hibernate-mapping>
