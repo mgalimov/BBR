@@ -1,11 +1,18 @@
 package BBR;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+@SuppressWarnings("unused")
 public class BBRUser {
 	private Long id;
 	private String email;
 	private String firstName;
 	private String lastName;
-	private BBRShop shop;
+	private String encodedPassword;
+	private boolean approved;
+	private BBRDataSet<BBRShop> shops;
 	
 	public void setId(Long id) {
 		this.id = id;
@@ -39,12 +46,25 @@ public class BBRUser {
 		return lastName;
 	}
 
-	public void setShop(BBRShop shop) {
-		this.shop = shop;
-	}
-	
-	public BBRShop getShop() {
-		return shop;
+	public void setEncodedPassword(String encodedPassword) {
+		this.encodedPassword = encodedPassword;
 	}
 
+	public String getEncodedPassword() {
+		return encodedPassword;
+	}
+
+	public void setApproved(boolean approved) {
+		this.approved = approved;
+	}
+	
+	public boolean getApproved() {
+		return approved;
+	}
+	public boolean comparePasswordTo(String comparingEncodedPassword) {
+		return encodedPassword == comparingEncodedPassword;
+	}
+
+	public BBRUser() {
+	}
 }

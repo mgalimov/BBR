@@ -11,8 +11,7 @@
         <property name="email" column="EMAIL"/>
         <property name="firstName" column="FIRSTNAME"/>
         <property name="lastName" column="LASTNAME"/>
-        <many-to-one name="shop"
-            column="SHOP_ID"
-            class="BBRShop"/>
+        <property name="encodedPassword" column="PASS"/>
+        <property name="approved" column="APPROVED"/>
     </class>
 </hibernate-mapping>
