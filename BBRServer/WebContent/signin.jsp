@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>TEST</title>
+    <title>Sign In or Sign Up</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -26,31 +26,33 @@
   
     <script>
         $(document).ready(function() {                        
-            $('#signIn').click(function(event) {  
+            $('#signIn').click(function(event) {
+            	alert("Hi there!");
                 var emailAddress=$('#inputEmail').val();
                 var passwordString=$('#inputPassword').val();
-             	$.get('BBRBackend',{email:emailAddress,password:passwordString},function(responseText) { 
+             	$.get('BBRSignIn',{email:emailAddress,password:passwordString},function(responseText) { 
 	            	    alert(responseText);
              			$('#welcomeText').text(responseText);        
                 	});
             });
-        });
-        
-        $(document).ready(function() {                        
-            $('#signUp').click(function(event) {  
+            
+            
+            $('#signUp').click(function(event) { 
+            	alert("Hi!");
                 var emailAddress=$('#inputEmailSignUp').val();
                 var firstNameString=$('#inputFirstName').val();
                 var lastNameString=$('#inputLastName').val();
                 var passwordString=$('#inputPasswordSignUp').val();
                 var passwordStringCopy=$('#inputCopyPasswordSignUp').val();
                 if (passwordString == passwordStringCopy) {
-	             	$.get('BBRBackend',{email:emailAddress,firstName:firstNameString,lastName=lastNameString,password:passwordString},function(responseText) { 
+	             	$.get('BBRSignUp',{email:emailAddress,firstName:firstNameString,lastName:lastNameString,password:passwordString},function(responseText) { 
 		            	    alert(responseText);
 	             			$('#welcomeText').text(responseText);        
 	                	});
                 	}
             });
         });
+        
     </script>  
    
     <div class="container">
@@ -81,7 +83,7 @@
         <input type="text" id="inputLastNameSignUp" class="form-control" placeholder="Last Name" required>
         <label for="inputPasswordSignUp" class="sr-only">Password</label>
         <input type="password" id="inputPasswordSignUp" class="form-control" placeholder="Password" required>
-        <label for="inputCopyPasswordSignUp" class="sr-only">Password</label>
+        <label for="inputCopyPasswordSignUp" class="sr-only">Password copy</label>
         <input type="password" id="inputCopyPasswordSignUp" class="form-control" placeholder="Type password once more to check" required>
         <button class="btn btn-lg btn-primary btn-block" type="submit" id="signUp">Sign Up</button>
       </form>

@@ -1,3 +1,5 @@
+
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -6,20 +8,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import BBR.*;
 import BBRClientApp.BBRApplication;
 
 /**
- * Servlet implementation class BBRSignIn
+ * Servlet implementation class BBRSignUp
  */
-@WebServlet("/BBRSignIn")
-public class BBRSignIn extends HttpServlet {
+@WebServlet("/BBRSignUp")
+public class BBRSignUp extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BBRSignIn() {
+    public BBRSignUp() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,12 +32,13 @@ public class BBRSignIn extends HttpServlet {
 		BBRApplication app = BBRApplication.GetApp(request);
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
-		String respText = app.SignIn(email, password);
+		String firstName = request.getParameter("firstName");
+		String lastName = request.getParameter("lastName");
+		String respText = app.SignUp(email, firstName, lastName, password);
 		
 		response.setContentType("text/plain");  
 		response.setCharacterEncoding("UTF-8"); 
-		response.getWriter().write(respText); 
-	}
+		response.getWriter().write(respText); 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
