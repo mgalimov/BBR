@@ -1,5 +1,6 @@
 package BBR;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.*;
 import org.hibernate.service.ServiceRegistry;
@@ -28,6 +29,25 @@ public class BBRUtil {
 
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
+    }
+    
+    public static Session getSession () {
+    	return sessionFactory.getCurrentSession();
+    }
+    
+    public static boolean beginTran() {
+        Session session = sessionFactory.getCurrentSession();
+        if (!session.getTransaction().isActive()) {
+        	session.beginTransaction();
+        	return true;
+        } else
+        	return false;
+    }
+
+    public static void commitTran(boolean transactionStarted) {
+        Session session = sessionFactory.getCurrentSession();
+        if (transactionStarted)
+        	session.getTransaction().commit();
     }
 
 }

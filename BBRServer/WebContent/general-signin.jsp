@@ -27,7 +27,6 @@
     <script>
         $(document).ready(function() {                        
             $('#signIn').click(function(event) {
-            	alert("Hi there!");
                 var emailAddress=$('#inputEmail').val();
                 var passwordString=$('#inputPassword').val();
              	$.get('BBRSignIn',{email:emailAddress,password:passwordString},function(responseText) { 
@@ -38,10 +37,9 @@
             
             
             $('#signUp').click(function(event) { 
-            	alert("Hi!");
                 var emailAddress=$('#inputEmailSignUp').val();
-                var firstNameString=$('#inputFirstName').val();
-                var lastNameString=$('#inputLastName').val();
+                var firstNameString=$('#inputFirstNameSignUp').val();
+                var lastNameString=$('#inputLastNameSignUp').val();
                 var passwordString=$('#inputPasswordSignUp').val();
                 var passwordStringCopy=$('#inputCopyPasswordSignUp').val();
                 if (passwordString == passwordStringCopy) {

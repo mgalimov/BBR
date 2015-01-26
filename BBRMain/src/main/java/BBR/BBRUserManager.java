@@ -24,6 +24,7 @@ public class BBRUserManager {
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setEncodedPassword(encodePassword(password));
+        user.setApproved(false);
         session.save(user);
 
         session.getTransaction().commit();
@@ -32,18 +33,16 @@ public class BBRUserManager {
     
     @SuppressWarnings("unchecked")
 	public BBRDataSet<BBRUser> listUsers() {
-        Session session = BBRUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        List<BBRUser> list = session.createQuery("from BBRUser").list();
-        session.getTransaction().commit();
+        boolean tr = BBRUtil.beginTran();
+        List<BBRUser> list = BBRUtil.getSession().createQuery("from BBRUser").list();
+        BBRUtil.commitTran(tr);
         return new BBRDataSet<BBRUser>(list);
     }
     
 	public BBRUser findUserByEmail(String email) {
-        Session session = BBRUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        BBRUser result = (BBRUser) session.createQuery("from BBRUser as user where user.email = '" + email + "'").uniqueResult();
-        session.getTransaction().commit();
+        boolean tr = BBRUtil.beginTran();
+        BBRUser result = (BBRUser) BBRUtil.getSession().createQuery("from BBRUser as user where user.email = '" + email + "'").uniqueResult();
+        BBRUtil.commitTran(tr);
         return result;
     }
 	
