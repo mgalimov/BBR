@@ -1,37 +1,18 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sign In or Sign Up</title>
+<%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<t:admin-wrapper>
+    <jsp:attribute name="title">
+      Sign in or Sign up
+    </jsp:attribute>
+	<jsp:body>
 
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="js/jquery-1.11.2.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
-  
     <script>
         $(document).ready(function() {                        
             $('#signIn').click(function(event) {
                 var emailAddress=$('#inputEmail').val();
                 var passwordString=$('#inputPassword').val();
              	$.get('BBRSignIn',{email:emailAddress,password:passwordString},function(responseText) { 
-	            	    alert(responseText);
-             			$('#welcomeText').text(responseText);        
+             			$('#welcomeText').html(responseText);        
                 	});
             });
             
@@ -44,8 +25,7 @@
                 var passwordStringCopy=$('#inputCopyPasswordSignUp').val();
                 if (passwordString == passwordStringCopy) {
 	             	$.get('BBRSignUp',{email:emailAddress,firstName:firstNameString,lastName:lastNameString,password:passwordString},function(responseText) { 
-		            	    alert(responseText);
-	             			$('#welcomeText').text(responseText);        
+	             			$('#welcomeText').html(responseText);        
 	                	});
                 	}
             });
@@ -54,10 +34,12 @@
     </script>  
    
     <div class="container">
-
+		<div class="alert alert-warning alert-dismissable">
+		  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		  <div id="welcomeText">.</div>
+		</div>
       <form class="form-signin">
         <h2 class="form-signin-heading">Please sign in</h2>
-        <div id="welcomeText"></div>
         <label for="inputEmail" class="sr-only">Email address</label>
         <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
@@ -72,7 +54,6 @@
 
      <form class="form-signup">
         <h2 class="form-signop-heading">OR Sign up</h2>
-        <div id="welcomeSignUpText"></div>
         <label for="inputEmailSignUp" class="sr-only">Email address</label>
         <input type="email" id="inputEmailSignUp" class="form-control" placeholder="Email address" required>
         <label for="inputFirstNameSignUp" class="sr-only">Email address</label>
@@ -87,6 +68,5 @@
       </form>
 
     </div> <!-- /container -->
-    
-  </body>
-</html>
+	</jsp:body>
+</t:admin-wrapper>

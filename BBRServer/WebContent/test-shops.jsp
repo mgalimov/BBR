@@ -2,7 +2,7 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <t:admin-wrapper>
     <jsp:attribute name="title">
-      Shop
+      Shops
     </jsp:attribute>
 	<jsp:body>
 	   	<div id="shopGrid"> </div>

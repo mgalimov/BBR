@@ -54,6 +54,8 @@
 		<script type="text/javascript" src="js/bs_grid/localization/en.js"></script>
   	</head>
   	<body>
-  		<jsp:doBody/>
+  		<div class="containter">
+  			<jsp:doBody/>
+  		</div>
 	</body>
 </html>
