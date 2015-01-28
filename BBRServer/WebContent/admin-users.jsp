@@ -6,8 +6,11 @@
     </jsp:attribute>
 	<jsp:body>
 		<!-- Button trigger modal -->
-		<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-		  Edit user
+		<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal" id="editUser">
+		  <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit
+		</button>
+		<button type="button" class="btn btn-warning" data-toggle="modal" id="deleteUser">
+		  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
 		</button>
 		
 		<!-- Modal -->
@@ -19,19 +22,56 @@
 		        <h4 class="modal-title" id="myModalLabel">Edit user</h4>
 		      </div>
 		      <div class="modal-body">
-		        ...
-		      </div>
-		      <div class="modal-footer">
+				<form class="form-horizontal">
+		        	<div class="form-group">
+						<label for="inputEmailSignUp" class="col-sm-4 control-label">Email address</label>
+						<p class="col-sm-6">
+							<!--input type="email" id="inputEmail" class="form-control-static" placeholder="Email address" required>-->
+						</p>
+					</div>
+					<div class="form-group">	
+						<label for="inputFirstName" class="col-sm-4 control-label">First Name</label>
+						<div class="col-sm-6">
+							<input type="text" id="inputFirstName" class="form-control" placeholder="First Name" required>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputLastName" class="col-sm-4 control-label">Last Name</label>
+						<div class="col-sm-6">
+							<input type="text" id="inputLastName" class="form-control" placeholder="Last Name" required>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputApprovedStatus" class="col-sm-4 control-label">Status</label>
+						<div class="col-sm-6">
+							<select class="form-control">
+							  <option>Approved</option>
+							  <option>Not yet approved</option>
+							</select>
+						</div>
+					</div>
+				</form>		      
+			</div>
+		    <div class="modal-footer">
 		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 		        <button type="button" class="btn btn-primary">Save changes</button>
-		      </div>
+		    </div>
 		    </div>
 		  </div>
 		</div>
 
 		<div id="userGrid"></div>
+		
+		
 	    <script>
-	    
+		    $('#editUser').click(function(event) {
+			    	$("#userGrid").bs_grid('selectedRows', 'get_ids');
+	            	});
+
+		    $('#deleteUser').click(function(event) {
+		    	$("#userGrid").bs_grid('destroy');
+		            	});
+
 	   		$("#userGrid").bs_grid({
 	   			ajaxFetchDataURL: "BBRShowUsers",
 	   	        row_primary_key: "id",
