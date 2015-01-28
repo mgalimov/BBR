@@ -62,4 +62,36 @@ public class BBRApplication {
 		}
 		return respText;
 	}
+	
+	public String getUserData(Long id) {
+		BBRUserManager mgr = new BBRUserManager();
+		String json = "";
+		
+		try {
+			BBRUser user = mgr.findUserById(id);
+			if (user != null)
+				json = user.toJson();
+			else
+				json = BBRErrors.ERR_USER_NOTFOUND;
+		} catch (Exception ex) {
+			json = ex.getLocalizedMessage();
+		}
+		return json;
+	}
+
+	public String deleteUser(Long id) {
+		BBRUserManager mgr = new BBRUserManager();
+		String respText = "";
+		
+		try {
+			BBRUser user = mgr.findUserById(id);
+			if (user != null)
+				mgr.deleteUser(user);
+			else
+				respText = BBRErrors.ERR_USER_NOTFOUND;
+		} catch (Exception ex) {
+			respText = ex.getLocalizedMessage();
+		}
+		return respText;
+	}
 }

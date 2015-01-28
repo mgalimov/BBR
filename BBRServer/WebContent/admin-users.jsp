@@ -6,10 +6,10 @@
     </jsp:attribute>
 	<jsp:body>
 		<!-- Button trigger modal -->
-		<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal" id="editUser">
+		<button type="button" class="btn btn-default" id="editUser">
 		  <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit
 		</button>
-		<button type="button" class="btn btn-warning" data-toggle="modal" id="deleteUser">
+		<button type="button" class="btn btn-warning" id="deleteUser">
 		  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
 		</button>
 		
@@ -25,7 +25,7 @@
 				<form class="form-horizontal">
 		        	<div class="form-group">
 						<label for="inputEmailSignUp" class="col-sm-4 control-label">Email address</label>
-						<p class="col-sm-6">
+						<p class="col-sm-6" id="inputEmail">
 							<!--input type="email" id="inputEmail" class="form-control-static" placeholder="Email address" required>-->
 						</p>
 					</div>
@@ -44,9 +44,9 @@
 					<div class="form-group">
 						<label for="inputApprovedStatus" class="col-sm-4 control-label">Status</label>
 						<div class="col-sm-6">
-							<select class="form-control">
-							  <option>Approved</option>
-							  <option>Not yet approved</option>
+							<select class="form-control" id="inputApproved">
+							  <option value="true">Approved</option>
+							  <option value="false">Not yet approved</option>
 							</select>
 						</div>
 					</div>
@@ -65,12 +65,24 @@
 		
 	    <script>
 		    $('#editUser').click(function(event) {
-			    	$("#userGrid").bs_grid('selectedRows', 'get_ids');
+			    	var row = $("#userGrid").bs_grid('selectedRows', 'get_ids');
+	             	$.get('BBRUserUpdate',{id:row[0],operation:'getdata'},function(responseText) {
+		             		obj = $.parseJSON(responseText);
+		             		if (obj) {
+		             			$('#inputEmail').text(obj.email);
+		             			$('#inputFirstName').val(obj.firstName);
+		             			$('#inputLastName').val(obj.lastName);
+		             			$('#inputApproved').val(obj.approved.toString());
+		             		}
+		             		$('#myModal').modal('show');
+	                	});
 	            	});
 
 		    $('#deleteUser').click(function(event) {
-		    	$("#userGrid").bs_grid('destroy');
-		            	});
+			    	var row = $("#userGrid").bs_grid('selectedRows', 'get_ids');
+	             	$.get('BBRUserUpdate',{id:row[0],operation:'delete'},function(responseText) {
+	                	});
+	            	});
 
 	   		$("#userGrid").bs_grid({
 	   			ajaxFetchDataURL: "BBRShowUsers",

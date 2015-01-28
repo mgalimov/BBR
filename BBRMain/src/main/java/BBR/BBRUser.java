@@ -5,7 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 @SuppressWarnings("unused")
-public class BBRUser {
+public class BBRUser extends BBRDataElement {
 	private Long id;
 	private String email;
 	private String firstName;
@@ -62,7 +62,7 @@ public class BBRUser {
 		return approved;
 	}
 	public boolean comparePasswordTo(String comparingEncodedPassword) {
-		return encodedPassword == comparingEncodedPassword;
+		return encodedPassword.equals(comparingEncodedPassword);
 	}
 
 	public BBRUser() {

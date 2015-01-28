@@ -45,7 +45,20 @@ public class BBRUserManager {
         BBRUtil.commitTran(tr);
         return result;
     }
+
+	public BBRUser findUserById(Long id) {
+        boolean tr = BBRUtil.beginTran();
+        BBRUser result = (BBRUser) BBRUtil.getSession().createQuery("from BBRUser as user where user.id = '" + id.toString() + "'").uniqueResult();
+        BBRUtil.commitTran(tr);
+        return result;
+    }
 	
+	public void deleteUser(BBRUser user){
+        boolean tr = BBRUtil.beginTran();
+        BBRUtil.getSession().delete(user);
+        BBRUtil.commitTran(tr);
+    }
+
 	public static String encodePassword(String password) {
 		try {
 			MessageDigest digest = MessageDigest.getInstance("MD5");

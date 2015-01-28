@@ -1,6 +1,6 @@
 package BBR;
 
-public class BBRShop {
+public class BBRShop extends BBRDataElement {
 	private Long id;
 	
 	private String title;
