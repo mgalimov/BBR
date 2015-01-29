@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
-<t:admin-wrapper>
+<t:admin-card-wrapper>
     <jsp:attribute name="title">
       Sign in or Sign up
     </jsp:attribute>
@@ -74,4 +74,4 @@
 
     </div> <!-- /container -->
 	</jsp:body>
-</t:admin-wrapper>
+</t:admin-card-wrapper>
