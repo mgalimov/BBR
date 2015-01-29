@@ -1,4 +1,4 @@
-<%@ tag language="java" pageEncoding="UTF-8" description="Admin Wrapper"%>
+<%@ tag language="java" pageEncoding="UTF-8" description="Admin Grid Wrapper"%>
 <%@ attribute name="title" fragment="true" %>
 <!--  http://stackoverflow.com/questions/1296235/jsp-tricks-to-make-templating-easier -->
 <!DOCTYPE html>
@@ -13,6 +13,9 @@
 	
 	    <!-- Bootstrap -->
 	    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- BBR Utils -->
+	    <script src="js/bbr-utils.js"></script>
 	
 	    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -35,8 +38,8 @@
 		<script type="text/javascript" src="js/jquery-ui-timepicker-addon.min.js"></script>
 		<!--  if touch event support is needed (mobile devices) -->
 		<script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
-		  
-		<!--  PAGINATION plugin -->
+		
+				<!--  PAGINATION plugin -->
 		<link rel="stylesheet" type="text/css" href="css/jquery.bs_pagination.min.css">
 		<script type="text/javascript" src="js/jquery.bs_pagination.min.js"></script>
 		<script type="text/javascript" src="js/bs_pagination/localization/en.min.js"></script>

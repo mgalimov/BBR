@@ -37,11 +37,18 @@ public class BBRUserUpdate extends HttpServlet {
 		if (operation.equals("getdata")) {
 			respText = app.getUserData(Long.parseLong(id));
 		} else
-			if (operation.equals("delete")) {
-				respText = app.deleteUser(Long.parseLong(id));
-			} else
+		if (operation.equals("delete")) {
+			respText = app.deleteUser(Long.parseLong(id));
+		} else
+		if (operation.equals("update")) {
+			String firstName = request.getParameter("firstName");
+			String lastName = request.getParameter("lastName");
+			String approved = request.getParameter("approved");
+			respText = app.updateUser(Long.parseLong(id), firstName, lastName, Boolean.parseBoolean(approved));
+		} else
+				
 			// TODO: rework!
-			respText = "Unknown operation";
+				respText = "Unknown operation";
 						
 		response.setContentType("text/plain");  
 		response.setCharacterEncoding("UTF-8"); 

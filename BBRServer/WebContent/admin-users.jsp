@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
-<t:admin-wrapper>
+<t:admin-grid-wrapper>
     <jsp:attribute name="title">
       Users
     </jsp:attribute>
@@ -9,52 +9,24 @@
 		<button type="button" class="btn btn-default" id="editUser">
 		  <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit
 		</button>
-		<button type="button" class="btn btn-warning" id="deleteUser">
+		<button type="button" class="btn btn-warning" id="deleteUser" data-toggle="modal" data-target="#sureToDelete">
 		  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
 		</button>
 		
 		<!-- Modal -->
-		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal fade" id="sureToDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
 		      <div class="modal-header">
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		        <h4 class="modal-title" id="myModalLabel">Edit user</h4>
+		        <h4 class="modal-title" id="myModalLabel">Confirm deletion</h4>
 		      </div>
 		      <div class="modal-body">
-				<form class="form-horizontal">
-		        	<div class="form-group">
-						<label for="inputEmailSignUp" class="col-sm-4 control-label">Email address</label>
-						<p class="col-sm-6" id="inputEmail">
-							<!--input type="email" id="inputEmail" class="form-control-static" placeholder="Email address" required>-->
-						</p>
-					</div>
-					<div class="form-group">	
-						<label for="inputFirstName" class="col-sm-4 control-label">First Name</label>
-						<div class="col-sm-6">
-							<input type="text" id="inputFirstName" class="form-control" placeholder="First Name" required>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="inputLastName" class="col-sm-4 control-label">Last Name</label>
-						<div class="col-sm-6">
-							<input type="text" id="inputLastName" class="form-control" placeholder="Last Name" required>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="inputApprovedStatus" class="col-sm-4 control-label">Status</label>
-						<div class="col-sm-6">
-							<select class="form-control" id="inputApproved">
-							  <option value="true">Approved</option>
-							  <option value="false">Not yet approved</option>
-							</select>
-						</div>
-					</div>
-				</form>		      
-			</div>
+		      	 Are you sure to delete user? You cannot restore record. 
+	   		  </div>
 		    <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		        <button type="button" class="btn btn-primary">Save changes</button>
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn btn-warning" id="deletionConfirmed">Delete</button>
 		    </div>
 		    </div>
 		  </div>
@@ -62,52 +34,48 @@
 
 		<div id="userGrid"></div>
 		
-		
 	    <script>
-		    $('#editUser').click(function(event) {
-			    	var row = $("#userGrid").bs_grid('selectedRows', 'get_ids');
-	             	$.get('BBRUserUpdate',{id:row[0],operation:'getdata'},function(responseText) {
-		             		obj = $.parseJSON(responseText);
-		             		if (obj) {
-		             			$('#inputEmail').text(obj.email);
-		             			$('#inputFirstName').val(obj.firstName);
-		             			$('#inputLastName').val(obj.lastName);
-		             			$('#inputApproved').val(obj.approved.toString());
-		             		}
-		             		$('#myModal').modal('show');
-	                	});
-	            	});
+			$('#editUser').click(
+					function(event) {
+						var row = $("#userGrid").bs_grid('selectedRows', 'get_ids');
+						if (row.length >0)
+							window.location.href = 'admin-user.jsp?id=' + row;
+					});
+	
+			$('#deletionConfirmed').click(
+					function(event) {
+						var row = $("#userGrid").bs_grid('selectedRows', 'get_ids');
+						if (row.length >0) {
+							$.get('BBRUserUpdate', {id : row[0], operation : 'delete'}, function(responseText) {});
+							$('#sureToDelete').modal('hide');
+							$("#userGrid").bs_grid('displayGrid', true);
+						}
+					});
 
-		    $('#deleteUser').click(function(event) {
-			    	var row = $("#userGrid").bs_grid('selectedRows', 'get_ids');
-	             	$.get('BBRUserUpdate',{id:row[0],operation:'delete'},function(responseText) {
-	                	});
-	            	});
-
-	   		$("#userGrid").bs_grid({
-	   			ajaxFetchDataURL: "BBRShowUsers",
-	   	        row_primary_key: "id",
+			$('#userGrid').bs_grid({
+	   			ajaxFetchDataURL: 'BBRShowUsers',
+	   	        row_primary_key: 'id',
 	   	     	columns: [
-	   	            {field: "id", header: "ID", visible: "yes"},
-	   	            {field: "email", header: "Email", visible: "yes"},
-	   	            {field: "firstName", header: "First Name", visible: "yes"},
-	   	            {field: "lastName", header: "Last Name", visible: "yes"},
-	   	            {field: "approved", header: "Approved", visible: "yes"}
+	   	            {field: 'id', header: 'ID', visible: 'yes'},
+	   	            {field: 'email', header: 'Email', visible: 'yes'},
+	   	            {field: 'firstName', header: 'First Name', visible: 'yes'},
+	   	            {field: 'lastName', header: 'Last Name', visible: 'yes'},
+	   	            {field: 'approved', header: 'Approved', visible: 'yes'}
 	   	        ],
 	   	 
 	   	        sorting: [
-	   	            {sortingName: "By email", field: "email", order: "ascending"},
+	   	            {sortingName: 'By email', field: 'email', order: 'ascending'},
 	   	        ],
 	   	        useFilters: false,
-	   	     	bootstrap_version: "3",
+	   	     	bootstrap_version: '3',
 	   	     	pageNum: 1,
 	   	  		rowsPerPage: 10,
 	   	  		maxRowsPerPage: 100,
-	   	  		row_primary_key: "id",
-	   	  		rowSelectionMode: "single",
-	   	  		debug_mode: "no",
+	   	  		row_primary_key: 'id',
+	   	  		rowSelectionMode: 'single',
+	   	  		debug_mode: 'no',
 		   	  	onDatagridError: function(event, data) {
-		   	      alert(data["err_description"] + ' (' + data["err_code"] + ')');
+		   	      alert(data['err_description'] + ' (' + data['err_code'] + ')');
 		   	    }
 	    	});
 	   		
@@ -115,4 +83,4 @@
 	   		
 	    </script>
 	</jsp:body>
-</t:admin-wrapper>
+</t:admin-grid-wrapper>

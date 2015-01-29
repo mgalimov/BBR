@@ -59,6 +59,12 @@ public class BBRUserManager {
         BBRUtil.commitTran(tr);
     }
 
+	public void updateUser(BBRUser user) {
+        boolean tr = BBRUtil.beginTran();
+        BBRUtil.getSession().update(user);
+        BBRUtil.commitTran(tr);	
+	}
+
 	public static String encodePassword(String password) {
 		try {
 			MessageDigest digest = MessageDigest.getInstance("MD5");
@@ -69,5 +75,6 @@ public class BBRUserManager {
 	        throw new RuntimeException("No UTF-8 encoding? Really?");
 	    }
 	}
+
 
 }

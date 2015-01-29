@@ -94,4 +94,25 @@ public class BBRApplication {
 		}
 		return respText;
 	}
+
+	public String updateUser(Long id, String firstName, String lastName, boolean approved) {
+		BBRUserManager mgr = new BBRUserManager();
+		String respText = "";
+
+		try {
+			BBRUser user = mgr.findUserById(id);
+			if (user != null) {
+				user.setFirstName(firstName);
+				user.setLastName(lastName);
+				user.setApproved(approved);
+				mgr.updateUser(user);
+			}
+			else
+				respText = BBRErrors.ERR_USER_NOTFOUND;
+		} catch (Exception ex) {
+			respText = ex.getLocalizedMessage();
+		}
+		
+		return respText;
+	}
 }
