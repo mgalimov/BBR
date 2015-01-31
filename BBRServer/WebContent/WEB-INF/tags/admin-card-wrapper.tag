@@ -1,5 +1,6 @@
 <%@ tag language="java" pageEncoding="UTF-8" description="Admin Grid Wrapper"%>
-<%@ attribute name="title" fragment="true" %>
+<%@ attribute name="title" required="true" fragment="true" %>
+<%@ attribute name="type" fragment="true" %>
 <!--  http://stackoverflow.com/questions/1296235/jsp-tricks-to-make-templating-easier -->
 <!DOCTYPE html>
 <html>
