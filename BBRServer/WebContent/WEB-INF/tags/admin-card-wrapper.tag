@@ -1,6 +1,8 @@
 <%@ tag language="java" pageEncoding="UTF-8" description="Admin Grid Wrapper"%>
-<%@ attribute name="title" required="true" fragment="true" %>
-<%@ attribute name="type" fragment="true" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+
+<%@ attribute name="title" required="true" %>
+
 <!--  http://stackoverflow.com/questions/1296235/jsp-tricks-to-make-templating-easier -->
 <!DOCTYPE html>
 <html>
@@ -9,7 +11,7 @@
 	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
 	    <title>
-	    	<jsp:invoke fragment="title"/>
+	    	<c:out value="${title}"/>
 	    </title>
 
 		<!-- BBR Utils -->

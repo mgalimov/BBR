@@ -1,9 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
-<t:admin-grid-wrapper>
-    <jsp:attribute name="title">
-      Users
-    </jsp:attribute>
+<t:admin-grid-wrapper title="Users">
 	<jsp:body>
 		<!-- Button trigger modal -->
 		<button type="button" class="btn btn-default" id="editUser">
@@ -78,8 +75,6 @@
 		   	      alert(data['err_description'] + ' (' + data['err_code'] + ')');
 		   	    }
 	    	});
-	   		
-	   		//$.post('BBRShowShops', {}, function(responseText) {alert("Hi!"); alert(responseText);});
 	   		
 	    </script>
 	</jsp:body>

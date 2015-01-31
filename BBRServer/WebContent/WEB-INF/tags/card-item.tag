@@ -1,7 +1,7 @@
 <%@ tag language="java" pageEncoding="UTF-8" description="Card Item"%>
-<%@ attribute name="label" %>
-<%@ attribute name="field" %>
-<%@ attribute name="type" %>
+<%@ attribute name="label" required="true" %>
+<%@ attribute name="field" required="true" %>
+<%@ attribute name="type" required="true" %>
 <%@ attribute name="isRequired" %>
 <%@ attribute name="options" %>
 
@@ -20,11 +20,11 @@
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('text(obj.').concat(field).concat(');')}"/>
 			</c:when>
 			<c:when test="${type.equals('text')}">
-				<input type="text" class="form-control" id="${field.concat('input')}" placeholder="${label}"/>
+				<input type="text" class="form-control" id="${field.concat('input')}" placeholder="${label}" ${isRequired}/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('val(obj.').concat(field).concat(');')}"/>
 			</c:when>
 			<c:when test="${type.equals('select')}">
-				<select class="form-control" id="${field.concat('input')}">
+				<select class="form-control" id="${field.concat('input')}" ${isRequired}>
 					<c:forTokens items="${options}" delims="," var="option">
 						<option value="${option.split(':')[0]}">${option.split(':')[1]}</option>
 					</c:forTokens>
