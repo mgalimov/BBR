@@ -2,7 +2,7 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <t:admin-card-wrapper title="User">
 	<jsp:body>
-		<t:card method="BBRUserUpdate" pageBack="admin-users.jsp" title="User">
+		<t:card method="BBRUserUpdate" gridPage="admin-users.jsp" title="User">
 			<t:card-item label="Email" field="email" type="info"  isRequired="required"/>
 			<t:card-item label="First name" field="firstName" type="text" isRequired="required"/>
 			<t:card-item label="Last name" field="lastName" type="text" isRequired="required"/>

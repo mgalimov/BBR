@@ -33,7 +33,7 @@ public class BBRSignIn extends HttpServlet {
 		String password = request.getParameter("password");
 		String respText = app.SignIn(email, password);
 		
-		response.setContentType("text/plain");  
+		response.setContentType("text/plain; charset=utf-8");  
 		response.setCharacterEncoding("UTF-8"); 
 		response.getWriter().write(respText); 
 	}

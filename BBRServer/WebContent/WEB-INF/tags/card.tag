@@ -1,7 +1,7 @@
-<%@ tag language="java" pageEncoding="UTF-8" description="Card Top"%>
+<%@ tag language="java" pageEncoding="UTF-8" description="Card"%>
 <%@ attribute name="title" %>
 <%@ attribute name="method"%>
-<%@ attribute name="pageBack" %>
+<%@ attribute name="gridPage" %>
 
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
@@ -51,7 +51,7 @@
  	$(document).ready(function () {
  		idParam = getUrlParameter('id');
 		if (!idParam) {
-			goBackOrTo('${pageBack}');
+			goBackOrTo('${gridPage}');
 		} else
 		{
 			$.get('${method}', {id : idParam, operation : 'getdata'}, function(responseText) {
@@ -66,11 +66,11 @@
 	 		idParam = getUrlParameter('id');
             ${itemVal}
             $.get('${method}',{id:idParam,${itemReq}operation:'update'},function(responseText) { });
-			goBackOrTo('${pageBack}');
+			goBackOrTo('${gridPage}');
            });			 		
 
 		$('#cancelChanges').click(function(event) {
-			goBackOrTo('${pageBack}');
+			goBackOrTo('${gridPage}');
 		});
  	});
 </script>			      
