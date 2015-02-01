@@ -2,14 +2,12 @@ package BBRClientApp;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import BBR.*;
 
 public class BBRApplication {
 	public BBRUser user = null;
 	
 	public BBRApplication() {
-		return;
 	}
 	
 	public static BBRApplication GetApp(HttpServletRequest request) {

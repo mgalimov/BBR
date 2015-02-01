@@ -2,6 +2,7 @@
 
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.security.Policy.Parameters;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,12 +32,11 @@ public class BBRSignUp extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		BBRApplication app = BBRApplication.GetApp(request);
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
-		String firstName = request.getParameter("firstName");
-		firstName = URLDecoder.decode(firstName, "ISO-8859-1");
-		String lastName = request.getParameter("lastName");
-		lastName = URLDecoder.decode(lastName, "ISO-8859-1");
+		BBRParams params = new BBRParams(request.getQueryString());
+		String email = params.get("email");
+		String password = params.get("password");
+		String firstName = params.get("firstName");
+		String lastName = params.get("lastName");
 		String respText = app.SignUp(email, firstName, lastName, password);
 		
 		response.setContentType("text/plain");  
@@ -48,18 +48,6 @@ public class BBRSignUp extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		BBRApplication app = BBRApplication.GetApp(request);
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
-		String firstName = request.getParameter("firstName");
-		firstName = URLDecoder.decode(firstName, "UTF-8");
-		String lastName = request.getParameter("lastName");
-		lastName = URLDecoder.decode(lastName, "UTF-8");
-		String respText = app.SignUp(email, firstName, lastName, password);
-		
-		response.setContentType("text/plain");  
-		response.setCharacterEncoding("UTF-8"); 
-		response.getWriter().write(respText); 	
 	}
 
 }
