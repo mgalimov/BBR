@@ -62,9 +62,15 @@
 		<script type="text/javascript" src="js/bs_grid/localization/en.js"></script>
   	</head>
   	<body>
-  		<t:admin-menu />
-  		<div class="containter">
-  			<jsp:doBody/>
+  		<t:admin-top-menu />
+  		<div class="container-fluid">
+  			<div class="row">
+		  		<t:admin-menu />
+	  			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+	  				<h1 class="page-header">${title}</h1>
+	  				<jsp:doBody/>
+	  			</div>
+  			</div>
   		</div>
 	</body>
 </html>
