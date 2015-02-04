@@ -1,5 +1,6 @@
 <%@ tag language="java" pageEncoding="UTF-8" description="Admin Grid Wrapper"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <%@ attribute name="title" required="true" %>
 
@@ -44,6 +45,7 @@
 		  
   	</head>
   	<body>
+  		<t:admin-menu />
   		<div class="containter">
   			<jsp:doBody/>
   		</div>

@@ -1,4 +1,5 @@
 <%@ tag language="java" pageEncoding="UTF-8" description="Admin Grid Wrapper"%>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 
 <%@ attribute name="title" %>
@@ -61,6 +62,7 @@
 		<script type="text/javascript" src="js/bs_grid/localization/en.js"></script>
   	</head>
   	<body>
+  		<t:admin-menu />
   		<div class="containter">
   			<jsp:doBody/>
   		</div>

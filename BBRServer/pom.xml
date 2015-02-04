@@ -105,6 +105,7 @@
   		<dependency>
   			<groupId>BBR</groupId>
   			<artifactId>BBRMain</artifactId>
+  			<version>0.0.1</version>
   		</dependency>
   	</dependencies>
   </dependencyManagement>
