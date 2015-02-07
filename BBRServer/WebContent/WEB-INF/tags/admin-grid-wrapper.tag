@@ -1,10 +1,7 @@
 <%@ tag language="java" pageEncoding="UTF-8" description="Admin Grid Wrapper"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
-
 <%@ attribute name="title" %>
-
-<!--  http://stackoverflow.com/questions/1296235/jsp-tricks-to-make-templating-easier -->
 
 <!DOCTYPE html>
 <html>
