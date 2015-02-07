@@ -3,6 +3,7 @@
 <%@ attribute name="methodFetch" required="true"%>
 <%@ attribute name="methodDelete" required="true"%>
 <%@ attribute name="editPage" required="true"%>
+<%@ attribute name="createPage" required="true"%>
 
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
@@ -12,10 +13,13 @@
 
 <!-- http://www.onjava.com/pub/a/onjava/excerpt/jserverpages3_ch11/ -->
 
-<h1>${title}</h1>	
+<h3>${title}</h3>	
 
 <!-- Toolbar -->
-<button type="button" class="btn btn-default" id="edit">
+<button type="button" class="btn btn-default" id="create">
+  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Create
+</button>
+<button type="button" class="btn btn-info" id="edit">
   <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit
 </button>
 <button type="button" class="btn btn-warning" id="delete" data-toggle="modal" data-target="#sureToDelete">
@@ -46,43 +50,45 @@
 <jsp:doBody/>
 		
 <script>
-$('#edit').click(
-		function(event) {
-			var row = $("#grid").bs_grid('selectedRows', 'get_ids');
-			if (row.length >0)
-				window.location.href = '${editPage}?id=' + row;
-		});
-
-$('#deletionConfirmed').click(
-		function(event) {
-			var row = $("#grid").bs_grid('selectedRows', 'get_ids');
-			if (row.length >0) {
-				$.get('${methodDelete}', {id:row[0],operation:'delete'}, function(responseText) {
-					$('#sureToDelete').modal('hide');
-					$("#grid").bs_grid('displayGrid', true);
-				});
-			}
-		});
-
-$('#grid').bs_grid({
- 			ajaxFetchDataURL: '${methodFetch}',
- 	        row_primary_key: 'id',
- 	    	columns: [${items}
- 	    	],
- 	        sorting: [
- 	            ${sorting}
- 	        ],
- 	        useFilters: false,
- 	     	bootstrap_version: '3',
- 	     	pageNum: 1,
- 	  		rowsPerPage: 10,
- 	  		maxRowsPerPage: 100,
- 	  		row_primary_key: 'id',
- 	  		rowSelectionMode: 'single',
- 	  		debug_mode: 'no',
-     	  	onDatagridError: function(event, data) {
-  	          alert(data['err_description'] + ' (' + data['err_code'] + ')');
-  	    }
-  	});
- 		
+	$('#create').click(
+			function(event) {
+				window.location.href = '${createPage}?id=new';
+			});
+	$('#edit').click(
+			function(event) {
+				var row = $("#grid").bs_grid('selectedRows', 'get_ids');
+				if (row.length > 0)
+					window.location.href = '${editPage}?id=' + row;
+			});
+	$('#deletionConfirmed').click(
+			function(event) {
+				var row = $("#grid").bs_grid('selectedRows', 'get_ids');
+				if (row.length > 0) {
+					$.get('${methodDelete}', {id:row[0],operation:'delete'}, function(responseText) {
+						$('#sureToDelete').modal('hide');
+						$("#grid").bs_grid('displayGrid', true);
+					});
+				}
+			});
+	
+	$('#grid').bs_grid({
+	 			ajaxFetchDataURL: '${methodFetch}',
+	 	        row_primary_key: 'id',
+	 	    	columns: [${items}
+	 	    	],
+	 	        sorting: [
+	 	            ${sorting}
+	 	        ],
+	 	        useFilters: false,
+	 	     	bootstrap_version: '3',
+	 	     	pageNum: 1,
+	 	  		rowsPerPage: 10,
+	 	  		maxRowsPerPage: 100,
+	 	  		row_primary_key: 'id',
+	 	  		rowSelectionMode: 'single',
+	 	  		debug_mode: 'no',
+	     	  	onDatagridError: function(event, data) {
+	  	          alert(data['err_description'] + ' (' + data['err_code'] + ')');
+	  	    }
+	  	});
 </script>

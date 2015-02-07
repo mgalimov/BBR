@@ -15,9 +15,6 @@
 	    	<c:out value="${title}"/>
 	    </title>
 
-		<!-- BBR Utils -->
-	    <script src="js/bbr-utils.js"></script>
-	
 	    <!-- Bootstrap -->
 	    <link href="css/bootstrap.min.css" rel="stylesheet">
 	
@@ -43,14 +40,16 @@
 		<!--  if touch event support is needed (mobile devices) -->
 		<script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
 		  
+  		<!-- BBR Utils -->
+	    <script src="js/bbr-utils.js"></script>
+	    <link href="css/bbr-admin.css" rel="stylesheet">	
   	</head>
   	<body>
-  		<t:admin-top-menu />
+		<t:admin-top-menu title="${title}"/>
   		<div class="container-fluid">
   			<div class="row">
 		  		<t:admin-menu />
 	  			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-	  				<h1 class="page-header">${title}</h1>
 	  				<jsp:doBody/>
 	  			</div>
   			</div>

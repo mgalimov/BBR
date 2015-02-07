@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Random;
+
 import org.hibernate.Session;
 
 public class BBRUserManager {
@@ -73,5 +75,14 @@ public class BBRUserManager {
 	    }
 	}
 
+	public static String generatePassword() {
+		Random rand = new Random();
+		int n = rand.nextInt(12) + 1;
+		String password = "";
+		
+		for (int i = 1; i <= n; i++)
+			password = password + (char)(rand.nextInt(94)+33); 
+		return password;
+	}
 
 }

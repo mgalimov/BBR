@@ -16,9 +16,6 @@
 	    	<c:out value="${title}"/>
 	    </title>
 
-		<!-- BBR Utils -->
-	    <script src="js/bbr-utils.js"></script>
-	
 	    <!-- Bootstrap -->
 	    <link href="css/bootstrap.min.css" rel="stylesheet">
 	
@@ -60,14 +57,17 @@
 		<link rel="stylesheet" type="text/css" href="css/jquery.bs_grid.min.css">
 		<script type="text/javascript" src="js/jquery.bs_grid.js"></script>
 		<script type="text/javascript" src="js/bs_grid/localization/en.js"></script>
+
+		<!-- BBR Utils -->
+	    <script src="js/bbr-utils.js"></script>
+	    <link href="css/bbr-admin.css" type="text/css" rel="stylesheet">
   	</head>
   	<body>
-  		<t:admin-top-menu />
-  		<div class="container-fluid">
+		<t:admin-top-menu title="${title}" />
+   		<div class="container-fluid">
   			<div class="row">
 		  		<t:admin-menu />
 	  			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-	  				<h1 class="page-header">${title}</h1>
 	  				<jsp:doBody/>
 	  			</div>
   			</div>

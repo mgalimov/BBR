@@ -35,8 +35,6 @@ public class BBRShowShops extends HttpServlet {
 		BBRShopManager mgr = new BBRShopManager();
 		String json = mgr.listShops().toJson();
 		
-//		String json = "{\"total_rows\":\"2\",\"page_data\":[{\"id\":\"1\",\"title\":\"My Shop\"},{\"id\":\"2\",\"title\":\"My Shop\"}]}";
-		
 		response.setContentType("text/plain");  
 		response.setCharacterEncoding("UTF-8"); 
 		response.getWriter().write(json); 

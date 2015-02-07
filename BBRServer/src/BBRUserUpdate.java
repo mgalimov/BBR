@@ -46,7 +46,12 @@ public class BBRUserUpdate extends HttpServlet {
 			String approved = request.getParameter("approved");
 			respText = app.updateUser(Long.parseLong(id), firstName, lastName, Boolean.parseBoolean(approved));
 		} else
-				
+		if (operation.equals("create")) {
+			String email = request.getParameter("email");
+			String firstName = request.getParameter("firstName");
+			String lastName = request.getParameter("lastName");
+			respText = app.createUser(email, firstName, lastName);
+		} else
 			// TODO: rework!
 				respText = "Unknown operation";
 						

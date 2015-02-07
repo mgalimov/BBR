@@ -32,19 +32,19 @@
   </div>
 </div>
 
-<h1>${title}</h1>	
-<div class="container"  id="editForm">
-  	<form class="form-horizontal">
-
-  		<jsp:doBody/>
-
-		<div class="form-group">
-			<div class="col-sm-6">
-				<button type="button" class="btn btn-default" data-toggle="modal" data-target="#sureToCancelChanges">Cancel changes</button>
-				<button type="submit" class="btn btn-primary" id="saveChanges">Save changes</button>
-			</div>
-		</div>
-	</form>
+<div class="container-fluid"  id="editForm">
+<h3>${title}</h3>
+<form role="form">
+	<div class="panel panel-default">
+	  <div class="panel-body">
+	  	<jsp:doBody/>
+	  </div>
+	  <div class="panel-footer">
+			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#sureToCancelChanges">Cancel changes</button>
+			<button type="submit" class="btn btn-primary" id="saveChanges">Save changes</button>
+	  </div>
+	</div>
+</form>
 </div>
 
 <script>
@@ -52,6 +52,8 @@
  		idParam = getUrlParameter('id');
 		if (!idParam) {
 			goBackOrTo('${gridPage}');
+		} else
+		if (idParam == 'new') {
 		} else
 		{
 			$.get('${method}', {id : idParam, operation : 'getdata'}, function(responseText) {
@@ -65,12 +67,20 @@
 		$('#saveChanges').click(function(event) { 
 	 		idParam = getUrlParameter('id');
             ${itemVal}
-            $.get('${method}',{id:idParam,${itemReq}operation:'update'},function(responseText) { });
+    		if (idParam == 'new') {
+                $.get('${method}',{id:idParam,${itemReq}operation:'create'},function(responseText) { });
+    		} else {
+	            $.get('${method}',{id:idParam,${itemReq}operation:'update'},function(responseText) { });
+    		}
 			goBackOrTo('${gridPage}');
            });			 		
 
 		$('#cancelChanges').click(function(event) {
 			goBackOrTo('${gridPage}');
 		});
+ 	});
+ 	
+ 	$(window).bind('beforeunload', function () {
+ 		return "Are you sure to cancel changes? All your changes will be lost.";
  	});
 </script>			      

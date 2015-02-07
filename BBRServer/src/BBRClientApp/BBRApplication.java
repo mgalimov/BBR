@@ -113,4 +113,18 @@ public class BBRApplication {
 		
 		return respText;
 	}
+
+	public String createUser(String email, String firstName, String lastName) {
+		BBRUserManager mgr = new BBRUserManager();
+		String respText = "";
+
+		try {
+			mgr.createAndStoreUser(email, firstName, lastName, BBRUserManager.generatePassword());
+		} catch (Exception ex) {
+			respText = ex.getLocalizedMessage();
+		}
+		
+		return respText;
+	}
+
 }
