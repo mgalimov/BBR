@@ -1,7 +1,6 @@
 <%@ tag language="java" pageEncoding="UTF-8" description="Grid"%>
 <%@ attribute name="title" required="true"%>
-<%@ attribute name="methodFetch" required="true"%>
-<%@ attribute name="methodDelete" required="true"%>
+<%@ attribute name="method" required="true"%>
 <%@ attribute name="editPage" required="true"%>
 <%@ attribute name="createPage" required="true"%>
 
@@ -64,7 +63,7 @@
 			function(event) {
 				var row = $("#grid").bs_grid('selectedRows', 'get_ids');
 				if (row.length > 0) {
-					$.get('${methodDelete}', {id:row[0],operation:'delete'}, function(responseText) {
+					$.get('${method}', {id:row[0],operation:'delete'}, function(responseText) {
 						$('#sureToDelete').modal('hide');
 						$("#grid").bs_grid('displayGrid', true);
 					});
@@ -72,7 +71,7 @@
 			});
 	
 	$('#grid').bs_grid({
-	 			ajaxFetchDataURL: '${methodFetch}',
+	 			ajaxFetchDataURL: '${method}',
 	 	        row_primary_key: 'id',
 	 	    	columns: [${items}
 	 	    	],

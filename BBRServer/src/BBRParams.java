@@ -18,7 +18,12 @@ public class BBRParams {
 		
 		for (int i = 0; i < params.length; i++) {
 			param = params[i].split("=");
-			parameters.put(param[0], param[1]);
+			if (param.length >= 2) {
+				parameters.put(param[0], param[1]);
+			} else
+				if (param.length == 1) {
+					parameters.put(param[0], "");
+				}
 		}
 	}
 	

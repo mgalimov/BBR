@@ -2,6 +2,7 @@ package BBRClientApp;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import BBR.*;
 
 public class BBRApplication {
@@ -125,6 +126,80 @@ public class BBRApplication {
 		}
 		
 		return respText;
+	}
+
+	public String getUsers() {
+		BBRUserManager mgr = new BBRUserManager();
+		return mgr.listUsers().toJson();
+	}
+
+	public String getShopData(Long id) {
+		BBRShopManager mgr = new BBRShopManager();
+		String json = "";
+		
+		try {
+			BBRShop shop = mgr.findShopById(id);
+			if (shop != null)
+				json = shop.toJson();
+			else
+				json = BBRErrors.ERR_USER_NOTFOUND;
+		} catch (Exception ex) {
+			json = ex.getLocalizedMessage();
+		}
+		return json;
+	}
+
+	public String deleteShop(Long id) {
+		BBRShopManager mgr = new BBRShopManager();
+		String respText = "";
+		
+		try {
+			BBRShop shop = mgr.findShopById(id);
+			if (shop != null)
+				mgr.deleteShop(shop);
+			else
+				respText = BBRErrors.ERR_USER_NOTFOUND;
+		} catch (Exception ex) {
+			respText = ex.getLocalizedMessage();
+		}
+		return respText;
+	}
+
+	public String updateShop(Long id, String title) {
+		BBRShopManager mgr = new BBRShopManager();
+		String respText = "";
+
+		try {
+			BBRShop shop = mgr.findShopById(id);
+			if (shop != null) {
+				shop.setTitle(title);
+				mgr.updateShop(shop);
+			}
+			else
+				respText = BBRErrors.ERR_USER_NOTFOUND;
+		} catch (Exception ex) {
+			respText = ex.getLocalizedMessage();
+		}
+		
+		return respText;
+	}
+
+	public String createShop(String title) {
+		BBRShopManager mgr = new BBRShopManager();
+		String respText = "";
+
+		try {
+			mgr.createAndStoreShop(title);
+		} catch (Exception ex) {
+			respText = ex.getLocalizedMessage();
+		}
+		
+		return respText;
+	}
+
+	public String getShops() {
+		BBRShopManager mgr = new BBRShopManager();
+		return mgr.listShops().toJson();
 	}
 
 }

@@ -48,6 +48,8 @@
 </div>
 
 <script>
+	var saved = false;
+
  	$(document).ready(function () {
  		idParam = getUrlParameter('id');
 		if (!idParam) {
@@ -72,6 +74,7 @@
     		} else {
 	            $.get('${method}',{id:idParam,${itemReq}operation:'update'},function(responseText) { });
     		}
+			saved = true;
 			goBackOrTo('${gridPage}');
            });			 		
 
@@ -81,6 +84,7 @@
  	});
  	
  	$(window).bind('beforeunload', function () {
+ 		if (saved) return;
  		return "Are you sure to cancel changes? All your changes will be lost.";
  	});
 </script>			      

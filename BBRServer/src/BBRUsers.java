@@ -7,22 +7,20 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import BBRClientApp.BBRApplication;
 
 /**
  * Servlet implementation class BBRUserUpdate
  */
-@WebServlet("/BBRUserUpdate")
-public class BBRUserUpdate extends HttpServlet {
+@WebServlet("/BBRUsers")
+public class BBRUsers extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BBRUserUpdate() {
+    public BBRUsers() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -30,8 +28,9 @@ public class BBRUserUpdate extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		BBRApplication app = BBRApplication.GetApp(request);
-		String id = request.getParameter("id");
-		String operation = request.getParameter("operation");
+		BBRParams params = new BBRParams(request.getQueryString());
+		String id = params.get("id");
+		String operation = params.get("operation");
 		String respText = "";
 		
 		if (operation.equals("getdata")) {
@@ -41,19 +40,18 @@ public class BBRUserUpdate extends HttpServlet {
 			respText = app.deleteUser(Long.parseLong(id));
 		} else
 		if (operation.equals("update")) {
-			String firstName = request.getParameter("firstName");
-			String lastName = request.getParameter("lastName");
-			String approved = request.getParameter("approved");
+			String firstName = params.get("firstName");
+			String lastName = params.get("lastName");
+			String approved = params.get("approved");
 			respText = app.updateUser(Long.parseLong(id), firstName, lastName, Boolean.parseBoolean(approved));
 		} else
 		if (operation.equals("create")) {
-			String email = request.getParameter("email");
-			String firstName = request.getParameter("firstName");
-			String lastName = request.getParameter("lastName");
+			String email = params.get("email");
+			String firstName = params.get("firstName");
+			String lastName = params.get("lastName");
 			respText = app.createUser(email, firstName, lastName);
 		} else
-			// TODO: rework!
-				respText = "Unknown operation";
+			respText = "Unknown operation";
 						
 		response.setContentType("text/plain");  
 		response.setCharacterEncoding("UTF-8"); 
@@ -64,7 +62,12 @@ public class BBRUserUpdate extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		BBRApplication app = BBRApplication.GetApp(request);
+		String respText = app.getUsers();
+		
+		response.setContentType("text/plain");  
+		response.setCharacterEncoding("UTF-8"); 
+		response.getWriter().write(respText); 
 	}
 
 }

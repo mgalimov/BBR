@@ -25,4 +25,23 @@ public class BBRShopManager {
         session.getTransaction().commit();
         return new BBRDataSet<BBRShop>(list);
     }
+
+	public BBRShop findShopById(Long id) {
+        boolean tr = BBRUtil.beginTran();
+        BBRShop result = (BBRShop) BBRUtil.getSession().createQuery("from BBRShop as shop where shop.id = '" + id.toString() + "'").uniqueResult();
+        BBRUtil.commitTran(tr);
+        return result;
+    }
+	
+	public void deleteShop(BBRShop shop){
+        boolean tr = BBRUtil.beginTran();
+        BBRUtil.getSession().delete(shop);
+        BBRUtil.commitTran(tr);
+    }
+
+	public void updateShop(BBRShop shop) {
+        boolean tr = BBRUtil.beginTran();
+        BBRUtil.getSession().update(shop);
+        BBRUtil.commitTran(tr);	
+	}
 }
