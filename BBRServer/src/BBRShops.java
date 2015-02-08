@@ -26,7 +26,7 @@ public class BBRShops extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		BBRApplication app = BBRApplication.GetApp(request);
+		BBRApplication app = BBRApplication.getApp(request);
 		BBRParams params = new BBRParams(request.getQueryString());
 		String id = params.get("id");
 		String operation = params.get("operation");
@@ -57,7 +57,7 @@ public class BBRShops extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		BBRApplication app = BBRApplication.GetApp(request);
+		BBRApplication app = BBRApplication.getApp(request);
 		String respText = app.getShops();
 		
 		response.setContentType("text/plain");  

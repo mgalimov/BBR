@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
-<t:admin-card-wrapper title="Sign in">
+<t:general-wrapper title="Sign in">
 <jsp:body>
     <script>
         $(document).ready(function() {                        
@@ -8,7 +8,9 @@
     	    	$('#signIn').click(function(event) {
 	                var emailAddress=$('#inputEmail').val();
 	                var passwordString=$('#inputPassword').val();
+	                $("#signFormPanel").addClass('hide');
 	             	$.get('BBRSignIn',{email:emailAddress,password:passwordString},function(responseText) { 
+		         			$("#signFormPanel").removeClass('hide');
 	             			$('#welcomeText').html(responseText);        
 		         			$('#alertMessage').show();
 	                	});
@@ -22,9 +24,11 @@
                 var passwordString=$('#inputPasswordSignUp').val();
                 var passwordStringCopy=$('#inputCopyPasswordSignUp').val();
                 if (passwordString == passwordStringCopy) {
+                	$("#signFormPanel").addClass('hide');
 	             	$.get('BBRSignUp',{email:emailAddress,firstName:firstNameString,lastName:lastNameString,password:passwordString},function(responseText) {
-	             			$('#welcomeText').html(responseText);        
-	             			$('#alertMessage').show();
+		         			$("#signFormPanel").removeClass('hide');
+            				$('#welcomeText').html(responseText);        
+             				$('#alertMessage').show();
 	                	});
                 	}
             });
@@ -32,7 +36,7 @@
         
     </script>  
    
-    <div class="container-fluid col-md-6">	
+    <div class="container-fluid col-md-6" id="signFormPanel">	
 		<div class="alert alert-warning alert-dismissable" id="alertMessage">
 		    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 		    <div id="welcomeText"></div>
@@ -104,4 +108,4 @@
 
     </div> <!-- /container -->
 </jsp:body>
-</t:admin-card-wrapper>
+</t:general-wrapper>

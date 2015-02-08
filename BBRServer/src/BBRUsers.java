@@ -27,7 +27,7 @@ public class BBRUsers extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		BBRApplication app = BBRApplication.GetApp(request);
+		BBRApplication app = BBRApplication.getApp(request);
 		BBRParams params = new BBRParams(request.getQueryString());
 		String id = params.get("id");
 		String operation = params.get("operation");
@@ -43,13 +43,15 @@ public class BBRUsers extends HttpServlet {
 			String firstName = params.get("firstName");
 			String lastName = params.get("lastName");
 			String approved = params.get("approved");
-			respText = app.updateUser(Long.parseLong(id), firstName, lastName, Boolean.parseBoolean(approved));
+			String role = params.get("role");
+			respText = app.updateUser(Long.parseLong(id), firstName, lastName, Boolean.parseBoolean(approved), Integer.valueOf(role));
 		} else
 		if (operation.equals("create")) {
 			String email = params.get("email");
 			String firstName = params.get("firstName");
 			String lastName = params.get("lastName");
-			respText = app.createUser(email, firstName, lastName);
+			String password = params.get("password");
+			respText = app.createUser(email, firstName, lastName, password);
 		} else
 			respText = "Unknown operation";
 						
@@ -62,7 +64,7 @@ public class BBRUsers extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		BBRApplication app = BBRApplication.GetApp(request);
+		BBRApplication app = BBRApplication.getApp(request);
 		String respText = app.getUsers();
 		
 		response.setContentType("text/plain");  

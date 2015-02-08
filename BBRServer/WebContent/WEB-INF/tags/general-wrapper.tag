@@ -1,5 +1,6 @@
-<%@ tag language="java" pageEncoding="UTF-8" description="Admin Grid Wrapper"%>
+<%@ tag language="java" pageEncoding="UTF-8" description="General Wrapper"%>
 <%@ attribute name="title" required="true" %>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
@@ -46,7 +47,6 @@
 		<t:admin-top-menu title="${title}"/>
   		<div class="container-fluid">
   			<div class="row">
-		  		<t:admin-menu />
 	  			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 	  				<jsp:doBody/>
 	  			</div>

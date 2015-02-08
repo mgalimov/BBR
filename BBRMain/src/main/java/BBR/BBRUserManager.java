@@ -3,6 +3,7 @@ package BBR;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -67,8 +68,16 @@ public class BBRUserManager {
 	public static String encodePassword(String password) {
 		try {
 			MessageDigest digest = MessageDigest.getInstance("MD5");
-			return digest.digest(password.getBytes("UTF-8")).toString();
-		}catch (NoSuchAlgorithmException ex) {
+			digest.update(password.getBytes("UTF-8"));
+			byte msg[] = digest.digest();
+			
+			StringBuffer hexString = new StringBuffer();
+	        for (int i=0; i < msg.length; i++) {
+	            hexString.append(Integer.toHexString(0xFF & msg[i]));
+	        }
+	        
+	        return hexString.toString();
+		} catch (NoSuchAlgorithmException ex) {
 	        throw new RuntimeException("No MD5 implementation? Really?");
 	    } catch (UnsupportedEncodingException ex) {
 	        throw new RuntimeException("No UTF-8 encoding? Really?");
@@ -77,7 +86,7 @@ public class BBRUserManager {
 
 	public static String generatePassword() {
 		Random rand = new Random();
-		int n = rand.nextInt(12) + 1;
+		int n = rand.nextInt(6) + 8;
 		String password = "";
 		
 		for (int i = 1; i <= n; i++)

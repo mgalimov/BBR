@@ -22,6 +22,10 @@
 				<input type="text" class="form-control" id="${field.concat('input')}" placeholder="${label}" ${isRequired}/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('val(obj.').concat(field).concat(');')}"/>
 			</c:when>
+			<c:when test="${type.equals('password')}">
+				<input type="password" class="form-control" id="${field.concat('input')}" placeholder="${label}" ${isRequired}/>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('val(obj.').concat(field).concat(');')}"/>
+			</c:when>
 			<c:when test="${type.equals('select')}">
 				<select class="form-control" id="${field.concat('input')}" ${isRequired}>
 					<c:forTokens items="${options}" delims="," var="option">

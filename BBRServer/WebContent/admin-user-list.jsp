@@ -7,6 +7,7 @@
 			<t:grid-item label="First name" field="firstName"/>
 			<t:grid-item label="Last name" field="lastName"/>
 			<t:grid-item label="Approved" field="approved"/>
+			<t:grid-item label="Role" field="role"/>
 		</t:grid>
 	</jsp:body>
 </t:admin-grid-wrapper>

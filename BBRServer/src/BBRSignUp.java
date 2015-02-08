@@ -24,14 +24,13 @@ public class BBRSignUp extends HttpServlet {
      */
     public BBRSignUp() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		BBRApplication app = BBRApplication.GetApp(request);
+		BBRApplication app = BBRApplication.getApp(request);
 		BBRParams params = new BBRParams(request.getQueryString());
 		String email = params.get("email");
 		String password = params.get("password");
@@ -39,9 +38,14 @@ public class BBRSignUp extends HttpServlet {
 		String lastName = params.get("lastName");
 		String respText = app.SignUp(email, firstName, lastName, password);
 		
-		response.setContentType("text/plain");  
-		response.setCharacterEncoding("UTF-8"); 
-		response.getWriter().write(respText); 	
+		if (app.user != null) {
+			response.sendRedirect(request.getContextPath() + "/" + app.getWelcomePage());
+		} else
+		{
+			response.setContentType("text/plain");  
+			response.setCharacterEncoding("UTF-8"); 
+			response.getWriter().write(respText); 	
+		}
 	}
 
 	/**

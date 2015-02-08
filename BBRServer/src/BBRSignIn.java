@@ -21,28 +21,38 @@ public class BBRSignIn extends HttpServlet {
      */
     public BBRSignIn() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		BBRApplication app = BBRApplication.GetApp(request);
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
+		BBRApplication app = BBRApplication.getApp(request);
+		BBRParams params = new BBRParams(request.getQueryString());
+		String email = params.get("email");
+		String password = params.get("password");
 		String respText = app.SignIn(email, password);
 		
-		response.setContentType("text/plain; charset=utf-8");  
-		response.setCharacterEncoding("UTF-8"); 
-		response.getWriter().write(respText); 
+		if (app.user != null) {
+			response.setContentType("text/plain; charset=utf-8");  
+			response.setCharacterEncoding("UTF-8"); 
+			response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
+			response.setHeader("Location", request.getPathInfo() + "/" + app.getWelcomePage());
+			
+			//response.sendRedirect(request.getContextPath() + "/" + app.getWelcomePage());
+		}
+		else
+		{
+			response.setContentType("text/plain; charset=utf-8");  
+			response.setCharacterEncoding("UTF-8"); 
+			response.getWriter().write(respText);
+		}
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 	}
 
 }

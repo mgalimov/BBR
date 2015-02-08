@@ -11,7 +11,7 @@ public class BBRApplication {
 	public BBRApplication() {
 	}
 	
-	public static BBRApplication GetApp(HttpServletRequest request) {
+	public static BBRApplication getApp(HttpServletRequest request) {
 		HttpSession session = request.getSession(true);		
 		BBRApplication app = (BBRApplication)session.getAttribute("BBRApplication");
 		if (app == null) {
@@ -34,7 +34,7 @@ public class BBRApplication {
 			} else {
 				if (candidate.comparePasswordTo(BBRUserManager.encodePassword(password))) {
 					user = candidate;
-					respText = BBRErrors.MSG_USER_SIGNED_IN;
+					respText = "";
 				} else {
 					respText = BBRErrors.ERR_INCORRECT_PASSWORD;
 				}
@@ -94,7 +94,7 @@ public class BBRApplication {
 		return respText;
 	}
 
-	public String updateUser(Long id, String firstName, String lastName, boolean approved) {
+	public String updateUser(Long id, String firstName, String lastName, boolean approved, int role) {
 		BBRUserManager mgr = new BBRUserManager();
 		String respText = "";
 
@@ -104,6 +104,7 @@ public class BBRApplication {
 				user.setFirstName(firstName);
 				user.setLastName(lastName);
 				user.setApproved(approved);
+				user.setRole(role);
 				mgr.updateUser(user);
 			}
 			else
@@ -115,12 +116,13 @@ public class BBRApplication {
 		return respText;
 	}
 
-	public String createUser(String email, String firstName, String lastName) {
+	public String createUser(String email, String firstName, String lastName, String password) {
 		BBRUserManager mgr = new BBRUserManager();
 		String respText = "";
 
 		try {
-			mgr.createAndStoreUser(email, firstName, lastName, BBRUserManager.generatePassword());
+			mgr.createAndStoreUser(email, firstName, lastName, password);
+			//BBRUserManager.generatePassword()
 		} catch (Exception ex) {
 			respText = ex.getLocalizedMessage();
 		}
@@ -202,4 +204,26 @@ public class BBRApplication {
 		return mgr.listShops().toJson();
 	}
 
+	public String getWelcomePage() {
+		if (user == null)
+			return "general-signin.jsp";
+
+		if (user.getApproved())
+			return "user-profile.jsp";
+					
+		if (user.getRole() == BBRUser.BBRUserRole.ROLE_BBR_OWNER)
+			return "admin-index.jsp";
+		
+		return "general-signin.jsp";
+	}
+	
+	public boolean isPageAvailable(String page) {
+		if (user == null)
+			if (page.equals("general_signin.jsp")) return true;
+		
+		if (user.getRole() == BBRUser.BBRUserRole.ROLE_BBR_OWNER)
+			if (page.contains("admin-")) return true;
+
+		return false;
+	}
 }

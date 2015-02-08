@@ -13,5 +13,6 @@
         <property name="lastName" column="LASTNAME"/>
         <property name="encodedPassword" column="PASS"/>
         <property name="approved" column="APPROVED"/>
+        <property name="role" column="ROLE"/>
     </class>
 </hibernate-mapping>
