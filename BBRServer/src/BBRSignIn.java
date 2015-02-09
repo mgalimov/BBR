@@ -2,6 +2,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,15 +32,21 @@ public class BBRSignIn extends HttpServlet {
 		BBRParams params = new BBRParams(request.getQueryString());
 		String email = params.get("email");
 		String password = params.get("password");
+		String rememberme = params.get("rememberme");
 		String respText = app.SignIn(email, password);
 		
 		if (app.user != null) {
-			response.setContentType("text/plain; charset=utf-8");  
-			response.setCharacterEncoding("UTF-8"); 
-			response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
-			response.setHeader("Location", request.getPathInfo() + "/" + app.getWelcomePage());
-			
-			//response.sendRedirect(request.getContextPath() + "/" + app.getWelcomePage());
+			if (rememberme != null)
+				if (!rememberme.equals("")) {
+					Cookie c = new Cookie("email", email);
+					c.setMaxAge(24*60*30);
+					response.addCookie(c);
+					
+					c = new Cookie("pwdhash", app.user.getEncodedPassword());
+					c.setMaxAge(24*60*30);
+					response.addCookie(c);
+				}
+			response.sendRedirect(request.getContextPath() + "/" + app.getWelcomePage());
 		}
 		else
 		{

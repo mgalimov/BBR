@@ -1,6 +1,8 @@
 package BBRClientApp;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import BBR.*;
@@ -43,8 +45,43 @@ public class BBRApplication {
 		
 		return respText;
 	}
-	
-	public String SignOut() {
+
+	public String SignInByCookie(HttpServletRequest request) {
+		BBRUserManager mgr = new BBRUserManager();
+		String respText = "";
+
+		String email = "";
+		String pwdhash = "";
+		Cookie[] cookies = request.getCookies();
+		for (int i = 0; i < cookies.length; i++) {
+			Cookie c = cookies[i];
+			if (c.getName().equals("email"))
+				email = c.getValue();
+			if (c.getName().equals("pwdhash"))
+				pwdhash = c.getValue();
+		}
+		
+		if (email != "" && pwdhash != "") {
+			BBRUser candidate = mgr.findUserByEmail(email);
+			if (candidate == null) {
+				respText = BBRErrors.ERR_USER_NOTFOUND;
+			} else {
+				if (candidate.comparePasswordTo(pwdhash)) {
+					user = candidate;
+					respText = "";
+				} else {
+					respText = BBRErrors.ERR_INCORRECT_PASSWORD;
+				}
+			}
+			
+		}
+				
+		return respText;
+	}
+
+	public String SignOut(HttpServletResponse response) {
+		response.addCookie(new Cookie("email", ""));
+		response.addCookie(new Cookie("pwdhash", ""));
 		user = null;
 		return BBRErrors.MSG_USER_SIGNED_OUT;
 	}
@@ -61,7 +98,8 @@ public class BBRApplication {
 		}
 		return respText;
 	}
-	
+
+
 	public String getUserData(Long id) {
 		BBRUserManager mgr = new BBRUserManager();
 		String json = "";
