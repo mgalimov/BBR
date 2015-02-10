@@ -24,7 +24,8 @@ public class BBRSignIn extends HttpServlet {
         super();
     }
 
-	/**
+    // Signing in
+    /**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -33,7 +34,7 @@ public class BBRSignIn extends HttpServlet {
 		String email = params.get("email");
 		String password = params.get("password");
 		String rememberme = params.get("rememberme");
-		String respText = app.SignIn(email, password);
+		app.SignIn(email, password);
 		
 		if (app.user != null) {
 			if (rememberme != null)
@@ -46,16 +47,11 @@ public class BBRSignIn extends HttpServlet {
 					c.setMaxAge(24*60*30);
 					response.addCookie(c);
 				}
-			response.sendRedirect(request.getContextPath() + "/" + app.getWelcomePage());
 		}
-		else
-		{
-			response.setContentType("text/plain; charset=utf-8");  
-			response.setCharacterEncoding("UTF-8"); 
-			response.getWriter().write(respText);
-		}
+		response.sendRedirect(request.getContextPath() + "/" + app.getWelcomePage());
 	}
 
+	// Signing out
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */

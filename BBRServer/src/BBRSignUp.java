@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import BBR.BBRErrors;
 import BBRClientApp.BBRApplication;
 
 /**
@@ -34,18 +35,13 @@ public class BBRSignUp extends HttpServlet {
 		BBRParams params = new BBRParams(request.getQueryString());
 		String email = params.get("email");
 		String password = params.get("password");
+		String passwordCopy = params.get("passwordCopy");
 		String firstName = params.get("firstName");
 		String lastName = params.get("lastName");
-		String respText = app.SignUp(email, firstName, lastName, password);
+
+		app.SignUp(email, firstName, lastName, password, passwordCopy);
 		
-		if (app.user != null) {
-			response.sendRedirect(request.getContextPath() + "/" + app.getWelcomePage());
-		} else
-		{
-			response.setContentType("text/plain");  
-			response.setCharacterEncoding("UTF-8"); 
-			response.getWriter().write(respText); 	
-		}
+		response.sendRedirect(request.getContextPath() + "/" + app.getWelcomePage());
 	}
 
 	/**

@@ -9,6 +9,7 @@ import BBR.*;
 
 public class BBRApplication {
 	public BBRUser user = null;
+	private String lastSignInError = ""; 
 	
 	public BBRApplication() {
 	}
@@ -25,30 +26,32 @@ public class BBRApplication {
 
 	public String SignIn(String email, String password) {
 		BBRUserManager mgr = new BBRUserManager();
-		String respText = "";
 		
 		if (email == null || email == "") {
-			respText = BBRErrors.ERR_EMPTY_EMAIL;
+			lastSignInError = BBRErrors.ERR_EMPTY_EMAIL;
 		} else {
 			BBRUser candidate = mgr.findUserByEmail(email);
 			if (candidate == null) {
-				respText = BBRErrors.ERR_USER_NOTFOUND;
+				lastSignInError = BBRErrors.ERR_USER_NOTFOUND;
 			} else {
 				if (candidate.comparePasswordTo(BBRUserManager.encodePassword(password))) {
 					user = candidate;
-					respText = "";
+					lastSignInError = "";
 				} else {
-					respText = BBRErrors.ERR_INCORRECT_PASSWORD;
+					lastSignInError = BBRErrors.ERR_INCORRECT_PASSWORD;
 				}
 			}
 		}
 		
-		return respText;
+		return lastSignInError;
+	}
+	
+	public String getLastSignInError() {
+		return lastSignInError;
 	}
 
 	public String SignInByCookie(HttpServletRequest request) {
 		BBRUserManager mgr = new BBRUserManager();
-		String respText = "";
 
 		String email = "";
 		String pwdhash = "";
@@ -64,19 +67,19 @@ public class BBRApplication {
 		if (email != "" && pwdhash != "") {
 			BBRUser candidate = mgr.findUserByEmail(email);
 			if (candidate == null) {
-				respText = BBRErrors.ERR_USER_NOTFOUND;
+				lastSignInError = BBRErrors.ERR_USER_NOTFOUND;
 			} else {
 				if (candidate.comparePasswordTo(pwdhash)) {
 					user = candidate;
-					respText = "";
+					lastSignInError = "";
 				} else {
-					respText = BBRErrors.ERR_INCORRECT_PASSWORD;
+					lastSignInError = BBRErrors.ERR_INCORRECT_PASSWORD;
 				}
 			}
 			
 		}
 				
-		return respText;
+		return lastSignInError;
 	}
 
 	public String SignOut(HttpServletResponse response) {
@@ -86,17 +89,22 @@ public class BBRApplication {
 		return BBRErrors.MSG_USER_SIGNED_OUT;
 	}
 	
-	public String SignUp(String email, String firstName, String lastName, String password) {
+	public String SignUp(String email, String firstName, String lastName, String password, String passwordCopy) {
 		BBRUserManager mgr = new BBRUserManager();
-		String respText = "";
 		
+		if (!password.equals(passwordCopy)) {
+			lastSignInError = BBRErrors.ERR_INCORRECT_PASSWORD;
+			return lastSignInError;
+		}
+			
 		try {
 			BBRUser candidate = mgr.createAndStoreUser(email, firstName, lastName, password);
 			user = candidate;
+			lastSignInError = "";
 		} catch (Exception ex) {
-			respText = ex.getLocalizedMessage();
+			lastSignInError = ex.getLocalizedMessage();
 		}
-		return respText;
+		return lastSignInError;
 	}
 
 
@@ -246,13 +254,14 @@ public class BBRApplication {
 		if (user == null)
 			return "general-signin.jsp";
 
-		if (user.getApproved())
-			return "user-profile.jsp";
-					
 		if (user.getRole() == BBRUser.BBRUserRole.ROLE_BBR_OWNER)
 			return "admin-index.jsp";
 		
-		return "general-signin.jsp";
+		if (user.getApproved())
+			return "user-profile.jsp";
+		else
+			return "user-profile.jsp";
+		
 	}
 	
 	public boolean isPageAvailable(String page) {
@@ -264,4 +273,5 @@ public class BBRApplication {
 
 		return false;
 	}
+	
 }
