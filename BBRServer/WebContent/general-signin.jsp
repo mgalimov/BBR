@@ -29,8 +29,8 @@
 	             			$('#welcomeText').html(responseText);        
 		         			$('#alertMessage').removeClass('hide');
 	                	});
-	        */
             });
+	        */
             
             
             $('#signUp').click(function(event) { 
