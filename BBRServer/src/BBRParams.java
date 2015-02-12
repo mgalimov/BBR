@@ -10,6 +10,9 @@ public class BBRParams {
 		String[] params;
 		String[] param;
 
+		if (queryString == null)
+			return;
+		
 		try {
 			params = URLDecoder.decode(queryString, "UTF-8").split("&");
 		} catch (UnsupportedEncodingException ex) {
@@ -30,4 +33,9 @@ public class BBRParams {
 	public String get(String param) {
 		return parameters.get(param);
 	}
+	
+	public int getLength() {
+		return parameters.size();
+	}
+	
 }

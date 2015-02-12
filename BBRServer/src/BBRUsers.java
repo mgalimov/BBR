@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import BBRClientApp.BBRApplication;
 
 /**
@@ -65,7 +66,10 @@ public class BBRUsers extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		BBRApplication app = BBRApplication.getApp(request);
-		String respText = app.getUsers();
+		String pageNum = request.getParameter("page_num");
+		String rowsPerPage = request.getParameter("rows_per_page");
+        
+		String respText = app.getUsers(Integer.parseInt(pageNum), Integer.parseInt(rowsPerPage));
 		
 		response.setContentType("text/plain");  
 		response.setCharacterEncoding("UTF-8"); 

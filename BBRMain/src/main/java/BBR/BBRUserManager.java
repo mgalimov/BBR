@@ -3,15 +3,19 @@ package BBR;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 
-public class BBRUserManager {
+public class BBRUserManager extends BBRDataManager<BBRUser> {
 
-    public BBRUser createAndStoreUser(String email, String firstName, String lastName, String password) throws Exception {
+    public BBRUserManager(Class<BBRUser> type) {
+		super(type);
+	}
+
+	public BBRUser createAndStoreUser(String email, String firstName, String lastName, String password) throws Exception {
         Session session = BBRUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
 
@@ -38,7 +42,22 @@ public class BBRUserManager {
         BBRUtil.commitTran(tr);
         return new BBRDataSet<BBRUser>(list);
     }
-    
+
+    @SuppressWarnings("unchecked")
+	public BBRDataSet<BBRUser> listUsers(int pageNumber, int pageSize) {
+        boolean tr = BBRUtil.beginTran();
+        
+        Session session = BBRUtil.getSession();
+        Long count = (Long)session.createQuery("Select count(*) from BBRUser u").uniqueResult();
+        Query query = session.createQuery("from BBRUser");
+        query.setFirstResult((pageNumber - 1) * pageSize);
+        query.setMaxResults(pageSize);
+        List<BBRUser> list = query.list();
+        BBRUtil.commitTran(tr);
+
+        return new BBRDataSet<BBRUser>(list, count);
+    }
+
 	public BBRUser findUserByEmail(String email) {
         boolean tr = BBRUtil.beginTran();
         BBRUser result = (BBRUser) BBRUtil.getSession().createQuery("from BBRUser as user where user.email = '" + email + "'").uniqueResult();

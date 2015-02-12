@@ -15,7 +15,12 @@ public class BBRDataSet<T> {
 		total_rows = i.toString();
 		this.page_data = rows;
 	}
-	
+
+	public BBRDataSet (List<T> rows, Long realSize) {
+		total_rows = realSize.toString();
+		this.page_data = rows;
+	}
+
 	public String toJson() {
 		return new Gson().toJson(this);
 	}

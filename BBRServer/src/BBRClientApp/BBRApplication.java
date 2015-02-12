@@ -25,7 +25,7 @@ public class BBRApplication {
 	}
 
 	public String SignIn(String email, String password) {
-		BBRUserManager mgr = new BBRUserManager();
+		BBRUserManager mgr = new BBRUserManager(BBRUser.class);
 		
 		if (email == null || email == "") {
 			lastSignInError = BBRErrors.ERR_EMPTY_EMAIL;
@@ -51,7 +51,7 @@ public class BBRApplication {
 	}
 
 	public String SignInByCookie(HttpServletRequest request) {
-		BBRUserManager mgr = new BBRUserManager();
+		BBRUserManager mgr = new BBRUserManager(BBRUser.class);
 
 		String email = "";
 		String pwdhash = "";
@@ -90,7 +90,7 @@ public class BBRApplication {
 	}
 	
 	public String SignUp(String email, String firstName, String lastName, String password, String passwordCopy) {
-		BBRUserManager mgr = new BBRUserManager();
+		BBRUserManager mgr = new BBRUserManager(BBRUser.class);
 		
 		if (!password.equals(passwordCopy)) {
 			lastSignInError = BBRErrors.ERR_INCORRECT_PASSWORD;
@@ -109,7 +109,7 @@ public class BBRApplication {
 
 
 	public String getUserData(Long id) {
-		BBRUserManager mgr = new BBRUserManager();
+		BBRUserManager mgr = new BBRUserManager(BBRUser.class);
 		String json = "";
 		
 		try {
@@ -125,7 +125,7 @@ public class BBRApplication {
 	}
 
 	public String deleteUser(Long id) {
-		BBRUserManager mgr = new BBRUserManager();
+		BBRUserManager mgr = new BBRUserManager(BBRUser.class);
 		String respText = "";
 		
 		try {
@@ -141,7 +141,7 @@ public class BBRApplication {
 	}
 
 	public String updateUser(Long id, String firstName, String lastName, boolean approved, int role) {
-		BBRUserManager mgr = new BBRUserManager();
+		BBRUserManager mgr = new BBRUserManager(BBRUser.class);
 		String respText = "";
 
 		try {
@@ -163,7 +163,7 @@ public class BBRApplication {
 	}
 
 	public String createUser(String email, String firstName, String lastName, String password) {
-		BBRUserManager mgr = new BBRUserManager();
+		BBRUserManager mgr = new BBRUserManager(BBRUser.class);
 		String respText = "";
 
 		try {
@@ -177,12 +177,17 @@ public class BBRApplication {
 	}
 
 	public String getUsers() {
-		BBRUserManager mgr = new BBRUserManager();
+		BBRUserManager mgr = new BBRUserManager(BBRUser.class);
 		return mgr.listUsers().toJson();
 	}
 
+	public String getUsers(int pageNumber, int pageSize) {
+		BBRUserManager mgr = new BBRUserManager(BBRUser.class);
+		return mgr.listUsers(pageNumber, pageSize).toJson();
+	}
+
 	public String getShopData(Long id) {
-		BBRShopManager mgr = new BBRShopManager();
+		BBRShopManager mgr = new BBRShopManager(BBRShop.class);
 		String json = "";
 		
 		try {
@@ -198,7 +203,7 @@ public class BBRApplication {
 	}
 
 	public String deleteShop(Long id) {
-		BBRShopManager mgr = new BBRShopManager();
+		BBRShopManager mgr = new BBRShopManager(BBRShop.class);
 		String respText = "";
 		
 		try {
@@ -214,7 +219,7 @@ public class BBRApplication {
 	}
 
 	public String updateShop(Long id, String title) {
-		BBRShopManager mgr = new BBRShopManager();
+		BBRShopManager mgr = new BBRShopManager(BBRShop.class);
 		String respText = "";
 
 		try {
@@ -233,7 +238,7 @@ public class BBRApplication {
 	}
 
 	public String createShop(String title) {
-		BBRShopManager mgr = new BBRShopManager();
+		BBRShopManager mgr = new BBRShopManager(BBRShop.class);
 		String respText = "";
 
 		try {
@@ -246,8 +251,14 @@ public class BBRApplication {
 	}
 
 	public String getShops() {
-		BBRShopManager mgr = new BBRShopManager();
+		BBRShopManager mgr = new BBRShopManager(BBRShop.class);
 		return mgr.listShops().toJson();
+	}
+
+	public String getShops(int pageNumber, int pageSize) {
+		BBRShopManager mgr = new BBRShopManager(BBRShop.class);
+		return mgr.list<BBRShop>(pageNumber, pageSize);
+		//return mgr.listShops(pageNumber, pageSize).toJson();
 	}
 
 	public String getWelcomePage() {

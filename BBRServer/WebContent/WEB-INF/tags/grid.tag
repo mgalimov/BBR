@@ -79,11 +79,11 @@
 	 	            ${sorting}
 	 	        ],
 	 	        useFilters: false,
+	 	        useSortableLists: true,
 	 	     	bootstrap_version: '3',
 	 	     	pageNum: 1,
 	 	  		rowsPerPage: 10,
 	 	  		maxRowsPerPage: 100,
-	 	  		row_primary_key: 'id',
 	 	  		rowSelectionMode: 'single',
 	 	  		debug_mode: 'no',
 	     	  	onDatagridError: function(event, data) {

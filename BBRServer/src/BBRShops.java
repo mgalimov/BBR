@@ -58,7 +58,10 @@ public class BBRShops extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		BBRApplication app = BBRApplication.getApp(request);
-		String respText = app.getShops();
+		String pageNum = request.getParameter("page_num");
+		String rowsPerPage = request.getParameter("rows_per_page");
+        
+		String respText = app.getShops(Integer.parseInt(pageNum), Integer.parseInt(rowsPerPage));
 		
 		response.setContentType("text/plain");  
 		response.setCharacterEncoding("UTF-8"); 
