@@ -19,7 +19,7 @@ public class BBRDataManager<T> {
     @SuppressWarnings("unchecked")
 	public BBRDataSet<T> list() {
         boolean tr = BBRUtil.beginTran();
-        List<T> list = BBRUtil.getSession().createQuery("from BBRUser").list();
+        List<T> list = BBRUtil.getSession().createQuery("from " + type.getName()).list();
         BBRUtil.commitTran(tr);
         return new BBRDataSet<T>(list);
     }
@@ -29,8 +29,8 @@ public class BBRDataManager<T> {
         boolean tr = BBRUtil.beginTran();
         
         Session session = BBRUtil.getSession();
-        Long count = (Long)session.createQuery("Select count(*) from BBRUser u").uniqueResult();
-        Query query = session.createQuery("from BBRUser");
+        Long count = (Long)session.createQuery("Select count(*) from " + type.getName() + " u").uniqueResult();
+        Query query = session.createQuery("from " + type.getName());
         query.setFirstResult((pageNumber - 1) * pageSize);
         query.setMaxResults(pageSize);
         List<T> list = query.list();

@@ -113,7 +113,7 @@ public class BBRApplication {
 		String json = "";
 		
 		try {
-			BBRUser user = mgr.findUserById(id);
+			BBRUser user = mgr.findById(id);
 			if (user != null)
 				json = user.toJson();
 			else
@@ -129,9 +129,9 @@ public class BBRApplication {
 		String respText = "";
 		
 		try {
-			BBRUser user = mgr.findUserById(id);
+			BBRUser user = mgr.findById(id);
 			if (user != null)
-				mgr.deleteUser(user);
+				mgr.delete(user);
 			else
 				respText = BBRErrors.ERR_USER_NOTFOUND;
 		} catch (Exception ex) {
@@ -145,13 +145,13 @@ public class BBRApplication {
 		String respText = "";
 
 		try {
-			BBRUser user = mgr.findUserById(id);
+			BBRUser user = mgr.findById(id);
 			if (user != null) {
 				user.setFirstName(firstName);
 				user.setLastName(lastName);
 				user.setApproved(approved);
 				user.setRole(role);
-				mgr.updateUser(user);
+				mgr.update(user);
 			}
 			else
 				respText = BBRErrors.ERR_USER_NOTFOUND;
@@ -168,7 +168,7 @@ public class BBRApplication {
 
 		try {
 			mgr.createAndStoreUser(email, firstName, lastName, password);
-			//BBRUserManager.generatePassword()
+		//	BBRUserManager.generatePassword()
 		} catch (Exception ex) {
 			respText = ex.getLocalizedMessage();
 		}
@@ -178,12 +178,12 @@ public class BBRApplication {
 
 	public String getUsers() {
 		BBRUserManager mgr = new BBRUserManager(BBRUser.class);
-		return mgr.listUsers().toJson();
+		return mgr.list().toJson();
 	}
 
 	public String getUsers(int pageNumber, int pageSize) {
 		BBRUserManager mgr = new BBRUserManager(BBRUser.class);
-		return mgr.listUsers(pageNumber, pageSize).toJson();
+		return mgr.list(pageNumber, pageSize).toJson();
 	}
 
 	public String getShopData(Long id) {
@@ -191,7 +191,7 @@ public class BBRApplication {
 		String json = "";
 		
 		try {
-			BBRShop shop = mgr.findShopById(id);
+			BBRShop shop = mgr.findById(id);
 			if (shop != null)
 				json = shop.toJson();
 			else
@@ -207,9 +207,9 @@ public class BBRApplication {
 		String respText = "";
 		
 		try {
-			BBRShop shop = mgr.findShopById(id);
+			BBRShop shop = mgr.findById(id);
 			if (shop != null)
-				mgr.deleteShop(shop);
+				mgr.delete(shop);
 			else
 				respText = BBRErrors.ERR_USER_NOTFOUND;
 		} catch (Exception ex) {
@@ -223,10 +223,10 @@ public class BBRApplication {
 		String respText = "";
 
 		try {
-			BBRShop shop = mgr.findShopById(id);
+			BBRShop shop = mgr.findById(id);
 			if (shop != null) {
 				shop.setTitle(title);
-				mgr.updateShop(shop);
+				mgr.update(shop);
 			}
 			else
 				respText = BBRErrors.ERR_USER_NOTFOUND;
@@ -252,13 +252,12 @@ public class BBRApplication {
 
 	public String getShops() {
 		BBRShopManager mgr = new BBRShopManager(BBRShop.class);
-		return mgr.listShops().toJson();
+		return mgr.list().toJson();
 	}
 
 	public String getShops(int pageNumber, int pageSize) {
 		BBRShopManager mgr = new BBRShopManager(BBRShop.class);
-		return mgr.list<BBRShop>(pageNumber, pageSize);
-		//return mgr.listShops(pageNumber, pageSize).toJson();
+		return mgr.list(pageNumber, pageSize).toJson();
 	}
 
 	public String getWelcomePage() {
