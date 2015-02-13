@@ -1,3 +1,4 @@
+import java.io.BufferedReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Hashtable;
@@ -5,8 +6,8 @@ import java.util.Hashtable;
 
 public class BBRParams {
 	private Hashtable<String, String> parameters = new Hashtable<String, String>();
-		
-	public BBRParams(String queryString) {
+	
+	private void readString(String queryString) {
 		String[] params;
 		String[] param;
 
@@ -27,7 +28,22 @@ public class BBRParams {
 				if (param.length == 1) {
 					parameters.put(param[0], "");
 				}
-		}
+		}		
+	}
+	
+	public BBRParams(String queryString) {
+		readString(queryString);
+	}
+	
+	public BBRParams(BufferedReader reader) {
+		StringBuffer jb = new StringBuffer();
+		String line = null;
+		try {
+			while ((line = reader.readLine()) != null)
+				jb.append(line);
+		} catch (Exception e) { /*report an error*/ }
+
+		readString(jb.toString());
 	}
 	
 	public String get(String param) {
@@ -37,5 +53,9 @@ public class BBRParams {
 	public int getLength() {
 		return parameters.size();
 	}
-	
+
+	public String getComplex(String param) {
+		return parameters.get(param);
+	}
+
 }

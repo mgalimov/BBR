@@ -38,7 +38,7 @@
 		<!--  if touch event support is needed (mobile devices) -->
 		<script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
 		
-				<!--  PAGINATION plugin -->
+		<!--  PAGINATION plugin -->
 		<link rel="stylesheet" type="text/css" href="css/jquery.bs_pagination.min.css">
 		<script type="text/javascript" src="js/jquery.bs_pagination.min.js"></script>
 		<script type="text/javascript" src="js/bs_pagination/localization/en.min.js"></script>
@@ -49,15 +49,16 @@
 		<script type="text/javascript" src="js/jui_filter_rules/localization/en.js"></script>
 		<!--  required from filters plugin -->
 		<script type="text/javascript" src="js/moment.min.js"></script>
+
+		<!-- BBR Utils -->
+	    <script src="js/bbr-utils.js"></script>
+	    <link href="css/bbr-admin.css" type="text/css" rel="stylesheet">
 		 
 		<!--  DATAGRID plugin -->
 		<link rel="stylesheet" type="text/css" href="css/jquery.bs_grid.min.css">
 		<script type="text/javascript" src="js/jquery.bs_grid.js"></script>
 		<script type="text/javascript" src="js/bs_grid/localization/en.js"></script>
 
-		<!-- BBR Utils -->
-	    <script src="js/bbr-utils.js"></script>
-	    <link href="css/bbr-admin.css" type="text/css" rel="stylesheet">
   	</head>
   	<body>
 		<t:admin-top-menu title="${title}" />

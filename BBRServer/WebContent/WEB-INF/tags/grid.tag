@@ -73,13 +73,15 @@
 	$('#grid').bs_grid({
 	 			ajaxFetchDataURL: '${method}',
 	 	        row_primary_key: 'id',
-	 	    	columns: [${items}
+	 	    	columns: [
+	 	    	    ${items}
 	 	    	],
 	 	        sorting: [
 	 	            ${sorting}
 	 	        ],
 	 	        useFilters: false,
 	 	        useSortableLists: true,
+	 	        showSortingIndicator: true,
 	 	     	bootstrap_version: '3',
 	 	     	pageNum: 1,
 	 	  		rowsPerPage: 10,

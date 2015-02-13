@@ -1,3 +1,4 @@
+import java.io.BufferedReader;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -58,10 +59,15 @@ public class BBRShops extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		BBRApplication app = BBRApplication.getApp(request);
-		String pageNum = request.getParameter("page_num");
-		String rowsPerPage = request.getParameter("rows_per_page");
-        
+		
+		BBRParams params = new BBRParams(request.getReader());
+
+		String pageNum = params.get("page_num");
+		String rowsPerPage = params.get("rows_per_page");
+		String sortingFields = params.getComplex("sorting");
+		
 		String respText = app.getShops(Integer.parseInt(pageNum), Integer.parseInt(rowsPerPage));
+		//String respText = app.getShops(1, 10);
 		
 		response.setContentType("text/plain");  
 		response.setCharacterEncoding("UTF-8"); 
