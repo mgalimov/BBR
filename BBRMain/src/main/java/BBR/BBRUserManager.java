@@ -8,8 +8,9 @@ import org.hibernate.Session;
 
 public class BBRUserManager extends BBRDataManager<BBRUser> {
 
-    public BBRUserManager(Class<BBRUser> type) {
-		super(type);
+	public BBRUserManager() {
+		super(); 
+		// TODO Auto-generated constructor stub
 	}
 
 	public BBRUser createAndStoreUser(String email, String firstName, String lastName, String password) throws Exception {

@@ -1,8 +1,12 @@
 import java.io.BufferedReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class BBRParams {
 	private Hashtable<String, String> parameters = new Hashtable<String, String>();
@@ -34,14 +38,16 @@ public class BBRParams {
 	public BBRParams(String queryString) {
 		readString(queryString);
 	}
-	
+		
 	public BBRParams(BufferedReader reader) {
 		StringBuffer jb = new StringBuffer();
 		String line = null;
 		try {
 			while ((line = reader.readLine()) != null)
 				jb.append(line);
-		} catch (Exception e) { /*report an error*/ }
+		} catch (Exception e) {
+			
+		};
 
 		readString(jb.toString());
 	}
@@ -54,8 +60,46 @@ public class BBRParams {
 		return parameters.size();
 	}
 
-	public String getComplex(String param) {
-		return parameters.get(param);
+	public List<Hashtable<String, String>> getArray(String param) {
+		List<Hashtable<String, String>> res = new ArrayList<Hashtable<String, String>>();
+		
+		for (String key : parameters.keySet()) {
+			if (key.startsWith(param + "[")) {
+				String k = "";
+				String v = "";
+				boolean b = false;
+				boolean e = false;
+				int j;
+				for (j = 0; (j < key.length()) && !e; j++) {
+					if (key.charAt(j) == ']')
+						e = true;
+					if (b && !e)
+						k += key.charAt(j);
+					if (key.charAt(j) == '[')
+						b = true;
+				}
+				b = false;
+				e = false;
+				for (; (j < key.length()) && !e; j++) {
+					if (key.charAt(j) == ']')
+						e = true;
+					if (b && !e)
+						v += key.charAt(j);
+					if (key.charAt(j) == '[')
+						b = true;
+				}
+				int index = Integer.parseInt(k);
+				if (res.size() == 0)
+					res.add(index, new Hashtable<String, String>());
+				if (res.get(index) == null)
+					res.add(index, new Hashtable<String, String>());
+				Hashtable<String, String> element = res.get(index);
+				element.put(v, parameters.get(key));
+				res.set(index, element);
+			}
+		}
+		
+		return res;
 	}
 
 }

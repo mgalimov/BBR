@@ -1,5 +1,9 @@
 package BBR;
 
+import java.lang.reflect.ParameterizedType;
+import java.util.Hashtable;
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.*;
@@ -50,4 +54,9 @@ public class BBRUtil {
         	session.getTransaction().commit();
     }
 
+    @SuppressWarnings("rawtypes")
+	public static Class getGenericParameterClass(Class actualClass, int parameterIndex) {
+    //	http://habrahabr.ru/post/66593/
+        return (Class) ((ParameterizedType) actualClass.getGenericSuperclass()).getActualTypeArguments()[parameterIndex];
+    }
 }

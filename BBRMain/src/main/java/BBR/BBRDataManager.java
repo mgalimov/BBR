@@ -1,36 +1,40 @@
 package BBR;
 
-import java.util.List;
 
+import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
+
 //http://stackoverflow.com/questions/3403909/get-generic-type-of-class-at-runtime
 public class BBRDataManager<T> {
-	private final Class<T> type;
-	
-	public BBRDataManager(Class<T> type) {
-        this.type = type;
-	}
+	private final String typeName;
 
-	public Class<T> getMyType() {
-       return this.type;
+	public BBRDataManager() {
+		typeName = BBRUtil.getGenericParameterClass(this.getClass(), 0).getName();
 	}
-	
+	 
     @SuppressWarnings("unchecked")
 	public BBRDataSet<T> list() {
         boolean tr = BBRUtil.beginTran();
-        List<T> list = BBRUtil.getSession().createQuery("from " + type.getName()).list();
+        List<T> list = BBRUtil.getSession().createQuery("from " + typeName).list();
         BBRUtil.commitTran(tr);
         return new BBRDataSet<T>(list);
     }
 
     @SuppressWarnings("unchecked")
-	public BBRDataSet<T> list(int pageNumber, int pageSize) {
+	public BBRDataSet<T> list(int pageNumber, int pageSize, String orderBy) {
         boolean tr = BBRUtil.beginTran();
         
         Session session = BBRUtil.getSession();
-        Long count = (Long)session.createQuery("Select count(*) from " + type.getName() + " u").uniqueResult();
-        Query query = session.createQuery("from " + type.getName());
+        if (orderBy == null)
+        	orderBy = "";
+        if (orderBy != "") {
+        	orderBy = orderBy.trim();
+        	if (!orderBy.startsWith("order by"))
+        		orderBy = "order by " + orderBy.trim();
+        }
+        Long count = (Long)session.createQuery("Select count(*) from " + typeName).uniqueResult();
+        Query query = session.createQuery("from " + typeName + " " + orderBy);
         query.setFirstResult((pageNumber - 1) * pageSize);
         query.setMaxResults(pageSize);
         List<T> list = query.list();
@@ -55,7 +59,7 @@ public class BBRDataManager<T> {
 	public T findById(Long id) {
         boolean tr = BBRUtil.beginTran();
        		
-        T result = (T) BBRUtil.getSession().createQuery("from " + type.getName() + " as user where user.id = '" + id.toString() + "'").uniqueResult();
+        T result = (T) BBRUtil.getSession().createQuery("from " + typeName + " as t where t.id = '" + id.toString() + "'").uniqueResult();
         BBRUtil.commitTran(tr);
         return result;
     }

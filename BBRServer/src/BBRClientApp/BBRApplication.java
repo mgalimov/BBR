@@ -1,5 +1,8 @@
 package BBRClientApp;
 
+import java.util.Hashtable;
+import java.util.List;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +28,7 @@ public class BBRApplication {
 	}
 
 	public String SignIn(String email, String password) {
-		BBRUserManager mgr = new BBRUserManager(BBRUser.class);
+		BBRUserManager mgr = new BBRUserManager();
 		
 		if (email == null || email == "") {
 			lastSignInError = BBRErrors.ERR_EMPTY_EMAIL;
@@ -51,8 +54,8 @@ public class BBRApplication {
 	}
 
 	public String SignInByCookie(HttpServletRequest request) {
-		BBRUserManager mgr = new BBRUserManager(BBRUser.class);
-
+		BBRUserManager mgr = new BBRUserManager();
+		
 		String email = "";
 		String pwdhash = "";
 		Cookie[] cookies = request.getCookies();
@@ -90,8 +93,8 @@ public class BBRApplication {
 	}
 	
 	public String SignUp(String email, String firstName, String lastName, String password, String passwordCopy) {
-		BBRUserManager mgr = new BBRUserManager(BBRUser.class);
-		
+		BBRUserManager mgr = new BBRUserManager();
+			
 		if (!password.equals(passwordCopy)) {
 			lastSignInError = BBRErrors.ERR_INCORRECT_PASSWORD;
 			return lastSignInError;
@@ -109,7 +112,7 @@ public class BBRApplication {
 
 
 	public String getUserData(Long id) {
-		BBRUserManager mgr = new BBRUserManager(BBRUser.class);
+		BBRUserManager mgr = new BBRUserManager();
 		String json = "";
 		
 		try {
@@ -125,7 +128,7 @@ public class BBRApplication {
 	}
 
 	public String deleteUser(Long id) {
-		BBRUserManager mgr = new BBRUserManager(BBRUser.class);
+		BBRUserManager mgr = new BBRUserManager();
 		String respText = "";
 		
 		try {
@@ -141,7 +144,7 @@ public class BBRApplication {
 	}
 
 	public String updateUser(Long id, String firstName, String lastName, boolean approved, int role) {
-		BBRUserManager mgr = new BBRUserManager(BBRUser.class);
+		BBRUserManager mgr = new BBRUserManager();
 		String respText = "";
 
 		try {
@@ -163,7 +166,7 @@ public class BBRApplication {
 	}
 
 	public String createUser(String email, String firstName, String lastName, String password) {
-		BBRUserManager mgr = new BBRUserManager(BBRUser.class);
+		BBRUserManager mgr = new BBRUserManager();
 		String respText = "";
 
 		try {
@@ -177,17 +180,18 @@ public class BBRApplication {
 	}
 
 	public String getUsers() {
-		BBRUserManager mgr = new BBRUserManager(BBRUser.class);
+		BBRUserManager mgr = new BBRUserManager();
 		return mgr.list().toJson();
 	}
 
-	public String getUsers(int pageNumber, int pageSize) {
-		BBRUserManager mgr = new BBRUserManager(BBRUser.class);
-		return mgr.list(pageNumber, pageSize).toJson();
+	public String getUsers(int pageNumber, int pageSize, List<Hashtable<String, String>> sortingFields) {
+		BBRUserManager mgr = new BBRUserManager();
+
+		return mgr.list(pageNumber, pageSize, getOrderBy(sortingFields)).toJson();
 	}
 
 	public String getShopData(Long id) {
-		BBRShopManager mgr = new BBRShopManager(BBRShop.class);
+		BBRShopManager mgr = new BBRShopManager();
 		String json = "";
 		
 		try {
@@ -203,7 +207,7 @@ public class BBRApplication {
 	}
 
 	public String deleteShop(Long id) {
-		BBRShopManager mgr = new BBRShopManager(BBRShop.class);
+		BBRShopManager mgr = new BBRShopManager();
 		String respText = "";
 		
 		try {
@@ -219,7 +223,7 @@ public class BBRApplication {
 	}
 
 	public String updateShop(Long id, String title) {
-		BBRShopManager mgr = new BBRShopManager(BBRShop.class);
+		BBRShopManager mgr = new BBRShopManager();
 		String respText = "";
 
 		try {
@@ -238,7 +242,7 @@ public class BBRApplication {
 	}
 
 	public String createShop(String title) {
-		BBRShopManager mgr = new BBRShopManager(BBRShop.class);
+		BBRShopManager mgr = new BBRShopManager();
 		String respText = "";
 
 		try {
@@ -251,13 +255,13 @@ public class BBRApplication {
 	}
 
 	public String getShops() {
-		BBRShopManager mgr = new BBRShopManager(BBRShop.class);
+		BBRShopManager mgr = new BBRShopManager();
 		return mgr.list().toJson();
 	}
 
-	public String getShops(int pageNumber, int pageSize) {
-		BBRShopManager mgr = new BBRShopManager(BBRShop.class);
-		return mgr.list(pageNumber, pageSize).toJson();
+	public String getShops(int pageNumber, int pageSize, List<Hashtable<String, String>> sortingFields) {
+		BBRShopManager mgr = new BBRShopManager();
+		return mgr.list(pageNumber, pageSize, getOrderBy(sortingFields)).toJson();
 	}
 
 	public String getWelcomePage() {
@@ -284,4 +288,15 @@ public class BBRApplication {
 		return false;
 	}
 	
+    public static String getOrderBy(List<Hashtable<String, String>> sortingFields) {
+    	String orderBy = "";
+    	for (Hashtable<String, String> element : sortingFields) {
+    		orderBy += element.get("field");
+    		if (element.get("order").equals("ascending"))
+    			orderBy += " asc, ";
+    		else if (element.get("order").equals("descending"))
+    			orderBy += " desc, ";
+    	}
+		return orderBy.substring(0, orderBy.length() - 2);
+    }
 }
