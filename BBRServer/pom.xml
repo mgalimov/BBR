@@ -107,6 +107,16 @@
   			<artifactId>BBRMain</artifactId>
   			<version>0.0.1</version>
   		</dependency>
+  		<dependency>
+  			<groupId>BBRAcc</groupId>
+  			<artifactId>BBRAcc</artifactId>
+  			<version>0.0.1</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>BBRCust</groupId>
+  			<artifactId>BBRCust</artifactId>
+  			<version>0.0.1</version>
+  		</dependency>
   	</dependencies>
   </dependencyManagement>
 
@@ -123,6 +133,14 @@
   	<dependency>
   		<groupId>mysql</groupId>
   		<artifactId>mysql-connector-java</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>BBRAcc</groupId>
+  		<artifactId>BBRAcc</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>BBRCust</groupId>
+  		<artifactId>BBRCust</artifactId>
   	</dependency>
   </dependencies>
 </project>

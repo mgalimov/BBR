@@ -19,5 +19,7 @@
 	</classpathentry>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/BBRMain"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/BBRAcc"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/BBRCust"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

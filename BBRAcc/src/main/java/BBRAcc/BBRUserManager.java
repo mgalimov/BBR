@@ -1,10 +1,15 @@
-package BBR;
+package BBRAcc;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
+
 import org.hibernate.Session;
+
+import BBR.BBRDataManager;
+import BBR.BBRErrors;
+import BBR.BBRUtil;
 
 public class BBRUserManager extends BBRDataManager<BBRUser> {
 

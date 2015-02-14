@@ -1,9 +1,6 @@
 package BBR;
 
 import java.lang.reflect.ParameterizedType;
-import java.util.Hashtable;
-import java.util.List;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.*;

@@ -1,13 +1,16 @@
-package BBR;
+package BBRCust;
 
 import org.hibernate.Session;
 
-public class BBRShopManager extends BBRDataManager<BBRShop>{
+import BBR.BBRDataManager;
+import BBR.BBRUtil;
+
+public class BBRShopSpecialistManager extends BBRDataManager<BBRShopSpecialist>{
 	public void createAndStoreShop(String title) {
         Session session = BBRUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
 
-        BBRShop theShop = new BBRShop();
+        BBRShopSpecialist theShop = new BBRShopSpecialist();
         theShop.setTitle(title);
         session.save(theShop);
 

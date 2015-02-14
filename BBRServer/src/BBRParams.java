@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 public class BBRParams {
 	private Hashtable<String, String> parameters = new Hashtable<String, String>();
 	

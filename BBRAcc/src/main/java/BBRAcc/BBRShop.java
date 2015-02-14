@@ -1,4 +1,6 @@
-package BBR;
+package BBRAcc;
+
+import BBR.BBRDataElement;
 
 public class BBRShop extends BBRDataElement {
 	private Long id;

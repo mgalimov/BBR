@@ -1,8 +1,11 @@
-package BBR;
+package BBRAcc;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import BBR.BBRDataElement;
+import BBR.BBRDataSet;
 
 @SuppressWarnings("unused")
 public class BBRUser extends BBRDataElement {

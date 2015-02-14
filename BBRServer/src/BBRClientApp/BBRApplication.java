@@ -2,16 +2,15 @@ package BBRClientApp;
 
 import java.util.Hashtable;
 import java.util.List;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import BBR.*;
+import BBR.BBRErrors;
+import BBRAcc.*;
 
 public class BBRApplication {
-	public BBRUser user = null;
+	public BBRAcc.BBRUser user = null;
 	private String lastSignInError = ""; 
 	
 	public BBRApplication() {

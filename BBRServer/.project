@@ -3,6 +3,8 @@
 	<name>BBRServer</name>
 	<comment></comment>
 	<projects>
+		<project>BBRAcc</project>
+		<project>BBRCust</project>
 		<project>BBRMain</project>
 	</projects>
 	<buildSpec>
