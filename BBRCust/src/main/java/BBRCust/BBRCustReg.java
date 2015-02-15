@@ -9,7 +9,7 @@ public class BBRCustReg {
 	
 	private static int getSessionIndex() {
 		Configuration config = new Configuration();
-		config.configure("hibernate.cfg.xml");
+		config.configure("hibernate2.cfg.xml");
 		
 		return BBRUtil.buildSessionFactory(config);
 	}
