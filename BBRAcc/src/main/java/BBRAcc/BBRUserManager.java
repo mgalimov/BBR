@@ -14,14 +14,14 @@ import BBR.BBRUtil;
 public class BBRUserManager extends BBRDataManager<BBRUser> {
 
 	public BBRUserManager() {
-		super(); 
-		// TODO Auto-generated constructor stub
+		super();
+		sessionIndex = BBRAccReg.sessionIndex;
 	}
 
 	public BBRUser createAndStoreUser(String email, String firstName, String lastName, String password) throws Exception {
-        Session session = BBRUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-
+        boolean tr = BBRUtil.beginTran(sessionIndex);
+        Session session = BBRUtil.getSession(sessionIndex);
+        
         if (findUserByEmail(email) != null) {
         	throw new Exception(BBRErrors.ERR_DUPLICATE_EMAIL);
         }
@@ -34,15 +34,15 @@ public class BBRUserManager extends BBRDataManager<BBRUser> {
         user.setApproved(false);
         session.save(user);
 
-        session.getTransaction().commit();
+        BBRUtil.commitTran(sessionIndex, tr);
         return user;
     }
     
 
 	public BBRUser findUserByEmail(String email) {
-        boolean tr = BBRUtil.beginTran();
-        BBRUser result = (BBRUser) BBRUtil.getSession().createQuery("from BBRUser as user where user.email = '" + email + "'").uniqueResult();
-        BBRUtil.commitTran(tr);
+        boolean tr = BBRUtil.beginTran(sessionIndex);
+        BBRUser result = (BBRUser) BBRUtil.getSession(sessionIndex).createQuery("from BBRUser as user where user.email = '" + email + "'").uniqueResult();
+        BBRUtil.commitTran(sessionIndex, tr);
         return result;
     }
 

@@ -6,14 +6,19 @@ import BBR.BBRDataManager;
 import BBR.BBRUtil;
 
 public class BBRShopManager extends BBRDataManager<BBRShop>{
+	
+	public BBRShopManager() {
+		super();
+		sessionIndex = BBRAccReg.sessionIndex;
+	}
 	public void createAndStoreShop(String title) {
-        Session session = BBRUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
+        boolean tr = BBRUtil.beginTran(sessionIndex);
+        Session session = BBRUtil.getSession(sessionIndex);
 
-        BBRShop theShop = new BBRShop();
-        theShop.setTitle(title);
-        session.save(theShop);
+        BBRShop shop = new BBRShop();
+        shop.setTitle(title);
+        session.save(shop);
 
-        session.getTransaction().commit();
+        BBRUtil.commitTran(sessionIndex, tr);
     }
 }

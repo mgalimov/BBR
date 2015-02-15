@@ -11,7 +11,7 @@
 
         <!-- Database connection settings -->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://localhost:3306/bbrdb</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/bbrcustdb</property>
         <property name="connection.username">root</property>
         <property name="connection.password"></property>
         
@@ -34,8 +34,7 @@
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">update</property>
 
-        <mapping resource="BBR/BBRShop.hbm.xml"/>
-        <mapping resource="BBR/BBRUser.hbm.xml"/>
+        <mapping resource="BBR/BBRShopSpecialist.hbm.xml"/>
 
     </session-factory>
 

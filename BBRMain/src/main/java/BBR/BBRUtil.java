@@ -1,6 +1,9 @@
 package BBR;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.*;
@@ -8,18 +11,16 @@ import org.hibernate.service.ServiceRegistry;
 import org.hibernate.cfg.Configuration;
 
 public class BBRUtil {
+    private static final List<SessionFactory> sessionFactory = new ArrayList<SessionFactory>();
+    private static int lastIndex = 0;
 
-    private static final SessionFactory sessionFactory = buildSessionFactory();
-
-    private static SessionFactory buildSessionFactory() {
+    public static int buildSessionFactory(Configuration configuration) {
         try {
-            // Create the SessionFactory from hibernate.cfg.xml
-        	Configuration configuration = new Configuration();
-        	configuration.configure("hibernate.cfg.xml");
         	StandardServiceRegistryBuilder regBuilder = new StandardServiceRegistryBuilder();
         	ServiceRegistry serviceRegistry = regBuilder.applySettings(configuration.getProperties()).build();
         	
-        	return configuration.buildSessionFactory(serviceRegistry);
+        	sessionFactory.add(lastIndex, configuration.buildSessionFactory(serviceRegistry));
+    		return lastIndex++;
         }
         catch (Throwable ex) {
             // Make sure you log the exception, as it might be swallowed
@@ -28,16 +29,16 @@ public class BBRUtil {
         }
     }
 
-    public static SessionFactory getSessionFactory() {
-        return sessionFactory;
+    public static SessionFactory getSessionFactory(int index) {
+        return sessionFactory.get(index);
     }
     
-    public static Session getSession () {
-    	return sessionFactory.getCurrentSession();
+    public static Session getSession (int index) {
+    	return sessionFactory.get(index).getCurrentSession();
     }
     
-    public static boolean beginTran() {
-        Session session = sessionFactory.getCurrentSession();
+    public static boolean beginTran(int index) {
+        Session session = sessionFactory.get(index).getCurrentSession();
         if (!session.getTransaction().isActive()) {
         	session.beginTransaction();
         	return true;
@@ -45,8 +46,8 @@ public class BBRUtil {
         	return false;
     }
 
-    public static void commitTran(boolean transactionStarted) {
-        Session session = sessionFactory.getCurrentSession();
+    public static void commitTran(int index, boolean transactionStarted) {
+        Session session = sessionFactory.get(index).getCurrentSession();
         if (transactionStarted)
         	session.getTransaction().commit();
     }

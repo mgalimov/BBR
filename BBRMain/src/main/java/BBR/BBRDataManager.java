@@ -7,24 +7,26 @@ import org.hibernate.Session;
 //http://stackoverflow.com/questions/3403909/get-generic-type-of-class-at-runtime
 public class BBRDataManager<T> {
 	private final String typeName;
+	protected int sessionIndex = -1;
 
 	public BBRDataManager() {
 		typeName = BBRUtil.getGenericParameterClass(this.getClass(), 0).getName();
+	//	get session index in all ascentors!
 	}
 	 
     @SuppressWarnings("unchecked")
 	public BBRDataSet<T> list() {
-        boolean tr = BBRUtil.beginTran();
-        List<T> list = BBRUtil.getSession().createQuery("from " + typeName).list();
-        BBRUtil.commitTran(tr);
+        boolean tr = BBRUtil.beginTran(sessionIndex);
+        List<T> list = BBRUtil.getSession(sessionIndex).createQuery("from " + typeName).list();
+        BBRUtil.commitTran(sessionIndex, tr);
         return new BBRDataSet<T>(list);
     }
 
     @SuppressWarnings("unchecked")
 	public BBRDataSet<T> list(int pageNumber, int pageSize, String orderBy) {
-        boolean tr = BBRUtil.beginTran();
+        boolean tr = BBRUtil.beginTran(sessionIndex);
         
-        Session session = BBRUtil.getSession();
+        Session session = BBRUtil.getSession(sessionIndex);
         if (orderBy == null)
         	orderBy = "";
         if (orderBy != "") {
@@ -37,29 +39,29 @@ public class BBRDataManager<T> {
         query.setFirstResult((pageNumber - 1) * pageSize);
         query.setMaxResults(pageSize);
         List<T> list = query.list();
-        BBRUtil.commitTran(tr);
+        BBRUtil.commitTran(sessionIndex, tr);
 
         return new BBRDataSet<T>(list, count);
     }
 
 	public void delete(T record){
-        boolean tr = BBRUtil.beginTran();
-        BBRUtil.getSession().delete(record);
-        BBRUtil.commitTran(tr);
+        boolean tr = BBRUtil.beginTran(sessionIndex);
+        BBRUtil.getSession(sessionIndex).delete(record);
+        BBRUtil.commitTran(sessionIndex, tr);
     }
 
 	public void update(T record) {
-        boolean tr = BBRUtil.beginTran();
-        BBRUtil.getSession().update(record);
-        BBRUtil.commitTran(tr);	
+        boolean tr = BBRUtil.beginTran(sessionIndex);
+        BBRUtil.getSession(sessionIndex).update(record);
+        BBRUtil.commitTran(sessionIndex, tr);	
 	}
 
     @SuppressWarnings("unchecked")
 	public T findById(Long id) {
-        boolean tr = BBRUtil.beginTran();
+        boolean tr = BBRUtil.beginTran(sessionIndex);
        		
-        T result = (T) BBRUtil.getSession().createQuery("from " + typeName + " as t where t.id = '" + id.toString() + "'").uniqueResult();
-        BBRUtil.commitTran(tr);
+        T result = (T) BBRUtil.getSession(sessionIndex).createQuery("from " + typeName + " as t where t.id = '" + id.toString() + "'").uniqueResult();
+        BBRUtil.commitTran(sessionIndex, tr);
         return result;
     }
 }
