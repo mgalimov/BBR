@@ -6,19 +6,20 @@ import BBR.BBRDataManager;
 import BBR.BBRUtil;
 import BBRCust.BBRCustReg;
 
-public class BBRShopSpecialistManager extends BBRDataManager<BBRShopSpecialist>{
+public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
 	
-	public BBRShopSpecialistManager() {
+	public BBRSpecialistManager() {
 		super();
 		sessionIndex = BBRCustReg.sessionIndex;
 	}
 
-	public void createAndStoreShopSpecialist(String title) {
+	public void createAndStoreSpecialist(String name, String position) {
         boolean tr = BBRUtil.beginTran(sessionIndex);
         Session session = BBRUtil.getSession(sessionIndex);
 
-        BBRShopSpecialist spec = new BBRShopSpecialist();
-        spec.setTitle(title);
+        BBRSpecialist spec = new BBRSpecialist();
+        spec.setName(name);
+        spec.setPosition(position);
         session.save(spec);
 
         BBRUtil.commitTran(sessionIndex, tr);

@@ -1,9 +1,9 @@
 <%@ tag language="java" pageEncoding="UTF-8" description="Admin Top Menu"
-        import="BBRClientApp.BBRApplication" %>
+        import="BBRClientApp.BBRAdminApplication" %>
 <%@ attribute name="title"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<% BBRApplication app = BBRApplication.getApp(request); %> 
+<% BBRAdminApplication app = BBRAdminApplication.getApp(request); %> 
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
    <div class="container-fluid">
      <div class="navbar-header">

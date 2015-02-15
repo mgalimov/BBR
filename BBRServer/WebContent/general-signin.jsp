@@ -1,13 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"
-		 import="BBRClientApp.BBRApplication"%>
+		 import="BBRClientApp.BBRAdminApplication"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%
-	BBRApplication app = BBRApplication.getApp(request);
+	BBRAdminApplication app = BBRAdminApplication.getApp(request);
 	String lastError = app.getLastSignInError();
 	
 	if (lastError == "")
 		if (app.user == null)
-			lastError = app.SignInByCookie(request);
+	lastError = app.SignInByCookie(request);
 		
 	if (app.user != null) {
 		response.sendRedirect(request.getContextPath() + "/" + app.getWelcomePage());

@@ -2,26 +2,30 @@ package BBRClientApp;
 
 import java.util.Hashtable;
 import java.util.List;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import BBR.BBRErrors;
 import BBRAcc.*;
+import BBRCust.BBRSpecialist;
+import BBRCust.BBRSpecialistManager;
 
-public class BBRApplication {
+public class BBRAdminApplication {
 	public BBRAcc.BBRUser user = null;
 	private String lastSignInError = ""; 
 	
-	public BBRApplication() {
+	public BBRAdminApplication() {
 	}
 	
-	public static BBRApplication getApp(HttpServletRequest request) {
+	public static BBRAdminApplication getApp(HttpServletRequest request) {
 		HttpSession session = request.getSession(true);		
-		BBRApplication app = (BBRApplication)session.getAttribute("BBRApplication");
+		BBRAdminApplication app = (BBRAdminApplication)session.getAttribute("BBRAdminApplication");
 		if (app == null) {
-			app = new BBRApplication();
-			session.setAttribute("BBRApplication", app);
+			app = new BBRAdminApplication();
+			session.setAttribute("BBRAdminApplication", app);
 		}
 		return app;
 	}
@@ -298,4 +302,75 @@ public class BBRApplication {
     	}
 		return orderBy.substring(0, orderBy.length() - 2);
     }
+    
+	public String getSpecData(Long id) {
+		BBRSpecialistManager mgr = new BBRSpecialistManager();
+		String json = "";
+		
+		try {
+			BBRSpecialist spec = mgr.findById(id);
+			if (spec != null)
+				json = spec.toJson();
+			else
+				json = BBRErrors.ERR_USER_NOTFOUND;
+		} catch (Exception ex) {
+			json = ex.getLocalizedMessage();
+		}
+		return json;
+	}
+
+	public String deleteSpec(Long id) {
+		BBRSpecialistManager mgr = new BBRSpecialistManager();
+		String respText = "";
+		
+		try {
+			BBRSpecialist spec = mgr.findById(id);
+			if (spec != null)
+				mgr.delete(spec);
+			else
+				respText = BBRErrors.ERR_USER_NOTFOUND;
+		} catch (Exception ex) {
+			respText = ex.getLocalizedMessage();
+		}
+		return respText;
+	}
+
+	public String updateSpec(Long id, String name, String position) {
+		BBRSpecialistManager mgr = new BBRSpecialistManager();
+		String respText = "";
+
+		try {
+			BBRSpecialist spec = mgr.findById(id);
+			if (spec != null) {
+				spec.setName(name);
+				spec.setPosition(position);
+				mgr.update(spec);
+			}
+			else
+				respText = BBRErrors.ERR_USER_NOTFOUND;
+		} catch (Exception ex) {
+			respText = ex.getLocalizedMessage();
+		}
+		
+		return respText;
+	}
+
+	public String createSpec(String name, String position) {
+		BBRSpecialistManager mgr = new BBRSpecialistManager();
+		String respText = "";
+
+		try {
+			mgr.createAndStoreSpecialist(name, position);
+		} catch (Exception ex) {
+			respText = ex.getLocalizedMessage();
+		}
+		
+		return respText;
+	}
+
+	public String getSpecs(int pageNumber, int pageSize, List<Hashtable<String, String>> sortingFields) {
+		BBRSpecialistManager mgr = new BBRSpecialistManager();
+		return mgr.list(pageNumber, pageSize, getOrderBy(sortingFields)).toJson();
+	}
+
 }

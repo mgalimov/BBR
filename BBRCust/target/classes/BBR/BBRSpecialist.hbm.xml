@@ -4,10 +4,12 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package="BBRCust">
-    <class name="BBRShopSpecialist" table="shopspecialists">
+    <class name="BBRSpecialist" table="specialists">
         <id name="id" column="SPEC_ID">
             <generator class="native"/>
         </id>
-        <property name="title" column="TITLE"/>
+        <property name="name" column="NAME"/>
+        <property name="position" column="POSITION"/>
+        <property name="userId" column="USER_ID"/>
     </class>
 </hibernate-mapping>
