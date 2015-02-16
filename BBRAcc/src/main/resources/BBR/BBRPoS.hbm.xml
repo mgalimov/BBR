@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="BBRAcc">
+    <class name="BBRPoS" table="poses">
+        <id name="id" column="POS_ID">
+            <generator class="native"/>
+        </id>
+        <property name="title" column="TITLE"/>
+        <property name="locationDescription" column="LOC_DESC"/>
+        <component name="locationGPS" class="BBRGPS">
+        	<property name="lat" column="LOC_LAT"/>
+        	<property name="lng" column="LOC_LNG"/>
+        </component>
+        <property name="shop" column="LOC_DESC"/>
+    </class>
+</hibernate-mapping>

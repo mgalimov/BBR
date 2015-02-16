@@ -36,6 +36,7 @@
 
         <mapping resource="BBR/BBRShop.hbm.xml"/>
         <mapping resource="BBR/BBRUser.hbm.xml"/>
+        <mapping resource="BBR/BBRPoS.hbm.xml"/>
 
     </session-factory>
 

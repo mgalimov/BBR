@@ -4,7 +4,7 @@
 
 <t:general-wrapper title="Plan your visit">
 <jsp:body>
-	<p>Select your shop:</p>
+	<p>Select your point of sale:</p>
 	<p>Select procedure:</p>
 	<p>Select specialist:</p>
 	<p>Select date and time:</p>

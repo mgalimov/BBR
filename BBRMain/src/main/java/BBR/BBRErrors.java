@@ -7,4 +7,6 @@ public class BBRErrors {
 	public static final String MSG_USER_SIGNED_IN = "User signed in successfully";
 	public static final String MSG_USER_SIGNED_OUT = "User signed out successfully";
 	public static final String ERR_INCORRECT_PASSWORD = "User password is incorrect";
+	public static final String ERR_SHOP_MUST_BE_SPECIFIED = "Shop must be specified";
+	public static final String ERR_TITLE_MUST_BE_UNIQUE = "Title must be unique";
 }
