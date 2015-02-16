@@ -43,7 +43,7 @@
 	    <link href="css/bbr-admin.css" rel="stylesheet">	
   	</head>
   	<body>
-		<t:admin-top-menu title="${title}"/>
+		<t:top-menu title="Control Panel. ${title}"/>
   		<div class="container-fluid">
   			<div class="row">
 		  		<t:admin-menu />

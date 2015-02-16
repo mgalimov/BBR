@@ -61,7 +61,7 @@
 
   	</head>
   	<body>
-		<t:admin-top-menu title="${title}" />
+		<t:top-menu title="Control panel. ${title}" />
    		<div class="container-fluid">
   			<div class="row">
 		  		<t:admin-menu />

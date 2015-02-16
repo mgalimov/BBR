@@ -13,7 +13,7 @@
          <span class="icon-bar"></span>
          <span class="icon-bar"></span>
        </button>
-       <a class="navbar-brand" href="#">Control Panel. <c:out value="${title}"/></a>
+       <a class="navbar-brand" href="#">BBR Service <c:out value="${title}"/></a>
      </div>
      <div class="navbar-collapse collapse">
        <ul class="nav navbar-nav navbar-right">
@@ -25,13 +25,15 @@
 		         		<span class="caret"></span>
 		         	</a>
 	         		<ul class="dropdown-menu" role="menu">
-					    <li><a href="#">Profile</a></li>
-					    <li><a href="#">Settings</a></li>
+					    <li><a href="general-user-profile.jsp">Profile and Settings</a></li>
 					    <li class="divider"></li>
-					    <li><a href="#" id="signOutLink">Sign Out</a></li>
+					    <li><a href="#" id="signOutLink">
+		         		<% if (context.user != null) 
+		         				out.println("Sign Out");
+		         		   else 
+		         		   		out.println("Sign In");%></a></li>
 					</ul>
 		 </li>
-         <li><a href="#">Help</a></li>
        </ul>
        <form class="navbar-form navbar-right">
          <input type="text" class="form-control" placeholder="Search...">

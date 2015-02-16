@@ -114,27 +114,32 @@ public class BBRContext {
 
 	public String getWelcomePage() {
 		if (user == null)
-			return "general-signin.jsp";
+			return getSignInPage();
 
 		if (user.getRole() == BBRUser.BBRUserRole.ROLE_BBR_OWNER)
 			return "admin-index.jsp";
 		
 		if (user.getApproved())
-			return "user-profile.jsp";
+			return "general-user-profile.jsp";
 		else
-			return "user-profile.jsp";
+			return "general-user-profile.jsp";
 		
+	}
+
+	public String getSignInPage() {
+		return "general-signin.jsp";
 	}
 	
 	public boolean isPageAllowed(String page) {
 		if (user == null)
-			if (page.startsWith("general_signin.jsp")) return true;
+			if (page.startsWith("general-")) return true;
+			else return false;
 		
 		if (user.getRole() == BBRUser.BBRUserRole.ROLE_BBR_OWNER)
 			if (page.startsWith("admin-")) return true;
 
 		if (user.getRole() >= BBRUser.BBRUserRole.ROLE_SHOP_ADMIN)
-			if (page.startsWith("management-")) return true;
+			if (page.startsWith("manager-")) return true;
 
 		if (user.getRole() >= BBRUser.BBRUserRole.ROLE_VISITOR)
 			if (page.startsWith("general-")) return true;
