@@ -29,14 +29,19 @@ public class BBRLoginFilter implements Filter {
     	BBRContext context = BBRContext.getContext(request);
 
     	String path = request.getRequestURI();
-    	if (path.startsWith(request.getContextPath() + "/general-signin.jsp")) {
+    	String page = path;
+    	if (path.startsWith(request.getContextPath() + "/"))
+    		 page = path.substring(request.getContextPath().length() + 1, path.length());
+    	if (page.startsWith("general-signin.jsp")) {
     		chain.doFilter(request, response);
     	} else
         if (context.user == null) {
         	response.sendRedirect(request.getContextPath() + "/general-signin.jsp");
-        } else {
-            chain.doFilter(request, response);
-        }
+        } else 
+        if (!context.isPageAllowed(page)){
+        	response.sendRedirect(context.getWelcomePage());
+        } else
+        	chain.doFilter(request, response);
     }
 
 
