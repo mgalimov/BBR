@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"
-		 import="BBRClientApp.BBRAdminApplication" %>
+		 import="BBRClientApp.BBRContext" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%
-	BBRAdminApplication app = BBRAdminApplication.getApp(request);
-	request.setAttribute("userName", app.user.getFirstName() + " " + app.user.getLastName());
+	BBRContext context = BBRContext.getContext(request);
+	request.setAttribute("userName", context.user.getFirstName() + " " + context.user.getLastName());
 %>
 <t:admin-card-wrapper title="Control Panel">
 <jsp:body>

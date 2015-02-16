@@ -9,7 +9,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import BBRClientApp.BBRManagementApplication;
+import BBRClientApp.BBRContext;
 
 public class BBRLoginFilter implements Filter {
 
@@ -26,14 +26,13 @@ public class BBRLoginFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
     	HttpServletRequest request = (HttpServletRequest) req;
     	HttpServletResponse response = (HttpServletResponse) res;
-    	BBRAdminApplication app = BBRAdminApplication.getApp(request);
+    	BBRContext context = BBRContext.getContext(request);
 
     	String path = request.getRequestURI();
     	if (path.startsWith(request.getContextPath() + "/general-signin.jsp")) {
     		chain.doFilter(request, response);
     	} else
-        if (app.user == null) {
-        	//chain.doFilter(request, response);
+        if (context.user == null) {
         	response.sendRedirect(request.getContextPath() + "/general-signin.jsp");
         } else {
             chain.doFilter(request, response);

@@ -1,9 +1,9 @@
 <%@ tag language="java" pageEncoding="UTF-8" description="Admin Top Menu"
-        import="BBRClientApp.BBRAdminApplication" %>
+        import="BBRClientApp.BBRContext" %>
 <%@ attribute name="title"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<% BBRAdminApplication app = BBRAdminApplication.getApp(request); %> 
+<% BBRContext context = BBRContext.getContext(request); %> 
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
    <div class="container-fluid">
      <div class="navbar-header">
@@ -20,7 +20,8 @@
          <li class="dropdown">
                  	<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" role="button">
 		         		<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-		         		<% if (app.user != null) out.println(app.user.getFirstName() + " " + app.user.getLastName()); %>
+		         		<% if (context.user != null) 
+		         				out.println(context.user.getFirstName() + " " + context.user.getLastName()); %>
 		         		<span class="caret"></span>
 		         	</a>
 	         		<ul class="dropdown-menu" role="menu">

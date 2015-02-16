@@ -1,16 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"
-		 import="BBRClientApp.BBRAdminApplication"%>
+		 import="BBRClientApp.BBRContext"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%
-	BBRAdminApplication app = BBRAdminApplication.getApp(request);
-	String lastError = app.getLastSignInError();
+	BBRContext context = BBRContext.getContext(request);
+	String lastError = context.getLastSignInError();
 	
 	if (lastError == "")
-		if (app.user == null)
-	lastError = app.SignInByCookie(request);
+		if (context.user == null)
+			lastError = context.SignInByCookie(request);
 		
-	if (app.user != null) {
-		response.sendRedirect(request.getContextPath() + "/" + app.getWelcomePage());
+	if (context.user != null) {
+		response.sendRedirect(request.getContextPath() + "/" + context.getWelcomePage());
 		return;
 	}
 	

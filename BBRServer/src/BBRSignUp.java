@@ -7,8 +7,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import BBRClientApp.BBRContext;
 
-import BBRClientApp.BBRAdminApplication;
 
 /**
  * Servlet implementation class BBRSignUp
@@ -28,7 +28,7 @@ public class BBRSignUp extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		BBRAdminApplication app = BBRAdminApplication.getApp(request);
+		BBRContext context = BBRContext.getContext(request);
 		BBRParams params = new BBRParams(request.getQueryString());
 		String email = params.get("email");
 		String password = params.get("password");
@@ -36,9 +36,9 @@ public class BBRSignUp extends HttpServlet {
 		String firstName = params.get("firstName");
 		String lastName = params.get("lastName");
 
-		app.SignUp(email, firstName, lastName, password, passwordCopy);
+		context.SignUp(email, firstName, lastName, password, passwordCopy);
 		
-		response.sendRedirect(request.getContextPath() + "/" + app.getWelcomePage());
+		response.sendRedirect(request.getContextPath() + "/" + context.getWelcomePage());
 	}
 
 	/**
