@@ -131,6 +131,9 @@ public class BBRContext {
 	}
 	
 	public boolean isPageAllowed(String page) {
+		if (page.startsWith("/"))
+			page.substring(1, page.length());
+		
 		if (user == null)
 			if (page.startsWith("general-")) return true;
 			else return false;

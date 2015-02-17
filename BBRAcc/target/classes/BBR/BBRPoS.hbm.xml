@@ -10,10 +10,10 @@
         </id>
         <property name="title" column="TITLE"/>
         <property name="locationDescription" column="LOC_DESC"/>
-        <component name="locationGPS" class="BBRGPS">
+        <component name="locationGPS" class="BBR.BBRGPS">
         	<property name="lat" column="LOC_LAT"/>
         	<property name="lng" column="LOC_LNG"/>
         </component>
-        <property name="shop" column="LOC_DESC"/>
+        <many-to-one name="shop" column="SHOP_ID" class="BBRShop" not-null="true" />
     </class>
 </hibernate-mapping>

@@ -38,6 +38,10 @@
 		<!--  if touch event support is needed (mobile devices) -->
 		<script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
 		  
+		<!-- SELECT 2 -->
+		<script type="text/javascript" src="js/select2.js"></script>
+		<link href="css/select2.min.css" type="text/css" rel="stylesheet">  
+		
   		<!-- BBR Utils -->
 	    <script src="js/bbr-utils.js"></script>
 	    <link href="css/bbr-admin.css" rel="stylesheet">	

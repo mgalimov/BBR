@@ -34,9 +34,9 @@
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">update</property>
 
+        <mapping resource="BBR/BBRPoS.hbm.xml"/>
         <mapping resource="BBR/BBRShop.hbm.xml"/>
         <mapping resource="BBR/BBRUser.hbm.xml"/>
-        <mapping resource="BBR/BBRPoS.hbm.xml"/>
 
     </session-factory>
 

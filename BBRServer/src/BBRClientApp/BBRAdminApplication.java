@@ -10,7 +10,6 @@ import BBRAcc.*;
 
 public class BBRAdminApplication {
 	public BBRAcc.BBRUser user = null;
-	private String lastSignInError = ""; 
 	
 	public BBRAdminApplication() {
 	}
@@ -178,5 +177,83 @@ public class BBRAdminApplication {
 		return mgr.list(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields)).toJson();
 	}
 
+	public String getShops(BBRUser user, String query) {
+		BBRShopManager mgr = new BBRShopManager();
+		return mgr.list(user, query, "title").toJson();
+	}
+
+	
+	public String getPoSData(Long id) {
+		BBRPoSManager mgr = new BBRPoSManager();
+		String json = "";
+		
+		try {
+			BBRPoS pos = mgr.findById(id);
+			if (pos != null)
+				json = pos.toJson();
+			else
+				json = BBRErrors.ERR_USER_NOTFOUND;
+		} catch (Exception ex) {
+			json = ex.getLocalizedMessage();
+		}
+		return json;
+	}
+
+	public String deletePoS(Long id) {
+		BBRPoSManager mgr = new BBRPoSManager();
+		String respText = "";
+		
+		try {
+			BBRPoS pos = mgr.findById(id);
+			if (pos != null)
+				mgr.delete(pos);
+			else
+				respText = BBRErrors.ERR_USER_NOTFOUND;
+		} catch (Exception ex) {
+			respText = ex.getLocalizedMessage();
+		}
+		return respText;
+	}
+
+	public String updatePoS(Long id, String title, String locationDescription) {
+		BBRPoSManager mgr = new BBRPoSManager();
+		String respText = "";
+
+		try {
+			BBRPoS pos = mgr.findById(id);
+			if (pos != null) {
+				pos.setTitle(title);
+				pos.setLocationDescription(locationDescription);
+				mgr.update(pos);
+			}
+			else
+				respText = BBRErrors.ERR_USER_NOTFOUND;
+		} catch (Exception ex) {
+			respText = ex.getLocalizedMessage();
+		}
+		
+		return respText;
+	}
+
+	public String createPoS(Long shopId, String title, String locationDescription) {
+		BBRPoSManager mgr = new BBRPoSManager();
+		BBRShopManager shopMgr = new BBRShopManager();
+		String respText = "";
+
+		try {
+			BBRShop shop = shopMgr.findById(shopId);
+			if (shop != null)
+				mgr.createAndStorePoS(shop, title, locationDescription, null);
+		} catch (Exception ex) {
+			respText = ex.getLocalizedMessage();
+		}
+		
+		return respText;
+	}
+
+	public String getPoSes(int pageNumber, int pageSize, List<Hashtable<String, String>> sortingFields) {
+		BBRPoSManager mgr = new BBRPoSManager();
+		return mgr.list(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields)).toJson();
+	}
 
 }

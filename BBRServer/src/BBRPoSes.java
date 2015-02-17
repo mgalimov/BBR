@@ -9,19 +9,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import BBRClientApp.BBRAdminApplication;
-import BBRClientApp.BBRContext;
 
 /**
  * Servlet implementation class BBRBackend
  */
-@WebServlet("/BBRShops")
-public class BBRShops extends HttpServlet {
+@WebServlet("/BBRPoSes")
+public class BBRPoSes extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BBRShops() {
+    public BBRPoSes() {
         super();
     }
 
@@ -30,32 +29,27 @@ public class BBRShops extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		BBRAdminApplication app = BBRAdminApplication.getApp(request);
-		BBRContext context = BBRContext.getContext(request);
 		BBRParams params = new BBRParams(request.getQueryString());
 		String id = params.get("id");
 		String operation = params.get("operation");
 		String respText = "";
 		
 		if (operation.equals("getdata")) {
-			respText = app.getShopData(Long.parseLong(id));
+			respText = app.getPoSData(Long.parseLong(id));
 		} else
 		if (operation.equals("delete")) {
-			respText = app.deleteShop(Long.parseLong(id));
+			respText = app.deletePoS(Long.parseLong(id));
 		} else
 		if (operation.equals("update")) {
 			String title = params.get("title");
-			respText = app.updateShop(Long.parseLong(id), title);
+			String locationDescription = params.get("locationDescription");
+			respText = app.updatePoS(Long.parseLong(id), title, locationDescription);
 		} else
 		if (operation.equals("create")) {
+			String shopId = params.get("shopId");
 			String title = params.get("title");
-			respText = app.createShop(title);
-		} else
-		if (operation.equals("reference")) {
-			String q = params.get("q");
-			//String pageNum = params.get("page");
-		
-			respText = app.getShops(context.user, q);
-			
+			String locationDescription = params.get("locationDescription");
+			respText = app.createPoS(Long.parseLong(shopId), title, locationDescription);
 		} else
 			respText = "Unknown operation";
 						
@@ -75,7 +69,7 @@ public class BBRShops extends HttpServlet {
 		String rowsPerPage = params.get("rows_per_page");
 		List<Hashtable<String, String>> sortingFields = params.getArray("sorting");
 		
-		String respText = app.getShops(Integer.parseInt(pageNum), Integer.parseInt(rowsPerPage), sortingFields);
+		String respText = app.getPoSes(Integer.parseInt(pageNum), Integer.parseInt(rowsPerPage), sortingFields);
 		
 		response.setContentType("text/plain");  
 		response.setCharacterEncoding("UTF-8"); 

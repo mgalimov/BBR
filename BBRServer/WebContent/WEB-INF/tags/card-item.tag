@@ -2,6 +2,8 @@
 <%@ attribute name="label" required="true" %>
 <%@ attribute name="field" required="true" %>
 <%@ attribute name="type" required="true" %>
+<%@ attribute name="referenceMethod" %>
+<%@ attribute name="referenceFieldTitle" %>
 <%@ attribute name="isRequired" %>
 <%@ attribute name="options" %>
 
@@ -32,6 +34,37 @@
 						<option value="${option.split(':')[0]}">${option.split(':')[1]}</option>
 					</c:forTokens>
 				</select>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('val(obj.').concat(field).concat('.toString());')}"/>
+			</c:when>
+			<c:when test="${type.equals('reference')}">
+				<select class="form-control" id="${field.concat('input')}" ${isRequired}>
+				</select>
+				<script>
+					$("#${field.concat('input')}").select2({
+					  ajax: {
+					    url: "${referenceMethod}",
+					    dataType: 'json',
+					    delay: 250,
+					    data: function (params) {
+					      return {
+					        q: params.term, // search term
+					        page: params.page,
+					        operation: 'reference'
+					      };
+					    },
+					    processResults: function (data) {
+					      return {
+					        results: data.page_data
+					      };
+					    },
+					    cache: true
+					  },
+					  escapeMarkup: function (markup) { return markup; },
+					  minimumInputLength: 1,
+					  templateResult: function (result) {return result.${referenceFieldTitle};},
+					  templateSelection: function (result) {return result.${referenceFieldTitle};}
+					});
+				</script>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('val(obj.').concat(field).concat('.toString());')}"/>
 			</c:when>
 		</c:choose>

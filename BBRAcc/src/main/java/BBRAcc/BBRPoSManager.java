@@ -7,7 +7,7 @@ import BBR.BBRErrors;
 import BBR.BBRGPS;
 import BBR.BBRUtil;
 
-public class BBRPoSManager extends BBRDataManager<BBRShop>{
+public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 	
 	public BBRPoSManager() {
 		super();

@@ -6,7 +6,7 @@ import org.hibernate.Session;
 
 //http://stackoverflow.com/questions/3403909/get-generic-type-of-class-at-runtime
 public class BBRDataManager<T> {
-	private final String typeName;
+	protected final String typeName;
 	protected int sessionIndex = -1;
 
 	public BBRDataManager() {
@@ -43,7 +43,7 @@ public class BBRDataManager<T> {
 
         return new BBRDataSet<T>(list, count);
     }
-
+    
 	public void delete(T record){
         boolean tr = BBRUtil.beginTran(sessionIndex);
         BBRUtil.getSession(sessionIndex).delete(record);
