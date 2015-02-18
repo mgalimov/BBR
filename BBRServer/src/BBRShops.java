@@ -1,7 +1,5 @@
 import java.io.IOException;
 import java.util.Hashtable;
-import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -52,8 +50,6 @@ public class BBRShops extends HttpServlet {
 		} else
 		if (operation.equals("reference")) {
 			String q = params.get("q");
-			//String pageNum = params.get("page");
-		
 			respText = app.getShops(context.user, q);
 			
 		} else
@@ -73,7 +69,7 @@ public class BBRShops extends HttpServlet {
 		BBRParams params = new BBRParams(request.getReader());
 		String pageNum = params.get("page_num");
 		String rowsPerPage = params.get("rows_per_page");
-		List<Hashtable<String, String>> sortingFields = params.getArray("sorting");
+		Hashtable<Integer, Hashtable<String, String>> sortingFields = params.getArray("sorting");
 		
 		String respText = app.getShops(Integer.parseInt(pageNum), Integer.parseInt(rowsPerPage), sortingFields);
 		

@@ -37,33 +37,35 @@
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('val(obj.').concat(field).concat('.toString());')}"/>
 			</c:when>
 			<c:when test="${type.equals('reference')}">
-				<select class="form-control" id="${field.concat('input')}" ${isRequired}>
+				<select class="selectized" style="display: none" id="${field.concat('input')}" ${isRequired}>
 				</select>
 				<script>
-					$("#${field.concat('input')}").select2({
-					  ajax: {
-					    url: "${referenceMethod}",
-					    dataType: 'json',
-					    delay: 250,
-					    data: function (params) {
-					      return {
-					        q: params.term, // search term
-					        page: params.page,
-					        operation: 'reference'
-					      };
-					    },
-					    processResults: function (data) {
-					      return {
-					        results: data.page_data
-					      };
-					    },
-					    cache: true
-					  },
-					  escapeMarkup: function (markup) { return markup; },
-					  minimumInputLength: 1,
-					  templateResult: function (result) {return result.${referenceFieldTitle};},
-					  templateSelection: function (result) {return result.${referenceFieldTitle};}
-					});
+				$("#${field.concat('input')}").selectize({
+				    valueField: 'id',
+				    labelField: '${referenceFieldTitle}',
+				    searchField: ['${referenceFieldTitle}'],
+				    create: false,
+				    maxOptions: 10,
+				    preload: 'focus',
+				    load: function(query, callback) {
+				        if (!query.length) return callback();
+				        $.ajax({
+				            url: '${referenceMethod}',
+				            type: 'GET',
+				            dataType: 'json',
+				            data: {
+				                q: query,
+				                operation: 'reference'
+				            },
+				            error: function() {
+				                callback();
+				            },
+				            success: function(res) {
+				                callback(res.page_data);
+				            }
+				        });
+				    }
+				});
 				</script>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('val(obj.').concat(field).concat('.toString());')}"/>
 			</c:when>

@@ -1,9 +1,7 @@
 import java.io.BufferedReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
 
 public class BBRParams {
 	private Hashtable<String, String> parameters = new Hashtable<String, String>();
@@ -57,8 +55,8 @@ public class BBRParams {
 		return parameters.size();
 	}
 
-	public List<Hashtable<String, String>> getArray(String param) {
-		List<Hashtable<String, String>> res = new ArrayList<Hashtable<String, String>>();
+	public Hashtable<Integer, Hashtable<String, String>> getArray(String param) {
+		Hashtable<Integer, Hashtable<String, String>> res = new Hashtable<Integer, Hashtable<String, String>>();
 		
 		for (String key : parameters.keySet()) {
 			if (key.startsWith(param + "[")) {
@@ -86,13 +84,13 @@ public class BBRParams {
 						b = true;
 				}
 				int index = Integer.parseInt(k);
-				if (res.size() == 0)
-					res.add(index, new Hashtable<String, String>());
+				Hashtable<String, String> element;
 				if (res.get(index) == null)
-					res.add(index, new Hashtable<String, String>());
-				Hashtable<String, String> element = res.get(index);
+					element = new Hashtable<String, String>();
+				else
+					element = res.get(index);
 				element.put(v, parameters.get(key));
-				res.set(index, element);
+				res.put(index, element);
 			}
 		}
 		

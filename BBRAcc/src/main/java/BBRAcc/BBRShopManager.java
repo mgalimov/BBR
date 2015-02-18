@@ -32,10 +32,17 @@ public class BBRShopManager extends BBRDataManager<BBRShop>{
         
         Session session = BBRUtil.getSession(sessionIndex);
    		String orderBy = " order by " + sortBy;
-   		queryTerm.replaceAll(" ", "%");
-   		String where = " where title like '%" + queryTerm + "%'";
+   		String where = "";
+   		
+   		if (queryTerm != null && !queryTerm.equals("")) {
+   			queryTerm.replaceAll(" ", "%");
+   			where = " where title like '%" + queryTerm + "%'";
+   		}
+   			
         Long count = (Long)session.createQuery("Select count(*) from " + typeName + where).uniqueResult();
         Query query = session.createQuery("from " + typeName + where + orderBy);
+        query.setMaxResults(maxRowsToReturn);
+        
         List<BBRShop> list = query.list();
         BBRUtil.commitTran(sessionIndex, tr);
 

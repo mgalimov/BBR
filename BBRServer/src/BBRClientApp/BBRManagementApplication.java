@@ -1,7 +1,6 @@
 package BBRClientApp;
 
 import java.util.Hashtable;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import BBR.BBRErrors;
@@ -89,7 +88,7 @@ public class BBRManagementApplication {
 		return respText;
 	}
 
-	public String getSpecs(int pageNumber, int pageSize, List<Hashtable<String, String>> sortingFields) {
+	public String getSpecs(int pageNumber, int pageSize, Hashtable<Integer, Hashtable<String, String>> sortingFields) {
 		BBRSpecialistManager mgr = new BBRSpecialistManager();
 		return mgr.list(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields)).toJson();
 	}

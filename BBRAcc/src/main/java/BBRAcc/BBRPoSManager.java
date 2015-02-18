@@ -36,7 +36,7 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 	
 	public BBRPoS findByTitle(String title, BBRShop shop) {
         boolean tr = BBRUtil.beginTran(sessionIndex);
-        BBRPoS result = (BBRPoS) BBRUtil.getSession(sessionIndex).createQuery("from BBRPoS as pos where pos.title = '" + title + "' and pos.shop = " + shop).uniqueResult();
+        BBRPoS result = (BBRPoS) BBRUtil.getSession(sessionIndex).createQuery("from BBRPoS as pos where pos.title = '" + title + "' and pos.shop = " + shop.getId()).uniqueResult();
         BBRUtil.commitTran(sessionIndex, tr);
         return result;
     }

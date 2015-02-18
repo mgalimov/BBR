@@ -8,6 +8,7 @@ import org.hibernate.Session;
 public class BBRDataManager<T> {
 	protected final String typeName;
 	protected int sessionIndex = -1;
+	protected final int maxRowsToReturn = 100;
 
 	public BBRDataManager() {
 		typeName = BBRUtil.getGenericParameterClass(this.getClass(), 0).getName();
@@ -37,6 +38,8 @@ public class BBRDataManager<T> {
         Long count = (Long)session.createQuery("Select count(*) from " + typeName).uniqueResult();
         Query query = session.createQuery("from " + typeName + " " + orderBy);
         query.setFirstResult((pageNumber - 1) * pageSize);
+        if (pageSize > maxRowsToReturn)
+        	pageSize = maxRowsToReturn;
         query.setMaxResults(pageSize);
         List<T> list = query.list();
         BBRUtil.commitTran(sessionIndex, tr);

@@ -1,10 +1,8 @@
 package BBRClientApp;
 
 import java.util.Hashtable;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import BBR.BBRErrors;
 import BBRAcc.*;
 
@@ -97,7 +95,7 @@ public class BBRAdminApplication {
 		return mgr.list().toJson();
 	}
 
-	public String getUsers(int pageNumber, int pageSize, List<Hashtable<String, String>> sortingFields) {
+	public String getUsers(int pageNumber, int pageSize, Hashtable<Integer, Hashtable<String, String>> sortingFields) {
 		BBRUserManager mgr = new BBRUserManager();
 
 		return mgr.list(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields)).toJson();
@@ -172,7 +170,7 @@ public class BBRAdminApplication {
 		return mgr.list().toJson();
 	}
 
-	public String getShops(int pageNumber, int pageSize, List<Hashtable<String, String>> sortingFields) {
+	public String getShops(int pageNumber, int pageSize, Hashtable<Integer, Hashtable<String, String>> sortingFields) {
 		BBRShopManager mgr = new BBRShopManager();
 		return mgr.list(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields)).toJson();
 	}
@@ -251,7 +249,7 @@ public class BBRAdminApplication {
 		return respText;
 	}
 
-	public String getPoSes(int pageNumber, int pageSize, List<Hashtable<String, String>> sortingFields) {
+	public String getPoSes(int pageNumber, int pageSize, Hashtable<Integer, Hashtable<String, String>> sortingFields) {
 		BBRPoSManager mgr = new BBRPoSManager();
 		return mgr.list(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields)).toJson();
 	}
