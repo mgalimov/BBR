@@ -39,6 +39,8 @@
 			<c:when test="${type.equals('reference')}">
 				<select class="selectized" style="display: none" id="${field.concat('input')}" ${isRequired}>
 				</select>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('options = [{value: obj.').concat(field).concat('.id').concat(', ')}"/>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('text: obj.').concat(field).concat('.').concat(referenceFieldTitle).concat('}];')}"/>
 				<script>
 				$("#${field.concat('input')}").selectize({
 				    valueField: 'id',
@@ -66,7 +68,6 @@
 				    }
 				});
 				</script>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('val(obj.').concat(field).concat('.toString());')}"/>
 			</c:when>
 		</c:choose>
 </div>

@@ -44,7 +44,7 @@ public class BBRPoSes extends HttpServlet {
 			respText = app.updatePoS(Long.parseLong(id), title, locationDescription);
 		} else
 		if (operation.equals("create")) {
-			String shopId = params.get("shopId");
+			String shopId = params.get("shop");
 			String title = params.get("title");
 			String locationDescription = params.get("locationDescription");
 			try {

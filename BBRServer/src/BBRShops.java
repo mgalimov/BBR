@@ -51,7 +51,6 @@ public class BBRShops extends HttpServlet {
 		if (operation.equals("reference")) {
 			String q = params.get("q");
 			respText = app.getShops(context.user, q);
-			
 		} else
 			respText = "Unknown operation";
 						
