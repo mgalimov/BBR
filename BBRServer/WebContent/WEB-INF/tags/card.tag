@@ -32,6 +32,11 @@
   </div>
 </div>
 
+<div class="alert alert-warning alert-dismissable hide" id="alertMessage">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <div id="welcomeText"></div>
+</div>
+
 <div class="container-fluid"  id="editForm">
 <h3>${title}</h3>
 <form role="form">
@@ -41,7 +46,7 @@
 	  </div>
 	  <div class="panel-footer">
 			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#sureToCancelChanges">Cancel changes</button>
-			<button type="submit" class="btn btn-primary" id="saveChanges">Save changes</button>
+			<button type="button" class="btn btn-primary" id="saveChanges">Save changes</button>
 	  </div>
 	</div>
 </form>
@@ -69,13 +74,19 @@
 		$('#saveChanges').click(function(event) { 
 	 		idParam = getUrlParameter('id');
             ${itemVal}
-    		if (idParam == 'new') {
-                $.get('${method}',{id:idParam,${itemReq}operation:'create'},function(responseText) { });
-    		} else {
-	            $.get('${method}',{id:idParam,${itemReq}operation:'update'},function(responseText) { });
-    		}
-			saved = true;
-			goBackOrTo('${gridPage}');
+    		if (!idParam || idParam == 'new')
+    			op = 'create';
+    		else
+    			op = 'update';
+    			
+            $.get('${method}',{id:idParam,${itemReq}operation: op}, function(responseText) { 
+																	    			saved = true; 
+            																		goBackOrTo('${gridPage}'); 
+            																}).fail(function(data) {
+            																		saved = false;
+            																		$('#welcomeText').text(data.responseText);
+            																		$('#alertMessage').removeClass('hide');
+            																});
            });			 		
 
 		$('#cancelChanges').click(function(event) {

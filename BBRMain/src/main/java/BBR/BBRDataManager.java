@@ -30,7 +30,7 @@ public class BBRDataManager<T> {
         Session session = BBRUtil.getSession(sessionIndex);
         if (orderBy == null)
         	orderBy = "";
-        if (orderBy != "") {
+        if (orderBy.length() > 0) {
         	orderBy = orderBy.trim();
         	if (!orderBy.startsWith("order by"))
         		orderBy = "order by " + orderBy.trim();
@@ -44,7 +44,7 @@ public class BBRDataManager<T> {
         List<T> list = query.list();
         BBRDataSet<T> ds = new BBRDataSet<T>(list, count);
         BBRUtil.commitTran(sessionIndex, tr);
-
+		
         return ds;
     }
     

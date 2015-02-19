@@ -8,7 +8,7 @@ public class BBRPoS extends BBRDataElement {
 	private String title;
 	private String locationDescription;
 	private BBRGPS locationGPS;
-	private BBRShop shop;
+	public BBRShop shop;
 	
 	public BBRPoS() {}
 	

@@ -31,6 +31,11 @@
  * @namespace
  */
 
+/**
+ * MG: Corrections to support fields of objects ("shop.title" format of columns)
+ *  
+ */
+
 "use strict";
 (function($) {
 
@@ -1084,6 +1089,13 @@
                             for(c = 0; c < col_len; c++) {
                                 column = columns[c];
                                 if(column_is_visible(column)) {
+                                	if(column["field"].indexOf(".") > -1) {
+                                		var objAndField = column["field"].split(".");
+                                		if(page_data[v][objAndField[0]]) {
+                                			page_data[v][column["field"]] = page_data[v][objAndField[0]][objAndField[1]]; 
+                                		} else
+                                			page_data[v][column["field"]] = '';
+                                	} else                                	
                                     if(page_data[v][column["field"]] == null) {
                                         page_data[v][column["field"]] = '';
                                     }

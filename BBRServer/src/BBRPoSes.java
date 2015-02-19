@@ -47,9 +47,16 @@ public class BBRPoSes extends HttpServlet {
 			String shopId = params.get("shopId");
 			String title = params.get("title");
 			String locationDescription = params.get("locationDescription");
-			respText = app.createPoS(Long.parseLong(shopId), title, locationDescription);
-		} else
+			try {
+				respText = app.createPoS(Long.parseLong(shopId), title, locationDescription);
+			} catch (Exception ex) {
+				respText = ex.getLocalizedMessage();
+				response.setStatus(700);
+			}
+		} else {
 			respText = "Unknown operation";
+			response.setStatus(700);
+		}
 						
 		response.setContentType("text/plain");  
 		response.setCharacterEncoding("UTF-8"); 

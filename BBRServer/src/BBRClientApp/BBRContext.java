@@ -1,6 +1,9 @@
 package BBRClientApp;
 
+import java.util.Collections;
 import java.util.Hashtable;
+import java.util.List;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -152,15 +155,23 @@ public class BBRContext {
     	String orderBy = "";
     	Hashtable<String, String> element;
     	
-    	for (Integer key : sortingFields.keySet()) {
+    	List<Integer> keys = Collections.list(sortingFields.keys());
+    	Collections.sort(keys);
+    	
+    	for (Integer key : keys) {
     		element = sortingFields.get(key);
-    		orderBy += element.get("field");
+    		String orderBylocal = element.get("field");
     		if (element.get("order").equals("ascending"))
-    			orderBy += " asc, ";
+    			orderBylocal += " asc, ";
     		else if (element.get("order").equals("descending"))
-    			orderBy += " desc, ";
+    			orderBylocal += " desc, ";
+    		else 
+    			orderBylocal = "";
+    		orderBy += orderBylocal;
     	}
-		return orderBy.substring(0, orderBy.length() - 2);
+    	if (orderBy.length() > 2)
+    		orderBy = orderBy.substring(0, orderBy.length() - 2);
+		return orderBy;
     }
 
 }

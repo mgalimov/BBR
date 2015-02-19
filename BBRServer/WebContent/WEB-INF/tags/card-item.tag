@@ -43,12 +43,11 @@
 				$("#${field.concat('input')}").selectize({
 				    valueField: 'id',
 				    labelField: '${referenceFieldTitle}',
-				    searchField: ['${referenceFieldTitle}'],
+				    searchField: '${referenceFieldTitle}',
 				    create: false,
 				    maxOptions: 10,
-				    preload: 'focus',
+				    openOnFocus: true,
 				    load: function(query, callback) {
-				        if (!query.length) return callback();
 				        $.ajax({
 				            url: '${referenceMethod}',
 				            type: 'GET',

@@ -3,11 +3,8 @@ package BBR;
 import java.util.*;
 
 public class BBRDataSet<T> {
-	@SuppressWarnings("unused")
-	private String total_rows;
-	
-	@SuppressWarnings("unused")
-	private	List<T> page_data;
+	public String total_rows;
+	public	List<T> page_data;
 	
 	public BBRDataSet (List<T> rows) {
 		Integer i = rows.size();
