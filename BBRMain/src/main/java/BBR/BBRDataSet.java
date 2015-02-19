@@ -1,7 +1,6 @@
 package BBR;
 
 import java.util.*;
-import com.google.gson.Gson;
 
 public class BBRDataSet<T> {
 	@SuppressWarnings("unused")
@@ -22,7 +21,7 @@ public class BBRDataSet<T> {
 	}
 
 	public String toJson() {
-		return new Gson().toJson(this);
+		return BBRUtil.gson.toJson(this);
 	}
 
 }

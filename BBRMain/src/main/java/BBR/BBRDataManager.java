@@ -42,9 +42,10 @@ public class BBRDataManager<T> {
         	pageSize = maxRowsToReturn;
         query.setMaxResults(pageSize);
         List<T> list = query.list();
+        BBRDataSet<T> ds = new BBRDataSet<T>(list, count);
         BBRUtil.commitTran(sessionIndex, tr);
 
-        return new BBRDataSet<T>(list, count);
+        return ds;
     }
     
 	public void delete(T record){
@@ -66,5 +67,9 @@ public class BBRDataManager<T> {
         T result = (T) BBRUtil.getSession(sessionIndex).createQuery("from " + typeName + " as t where t.id = '" + id.toString() + "'").uniqueResult();
         BBRUtil.commitTran(sessionIndex, tr);
         return result;
+    }
+    
+    public int getSessionIndex() {
+    	return sessionIndex;
     }
 }

@@ -10,9 +10,13 @@ import org.hibernate.boot.registry.*;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.cfg.Configuration;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 public class BBRUtil {
     private static final List<SessionFactory> sessionFactory = new ArrayList<SessionFactory>();
     private static int lastIndex = 0;
+    public static final Gson gson = buildGson();
 
     public static int buildSessionFactory(Configuration configuration) {
         try {
@@ -29,7 +33,14 @@ public class BBRUtil {
         }
     }
 
-    public static SessionFactory getSessionFactory(int index) {
+    private static Gson buildGson() {
+    	GsonBuilder b = new GsonBuilder();
+    	b.registerTypeAdapterFactory(BBR.HibernateProxyTypeAdapter.FACTORY);
+    	Gson gson = b.create();
+		return gson;
+	}
+
+	public static SessionFactory getSessionFactory(int index) {
         return sessionFactory.get(index);
     }
     
@@ -38,7 +49,7 @@ public class BBRUtil {
     }
     
     public static boolean beginTran(int index) {
-        Session session = sessionFactory.get(index).getCurrentSession();
+        Session session = getSession(index);
         if (!session.getTransaction().isActive()) {
         	session.beginTransaction();
         	return true;
@@ -47,7 +58,7 @@ public class BBRUtil {
     }
 
     public static void commitTran(int index, boolean transactionStarted) {
-        Session session = sessionFactory.get(index).getCurrentSession();
+        Session session = getSession(index);
         if (transactionStarted)
         	session.getTransaction().commit();
     }

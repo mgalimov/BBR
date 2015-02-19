@@ -1,9 +1,15 @@
 package BBRClientApp;
 
 import java.util.Hashtable;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import org.hibernate.Session;
+
+import BBR.BBRDataSet;
 import BBR.BBRErrors;
+import BBR.BBRUtil;
 import BBRAcc.*;
 
 public class BBRAdminApplication {
@@ -251,7 +257,10 @@ public class BBRAdminApplication {
 
 	public String getPoSes(int pageNumber, int pageSize, Hashtable<Integer, Hashtable<String, String>> sortingFields) {
 		BBRPoSManager mgr = new BBRPoSManager();
-		return mgr.list(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields)).toJson();
+		BBRDataSet<BBRPoS> poses = mgr.list(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields));
+		Session session = BBRUtil.getSession(mgr.getSessionIndex());
+		String s = poses.toJson();
+		return s;
 	}
 
 }
