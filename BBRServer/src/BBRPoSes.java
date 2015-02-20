@@ -39,9 +39,10 @@ public class BBRPoSes extends HttpServlet {
 			respText = app.deletePoS(Long.parseLong(id));
 		} else
 		if (operation.equals("update")) {
+			String shopId = params.get("shop");
 			String title = params.get("title");
 			String locationDescription = params.get("locationDescription");
-			respText = app.updatePoS(Long.parseLong(id), title, locationDescription);
+			respText = app.updatePoS(Long.parseLong(id), Long.parseLong(shopId), title, locationDescription);
 		} else
 		if (operation.equals("create")) {
 			String shopId = params.get("shop");

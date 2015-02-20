@@ -5,6 +5,7 @@
 <%@ attribute name="referenceMethod" %>
 <%@ attribute name="referenceFieldTitle" %>
 <%@ attribute name="isRequired" %>
+<%@ attribute name="isDisabled" %>
 <%@ attribute name="options" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
@@ -25,15 +26,15 @@
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('.text(obj.').concat(field).concat(');')}"/>
 			</c:when>
 			<c:when test="${type.equals('text')}">
-				<input type="text" class="form-control" id="${field.concat('input')}" placeholder="${label}" ${isRequired}/>
+				<input type="text" class="form-control" id="${field.concat('input')}" placeholder="${label}" ${isRequired} ${isDisabled}/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
 			</c:when>
 			<c:when test="${type.equals('password')}">
-				<input type="password" class="form-control" id="${field.concat('input')}" placeholder="${label}" ${isRequired}/>
+				<input type="password" class="form-control" id="${field.concat('input')}" placeholder="${label}" ${isRequired} ${isDisabled}/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
 			</c:when>
 			<c:when test="${type.equals('select')}">
-				<select class="form-control" id="${field.concat('input')}" ${isRequired}>
+				<select class="form-control" id="${field.concat('input')}" ${isRequired} ${isDisabled}>
 					<c:forTokens items="${options}" delims="," var="option">
 						<option value="${option.split(':')[0]}">${option.split(':')[1]}</option>
 					</c:forTokens>
@@ -41,7 +42,7 @@
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat('.toString());')}"/>
 			</c:when>
 			<c:when test="${type.equals('reference')}">
-				<select class="selectized" style="display: none" id="${field.concat('input')}" ${isRequired}>
+				<select class="selectized" style="display: none" id="${field.concat('input')}" ${isRequired}  ${isDisabled}>
 				</select>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize')}"/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('.addOption({id: obj.').concat(field).concat('.id').concat(', ')}"/>

@@ -216,19 +216,25 @@ public class BBRAdminApplication {
 		return respText;
 	}
 
-	public String updatePoS(Long id, String title, String locationDescription) {
+	public String updatePoS(Long id, Long shopId, String title, String locationDescription) {
 		BBRPoSManager mgr = new BBRPoSManager();
+		BBRShopManager shopMgr = new BBRShopManager();
 		String respText = "";
 
 		try {
 			BBRPoS pos = mgr.findById(id);
 			if (pos != null) {
-				pos.setTitle(title);
-				pos.setLocationDescription(locationDescription);
-				mgr.update(pos);
+				BBRShop shop = shopMgr.findById(shopId);
+				if (shop != null) {
+					pos.setShop(shop);
+					pos.setTitle(title);
+					pos.setLocationDescription(locationDescription);
+					mgr.update(pos);
+				} else
+					respText = BBRErrors.ERR_SHOP_NOTFOUND;
 			}
 			else
-				respText = BBRErrors.ERR_USER_NOTFOUND;
+				respText = BBRErrors.ERR_POS_NOTFOUND;
 		} catch (Exception ex) {
 			respText = ex.getLocalizedMessage();
 		}
@@ -245,6 +251,8 @@ public class BBRAdminApplication {
 			BBRShop shop = shopMgr.findById(shopId);
 			if (shop != null)
 				mgr.createAndStorePoS(shop, title, locationDescription, null);
+			else 
+				respText = BBRErrors.ERR_SHOP_NOTFOUND;
 		} catch (Exception ex) {
 			respText = ex.getLocalizedMessage();
 		}
