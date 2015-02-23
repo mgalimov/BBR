@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
-<t:admin-grid-wrapper title="Shops">
+<t:admin-grid-wrapper title="Points of sale (service)">
 	<jsp:body>
 		<t:grid method="BBRPoSes" editPage="admin-pos-edit.jsp" createPage="admin-pos-create.jsp" title="Point of Sales">
 			<t:grid-item label="Title" field="title" sort="ascending"/>

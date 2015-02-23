@@ -12,4 +12,5 @@ public class BBRErrors {
 	public static final String ERR_SHOP_NOTFOUND = "Shop not found";
 	public static final String ERR_POS_NOTFOUND = "Point of Sale not found";
 	public static final String ERR_VISIT_NOTFOUND = "Visit not found";
+	public static final String ERR_USER_NOTSPECIFIED = "User not specified";
 }

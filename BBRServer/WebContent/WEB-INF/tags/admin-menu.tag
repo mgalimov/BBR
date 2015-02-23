@@ -7,5 +7,6 @@
 	<t:nav-item href="admin-pos-list.jsp" title="Точки продаж" />
 	<t:nav-item href="manager-spec-list.jsp" title="Специалисты" />
 	<t:nav-item href="general-plan-visit.jsp" title="Спланируйте ваш визит" />
+	<t:nav-item href="general-my-visits.jsp" title="Мои визиты" />
 </t:nav>
 

@@ -15,5 +15,6 @@
         <property name="userId" column="USER_ID"/>
         <property name="procedure" column="PROCED"/>
         <property name="status" column="STATUS"/>
+        <property name="posTitle" column="POS_TITLE"/>
     </class>
 </hibernate-mapping>

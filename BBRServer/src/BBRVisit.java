@@ -55,18 +55,18 @@ public class BBRVisit extends HttpServlet {
 				String procedure = params.get("procedure");
 				try {
 					BBRPoSManager posmgr = new BBRPoSManager();
-					Long posId = Long.parseLong(params.get("timeScheduled"));
+					Long posId = Long.parseLong(params.get("pos"));
 					BBRPoS pos = posmgr.findById(posId);
 					if (pos == null)
 						throw new Exception(BBRErrors.ERR_POS_NOTFOUND);
 					
-					DateFormat df = new SimpleDateFormat("YYYY-MM-DD kk:mm");
+					DateFormat df = new SimpleDateFormat("y-M-d H:mm");
 					Date timeScheduled = df.parse(params.get("timeScheduled"));
 					Long userId = null;
 					if (context.user != null)
 						userId = context.user.getId();
 					
-					respText = app.createVisit(posId, timeScheduled, procedure, userName, userContacts, userId);
+					respText = app.createVisit(pos, timeScheduled, procedure, userName, userContacts, userId);
 				} catch (Exception ex) {
 					respText = ex.getLocalizedMessage();
 					response.setStatus(700);
@@ -88,6 +88,7 @@ public class BBRVisit extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		BBRContext context = BBRContext.getContext(request);
 		String respText = "";
 		try {
 			BBRManagementApplication app = BBRManagementApplication.getApp(request);
@@ -97,7 +98,10 @@ public class BBRVisit extends HttpServlet {
 			String rowsPerPage = params.get("rows_per_page");
 			Hashtable<Integer, Hashtable<String, String>> sortingFields = params.getArray("sorting");
 			
-			respText = app.getVisits(Integer.parseInt(pageNum), Integer.parseInt(rowsPerPage), sortingFields);
+			if (context.user != null)
+				respText = app.getVisits(context.user.getId(), Integer.parseInt(pageNum), Integer.parseInt(rowsPerPage), sortingFields);
+			else
+				throw new Exception(BBRErrors.ERR_USER_NOTSPECIFIED);
 		} catch (Exception ex) {
 			respText = ex.getLocalizedMessage();
 			response.setStatus(700);

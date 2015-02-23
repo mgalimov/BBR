@@ -3,5 +3,6 @@
 
 <t:nav>
 	<t:nav-item href="general-plan-visit.jsp" title="Спланируйте свой визит" />
+	<t:nav-item href="general-my-visits.jsp" title="Мои визиты" />
 </t:nav>
 

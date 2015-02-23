@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import BBR.BBRErrors;
+import BBRAcc.BBRPoS;
 import BBRCust.BBRSpecialist;
 import BBRCust.BBRSpecialistManager;
 import BBRCust.BBRVisit;
@@ -15,6 +16,7 @@ import BBRCust.BBRVisit.BBRVisitStatus;
 
 public class BBRManagementApplication {
 	public BBRAcc.BBRShop shop = null;
+	private String lastVisitScheduled = null;
 	
 	public BBRManagementApplication() {
 	}
@@ -151,22 +153,33 @@ public class BBRManagementApplication {
 		return respText;
 	}
 
-	public String createVisit(Long posId, Date timeScheduled, String procedure, String userName, String userContacts, Long userId) {
+	public String createVisit(BBRPoS pos, Date timeScheduled, String procedure, String userName, String userContacts, Long userId) {
 		BBRVisitManager mgr = new BBRVisitManager();
 		String respText = "";
 
 		try {
-			mgr.createAndStoreVisit(posId, timeScheduled, procedure, userName, userContacts, userId);
+			lastVisitScheduled = mgr.createAndStoreVisit(pos.getId(), pos.getTitle(), timeScheduled, procedure, userName, userContacts, userId);
 		} catch (Exception ex) {
+			lastVisitScheduled = null;
 			respText = ex.getLocalizedMessage();
 		}
 		
 		return respText;
 	}
-
+/*
 	public String getVisits(int pageNumber, int pageSize, Hashtable<Integer, Hashtable<String, String>> sortingFields) {
 		BBRVisitManager mgr = new BBRVisitManager();
 		return mgr.list(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields)).toJson();
 	}
+*/
+	public String getVisits(Long userId, int pageNumber, int pageSize, Hashtable<Integer, Hashtable<String, String>> sortingFields) {
+		BBRVisitManager mgr = new BBRVisitManager();
+		return mgr.list(userId, pageNumber, pageSize, BBRContext.getOrderBy(sortingFields)).toJson();
+	}
 
+	public String getLastVisitScheduled() {
+		String lastVisit = lastVisitScheduled;
+		lastVisitScheduled = null;
+		return lastVisit;
+	}
 }

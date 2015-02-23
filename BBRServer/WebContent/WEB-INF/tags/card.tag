@@ -81,7 +81,7 @@
     			
             $.get('${method}',{id:idParam,${itemReq}operation: op}, function(responseText) { 
 																	    			saved = true; 
-            																		goBackOrTo('${gridPage}'); 
+            																		windows.location.href = '${gridPage}'; 
             																}).fail(function(data) {
             																		saved = false;
             																		$('#welcomeText').text(data.responseText);

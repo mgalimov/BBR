@@ -38,6 +38,10 @@
 		<script type="text/javascript" src="js/jquery-ui-timepicker-addon.min.js"></script>
 		<!--  if touch event support is needed (mobile devices) -->
 		<script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
+
+		<!-- SELECTIZE -->
+		<script type="text/javascript" src="js/selectize.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/selectize.css" />
 		  
   		<!-- BBR Utils -->
 	    <script src="js/bbr-utils.js"></script>
