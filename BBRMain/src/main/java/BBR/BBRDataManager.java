@@ -1,6 +1,7 @@
 package BBR;
 
 import java.util.List;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -72,4 +73,28 @@ public class BBRDataManager<T> {
     public int getSessionIndex() {
     	return sessionIndex;
     }
+    
+    @SuppressWarnings("unchecked")
+	public BBRDataSet<T> list(String queryTerm, String sortBy) {
+        boolean tr = BBRUtil.beginTran(sessionIndex);
+        
+        Session session = BBRUtil.getSession(sessionIndex);
+   		String orderBy = " order by " + sortBy;
+   		String where = "";
+   		
+   		if (queryTerm != null && !queryTerm.equals("")) {
+   			queryTerm.replaceAll("\\s", "%");
+   			where = " where title like '%" + queryTerm + "%'";
+   		}
+   			
+        Long count = (Long)session.createQuery("Select count(*) from " + typeName + where).uniqueResult();
+        Query query = session.createQuery("from " + typeName + where + orderBy);
+        query.setMaxResults(maxRowsToReturn);
+        
+        List<T> list = query.list();
+        BBRUtil.commitTran(sessionIndex, tr);
+
+        return new BBRDataSet<T>(list, count);
+    }
+
 }

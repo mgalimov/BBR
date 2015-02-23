@@ -4,9 +4,12 @@
 
 <t:general-wrapper title="Plan your visit">
 <jsp:body>
-	<p>Select your point of sale:</p>
-	<p>Select procedure:</p>
-	<p>Select specialist:</p>
-	<p>Select date and time:</p>
+	<t:card title="Plan your visit" gridPage="general-plan-visit.jsp" method="BBRVisit">
+		<t:card-item label="Select place" type="referenece" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoS"/>
+		<t:card-item label="Date and time YYYY-MM-DD HH-MM" type="text" field="timeScheduled" isRequired="required" />
+		<t:card-item label="Your name" type="text" field="userName" isRequired="required" />
+		<t:card-item label="Your phone" type="text" field="userContacts" isRequired="required" />
+		<t:card-item label="Procedure" type="text" field="procedure" />
+	</t:card>
 </jsp:body>
 </t:general-wrapper>

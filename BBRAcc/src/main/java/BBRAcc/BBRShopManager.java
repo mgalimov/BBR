@@ -35,7 +35,7 @@ public class BBRShopManager extends BBRDataManager<BBRShop>{
    		String where = "";
    		
    		if (queryTerm != null && !queryTerm.equals("")) {
-   			queryTerm.replaceAll(" ", "%");
+   			queryTerm.replaceAll("\\s", "%");
    			where = " where title like '%" + queryTerm + "%'";
    		}
    			

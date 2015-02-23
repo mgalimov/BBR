@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="BBRCust">
+    <class name="BBRVisit" table="visits">
+        <id name="id" column="VIS_ID">
+            <generator class="native"/>
+        </id>
+        <property name="posId" column="POS_ID"/>
+        <property name="timeScheduled" column="TIME_SCHEDULED"/>
+        <property name="userName" column="USER_NAME"/>
+        <property name="userContacts" column="USER_CONTACTS"/>
+        <property name="userId" column="USER_ID"/>
+        <property name="procedure" column="PROCED"/>
+        <property name="status" column="STATUS"/>
+    </class>
+</hibernate-mapping>

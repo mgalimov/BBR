@@ -1,17 +1,13 @@
 package BBRClientApp;
 
 import java.util.Hashtable;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import BBR.BBRDataSet;
 import BBR.BBRErrors;
 import BBRAcc.*;
 
-public class BBRAdminApplication {
-	public BBRAcc.BBRUser user = null;
-	
+public class BBRAdminApplication {	
 	public BBRAdminApplication() {
 	}
 	
@@ -113,7 +109,7 @@ public class BBRAdminApplication {
 			if (shop != null)
 				json = shop.toJson();
 			else
-				json = BBRErrors.ERR_USER_NOTFOUND;
+				json = BBRErrors.ERR_SHOP_NOTFOUND;
 		} catch (Exception ex) {
 			json = ex.getLocalizedMessage();
 		}
@@ -129,7 +125,7 @@ public class BBRAdminApplication {
 			if (shop != null)
 				mgr.delete(shop);
 			else
-				respText = BBRErrors.ERR_USER_NOTFOUND;
+				respText = BBRErrors.ERR_SHOP_NOTFOUND;
 		} catch (Exception ex) {
 			respText = ex.getLocalizedMessage();
 		}
@@ -147,7 +143,7 @@ public class BBRAdminApplication {
 				mgr.update(shop);
 			}
 			else
-				respText = BBRErrors.ERR_USER_NOTFOUND;
+				respText = BBRErrors.ERR_SHOP_NOTFOUND;
 		} catch (Exception ex) {
 			respText = ex.getLocalizedMessage();
 		}
@@ -193,7 +189,7 @@ public class BBRAdminApplication {
 			if (pos != null)
 				json = pos.toJson();
 			else
-				json = BBRErrors.ERR_USER_NOTFOUND;
+				json = BBRErrors.ERR_POS_NOTFOUND;
 		} catch (Exception ex) {
 			json = ex.getLocalizedMessage();
 		}
@@ -209,7 +205,7 @@ public class BBRAdminApplication {
 			if (pos != null)
 				mgr.delete(pos);
 			else
-				respText = BBRErrors.ERR_USER_NOTFOUND;
+				respText = BBRErrors.ERR_POS_NOTFOUND;
 		} catch (Exception ex) {
 			respText = ex.getLocalizedMessage();
 		}
@@ -265,6 +261,11 @@ public class BBRAdminApplication {
 		BBRDataSet<BBRPoS> poses = mgr.list(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields));
 		String s = poses.toJson();
 		return s;
+	}
+
+	public String getPoSes(String query) {
+		BBRPoSManager mgr = new BBRPoSManager();
+		return mgr.list(query, "title").toJson();
 	}
 
 }

@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.util.Hashtable;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,33 +28,37 @@ public class BBRShops extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		BBRAdminApplication app = BBRAdminApplication.getApp(request);
-		BBRContext context = BBRContext.getContext(request);
-		BBRParams params = new BBRParams(request.getQueryString());
-		String id = params.get("id");
-		String operation = params.get("operation");
 		String respText = "";
-		
-		if (operation.equals("getdata")) {
-			respText = app.getShopData(Long.parseLong(id));
-		} else
-		if (operation.equals("delete")) {
-			respText = app.deleteShop(Long.parseLong(id));
-		} else
-		if (operation.equals("update")) {
-			String title = params.get("title");
-			respText = app.updateShop(Long.parseLong(id), title);
-		} else
-		if (operation.equals("create")) {
-			String title = params.get("title");
-			respText = app.createShop(title);
-		} else
-		if (operation.equals("reference")) {
-			String q = params.get("q");
-			respText = app.getShops(context.user, q);
-		} else
-			respText = "Unknown operation";
-						
+		try {
+			BBRAdminApplication app = BBRAdminApplication.getApp(request);
+			BBRContext context = BBRContext.getContext(request);
+			BBRParams params = new BBRParams(request.getQueryString());
+			String id = params.get("id");
+			String operation = params.get("operation");
+			
+			if (operation.equals("getdata")) {
+				respText = app.getShopData(Long.parseLong(id));
+			} else
+			if (operation.equals("delete")) {
+				respText = app.deleteShop(Long.parseLong(id));
+			} else
+			if (operation.equals("update")) {
+				String title = params.get("title");
+				respText = app.updateShop(Long.parseLong(id), title);
+			} else
+			if (operation.equals("create")) {
+				String title = params.get("title");
+				respText = app.createShop(title);
+			} else
+			if (operation.equals("reference")) {
+				String q = params.get("q");
+				respText = app.getShops(context.user, q);
+			} else
+				respText = "Unknown operation";
+		} catch (Exception ex) {
+			respText = ex.getLocalizedMessage();
+			response.setStatus(700);
+		}
 		response.setContentType("text/plain");  
 		response.setCharacterEncoding("UTF-8"); 
 		response.getWriter().write(respText); 
@@ -63,15 +68,20 @@ public class BBRShops extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		BBRAdminApplication app = BBRAdminApplication.getApp(request);
-		
-		BBRParams params = new BBRParams(request.getReader());
-		String pageNum = params.get("page_num");
-		String rowsPerPage = params.get("rows_per_page");
-		Hashtable<Integer, Hashtable<String, String>> sortingFields = params.getArray("sorting");
-		
-		String respText = app.getShops(Integer.parseInt(pageNum), Integer.parseInt(rowsPerPage), sortingFields);
-		
+		String respText = "";
+		try {
+			BBRAdminApplication app = BBRAdminApplication.getApp(request);
+			
+			BBRParams params = new BBRParams(request.getReader());
+			String pageNum = params.get("page_num");
+			String rowsPerPage = params.get("rows_per_page");
+			Hashtable<Integer, Hashtable<String, String>> sortingFields = params.getArray("sorting");
+			
+			respText = app.getShops(Integer.parseInt(pageNum), Integer.parseInt(rowsPerPage), sortingFields);
+		} catch (Exception ex) {
+			respText = ex.getLocalizedMessage();
+			response.setStatus(700);
+		}
 		response.setContentType("text/plain");  
 		response.setCharacterEncoding("UTF-8"); 
 		response.getWriter().write(respText); 

@@ -1,7 +1,6 @@
 package BBRAcc;
 
 import org.hibernate.Session;
-
 import BBR.BBRDataManager;
 import BBR.BBRErrors;
 import BBR.BBRGPS;

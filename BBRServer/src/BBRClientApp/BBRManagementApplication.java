@@ -1,11 +1,17 @@
 package BBRClientApp;
 
+import java.util.Date;
 import java.util.Hashtable;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import BBR.BBRErrors;
 import BBRCust.BBRSpecialist;
 import BBRCust.BBRSpecialistManager;
+import BBRCust.BBRVisit;
+import BBRCust.BBRVisitManager;
+import BBRCust.BBRVisit.BBRVisitStatus;
 
 public class BBRManagementApplication {
 	public BBRAcc.BBRShop shop = null;
@@ -90,6 +96,76 @@ public class BBRManagementApplication {
 
 	public String getSpecs(int pageNumber, int pageSize, Hashtable<Integer, Hashtable<String, String>> sortingFields) {
 		BBRSpecialistManager mgr = new BBRSpecialistManager();
+		return mgr.list(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields)).toJson();
+	}
+
+	public String getVisitData(Long id) {
+		BBRVisitManager mgr = new BBRVisitManager();
+		String json = "";
+		
+		try {
+			BBRVisit visit = mgr.findById(id);
+			if (visit != null)
+				json = visit.toJson();
+			else
+				json = BBRErrors.ERR_VISIT_NOTFOUND;
+		} catch (Exception ex) {
+			json = ex.getLocalizedMessage();
+		}
+		return json;
+	}
+
+	public String cancelVisit(Long id) {
+		BBRVisitManager mgr = new BBRVisitManager();
+		String respText = "";
+		
+		try {
+			BBRVisit visit = mgr.findById(id);
+			if (visit != null) {
+				visit.setStatus(BBRVisitStatus.VISSTATUS_CANCELLED);
+				mgr.update(visit);
+			}
+			else
+				respText = BBRErrors.ERR_VISIT_NOTFOUND;
+		} catch (Exception ex) {
+			respText = ex.getLocalizedMessage();
+		}
+		return respText;
+	}
+
+	public String approveVisit(Long id) {
+		BBRVisitManager mgr = new BBRVisitManager();
+		String respText = "";
+		
+		try {
+			BBRVisit visit = mgr.findById(id);
+			if (visit != null) {
+				visit.setStatus(BBRVisitStatus.VISSTATUS_APPROVED);
+				mgr.update(visit);
+			}
+			else
+				respText = BBRErrors.ERR_VISIT_NOTFOUND;
+		} catch (Exception ex) {
+			respText = ex.getLocalizedMessage();
+		}
+		return respText;
+	}
+
+	public String createVisit(Long posId, Date timeScheduled, String procedure, String userName, String userContacts, Long userId) {
+		BBRVisitManager mgr = new BBRVisitManager();
+		String respText = "";
+
+		try {
+			mgr.createAndStoreVisit(posId, timeScheduled, procedure, userName, userContacts, userId);
+		} catch (Exception ex) {
+			respText = ex.getLocalizedMessage();
+		}
+		
+		return respText;
+	}
+
+	public String getVisits(int pageNumber, int pageSize, Hashtable<Integer, Hashtable<String, String>> sortingFields) {
+		BBRVisitManager mgr = new BBRVisitManager();
 		return mgr.list(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields)).toJson();
 	}
 

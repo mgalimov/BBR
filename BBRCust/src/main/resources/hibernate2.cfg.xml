@@ -35,6 +35,7 @@
         <property name="hbm2ddl.auto">update</property>
 
         <mapping resource="BBR/BBRSpecialist.hbm.xml"/>
+        <mapping resource="BBR/BBRVisit.hbm.xml"/>
 
     </session-factory>
 

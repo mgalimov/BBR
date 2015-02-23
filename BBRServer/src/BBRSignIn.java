@@ -6,6 +6,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import BBRClientApp.BBRContext;
 
 /**
@@ -27,26 +28,34 @@ public class BBRSignIn extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		BBRContext context = BBRContext.getContext(request);
-		BBRParams params = new BBRParams(request.getQueryString());
-		String email = params.get("email");
-		String password = params.get("password");
-		String rememberme = params.get("rememberme");
-		context.SignIn(email, password);
-		
-		if (context.user != null) {
-			if (rememberme != null)
-				if (!rememberme.equals("")) {
-					Cookie c = new Cookie("email", email);
-					c.setMaxAge(24*60*30);
-					response.addCookie(c);
-					
-					c = new Cookie("pwdhash", context.user.getEncodedPassword());
-					c.setMaxAge(24*60*30);
-					response.addCookie(c);
-				}
+		try {
+			BBRContext context = BBRContext.getContext(request);
+			BBRParams params = new BBRParams(request.getQueryString());
+			String email = params.get("email");
+			String password = params.get("password");
+			String rememberme = params.get("rememberme");
+			context.SignIn(email, password);
+			
+			if (context.user != null) {
+				if (rememberme != null)
+					if (!rememberme.equals("")) {
+						Cookie c = new Cookie("email", email);
+						c.setMaxAge(24*60*30);
+						response.addCookie(c);
+						
+						c = new Cookie("pwdhash", context.user.getEncodedPassword());
+						c.setMaxAge(24*60*30);
+						response.addCookie(c);
+					}
+			}
+			response.sendRedirect(request.getContextPath() + "/" + context.getWelcomePage());
+		} catch (Exception ex) {
+			String respText = ex.getLocalizedMessage();
+			response.setStatus(700);
+			response.setContentType("text/plain");  
+			response.setCharacterEncoding("UTF-8"); 
+			response.getWriter().write(respText);
 		}
-		response.sendRedirect(request.getContextPath() + "/" + context.getWelcomePage());
 	}
 
 	// Signing out
