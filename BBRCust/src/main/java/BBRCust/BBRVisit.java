@@ -13,6 +13,7 @@ public class BBRVisit extends BBRDataElement {
 	private String userContacts;
 	private String procedure;
 	private String posTitle;
+	private BBRSpecialist spec;
 	
 	public class BBRVisitStatus {
 		public static final int VISSTATUS_INITIALIZED = 0;
@@ -95,5 +96,13 @@ public class BBRVisit extends BBRDataElement {
 
 	public void setPosTitle(String posTitle) {
 		this.posTitle = posTitle;
+	}
+
+	public BBRSpecialist getSpec() {
+		return spec;
+	}
+
+	public void setSpec(BBRSpecialist spec) {
+		this.spec = spec;
 	}
 }

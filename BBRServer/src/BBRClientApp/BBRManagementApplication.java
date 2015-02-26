@@ -2,10 +2,8 @@ package BBRClientApp;
 
 import java.util.Date;
 import java.util.Hashtable;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import BBR.BBRErrors;
 import BBRAcc.BBRPoS;
 import BBRCust.BBRSpecialist;
@@ -101,6 +99,11 @@ public class BBRManagementApplication {
 		return mgr.list(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields)).toJson();
 	}
 
+	public String getSpecs(String query) {
+		BBRSpecialistManager mgr = new BBRSpecialistManager();
+		return mgr.list(query, "name").toJson();
+	}
+
 	public String getVisitData(Long id) {
 		BBRVisitManager mgr = new BBRVisitManager();
 		String json = "";
@@ -166,12 +169,7 @@ public class BBRManagementApplication {
 		
 		return respText;
 	}
-/*
-	public String getVisits(int pageNumber, int pageSize, Hashtable<Integer, Hashtable<String, String>> sortingFields) {
-		BBRVisitManager mgr = new BBRVisitManager();
-		return mgr.list(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields)).toJson();
-	}
-*/
+
 	public String getVisits(Long userId, int pageNumber, int pageSize, Hashtable<Integer, Hashtable<String, String>> sortingFields) {
 		BBRVisitManager mgr = new BBRVisitManager();
 		return mgr.list(userId, pageNumber, pageSize, BBRContext.getOrderBy(sortingFields)).toJson();

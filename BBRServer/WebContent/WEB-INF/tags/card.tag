@@ -58,6 +58,7 @@
 
  	$(document).ready(function () {
  		idParam = getUrlParameter('id');
+		${itemPreload}
 		if (idParam && idParam != 'new') 
 		{
 			$.get('${method}', {id : idParam, operation : 'getdata'}, function(responseText) {
@@ -67,7 +68,6 @@
 				};
 			});
  		}
-		${itemPreload}
 
 		$('#saveChanges').click(function(event) { 
 	 		idParam = getUrlParameter('id');
@@ -77,14 +77,16 @@
     		else
     			op = 'update';
     			
-            $.get('${method}',{id:idParam,${itemReq}operation: op}, function(responseText) { 
-																	    			saved = true; 
-            																		window.location.href = '${gridPage}'; 
-            																}).fail(function(data) {
-            																		saved = false;
-            																		$('#welcomeText').text(data.responseText);
-            																		$('#alertMessage').removeClass('hide');
-            																});
+            $.get('${method}',
+            		{id:idParam,${itemReq}operation: op}, 
+            		function(responseText) { 
+						saved = true; 
+            			window.location.href = '${gridPage}'; 
+            		}).fail(function(data) {
+            					saved = false;
+            					$('#welcomeText').text(data.responseText);
+            					$('#alertMessage').removeClass('hide');
+            				});
            });			 		
 
 		$('#cancelChanges').click(function(event) {

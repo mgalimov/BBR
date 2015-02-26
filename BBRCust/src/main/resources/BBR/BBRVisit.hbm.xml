@@ -16,5 +16,6 @@
         <property name="procedure" column="PROCED"/>
         <property name="status" column="STATUS"/>
         <property name="posTitle" column="POS_TITLE"/>
+        <many-to-one name="spec" column="SPEC_ID" class="BBRSpecialist" lazy="false" fetch="join"/>
     </class>
 </hibernate-mapping>

@@ -7,7 +7,8 @@
 			<t:grid-item label="Point of sale (service)" field="posTitle" sort="ascending"/>
 			<t:grid-item label="Name" field="userName"/>
 			<t:grid-item label="Contacts" field="userContacts"/>
-			<t:grid-item label="Status" field="status"/>
+			<t:grid-item label="Specialist" field="status"/>
+			<t:grid-item label="Status" field="spec.title"/>
 		</t:grid>
 	</jsp:body>
 </t:admin-grid-wrapper>

@@ -19,6 +19,7 @@
 			<t:card-item label="Your name" type="text" field="userName" isRequired="required" />
 			<t:card-item label="Your phone" type="text" field="userContacts" isRequired="required" />
 			<t:card-item label="Procedure" type="text" field="procedure" />
+			<t:card-item label="Select specialist" type="reference" field="spec" referenceFieldTitle="name" referenceMethod="BBRSpecialists"/>
 		</t:card>
 	</c:when>
 	<c:when test="${lastVisit != null}">

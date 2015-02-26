@@ -50,7 +50,13 @@ public class BBRSpecialists extends HttpServlet {
 				String position = params.get("position");
 				respText = app.createSpec(name, position);
 			} else
+			if (operation.equals("reference")) {
+				String q = params.get("q");
+				respText = app.getSpecs(q);
+			} else {
 				respText = "Unknown operation";
+				response.setStatus(700);
+			}
 		} catch (Exception ex) {
 			respText = ex.getLocalizedMessage();
 			response.setStatus(700);
