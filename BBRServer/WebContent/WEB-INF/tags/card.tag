@@ -10,6 +10,7 @@
 <c:set var="itemReq" scope="request" value="${''}"/>
 <c:set var="itemVal" scope="request" value="${''}"/>
 <c:set var="itemSet" scope="request" value="${''}"/>
+<c:set var="itemPreload" scope="request" value="${''}"/>
 
 <!-- http://www.onjava.com/pub/a/onjava/excerpt/jserverpages3_ch11/ -->
 
@@ -57,11 +58,7 @@
 
  	$(document).ready(function () {
  		idParam = getUrlParameter('id');
-		if (!idParam) {
-			goBackOrTo('${gridPage}');
-		} else
-		if (idParam == 'new') {
-		} else
+		if (idParam && idParam != 'new') 
 		{
 			$.get('${method}', {id : idParam, operation : 'getdata'}, function(responseText) {
 				obj = $.parseJSON(responseText);
@@ -70,6 +67,7 @@
 				};
 			});
  		}
+		${itemPreload}
 
 		$('#saveChanges').click(function(event) { 
 	 		idParam = getUrlParameter('id');
@@ -81,7 +79,7 @@
     			
             $.get('${method}',{id:idParam,${itemReq}operation: op}, function(responseText) { 
 																	    			saved = true; 
-            																		windows.location.href = '${gridPage}'; 
+            																		window.location.href = '${gridPage}'; 
             																}).fail(function(data) {
             																		saved = false;
             																		$('#welcomeText').text(data.responseText);
@@ -90,6 +88,7 @@
            });			 		
 
 		$('#cancelChanges').click(function(event) {
+			saved = true;
 			goBackOrTo('${gridPage}');
 		});
  	});

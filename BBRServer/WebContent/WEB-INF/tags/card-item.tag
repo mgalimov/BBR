@@ -58,6 +58,12 @@
 				    $(\"#').concat(field).concat('input\")')}"/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize.refreshItems();')}"/>
 
+
+				<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
+				$(\"#').concat(field).concat('input\")')}"/>
+				<c:set var="itemPreload" scope="request" value="${itemPreload.concat('[0].selectize')}"/>
+				<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.load(function(callback){$.ajax({url:\"').concat(referenceMethod).concat('\",type:\"GET\",dataType:\"json\",data:{q:\"\",operation:\"reference\"},error:function(){callback();},success:function(res){callback(res.page_data);}})});')}"/>
+
 				<script>
 				$("#${field.concat('input')}").selectize({
 				    valueField: 'id',
@@ -79,7 +85,7 @@
 				                callback();
 				            },
 				            success: function(res) {
-				                callback(res.page_data);
+				            	callback(res.page_data);
 				            }
 				        });
 				    }

@@ -9,7 +9,7 @@ import org.hibernate.Session;
 public class BBRDataManager<T> {
 	protected final String typeName;
 	protected int sessionIndex = -1;
-	protected final int maxRowsToReturn = 100;
+	protected final int maxRowsToReturn = -100;
 
 	public BBRDataManager() {
 		typeName = BBRUtil.getGenericParameterClass(this.getClass(), 0).getName();
@@ -74,7 +74,7 @@ public class BBRDataManager<T> {
     	return sessionIndex;
     }
     
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "unused" })
 	public BBRDataSet<T> list(String queryTerm, String sortBy) {
         boolean tr = BBRUtil.beginTran(sessionIndex);
         
@@ -89,7 +89,9 @@ public class BBRDataManager<T> {
    			
         Long count = (Long)session.createQuery("Select count(*) from " + typeName + where).uniqueResult();
         Query query = session.createQuery("from " + typeName + where + orderBy);
-        query.setMaxResults(maxRowsToReturn);
+        
+        if (maxRowsToReturn > 0)
+        	query.setMaxResults(maxRowsToReturn);
         
         List<T> list = query.list();
         BBRUtil.commitTran(sessionIndex, tr);
