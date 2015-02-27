@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package="BBRCust">
-    <class name="BBRVisit" table="visits">
+    <class name="BBRProcedure" table="procedures">
         <id name="id" column="VIS_ID">
             <generator class="native"/>
         </id>

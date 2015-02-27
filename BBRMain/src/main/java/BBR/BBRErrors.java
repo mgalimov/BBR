@@ -13,4 +13,5 @@ public class BBRErrors {
 	public static final String ERR_POS_NOTFOUND = "Point of Sale not found";
 	public static final String ERR_VISIT_NOTFOUND = "Visit not found";
 	public static final String ERR_USER_NOTSPECIFIED = "User not specified";
+	public static final String ERR_PROC_NOTFOUND = "Procedure not found";
 }

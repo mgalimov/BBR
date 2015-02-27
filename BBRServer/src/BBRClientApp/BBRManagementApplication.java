@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import BBR.BBRErrors;
 import BBRAcc.BBRPoS;
+import BBRCust.BBRProcedure;
+import BBRCust.BBRProcedureManager;
 import BBRCust.BBRSpecialist;
 import BBRCust.BBRSpecialistManager;
 import BBRCust.BBRVisit;
@@ -179,5 +181,85 @@ public class BBRManagementApplication {
 		String lastVisit = lastVisitScheduled;
 		lastVisitScheduled = null;
 		return lastVisit;
+	}
+	
+	public String getProcedureData(Long id) {
+		BBRProcedureManager mgr = new BBRProcedureManager();
+		String json = "";
+		
+		try {
+			BBRProcedure proc = mgr.findById(id);
+			if (proc != null)
+				json = proc.toJson();
+			else
+				json = BBRErrors.ERR_PROC_NOTFOUND;
+		} catch (Exception ex) {
+			json = ex.getLocalizedMessage();
+		}
+		return json;
+	}
+
+	public String deleteProcedure(Long id) {
+		BBRProcedureManager mgr = new BBRProcedureManager();
+		String respText = "";
+		
+		try {
+			BBRProcedure proc = mgr.findById(id);
+			if (proc != null)
+				mgr.delete(proc);
+			else
+				respText = BBRErrors.ERR_PROC_NOTFOUND;
+		} catch (Exception ex) {
+			respText = ex.getLocalizedMessage();
+		}
+		return respText;
+	}
+
+	public String updateProcedure(Long id, String title, Long posId, String posTitle, float length, float price, String currency, int status) {
+		BBRProcedureManager mgr = new BBRProcedureManager();
+		String respText = "";
+
+		try {
+			BBRProcedure proc = mgr.findById(id);
+			if (proc != null) {
+		        proc.setTitle(title);
+		        proc.setPosId(posId);
+		        proc.setPosTitle(posTitle);
+		        proc.setLength(length);
+		        proc.setPrice(price);
+		        proc.setCurrency(currency);
+		        proc.setStatus(status);
+				mgr.update(proc);
+			}
+			else
+				respText = BBRErrors.ERR_USER_NOTFOUND;
+		} catch (Exception ex) {
+			respText = ex.getLocalizedMessage();
+		}
+		
+		return respText;
+	}
+
+	public String createProcedure(String title, Long posId, String posTitle, float length, float price, String currency, int status) {
+		BBRProcedureManager mgr = new BBRProcedureManager();
+		String respText = "";
+
+		try {
+			mgr.createAndStoreProcedure(title, posId, posTitle, length, price, currency, status);
+		} catch (Exception ex) {
+			respText = ex.getLocalizedMessage();
+		}
+		
+		return respText;
+	}
+
+	public String getProcedures(int pageNumber, int pageSize, Hashtable<Integer, Hashtable<String, String>> sortingFields) {
+		BBRProcedureManager mgr = new BBRProcedureManager();
+		return mgr.list(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields)).toJson();
+	}
+
+	public String getProcedures(String query) {
+		BBRProcedureManager mgr = new BBRProcedureManager();
+		return mgr.list(query, "name").toJson();
 	}
 }

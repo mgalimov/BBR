@@ -17,7 +17,7 @@ public class BBRProcedure extends BBRDataElement {
 		public static final int PROCSTATUS_INACTIVE = 2;
 	}
 	
-	private BBRProcedureStatus status;
+	private int status;
 	
 	BBRProcedure() {
 	}
@@ -78,11 +78,11 @@ public class BBRProcedure extends BBRDataElement {
 		this.posTitle = posTitle;
 	}
 
-	public BBRProcedureStatus getStatus() {
+	public int getStatus() {
 		return status;
 	}
 
-	public void setStatus(BBRProcedureStatus status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 }
