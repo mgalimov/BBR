@@ -36,6 +36,7 @@
 
         <mapping resource="BBR/BBRSpecialist.hbm.xml"/>
         <mapping resource="BBR/BBRVisit.hbm.xml"/>
+        <mapping resource="BBR/BBRProcedure.hbm.xml"/>
 
     </session-factory>
 
