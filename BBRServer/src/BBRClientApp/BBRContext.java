@@ -10,12 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import BBR.BBRErrors;
+import BBR.BBRGPS;
 import BBRAcc.*;
 
 public class BBRContext {
 	public BBRAcc.BBRUser user = null;
 	public BBRAcc.BBRShop shop = null;
-	private String lastSignInError = ""; 
+	private String lastSignInError = "";
+	private BBRGPS location = null;
 	
 	public BBRContext() {
 	}
@@ -173,5 +175,13 @@ public class BBRContext {
     		orderBy = orderBy.substring(0, orderBy.length() - 2);
 		return orderBy;
     }
+
+	public void setLocation(BBRGPS gps) {
+		location = gps;
+	}
+
+	public BBRGPS getLocation() {
+		return location;
+	}
 
 }

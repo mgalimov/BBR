@@ -1,6 +1,8 @@
 /*
    BBR javascript utils 
  */
+var locationSet = false;
+
 function getUrlParameter(sParam) {
     var sPageURL = window.location.search.substring(1);
     var sURLVariables = sPageURL.split('&');
@@ -20,3 +22,20 @@ function goBackOrTo(address) {
 	else 
 		window.location.href = address;
 }
+
+function getAndPassGPS() {
+	if (!locationSet)
+		navigator.geolocation.getCurrentPosition(function(location) {
+			$.ajax({
+				url: "BBRLocation", 
+				data: {
+					lat: location.coords.latitude,
+					lng: location.coords.longitude
+				} 
+			}).done(function() {
+				 locationSet = true;
+			});
+		});	
+}
+
+getAndPassGPS();
