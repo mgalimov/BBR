@@ -4,6 +4,7 @@
 	<jsp:body>
 		<t:grid method="BBRSpecialists" editPage="manager-spec-edit.jsp" createPage="manager-spec-create.jsp" title="Specialists">
 			<t:grid-item label="Name" field="name" sort="ascending"/>
+			<t:grid-item label="Point of service" field="pos.title"/>
 			<t:grid-item label="Position" field="position"/>
 		</t:grid>
 	</jsp:body>

@@ -1,7 +1,6 @@
 package BBRAcc;
 
 import org.hibernate.cfg.Configuration;
-
 import BBR.BBRUtil;
 
 public class BBRAccReg {

@@ -3,16 +3,20 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Hashtable;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import BBR.BBRErrors;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRPoSManager;
 import BBRClientApp.BBRContext;
 import BBRClientApp.BBRManagementApplication;
+import BBRCust.BBRProcedure;
+import BBRCust.BBRProcedureManager;
 
 /**
  * Servlet implementation class BBRBackend
@@ -52,21 +56,24 @@ public class BBRVisit extends HttpServlet {
 				BBRContext context = BBRContext.getContext(request);
 				String userName = params.get("userName");
 				String userContacts = params.get("userContacts");
-				String procedure = params.get("procedure");
 				try {
-					BBRPoSManager posmgr = new BBRPoSManager();
 					Long posId = Long.parseLong(params.get("pos"));
-					BBRPoS pos = posmgr.findById(posId);
+					Long procedureId = Long.parseLong(params.get("procedure"));
+
+					BBRPoSManager mgrPoS = new BBRPoSManager();
+					BBRPoS pos = mgrPoS.findById(posId);
 					if (pos == null)
 						throw new Exception(BBRErrors.ERR_POS_NOTFOUND);
+
+					BBRProcedureManager mgrProc = new BBRProcedureManager();
+					BBRProcedure proc = mgrProc.findById(procedureId);
+					if (proc == null)
+						throw new Exception(BBRErrors.ERR_PROC_NOTFOUND);
 					
 					DateFormat df = new SimpleDateFormat("y-M-d H:mm");
 					Date timeScheduled = df.parse(params.get("timeScheduled"));
-					Long userId = null;
-					if (context.user != null)
-						userId = context.user.getId();
 					
-					respText = app.createVisit(pos, timeScheduled, procedure, userName, userContacts, userId);
+					respText = app.createVisit(pos, context.user, timeScheduled, proc, userName, userContacts);
 				} catch (Exception ex) {
 					respText = ex.getLocalizedMessage();
 					response.setStatus(700);

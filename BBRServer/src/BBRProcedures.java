@@ -53,7 +53,7 @@ public class BBRProcedures extends HttpServlet {
 					String price = params.get("price");
 					String currency = params.get("currency");
 					String status = params.get("status");
-					respText = app.updateProcedure(Long.parseLong(id), title, pos.getId(), pos.getTitle(), Float.parseFloat(length), Float.parseFloat(price), currency, (int) Long.parseLong(status));
+					respText = app.updateProcedure(Long.parseLong(id), title, pos, Float.parseFloat(length), Float.parseFloat(price), currency, (int) Long.parseLong(status));
 				} else {
 					respText = BBRErrors.ERR_POS_NOTFOUND;
 					response.setStatus(700);
@@ -69,7 +69,7 @@ public class BBRProcedures extends HttpServlet {
 					String price = params.get("price");
 					String currency = params.get("currency");
 					String status = params.get("status");
-					respText = app.createProcedure(title, pos.getId(), pos.getTitle(), Float.parseFloat(length), Float.parseFloat(price), currency, (int) Long.parseLong(status));
+					respText = app.createProcedure(title, pos, Float.parseFloat(length), Float.parseFloat(price), currency, (int) Long.parseLong(status));
 				} else {
 					respText = BBRErrors.ERR_POS_NOTFOUND;
 					response.setStatus(700);

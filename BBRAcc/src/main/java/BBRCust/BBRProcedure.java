@@ -1,12 +1,12 @@
 package BBRCust;
 
 import BBR.BBRDataElement;
+import BBRAcc.BBRPoS;
 
 public class BBRProcedure extends BBRDataElement {
 	private Long id;
 	private String title;
-	private Long posId;
-	private String posTitle;
+	private BBRPoS pos;
 	private float length;
 	private float price;
 	private String currency;
@@ -38,14 +38,6 @@ public class BBRProcedure extends BBRDataElement {
 		this.title = title;
 	}
 
-	public Long getPosId() {
-		return posId;
-	}
-
-	public void setPosId(Long posId) {
-		this.posId = posId;
-	}
-
 	public float getLength() {
 		return length;
 	}
@@ -70,19 +62,19 @@ public class BBRProcedure extends BBRDataElement {
 		this.currency = currency;
 	}
 
-	public String getPosTitle() {
-		return posTitle;
-	}
-
-	public void setPosTitle(String posTitle) {
-		this.posTitle = posTitle;
-	}
-
 	public int getStatus() {
 		return status;
 	}
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	public BBRPoS getPos() {
+		return pos;
+	}
+
+	public void setPos(BBRPoS pos) {
+		this.pos = pos;
 	}
 }

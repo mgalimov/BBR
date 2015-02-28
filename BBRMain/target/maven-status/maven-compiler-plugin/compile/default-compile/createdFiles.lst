@@ -1,4 +1,7 @@
 BBR\BBRDataManager.class
+BBR\HibernateProxyTypeAdapter$1.class
+BBR\BBRGPS.class
+BBR\HibernateProxyTypeAdapter.class
 BBR\BBRUtil.class
 BBR\BBRErrors.class
 BBR\BBRDataSet.class

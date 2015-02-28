@@ -5,11 +5,15 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+
 import BBR.BBRDataManager;
 import BBR.BBRDataSet;
 import BBR.BBRUtil;
+import BBRAcc.BBRPoS;
+import BBRAcc.BBRUser;
 import BBRCust.BBRCustReg;
 import BBRCust.BBRVisit.BBRVisitStatus;
+import BBRCust.BBRVisit;
 
 public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	
@@ -18,19 +22,17 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		sessionIndex = BBRCustReg.sessionIndex;
 	}
 
-	public String createAndStoreVisit(Long posId, String posTitle, Date timeScheduled, String procedure, String userName, String userContacts, Long userId) {
+	public String createAndStoreVisit(BBRPoS pos, BBRUser user, Date timeScheduled, BBRProcedure procedure, String userName, String userContacts) {
         try {
 			boolean tr = BBRUtil.beginTran(sessionIndex);
 	        Session session = BBRUtil.getSession(sessionIndex);
-	
 	        BBRVisit visit = new BBRVisit();
-	        visit.setPosId(posId);
-	        visit.setPosTitle(posTitle);
+	        visit.setPos(pos);
+	        visit.setUser(user);
 	        visit.setTimeScheduled(timeScheduled);
 	        visit.setProcedure(procedure);
 	        visit.setUserName(userName);
 	        visit.setUserContacts(userContacts);
-	        visit.setUserId(userId);
 	        visit.setStatus(BBRVisitStatus.VISSTATUS_INITIALIZED);
 	        session.save(visit);
 	

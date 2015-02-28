@@ -2,12 +2,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>BBRAcc</groupId>
-  <artifactId>BBRAcc</artifactId>
+  <groupId>BBRData</groupId>
+  <artifactId>BBRData</artifactId>
   <version>0.0.1</version>
   <packaging>jar</packaging>
 
-  <name>BBRAcc</name>
+  <name>BBRData</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -30,7 +30,7 @@
                   <pluginExecutionFilter>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <versionRange>[1.0.0,)</versionRange>
+                    <versionRange>[0.0.0,)</versionRange>
                     <goals>
                       <goal>copy-dependencies</goal>
                     </goals>

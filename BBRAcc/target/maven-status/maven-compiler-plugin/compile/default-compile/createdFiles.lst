@@ -1,0 +1,16 @@
+BBRAcc\BBRShopManager.class
+BBRCust\BBRVisit.class
+BBRCust\BBRProcedure$BBRProcedureStatus.class
+BBRAcc\BBRPoSManager.class
+BBRCust\BBRProcedure.class
+BBRAcc\BBRShop.class
+BBRCust\BBRCustReg.class
+BBRCust\BBRSpecialistManager.class
+BBRCust\BBRSpecialist.class
+BBRAcc\BBRUserManager.class
+BBRAcc\BBRAccReg.class
+BBRCust\BBRVisit$BBRVisitStatus.class
+BBRAcc\BBRUser$BBRUserRole.class
+BBRCust\BBRProcedureManager.class
+BBRAcc\BBRUser.class
+BBRAcc\BBRPoS.class

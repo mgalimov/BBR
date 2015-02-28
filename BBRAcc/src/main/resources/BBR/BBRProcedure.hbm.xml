@@ -9,11 +9,10 @@
             <generator class="native"/>
         </id>
         <property name="title" column="TITLE" not-null="true" unique="true"/>
-        <property name="posId" column="POS_ID" not-null="true"/>
-        <property name="posTitle" column="POS_TITLE"/>
         <property name="length" column="LENGTH"/>
         <property name="price" column="PRICE"/>
         <property name="currency" column="CURRENCY"/>
         <property name="status" column="STATUS"/>
+        <many-to-one name="pos" column="POS_ID" class="BBRPoS" lazy="false" fetch="join"/>
     </class>
 </hibernate-mapping>

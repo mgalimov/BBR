@@ -8,14 +8,13 @@
         <id name="id" column="VIS_ID">
             <generator class="native"/>
         </id>
-        <property name="posId" column="POS_ID"/>
         <property name="timeScheduled" column="TIME_SCHEDULED"/>
         <property name="userName" column="USER_NAME"/>
         <property name="userContacts" column="USER_CONTACTS"/>
-        <property name="userId" column="USER_ID"/>
         <property name="procedure" column="PROCED"/>
         <property name="status" column="STATUS"/>
-        <property name="posTitle" column="POS_TITLE"/>
         <many-to-one name="spec" column="SPEC_ID" class="BBRSpecialist" lazy="false" fetch="join"/>
+        <many-to-one name="pos" column="POS_ID" class="BBRPoS" lazy="false" fetch="join"/>
+        <many-to-one name="proc" column="PROC_ID" class="BBRProcedure" lazy="false" fetch="join"/>
     </class>
 </hibernate-mapping>

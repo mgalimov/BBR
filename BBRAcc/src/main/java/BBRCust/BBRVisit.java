@@ -1,19 +1,20 @@
 package BBRCust;
 
 import java.util.Date;
-
 import BBR.BBRDataElement;
+import BBRAcc.BBRPoS;
+import BBRAcc.BBRUser;
 
 public class BBRVisit extends BBRDataElement {
 	private Long id;
 	private Date timeScheduled;
-	private Long posId;
-	private Long userId;
+	private BBRPoS pos;
+	private BBRUser user;
 	private String userName;
 	private String userContacts;
-	private String procedure;
 	private String posTitle;
 	private BBRSpecialist spec;
+	private BBRProcedure procedure;
 	
 	public class BBRVisitStatus {
 		public static final int VISSTATUS_INITIALIZED = 0;
@@ -42,21 +43,6 @@ public class BBRVisit extends BBRDataElement {
 		return timeScheduled;
 	}
 
-	public void setPosId(Long posId) {
-		this.posId = posId;
-	}
-	
-	public Long getPosId() {
-		return posId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
-	
-	public Long getUserId() {
-		return userId;
-	}
 
 	public void setUserName(String userName) {
 		this.userName = userName;
@@ -72,14 +58,6 @@ public class BBRVisit extends BBRDataElement {
 	
 	public String getUserContacts() {
 		return userContacts;
-	}
-
-	public void setProcedure(String procedure) {
-		this.procedure = procedure;
-	}
-	
-	public String getProcedure() {
-		return procedure;
 	}
 
 	public void setStatus(int status) {
@@ -104,5 +82,29 @@ public class BBRVisit extends BBRDataElement {
 
 	public void setSpec(BBRSpecialist spec) {
 		this.spec = spec;
+	}
+
+	public BBRPoS getPos() {
+		return pos;
+	}
+
+	public void setPos(BBRPoS pos) {
+		this.pos = pos;
+	}
+
+	public BBRUser getUser() {
+		return user;
+	}
+
+	public void setUser(BBRUser user) {
+		this.user = user;
+	}
+
+	public BBRProcedure getProcedure() {
+		return procedure;
+	}
+
+	public void setProcedure(BBRProcedure procedure) {
+		this.procedure = procedure;
 	}
 }

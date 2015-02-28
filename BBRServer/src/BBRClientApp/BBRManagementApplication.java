@@ -2,10 +2,13 @@ package BBRClientApp;
 
 import java.util.Date;
 import java.util.Hashtable;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import BBR.BBRErrors;
 import BBRAcc.BBRPoS;
+import BBRAcc.BBRUser;
 import BBRCust.BBRProcedure;
 import BBRCust.BBRProcedureManager;
 import BBRCust.BBRSpecialist;
@@ -63,7 +66,7 @@ public class BBRManagementApplication {
 		return respText;
 	}
 
-	public String updateSpec(Long id, String name, String position) {
+	public String updateSpec(Long id, String name, String position, BBRUser user, BBRPoS pos) {
 		BBRSpecialistManager mgr = new BBRSpecialistManager();
 		String respText = "";
 
@@ -72,6 +75,8 @@ public class BBRManagementApplication {
 			if (spec != null) {
 				spec.setName(name);
 				spec.setPosition(position);
+				spec.setPos(pos);
+				spec.setUser(user);
 				mgr.update(spec);
 			}
 			else
@@ -83,12 +88,12 @@ public class BBRManagementApplication {
 		return respText;
 	}
 
-	public String createSpec(String name, String position) {
+	public String createSpec(String name, String position, BBRUser user, BBRPoS pos) {
 		BBRSpecialistManager mgr = new BBRSpecialistManager();
 		String respText = "";
 
 		try {
-			mgr.createAndStoreSpecialist(name, position);
+			mgr.createAndStoreSpecialist(name, position, user, pos);
 		} catch (Exception ex) {
 			respText = ex.getLocalizedMessage();
 		}
@@ -158,12 +163,12 @@ public class BBRManagementApplication {
 		return respText;
 	}
 
-	public String createVisit(BBRPoS pos, Date timeScheduled, String procedure, String userName, String userContacts, Long userId) {
+	public String createVisit(BBRPoS pos, BBRUser user, Date timeScheduled, BBRProcedure procedure, String userName, String userContacts) {
 		BBRVisitManager mgr = new BBRVisitManager();
 		String respText = "";
 
 		try {
-			lastVisitScheduled = mgr.createAndStoreVisit(pos.getId(), pos.getTitle(), timeScheduled, procedure, userName, userContacts, userId);
+			lastVisitScheduled = mgr.createAndStoreVisit(pos, user, timeScheduled, procedure, userName, userContacts);
 		} catch (Exception ex) {
 			lastVisitScheduled = null;
 			respText = ex.getLocalizedMessage();
@@ -215,7 +220,7 @@ public class BBRManagementApplication {
 		return respText;
 	}
 
-	public String updateProcedure(Long id, String title, Long posId, String posTitle, float length, float price, String currency, int status) {
+	public String updateProcedure(Long id, String title, BBRPoS pos, float length, float price, String currency, int status) {
 		BBRProcedureManager mgr = new BBRProcedureManager();
 		String respText = "";
 
@@ -223,8 +228,7 @@ public class BBRManagementApplication {
 			BBRProcedure proc = mgr.findById(id);
 			if (proc != null) {
 		        proc.setTitle(title);
-		        proc.setPosId(posId);
-		        proc.setPosTitle(posTitle);
+		        proc.setPos(pos);
 		        proc.setLength(length);
 		        proc.setPrice(price);
 		        proc.setCurrency(currency);
@@ -240,12 +244,12 @@ public class BBRManagementApplication {
 		return respText;
 	}
 
-	public String createProcedure(String title, Long posId, String posTitle, float length, float price, String currency, int status) {
+	public String createProcedure(String title, BBRPoS pos, float length, float price, String currency, int status) {
 		BBRProcedureManager mgr = new BBRProcedureManager();
 		String respText = "";
 
 		try {
-			mgr.createAndStoreProcedure(title, posId, posTitle, length, price, currency, status);
+			mgr.createAndStoreProcedure(title, pos, length, price, currency, status);
 		} catch (Exception ex) {
 			respText = ex.getLocalizedMessage();
 		}

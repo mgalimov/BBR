@@ -3,9 +3,8 @@
 	<name>BBRServer</name>
 	<comment></comment>
 	<projects>
-		<project>BBRAcc</project>
-		<project>BBRCust</project>
 		<project>BBRMain</project>
+		<project>BBRData</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -14,12 +13,12 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.eclipse.m2e.core.maven2Builder</name>
+			<name>org.eclipse.jdt.core.javabuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.eclipse.jdt.core.javabuilder</name>
+			<name>org.eclipse.m2e.core.maven2Builder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
