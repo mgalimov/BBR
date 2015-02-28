@@ -60,7 +60,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         	orderBy = " " + orderBy;
         }
 
-        String where = " where userId=" + userId.toString() + "";
+        String where = " where user.id=" + userId.toString() + "";
         
         Long count = (Long)session.createQuery("Select count(*) from " + typeName + where).uniqueResult();
         Query query = session.createQuery("from " + typeName + where + orderBy);

@@ -28,7 +28,7 @@
 			<t:card-item label="Date and time YYYY-MM-DD HH-MM" type="text" field="timeScheduled" isRequired="required" />
 			<t:card-item label="Your name" type="text" field="userName" isRequired="required" defaultValue="${userName}"/>
 			<t:card-item label="Your phone" type="text" field="userContacts" isRequired="required" />
-			<t:card-item label="Select proceure" type="reference" field="proc" referenceFieldTitle="title" referenceMethod="BBRProcedures"/>
+			<t:card-item label="Select procedure" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures"/>
 			<t:card-item label="Select specialist" type="reference" field="spec" referenceFieldTitle="name" referenceMethod="BBRSpecialists"/>
 		</t:card>
 	</c:when>

@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import BBR.BBRErrors;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRPoSManager;
-import BBRAcc.BBRUser;
-import BBRAcc.BBRUserManager;
 import BBRClientApp.BBRManagementApplication;
 
 /**
@@ -49,13 +47,10 @@ public class BBRSpecialists extends HttpServlet {
 				String name = params.get("name");
 				String position = params.get("position");
 				String posId = params.get("pos");
-				String usrId = params.get("usr");
 				BBRPoSManager mgrPos = new BBRPoSManager();
 				BBRPoS pos = mgrPos.findById(Long.parseLong(posId));
-				BBRUserManager mgrUsr = new BBRUserManager();
-				BBRUser usr = mgrUsr.findById(Long.parseLong(usrId));
-				if (pos != null && usr != null) {						
-					respText = app.updateSpec(Long.parseLong(id), name, position, usr, pos);
+				if (pos != null) {						
+					respText = app.updateSpec(Long.parseLong(id), name, position, null, pos);
 				} else {
 					respText = BBRErrors.ERR_POS_NOTFOUND;
 					response.setStatus(700);
@@ -66,13 +61,10 @@ public class BBRSpecialists extends HttpServlet {
 				String name = params.get("name");
 				String position = params.get("position");
 				String posId = params.get("pos");
-				String usrId = params.get("usr");
 				BBRPoSManager mgrPos = new BBRPoSManager();
 				BBRPoS pos = mgrPos.findById(Long.parseLong(posId));
-				BBRUserManager mgrUsr = new BBRUserManager();
-				BBRUser usr = mgrUsr.findById(Long.parseLong(usrId));
-				if (pos != null && usr != null) {						
-					respText = app.createSpec(name, position, usr, pos);
+				if (pos != null) {						
+					respText = app.createSpec(name, position, null, pos);
 				} else {
 					respText = BBRErrors.ERR_POS_NOTFOUND;
 					response.setStatus(700);

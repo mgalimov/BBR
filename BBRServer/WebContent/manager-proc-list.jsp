@@ -8,6 +8,7 @@
 			<t:grid-item label="length, hrs" field="length"/>
 			<t:grid-item label="Price" field="price"/>
 			<t:grid-item label="Currency" field="currency"/>
+			<t:grid-item label="Status" field="status"/>
 		</t:grid>
 	</jsp:body>
 </t:admin-grid-wrapper>

@@ -261,4 +261,9 @@ public class BBRManagementApplication {
 		BBRProcedureManager mgr = new BBRProcedureManager();
 		return mgr.list(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields)).toJson();
 	}
+
+	public String getProcedures(String query) {
+		BBRProcedureManager mgr = new BBRProcedureManager();
+		return mgr.list(query, "title").toJson();
+	}
 }

@@ -50,10 +50,17 @@ public class BBRProcedures extends HttpServlet {
 				BBRPoS pos = mgr.findById(Long.parseLong(posId));
 				if (pos != null) {						
 					String length = params.get("length");
+					float lengthFloat = (float) 0.5;
+					if (!length.isEmpty())
+						lengthFloat = Float.parseFloat(length);
+					
 					String price = params.get("price");
+					float priceFloat = 0;
+					if (!price.isEmpty())
+						priceFloat = Float.parseFloat(price);
 					String currency = params.get("currency");
 					String status = params.get("status");
-					respText = app.updateProcedure(Long.parseLong(id), title, pos, Float.parseFloat(length), Float.parseFloat(price), currency, (int) Long.parseLong(status));
+					respText = app.updateProcedure(Long.parseLong(id), title, pos, lengthFloat, priceFloat, currency, (int) Long.parseLong(status));
 				} else {
 					respText = BBRErrors.ERR_POS_NOTFOUND;
 					response.setStatus(700);
@@ -66,14 +73,25 @@ public class BBRProcedures extends HttpServlet {
 				BBRPoS pos = mgr.findById(Long.parseLong(posId));
 				if (pos != null) {						
 					String length = params.get("length");
+					float lengthFloat = (float) 0.5;
+					if (!length.isEmpty())
+						lengthFloat = Float.parseFloat(length);
+					
 					String price = params.get("price");
+					float priceFloat = 0;
+					if (!price.isEmpty())
+						priceFloat = Float.parseFloat(price);
 					String currency = params.get("currency");
 					String status = params.get("status");
-					respText = app.createProcedure(title, pos, Float.parseFloat(length), Float.parseFloat(price), currency, (int) Long.parseLong(status));
+					respText = app.createProcedure(title, pos, lengthFloat, priceFloat, currency, (int) Long.parseLong(status));
 				} else {
 					respText = BBRErrors.ERR_POS_NOTFOUND;
 					response.setStatus(700);
 				}
+			} else
+			if (operation.equals("reference")) {
+				String q = params.get("q");
+				respText = app.getProcedures(q);
 			} else {
 				respText = "Unknown operation";
 				response.setStatus(700);

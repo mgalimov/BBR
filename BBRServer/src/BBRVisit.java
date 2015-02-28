@@ -57,19 +57,22 @@ public class BBRVisit extends HttpServlet {
 				String userName = params.get("userName");
 				String userContacts = params.get("userContacts");
 				try {
+					BBRProcedure proc = null;
+					
+					if (!params.get("procedure").isEmpty()) {
+						Long procedureId = Long.parseLong(params.get("procedure"));
+
+						BBRProcedureManager mgrProc = new BBRProcedureManager();
+						proc = mgrProc.findById(procedureId);						
+					}
+					
 					Long posId = Long.parseLong(params.get("pos"));
-					Long procedureId = Long.parseLong(params.get("procedure"));
 
 					BBRPoSManager mgrPoS = new BBRPoSManager();
 					BBRPoS pos = mgrPoS.findById(posId);
 					if (pos == null)
 						throw new Exception(BBRErrors.ERR_POS_NOTFOUND);
 
-					BBRProcedureManager mgrProc = new BBRProcedureManager();
-					BBRProcedure proc = mgrProc.findById(procedureId);
-					if (proc == null)
-						throw new Exception(BBRErrors.ERR_PROC_NOTFOUND);
-					
 					DateFormat df = new SimpleDateFormat("y-M-d H:mm");
 					Date timeScheduled = df.parse(params.get("timeScheduled"));
 					
