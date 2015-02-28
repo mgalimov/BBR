@@ -10,7 +10,7 @@
         </id>
         <property name="name" column="NAME"/>
         <property name="position" column="POSITION"/>
-        <many-to-one name="user" column="USER_ID" class="BBRUser" lazy="false" fetch="join"/>
-        <many-to-one name="pos" column="POS_ID" class="BBRPoS" lazy="false" fetch="join"/>
+        <many-to-one name="user" column="USER_ID" class="BBRAcc.BBRUser" lazy="false" fetch="join"/>
+        <many-to-one name="pos" column="POS_ID" class="BBRAcc.BBRPoS" lazy="false" fetch="join"/>
     </class>
 </hibernate-mapping>
