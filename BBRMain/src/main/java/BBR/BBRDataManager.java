@@ -24,7 +24,7 @@ public class BBRDataManager<T> {
         return new BBRDataSet<T>(list);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "unused" })
 	public BBRDataSet<T> list(int pageNumber, int pageSize, String orderBy) {
         boolean tr = BBRUtil.beginTran(sessionIndex);
         
@@ -39,7 +39,7 @@ public class BBRDataManager<T> {
         Long count = (Long)session.createQuery("Select count(*) from " + typeName).uniqueResult();
         Query query = session.createQuery("from " + typeName + " " + orderBy);
         query.setFirstResult((pageNumber - 1) * pageSize);
-        if (pageSize > maxRowsToReturn)
+        if (pageSize > maxRowsToReturn && maxRowsToReturn > 0)
         	pageSize = maxRowsToReturn;
         query.setMaxResults(pageSize);
         List<T> list = query.list();

@@ -62,8 +62,8 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 
         String where = " where user.id=" + userId.toString() + "";
         
-        Long count = (Long)session.createQuery("Select count(*) from " + typeName + where).uniqueResult();
-        Query query = session.createQuery("from " + typeName + where + orderBy);
+        Long count = (Long)session.createQuery("Select count(*) from BBRVisit visit join visit.user user " + where).uniqueResult();
+        Query query = session.createQuery("from BBRVisit visit join visit.user user " + where + orderBy);
         
         query.setFirstResult((pageNumber - 1) * pageSize);
         if (pageSize > maxRowsToReturn)
