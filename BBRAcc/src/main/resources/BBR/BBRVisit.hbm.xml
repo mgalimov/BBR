@@ -15,6 +15,6 @@
         <many-to-one name="spec" column="SPEC_ID" class="BBRSpecialist" lazy="false" fetch="join"/>
         <many-to-one name="pos" column="POS_ID" class="BBRAcc.BBRPoS" lazy="false" fetch="join"/>
         <many-to-one name="procedure" column="PROC_ID" class="BBRProcedure" lazy="false" fetch="join"/>
-        <many-to-one name="user" column="USER_ID" class="BBRAcc.BBRUser" lazy="false" fetch="join"/>
+        <many-to-one name="user" column="USER_ID" class="BBRAcc.BBRUser" lazy="false" fetch="select"/>
     </class>
 </hibernate-mapping>

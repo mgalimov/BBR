@@ -43,6 +43,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         }
     }
 
+	@SuppressWarnings("unused")
 	public BBRDataSet<BBRVisit> list(Long userId, int pageNumber, int pageSize, String orderBy) {
    		if (userId == null) {
    			return null;
@@ -60,13 +61,13 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         	orderBy = " " + orderBy;
         }
 
-        String where = " where user.id=" + userId.toString() + "";
-        
+        String where = " where visit.user.id=" + userId.toString() + "";
+        //join visit.user user 
         Long count = (Long)session.createQuery("Select count(*) from BBRVisit visit join visit.user user " + where).uniqueResult();
-        Query query = session.createQuery("from BBRVisit visit join visit.user user " + where + orderBy);
+        Query query = session.createQuery("from BBRVisit visit " + where + orderBy);
         
         query.setFirstResult((pageNumber - 1) * pageSize);
-        if (pageSize > maxRowsToReturn)
+        if (pageSize > maxRowsToReturn && maxRowsToReturn > 0)
         	pageSize = maxRowsToReturn;
         query.setMaxResults(pageSize);
         
