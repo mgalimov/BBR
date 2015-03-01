@@ -10,6 +10,8 @@ public class BBRDataManager<T> {
 	protected final String typeName;
 	protected int sessionIndex = -1;
 	protected final int maxRowsToReturn = -100;
+	protected String titleField = "title";
+	protected String classTitle = "abstract Data Element";
 
 	public BBRDataManager() {
 		typeName = BBRUtil.getGenericParameterClass(this.getClass(), 0).getName();
@@ -99,4 +101,11 @@ public class BBRDataManager<T> {
         return new BBRDataSet<T>(list, count);
     }
 
+    public String getTitleField() {
+    	return titleField;
+    }
+    
+    public String getClassTitle() {
+    	return classTitle;
+    }
 }

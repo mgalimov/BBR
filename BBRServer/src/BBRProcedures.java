@@ -15,7 +15,7 @@ import BBRClientApp.BBRManagementApplication;
 /**
  * Servlet implementation class BBRBackend
  */
-@WebServlet("/BBRProcedures")
+@WebServlet("/BBRProceduresOld")
 public class BBRProcedures extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

@@ -14,7 +14,9 @@ public class BBRShopManager extends BBRDataManager<BBRShop>{
 	public BBRShopManager() {
 		super();
 		sessionIndex = BBRAccReg.sessionIndex;
+		classTitle = "Shop";	
 	}
+	
 	public void createAndStoreShop(String title) {
         boolean tr = BBRUtil.beginTran(sessionIndex);
         Session session = BBRUtil.getSession(sessionIndex);

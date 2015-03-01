@@ -20,6 +20,8 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	public BBRVisitManager() {
 		super();
 		sessionIndex = BBRCustReg.sessionIndex;
+		titleField = "timeScheduled";
+		classTitle = "Visit";	
 	}
 
 	public String createAndStoreVisit(BBRPoS pos, BBRUser user, Date timeScheduled, BBRProcedure procedure, String userName, String userContacts) {

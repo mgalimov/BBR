@@ -16,6 +16,8 @@ public class BBRUserManager extends BBRDataManager<BBRUser> {
 	public BBRUserManager() {
 		super();
 		sessionIndex = BBRAccReg.sessionIndex;
+		titleField = "lastName";
+		classTitle = "User";	
 	}
 
 	public BBRUser createAndStoreUser(String email, String firstName, String lastName, String password) throws Exception {

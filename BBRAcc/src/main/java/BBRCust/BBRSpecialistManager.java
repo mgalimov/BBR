@@ -13,6 +13,8 @@ public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
 	public BBRSpecialistManager() {
 		super();
 		sessionIndex = BBRCustReg.sessionIndex;
+		titleField = "name";
+		classTitle = "Specialist";	
 	}
 
 	public void createAndStoreSpecialist(String name, String position, BBRUser user, BBRPoS pos) {

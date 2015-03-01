@@ -12,6 +12,7 @@ public class BBRProcedureManager extends BBRDataManager<BBRProcedure>{
 	public BBRProcedureManager() {
 		super();
 		sessionIndex = BBRCustReg.sessionIndex;
+		classTitle = "Procedure";	
 	}
 
 	public void createAndStoreProcedure(String title, BBRPoS pos, float length, float price, String currency, int status) {

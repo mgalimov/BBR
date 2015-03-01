@@ -11,6 +11,7 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 	public BBRPoSManager() {
 		super();
 		sessionIndex = BBRAccReg.sessionIndex;
+		classTitle = "Point of service";	
 	}
 	
 	public void createAndStorePoS(BBRShop shop, String title, String locationDescription, BBRGPS locationGPS) throws Exception {
