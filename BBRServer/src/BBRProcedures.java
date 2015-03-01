@@ -1,131 +1,72 @@
-import java.io.IOException;
-import java.util.Hashtable;
-
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import BBR.BBRErrors;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRPoSManager;
-import BBRClientApp.BBRManagementApplication;
+import BBRCust.BBRProcedure;
+import BBRCust.BBRProcedureManager;
 
-/**
- * Servlet implementation class BBRBackend
- */
-@WebServlet("/BBRProceduresOld")
-public class BBRProcedures extends HttpServlet {
+@WebServlet("/BBRProcedures")
+public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureManager> {
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public BBRProcedures() {
-        super();
+    public BBRProcedures() throws InstantiationException, IllegalAccessException {
+        super(BBRProcedureManager.class);
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String respText = "";
-		try {
-			BBRManagementApplication app = BBRManagementApplication.getApp(request);
-			BBRParams params = new BBRParams(request.getQueryString());
-			String id = params.get("id");
-			String operation = params.get("operation");
+	@Override
+	String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+		String title = params.get("title");
+		String posId = params.get("pos");
+		BBRPoSManager mgr = new BBRPoSManager();
+		BBRPoS pos = mgr.findById(Long.parseLong(posId));
+		if (pos != null) {						
+			String length = params.get("length");
+			float lengthFloat = (float) 0.5;
+			if (!length.isEmpty())
+				lengthFloat = Float.parseFloat(length);
 			
-			if (operation.equals("getdata")) {
-				respText = app.getProcedureData(Long.parseLong(id));
-			} else
-			if (operation.equals("delete")) {
-				respText = app.deleteProcedure(Long.parseLong(id));
-			} else
-			if (operation.equals("update")) {
-				String title = params.get("title");
-				String posId = params.get("pos");
-				BBRPoSManager mgr = new BBRPoSManager();
-				BBRPoS pos = mgr.findById(Long.parseLong(posId));
-				if (pos != null) {						
-					String length = params.get("length");
-					float lengthFloat = (float) 0.5;
-					if (!length.isEmpty())
-						lengthFloat = Float.parseFloat(length);
-					
-					String price = params.get("price");
-					float priceFloat = 0;
-					if (!price.isEmpty())
-						priceFloat = Float.parseFloat(price);
-					String currency = params.get("currency");
-					String status = params.get("status");
-					respText = app.updateProcedure(Long.parseLong(id), title, pos, lengthFloat, priceFloat, currency, (int) Long.parseLong(status));
-				} else {
-					respText = BBRErrors.ERR_POS_NOTFOUND;
-					response.setStatus(700);
-				}
-			} else
-			if (operation.equals("create")) {
-				String title = params.get("title");
-				String posId = params.get("pos");
-				BBRPoSManager mgr = new BBRPoSManager();
-				BBRPoS pos = mgr.findById(Long.parseLong(posId));
-				if (pos != null) {						
-					String length = params.get("length");
-					float lengthFloat = (float) 0.5;
-					if (!length.isEmpty())
-						lengthFloat = Float.parseFloat(length);
-					
-					String price = params.get("price");
-					float priceFloat = 0;
-					if (!price.isEmpty())
-						priceFloat = Float.parseFloat(price);
-					String currency = params.get("currency");
-					String status = params.get("status");
-					respText = app.createProcedure(title, pos, lengthFloat, priceFloat, currency, (int) Long.parseLong(status));
-				} else {
-					respText = BBRErrors.ERR_POS_NOTFOUND;
-					response.setStatus(700);
-				}
-			} else
-			if (operation.equals("reference")) {
-				String q = params.get("q");
-				respText = app.getProcedures(q);
-			} else {
-				respText = "Unknown operation";
-				response.setStatus(700);
-			}
-		} catch (Exception ex) {
-			respText = ex.getLocalizedMessage();
-			response.setStatus(700);
+			String price = params.get("price");
+			float priceFloat = 0;
+			if (!price.isEmpty())
+				priceFloat = Float.parseFloat(price);
+			
+			String currency = params.get("currency");
+			String status = params.get("status");
+			manager.createAndStoreProcedure(title, pos, lengthFloat, priceFloat, currency, (int) Long.parseLong(status));
 		}
-		response.setContentType("text/plain");  
-		response.setCharacterEncoding("UTF-8"); 
-		response.getWriter().write(respText); 
+		return "";
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String respText = "";
-		try {
-			BBRManagementApplication app = BBRManagementApplication.getApp(request);
-			BBRParams params = new BBRParams(request.getReader());
-			String pageNum = params.get("page_num");
-			String rowsPerPage = params.get("rows_per_page");
-			Hashtable<Integer, Hashtable<String, String>> sortingFields = params.getArray("sorting");
+	@Override
+	protected BBRProcedure beforeUpdate(BBRProcedure proc, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+		String title = params.get("title");
+		String posId = params.get("pos");
+		BBRPoSManager mgr = new BBRPoSManager();
+		BBRPoS pos = mgr.findById(Long.parseLong(posId));
+		if (pos != null) {						
+			String length = params.get("length");
+			float lengthFloat = (float) 0.5;
+			if (!length.isEmpty())
+				lengthFloat = Float.parseFloat(length);
 			
-			respText = app.getProcedures(Integer.parseInt(pageNum), Integer.parseInt(rowsPerPage), sortingFields);
-		} catch (Exception ex) {
-			respText = ex.getLocalizedMessage();
-			response.setStatus(700);
+			String price = params.get("price");
+			float priceFloat = 0;
+			if (!price.isEmpty())
+				priceFloat = Float.parseFloat(price);
+			String currency = params.get("currency");
+			String status = params.get("status");
+			
+			proc.setTitle(title);
+	        proc.setPos(pos);
+	        proc.setLength(lengthFloat);
+	        proc.setPrice(priceFloat);
+	        proc.setCurrency(currency);
+	        proc.setStatus((int) Long.parseLong(status));
+	        return proc;
 		}
-		
-		response.setContentType("text/plain");  
-		response.setCharacterEncoding("UTF-8"); 
-		response.getWriter().write(respText); 
+		return null;		
 	}
-
+	
 }

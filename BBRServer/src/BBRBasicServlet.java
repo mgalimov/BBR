@@ -5,15 +5,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import BBR.BBRDataElement;
 import BBR.BBRDataManager;
 import BBR.BBRErrors;
+import BBRClientApp.BBRContext;
 
 @SuppressWarnings("rawtypes")
 public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BBRDataManager> extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final int errorResponseCode = 700;
-	private Mgr manager;
+	protected Mgr manager;
        
     public BBRBasicServlet() {
         super();
@@ -65,8 +67,10 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 				String q = params.get("q");
 				respText = getReferenceData(q, params, request, response);
 			} else {
-				respText = "Unknown operation";
-				response.setStatus(errorResponseCode);
+				if (processOperation(operation, params, request, response) < 0) {
+					respText = "Unknown operation";
+					response.setStatus(errorResponseCode);
+				}
 			}
 		} catch (Exception ex) {
 			respText = ex.getLocalizedMessage();
@@ -100,9 +104,8 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 	
 	// Application methods
 	
-	protected String getData(int parseInt, int parseInt2,
-			Hashtable<Integer, Hashtable<String, String>> sortingFields) {
-		return null;
+	protected String getData(int pageNumber, int pageSize, Hashtable<Integer, Hashtable<String, String>> sortingFields) {
+		return manager.list(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields)).toJson();
 	}
 
 	protected String getReferenceData(String query, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
@@ -124,7 +127,7 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 	@SuppressWarnings("unchecked")
 	protected String update(Cls obj, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		try {
-			beforeUpdate(obj, params, request, response);
+			obj = beforeUpdate(obj, params, request, response);
 			manager.update(obj);
 			return "";
 		} catch (Exception ex) {
@@ -132,8 +135,8 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 		}
 	}
 
-	protected void beforeUpdate(Cls obj, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
-		return;
+	protected Cls beforeUpdate(Cls obj, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+		return obj;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -147,8 +150,13 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 		}
 	}
 
-	protected void beforeDelete(Cls obj, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
-		return;
+	protected Cls beforeDelete(Cls obj, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+		return obj;
 	};
+	
+	protected int processOperation(String operation, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+		return -1;
+	};
+	
 
 }
