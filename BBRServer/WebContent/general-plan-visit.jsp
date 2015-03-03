@@ -7,8 +7,7 @@
 
 <%
 	BBRContext context = BBRContext.getContext(request);
-	BBRManagementApplication app = BBRManagementApplication.getApp(request);
-	String lastVisit = app.getLastVisitScheduled();
+	String lastVisit = context.getLastVisitScheduled();
 	request.setAttribute("lastVisit", lastVisit);
 	if (context.user != null)
 		request.setAttribute("userName", context.user.getFirstName() + " " + context.user.getLastName());
@@ -23,7 +22,7 @@
 <c:out value="${location}"></c:out>
 <c:choose>
 	<c:when test="${lastVisit == null}">
-		<t:card title="Plan your visit" gridPage="general-plan-visit.jsp" method="BBRVisit">
+		<t:card title="Plan your visit" gridPage="general-plan-visit.jsp" method="BBRVisits">
 			<t:card-item label="Select place" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes" defaultValue="${closestPoS}" defaultDisplay="${closestPoSName}"/>
 			<t:card-item label="Date and time YYYY-MM-DD HH-MM" type="text" field="timeScheduled" isRequired="required" />
 			<t:card-item label="Your name" type="text" field="userName" isRequired="required" defaultValue="${userName}"/>

@@ -18,6 +18,7 @@ public class BBRContext {
 	public BBRAcc.BBRShop shop = null;
 	private String lastSignInError = "";
 	private BBRGPS location = null;
+	private String lastVisitScheduled = null;
 	
 	public BBRContext() {
 	}
@@ -182,6 +183,16 @@ public class BBRContext {
 
 	public BBRGPS getLocation() {
 		return location;
+	}
+
+	public String getLastVisitScheduled() {
+		String lastVisit = lastVisitScheduled;
+		lastVisitScheduled = null;
+		return lastVisit;
+	}
+
+	public void setLastVisitScheduled(String lastVisitScheduled) {
+		this.lastVisitScheduled = lastVisitScheduled;
 	}
 
 }

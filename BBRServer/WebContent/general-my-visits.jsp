@@ -2,7 +2,7 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <t:admin-grid-wrapper title="My visits">
 	<jsp:body>
-		<t:grid method="BBRVisit" editPage="general-cancel-visit.jsp" createPage="general-plan-visit.jsp" title="Visits">
+		<t:grid method="BBRVisits" editPage="general-edit-visit.jsp" createPage="general-plan-visit.jsp" title="Visits">
 			<t:grid-item label="Date and Time" field="timeScheduled" />
 			<t:grid-item label="Point of sale (service)" field="pos.title"/>
 			<t:grid-item label="Name" field="userName"/>

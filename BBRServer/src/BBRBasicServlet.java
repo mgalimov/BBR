@@ -91,7 +91,7 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 			String rowsPerPage = params.get("rows_per_page");
 			Hashtable<Integer, Hashtable<String, String>> sortingFields = params.getArray("sorting");
 			
-			respText = getData(Integer.parseInt(pageNum), Integer.parseInt(rowsPerPage), sortingFields);
+			respText = getData(Integer.parseInt(pageNum), Integer.parseInt(rowsPerPage), sortingFields, params, request, response);
 		} catch (Exception ex) {
 			respText = ex.getLocalizedMessage();
 			response.setStatus(700);
@@ -104,7 +104,7 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 	
 	// Application methods
 	
-	protected String getData(int pageNumber, int pageSize, Hashtable<Integer, Hashtable<String, String>> sortingFields) {
+	protected String getData(int pageNumber, int pageSize, Hashtable<Integer, Hashtable<String, String>> sortingFields, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		return manager.list(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields)).toJson();
 	}
 
@@ -122,7 +122,7 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 	}
 
 
-	abstract String create(BBRParams params, HttpServletRequest request, HttpServletResponse response);
+	abstract String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception;
 
 	@SuppressWarnings("unchecked")
 	protected String update(Cls obj, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
