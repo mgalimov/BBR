@@ -1,6 +1,5 @@
 package BBRClientApp;
 
-import java.util.Date;
 import java.util.Hashtable;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,17 +8,11 @@ import javax.servlet.http.HttpSession;
 import BBR.BBRErrors;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRUser;
-import BBRCust.BBRProcedure;
-import BBRCust.BBRProcedureManager;
 import BBRCust.BBRSpecialist;
 import BBRCust.BBRSpecialistManager;
-import BBRCust.BBRVisit;
-import BBRCust.BBRVisitManager;
-import BBRCust.BBRVisit.BBRVisitStatus;
 
 public class BBRManagementApplication {
 	public BBRAcc.BBRShop shop = null;
-	private String lastVisitScheduled = null;
 	
 	public BBRManagementApplication() {
 	}

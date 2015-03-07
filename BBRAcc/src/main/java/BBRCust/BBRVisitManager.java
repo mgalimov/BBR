@@ -2,10 +2,8 @@ package BBRCust;
 
 import java.util.Date;
 import java.util.List;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
-
 import BBR.BBRDataManager;
 import BBR.BBRDataSet;
 import BBR.BBRUtil;
