@@ -128,7 +128,8 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 	protected String update(Cls obj, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		try {
 			obj = beforeUpdate(obj, params, request, response);
-			manager.update(obj);
+			if (obj != null)
+				manager.update(obj);
 			return "";
 		} catch (Exception ex) {
 			return ex.getLocalizedMessage();
@@ -142,8 +143,9 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 	@SuppressWarnings("unchecked")
 	protected String delete(Cls obj, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		try {
-			beforeDelete(obj, params, request, response);
-			manager.delete(obj);
+			obj = beforeDelete(obj, params, request, response);
+			if (obj != null)
+				manager.delete(obj);
 			return "";
 		} catch (Exception ex) {
 			return ex.getLocalizedMessage();

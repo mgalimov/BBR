@@ -19,7 +19,8 @@ public class BBRUsers extends BBRBasicServlet<BBRUser, BBRUserManager> {
 		String firstName = params.get("firstName");
 		String lastName = params.get("lastName");
 		String password = params.get("password");
-		manager.createAndStoreUser(email, firstName, lastName, password);
+		String role = params.get("role");
+		manager.createAndStoreUser(email, firstName, lastName, password, Integer.valueOf(role));
 		return "";
 	}
 
@@ -33,7 +34,6 @@ public class BBRUsers extends BBRBasicServlet<BBRUser, BBRUserManager> {
 		user.setLastName(lastName);
 		user.setApproved(Boolean.parseBoolean(approved));
 		user.setRole(Integer.valueOf(role));
-		manager.update(user);
-		return null;		
+		return user;		
 	}
 }

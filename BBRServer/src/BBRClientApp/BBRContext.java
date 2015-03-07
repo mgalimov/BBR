@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import BBR.BBRErrors;
 import BBR.BBRGPS;
 import BBRAcc.*;
+import BBRAcc.BBRUser.BBRUserRole;
 
 public class BBRContext {
 	public BBRAcc.BBRUser user = null;
@@ -107,7 +108,7 @@ public class BBRContext {
 		}
 			
 		try {
-			BBRUser candidate = mgr.createAndStoreUser(email, firstName, lastName, password);
+			BBRUser candidate = mgr.createAndStoreUser(email, firstName, lastName, password, BBRUserRole.ROLE_VISITOR);
 			user = candidate;
 			lastSignInError = "";
 		} catch (Exception ex) {

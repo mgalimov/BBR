@@ -20,7 +20,7 @@ public class BBRUserManager extends BBRDataManager<BBRUser> {
 		classTitle = "User";	
 	}
 
-	public BBRUser createAndStoreUser(String email, String firstName, String lastName, String password) throws Exception {
+	public BBRUser createAndStoreUser(String email, String firstName, String lastName, String password, int role) throws Exception {
         boolean tr = BBRUtil.beginTran(sessionIndex);
         Session session = BBRUtil.getSession(sessionIndex);
         
@@ -34,6 +34,7 @@ public class BBRUserManager extends BBRDataManager<BBRUser> {
         user.setLastName(lastName);
         user.setEncodedPassword(encodePassword(password));
         user.setApproved(false);
+        user.setRole(role);
         session.save(user);
 
         BBRUtil.commitTran(sessionIndex, tr);

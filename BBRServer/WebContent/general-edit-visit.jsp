@@ -1,7 +1,5 @@
 <%@page import="BBRClientApp.BBRContext"%>
-<%@page import="BBRClientApp.BBRManagementApplication"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"
-		 import="BBRClientApp.BBRManagementApplication" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:general-wrapper title="See or cancel your visit">
