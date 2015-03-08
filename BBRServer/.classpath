@@ -17,7 +17,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/BBRMain"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/BBRData"/>
 	<classpathentry kind="output" path="target/classes"/>
