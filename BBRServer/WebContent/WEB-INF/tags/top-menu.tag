@@ -40,7 +40,7 @@
        </form>
      </div>
    </div>
-</div>
+</div> 
 
 <form method="post" action="BBRSignIn" id="userMenuForm"></form>
 
