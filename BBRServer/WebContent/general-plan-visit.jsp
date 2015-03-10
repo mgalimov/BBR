@@ -19,16 +19,16 @@
 		request.setAttribute("userName", "");
 	request.setAttribute("location", Double.toString(context.getLocation().lat) + ", " + Double.toString(context.getLocation().lng));
 	
-	String posesCoords = "";
-	String bbrIds = "";
+	String posCoords = "";
+	String posIds = "";
 	BBRPoSManager mgr = new BBRPoSManager();
 	BBRDataSet<BBRPoS> poses = mgr.listLocal(context.getLocation(), 10.0);
 	for (BBRPoS pos : poses.page_data) {
-		posesCoords = posesCoords + "[" + pos.getLocationGPS().getLat() + "," + pos.getLocationGPS().getLng() + "], ";
-		bbrIds = bbrIds + pos.getId().toString() + ", ";
+		posCoords = posCoords + "[" + pos.getLocationGPS().getLat() + "," + pos.getLocationGPS().getLng() + "], ";
+		posIds = posIds + pos.getId().toString() + ", ";
 	}
-	request.setAttribute("posesCoords", posesCoords);
-	request.setAttribute("bbrIds", bbrIds);
+	request.setAttribute("posCoords", posCoords);
+	request.setAttribute("posIds", posIds);
 %>
 <t:general-wrapper title="Plan your visit">
 <jsp:body>
@@ -50,7 +50,9 @@
 			$(document).ready(function () {
 				ymaps.ready(function () {
 					initMap(${location});
-					addPosesToMap([${posesCoords}], [${bbrIds}]);
+					addPosesToMap([${posCoords}], [${posIds}], function(posId) {
+						alert(posId);
+					});
 				})
 			});
 		</script>

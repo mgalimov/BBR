@@ -11,15 +11,18 @@ function initMap (locationLat, locationLng) {
     });
 }
 
-function addPosesToMap (coords, bbrIds) {
+function addPosesToMap (coords, posIds, fn) {
 	var bbrCollection = new ymaps.GeoObjectCollection(null, {
         preset: 'islands#yellowIcon'
     })
     for (var i = 0, l = coords.length; i < l; i++) {
-        bbrCollection.add(new ymaps.Placemark(coords[i], {bbrId : bbrIds[i]}));
+    	var placemark = new ymaps.Placemark(coords[i], {posId: posIds[i]});
+        bbrCollection.add(placemark);
     }
     bbrMap.geoObjects.add(bbrCollection);
-    bbrCollection.events.add('click', function (event) { 
-    		alert('Кликнули по желтой метке') 
-    	});
+    bbrCollection.events.add('click', function (e) { 
+    	placemark = e.get('target');
+    	posId = placemark.properties.get('posId', 0);
+    	fn(posId);
+    });
 }
