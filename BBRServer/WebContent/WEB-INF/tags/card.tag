@@ -41,7 +41,7 @@
 <div class="container-fluid"  id="editForm">
 <h3>${title}</h3>
 <form role="form">
-	<div class="panel panel-default">
+	<div class="panel panel-default col-md-6">
 	  <div class="panel-body">
 	  	<jsp:doBody/>
 	  </div>

@@ -2,6 +2,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import BBR.BBRGPS;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRPoSManager;
 import BBRAcc.BBRShop;
@@ -20,10 +21,12 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 		String shopId = params.get("shop");
 		String title = params.get("title");
 		String locationDescription = params.get("locationDescription");
+		String locationLat = params.get("locationGPS_lat");
+		String locationLng = params.get("locationGPS_lng");
 		BBRShopManager shopMgr = new BBRShopManager();
 		BBRShop shop = shopMgr.findById(Long.parseLong(shopId));
 		if (shop != null) 
-			manager.createAndStorePoS(shop, title, locationDescription, null);
+			manager.createAndStorePoS(shop, title, locationDescription, new BBRGPS(Float.parseFloat(locationLat), Float.parseFloat(locationLng)));
 		return "";
 	}
 
@@ -32,12 +35,19 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 		String shopId = params.get("shop");
 		String title = params.get("title");
 		String locationDescription = params.get("locationDescription");
+		String locationLat = params.get("locationGPS_lat");
+		String locationLng = params.get("locationGPS_lng");
+		if (locationLat.isEmpty())
+			locationLat = "0";
+		if (locationLng.isEmpty())
+			locationLng = "0";
 		BBRShopManager shopMgr = new BBRShopManager();
 		BBRShop shop = shopMgr.findById(Long.parseLong(shopId));
 		if (shop != null) {
 			pos.setShop(shop);
 			pos.setTitle(title);
 			pos.setLocationDescription(locationDescription);
+			pos.setLocationGPS(new BBRGPS(Float.parseFloat(locationLat), Float.parseFloat(locationLng)));
 			manager.update(pos);
 		}
 		return null;		

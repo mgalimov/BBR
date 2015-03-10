@@ -1,10 +1,15 @@
 package BBR;
 
 public class BBRGPS {
-	public float lat;
-	public float lng;
-	
-	public BBRGPS(float lat, float lng) {
+	public double lat;
+	public double lng;
+
+	public BBRGPS() {
+		this.lat = 0;
+		this.lng = 0;
+	}
+
+	public BBRGPS(double lat, double lng) {
 		this.lat = lat;
 		this.lng = lng;
 	}
@@ -13,19 +18,19 @@ public class BBRGPS {
 		return String.format("%.3f, %.3f", lat, lng);
 	}
 
-	public void setLat(float lat) {
+	public void setLat(double lat) {
 		this.lat = lat;
 	}
 	
-	public float getLat() {
+	public double getLat() {
 		return lat;
 	}
 
-	public void setLng(float lng) {
+	public void setLng(double lng) {
 		this.lng = lng;
 	}
 	
-	public float getLng() {
+	public double getLng() {
 		return lng;
 	}
 }

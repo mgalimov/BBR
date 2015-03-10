@@ -1,7 +1,12 @@
 package BBRAcc;
 
+import java.util.List;
+
+import org.hibernate.Query;
 import org.hibernate.Session;
+
 import BBR.BBRDataManager;
+import BBR.BBRDataSet;
 import BBR.BBRErrors;
 import BBR.BBRGPS;
 import BBR.BBRUtil;
@@ -41,4 +46,30 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
         return result;
     }
 
+	@SuppressWarnings({ "unchecked", "unused" })
+	public BBRDataSet<BBRPoS> listLocal(BBRGPS locationGPS, Double radius) {
+		//TODO: throw Exceptions
+		if (locationGPS == null) return null;
+		if (radius > 100.0 || radius <= 0.5) return null;
+		
+        boolean tr = BBRUtil.beginTran(sessionIndex);
+        
+        Session session = BBRUtil.getSession(sessionIndex);
+ 		String where = " where (" 
+ 							+ "(locationGPS.lat - " + locationGPS.lat + ")*(locationGPS.lat - " + locationGPS.lat + ")"
+ 							+ "+"
+ 							+ "(locationGPS.lng - " + locationGPS.lng + ")*(locationGPS.lng - " + locationGPS.lng + ")"
+ 							+ ") <= " + radius;
+
+ 		Long count = (Long)session.createQuery("Select count(*) from " + typeName + where).uniqueResult();
+        Query query = session.createQuery("from " + typeName + where);
+        
+        if (maxRowsToReturn > 0)
+        	query.setMaxResults(maxRowsToReturn);
+        
+        List<BBRPoS> list = query.list();
+        BBRUtil.commitTran(sessionIndex, tr);
+
+        return new BBRDataSet<BBRPoS>(list, count);
+	}
 }
