@@ -11,12 +11,22 @@
 
 <%
 	BBRContext context = BBRContext.getContext(request);
-	String lastVisit = context.getLastVisitScheduled();
-	request.setAttribute("lastVisit", lastVisit);
+	
+int visitStep = context.getLastVisitStep();
+	if (visitStep > 3 || visitStep < 1)
+		context.setLastVisitStep(1);
+	request.setAttribute("visitStep", visitStep);
+	
+	Long visitId = Long.parseLong("0");
+	if (context.planningVisit != null)
+		visitId = context.planningVisit.getId();
+	request.setAttribute("visitId", visitId);
+	
 	if (context.user != null)
 		request.setAttribute("userName", context.user.getFirstName() + " " + context.user.getLastName());
 	else
 		request.setAttribute("userName", "");
+	
 	request.setAttribute("location", Double.toString(context.getLocation().lat) + ", " + Double.toString(context.getLocation().lng));
 	
 	String posCoords = "";
@@ -32,18 +42,12 @@
 %>
 <t:general-wrapper title="Plan your visit">
 <jsp:body>
-<c:out value="${location}"></c:out>
 
 <c:choose>
-	<c:when test="${lastVisit == null}">
-		<t:card title="Plan your visit" gridPage="general-plan-visit.jsp" method="BBRVisits">
+	<c:when test="${visitStep == 1}">
+		<t:card title="Plan your visit. Step 1" gridPage="general-plan-visit.jsp" method="BBRVisits">
 			<div class="panel col-md-12" id="map" style="height: 400px"></div>
 			<t:card-item label="Select place" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes" defaultValue="${closestPoS}" defaultDisplay="${closestPoSName}"/>
-			<t:card-item label="Date and time YYYY-MM-DD HH-MM" type="text" field="timeScheduled" isRequired="required" />
-			<t:card-item label="Your name" type="text" field="userName" isRequired="required" defaultValue="${userName}"/>
-			<t:card-item label="Your phone" type="text" field="userContacts" isRequired="required" />
-			<t:card-item label="Select procedure" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures"/>
-			<t:card-item label="Select specialist" type="reference" field="spec" referenceFieldTitle="name" referenceMethod="BBRSpecialists"/>
 		</t:card>
 		
 		<script>
@@ -58,10 +62,26 @@
 			});
 		</script>
 	</c:when>
+
+	<c:when test="${visitStep == 2}">
+		<t:card title="Plan your visit. Step 2" gridPage="general-plan-visit.jsp" method="BBRVisits">
+			<t:card-item label="Date and time YYYY-MM-DD HH-MM" type="text" field="timeScheduled" isRequired="required" />
+			<t:card-item label="Select procedure" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures"/>
+			<t:card-item label="Select specialist" type="reference" field="spec" referenceFieldTitle="name" referenceMethod="BBRSpecialists"/>
+		</t:card>
+	</c:when>
+
+	<c:when test="${visitStep == 3}">
+		<t:card title="Plan your visit. Step 3" gridPage="general-plan-visit.jsp" method="BBRVisits">
+			<t:card-item label="Your name" type="text" field="userName" isRequired="required" defaultValue="${userName}"/>
+			<t:card-item label="Your phone" type="text" field="userContacts" isRequired="required" />
+		</t:card>
+	</c:when>
 	
-	<c:when test="${lastVisit != null}">
+	<c:when test="${visitStep == 4}">
 		<div>
-			<p>Thanks for your visit! Your visit id is ${lastVisit}.
+			<h1>Your visit planned.</h1>
+			<p>You'll get approved soon. Your visit id is ${visitId}. Please use this number for any reference.
 			</p>
 		</div>
 	</c:when>

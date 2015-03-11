@@ -15,4 +15,5 @@ public class BBRErrors {
 	public static final String ERR_USER_NOTSPECIFIED = "User not specified";
 	public static final String ERR_PROC_NOTFOUND = "Procedure not found";
 	public static final String ERR_RECORD_NOTFOUND = "Record not found";
+	public static final String ERR_DATE_INCORRECT = "Date/time is incorrect";
 }

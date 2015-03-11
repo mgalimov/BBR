@@ -28,30 +28,68 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 	@Override
 	String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		BBRContext context = BBRContext.getContext(request);
-		String userName = params.get("userName");
-		String userContacts = params.get("userContacts");
-
-		BBRProcedure proc = null;
+		int visitStep = context.getLastVisitStep();
 		
-		if (!params.get("procedure").isEmpty()) {
-			Long procedureId = Long.parseLong(params.get("procedure"));
+		if (visitStep == 1) {
+			context.planningVisit = new BBRVisit();
+			
+			Long posId = Long.parseLong(params.get("pos"));
 
-			BBRProcedureManager mgrProc = new BBRProcedureManager();
-			proc = mgrProc.findById(procedureId);						
+			BBRPoSManager mgrPoS = new BBRPoSManager();
+			BBRPoS pos = mgrPoS.findById(posId);
+			if (pos == null) {
+				throw new Exception(BBRErrors.ERR_POS_NOTFOUND);
+			}
+			
+			context.planningVisit.setPos(pos);
+		}
+			
+
+		if (visitStep == 2) {
+			if (context.planningVisit == null)
+				throw new Exception(BBRErrors.ERR_VISIT_NOTFOUND);
+			
+			BBRProcedure proc = null;
+			
+			if (!params.get("procedure").isEmpty()) {
+				Long procedureId = Long.parseLong(params.get("procedure"));
+
+				BBRProcedureManager mgrProc = new BBRProcedureManager();
+				proc = mgrProc.findById(procedureId);						
+				context.planningVisit.setProcedure(proc);
+			}
+			
+
+			DateFormat df = new SimpleDateFormat("y-M-d H:mm");
+			try {
+				Date timeScheduled = df.parse(params.get("timeScheduled"));
+				context.planningVisit.setTimeScheduled(timeScheduled);
+			} catch (Throwable ex) {
+				throw new Exception(BBRErrors.ERR_DATE_INCORRECT);
+			}
 		}
 		
-		Long posId = Long.parseLong(params.get("pos"));
+		if (visitStep == 3) {
+			if (context.planningVisit == null)
+				throw new Exception(BBRErrors.ERR_VISIT_NOTFOUND);
+			
+			String userName = params.get("userName");
+			String userContacts = params.get("userContacts");
+			
+			context.planningVisit.setUserName(userName);
+			context.planningVisit.setUserContacts(userContacts);
 
-		BBRPoSManager mgrPoS = new BBRPoSManager();
-		BBRPoS pos = mgrPoS.findById(posId);
-		if (pos == null)
-			throw new Exception(BBRErrors.ERR_POS_NOTFOUND);
+			Long id = Long.parseLong(manager.createAndStoreVisit(
+					context.planningVisit.getPos(), 
+					context.user, 
+					context.planningVisit.getTimeScheduled(), 
+					context.planningVisit.getProcedure(), 
+					context.planningVisit.getUserName(),
+					context.planningVisit.getUserContacts()));
+			context.planningVisit.setId(id);
+		}
 
-		DateFormat df = new SimpleDateFormat("y-M-d H:mm");
-		Date timeScheduled = df.parse(params.get("timeScheduled"));
-		
-		context.setLastVisitScheduled(manager.createAndStoreVisit(pos, context.user, timeScheduled, proc, userName, userContacts));
-		
+		context.setLastVisitStep(++visitStep);
 		return "";
 	}
 

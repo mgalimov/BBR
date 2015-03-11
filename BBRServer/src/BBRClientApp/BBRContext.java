@@ -13,13 +13,15 @@ import BBR.BBRErrors;
 import BBR.BBRGPS;
 import BBRAcc.*;
 import BBRAcc.BBRUser.BBRUserRole;
+import BBRCust.BBRVisit;
 
 public class BBRContext {
 	public BBRAcc.BBRUser user = null;
 	public BBRAcc.BBRShop shop = null;
 	private String lastSignInError = "";
 	private BBRGPS location = null;
-	private String lastVisitScheduled = null;
+	private int lastVisitStep = 1;
+	public BBRVisit planningVisit = null;
 	
 	public BBRContext() {
 	}
@@ -186,14 +188,12 @@ public class BBRContext {
 		return location;
 	}
 
-	public String getLastVisitScheduled() {
-		String lastVisit = lastVisitScheduled;
-		lastVisitScheduled = null;
-		return lastVisit;
+	public int getLastVisitStep() {
+		return lastVisitStep;
 	}
 
-	public void setLastVisitScheduled(String lastVisitScheduled) {
-		this.lastVisitScheduled = lastVisitScheduled;
+	public void setLastVisitStep(int lastVisitStep) {
+		this.lastVisitStep = lastVisitStep;
 	}
 
 }
