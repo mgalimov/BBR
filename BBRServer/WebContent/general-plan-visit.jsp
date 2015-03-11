@@ -51,7 +51,8 @@
 				ymaps.ready(function () {
 					initMap(${location});
 					addPosesToMap([${posCoords}], [${posIds}], function(posId) {
-						alert(posId);
+						 $("#posinput")[0].selectize.addItem(posId);
+						 $("#posinput")[0].selectize.refreshItems();
 					});
 				})
 			});

@@ -112,6 +112,11 @@
   			<artifactId>BBRData</artifactId>
   			<version>0.0.1</version>
   		</dependency>
+  		<dependency>
+  			<groupId>jstl</groupId>
+  			<artifactId>jstl</artifactId>
+  			<version>1.2</version>
+  		</dependency>
   	</dependencies>
   </dependencyManagement>
 
@@ -131,6 +136,10 @@
   	<dependency>
   		<groupId>BBRData</groupId>
   		<artifactId>BBRData</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>jstl</groupId>
+  		<artifactId>jstl</artifactId>
   	</dependency>
   </dependencies>
 </project>
