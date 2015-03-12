@@ -2,6 +2,8 @@
 <%@ attribute name="title" %>
 <%@ attribute name="method"%>
 <%@ attribute name="gridPage" %>
+<%@ attribute name="buttonSave" %>
+<%@ attribute name="buttonCancel" %>
 
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
@@ -46,8 +48,8 @@
 	  	<jsp:doBody/>
 	  </div>
 	  <div class="panel-footer">
-			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#sureToCancelChanges">Cancel changes</button>
-			<button type="button" class="btn btn-primary" id="saveChanges">Save changes</button>
+	  		<button type="button" class="btn btn-default" data-toggle="modal" data-target="#sureToCancelChanges"><c:if test="${buttonCancel == null}">Cancel changes</c:if><c:if test="${buttonCancel != null}">${buttonCancel}</c:if></button>
+	  		<button type="button" class="btn btn-primary" id="saveChanges"><c:if test="${buttonSave == null}">Save changes</c:if><c:if test="${buttonSave != null}">${buttonSave}</c:if></button>
 	  </div>
 	</div>
 </form>
@@ -91,12 +93,14 @@
 
 		$('#cancelChanges').click(function(event) {
 			saved = true;
+			$.get('${method}', {id : idParam, operation : 'cancel'});
 			goBackOrTo('${gridPage}');
 		});
  	});
  	
  	$(window).bind('beforeunload', function () {
- 		if (saved) return;
- 		return "Are you sure to cancel changes? All your changes will be lost.";
+ 		return;
+ 		//if (saved) return;
+ 		//return "Are you sure to cancel changes? All your changes will be lost.";
  	});
 </script>			      

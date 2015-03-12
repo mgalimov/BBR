@@ -119,4 +119,11 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 		else
 			return "";
 	}
+	
+	@Override
+	protected String cancel(String id, BBRParams params,	HttpServletRequest request, HttpServletResponse response) {
+		BBRContext context = BBRContext.getContext(request);
+		context.setLastVisitStep(1);
+		return "";
+	}
 }

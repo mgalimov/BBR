@@ -66,7 +66,10 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 			if (operation.equals("reference")) {
 				String q = params.get("q");
 				respText = getReferenceData(q, params, request, response);
-			} else {
+			} else 
+			if (operation.equals("cancel")) {
+				respText = cancel(id, params, request, response);
+			} else	{
 				if (processOperation(operation, params, request, response) < 0) {
 					respText = "Unknown operation";
 					response.setStatus(errorResponseCode);
@@ -160,5 +163,7 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 		return -1;
 	};
 	
-
+	protected String cancel(String id, BBRParams params,	HttpServletRequest request, HttpServletResponse response) {
+		return "";
+	}
 }
