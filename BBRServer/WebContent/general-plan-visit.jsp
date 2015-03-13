@@ -65,9 +65,7 @@
 
 	<c:when test="${visitStep == 2}">
 		<t:card title="Plan your visit. Step 2" gridPage="general-plan-visit.jsp" method="BBRVisits" buttonSave="Go to step 3" buttonCancel="Cancel">
-			<t:card-item label="Date and time YYYY-MM-DD HH-MM" type="text" field="timeScheduled" isRequired="required" />
-			<t:card-item label="Select procedure" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures"/>
-			<t:card-item label="Select specialist" type="reference" field="spec" referenceFieldTitle="name" referenceMethod="BBRSpecialists"/>
+			<t:card-schedule-spec-proc fieldTime="timeScheduled" fieldSpecialist="spec" fieldProcedure="procedure" />
 		</t:card>
 	</c:when>
 
