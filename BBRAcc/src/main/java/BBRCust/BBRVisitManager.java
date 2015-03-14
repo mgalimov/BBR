@@ -1,9 +1,12 @@
 package BBRCust;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
+
 import BBR.BBRDataManager;
 import BBR.BBRDataSet;
 import BBR.BBRUtil;
@@ -77,5 +80,28 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         BBRUtil.commitTran(sessionIndex, tr);
 		
         return ds;
+	}
+	
+	@SuppressWarnings("unused")
+	public BBRDataSet<BBRVisit> getSchedule(Date date, String specialistId) {
+		boolean tr = BBRUtil.beginTran(sessionIndex);
+        Session session = BBRUtil.getSession(sessionIndex);
+
+        String where = "visit.timeScheduled >= '" + BBRUtil.getStartOfDay(date).toString() + "' and "
+        			 + "visit.timeScheduled <= '" + BBRUtil.getEndOfDay(date).toString() + "'";
+        if (!specialistId.equals(""))
+         where = where + " and visit.procedure.id = " + specialistId;
+        
+        String orderBy = "visit.timeScheduled ASC";
+        
+        Long count = (Long)session.createQuery("Select count(*) from BBRVisit visit " + where).uniqueResult();
+        Query query = session.createQuery("from BBRVisit visit " + where + orderBy);
+        
+		@SuppressWarnings("unchecked")
+		List<BBRVisit> list = (List<BBRVisit>)query.list();
+        BBRDataSet<BBRVisit> ds = new BBRDataSet<BBRVisit>(list, count);
+        BBRUtil.commitTran(sessionIndex, tr);
+		
+		return null;
 	}
 }
