@@ -45,7 +45,9 @@ $(function() {
     		$.get('BBRSchedule', {
     			date: dateSelected
     		}, function (responseText) {
-    			
+    			for (i = 8; i <= 22; i++) {
+    				
+    			}
     		})
     	}
     });

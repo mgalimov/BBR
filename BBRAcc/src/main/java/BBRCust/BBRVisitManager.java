@@ -1,6 +1,8 @@
 package BBRCust;
 
-import java.util.Calendar;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +19,7 @@ import BBRCust.BBRVisit.BBRVisitStatus;
 import BBRCust.BBRVisit;
 
 public class BBRVisitManager extends BBRDataManager<BBRVisit>{
+	private final float minimalLength = (float) 0.5;
 	
 	public BBRVisitManager() {
 		super();
@@ -37,6 +40,9 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        visit.setUserName(userName);
 	        visit.setUserContacts(userContacts);
 	        visit.setStatus(BBRVisitStatus.VISSTATUS_INITIALIZED);
+	        visit.setLength(procedure.getLength());
+	        if (visit.getLength() < minimalLength)
+	        	visit.setLength(minimalLength);
 	        session.save(visit);
 	
 	        BBRUtil.commitTran(sessionIndex, tr);
@@ -82,26 +88,39 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         return ds;
 	}
 	
-	@SuppressWarnings("unused")
-	public BBRDataSet<BBRVisit> getSchedule(Date date, String specialistId) {
+	public List<Object[]> getSchedule(Date date, String posId, String specialistId) {
+		if (posId == null) return null;
+		if (posId == "") return null;
+		
 		boolean tr = BBRUtil.beginTran(sessionIndex);
         Session session = BBRUtil.getSession(sessionIndex);
-
-        String where = "visit.timeScheduled >= '" + BBRUtil.getStartOfDay(date).toString() + "' and "
-        			 + "visit.timeScheduled <= '" + BBRUtil.getEndOfDay(date).toString() + "'";
-        if (!specialistId.equals(""))
-         where = where + " and visit.procedure.id = " + specialistId;
+        Date startOfDay = BBRUtil.getStartOfDay(date);
+        Date endOfDay = BBRUtil.getEndOfDay(date);
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         
-        String orderBy = "visit.timeScheduled ASC";
+        String select = "select visit.timeScheduled as timeScheduled, visit.length as length";
+        String from = " from BBRVisit visit";
+        String where = " where timeScheduled >= '" + df.format(startOfDay) + "' and "
+        			 + "timeScheduled <= '" + df.format(endOfDay) + "'";
+        where = where + " and visit.pos.id = " + posId;
         
-        Long count = (Long)session.createQuery("Select count(*) from BBRVisit visit " + where).uniqueResult();
-        Query query = session.createQuery("from BBRVisit visit " + where + orderBy);
+        if (specialistId != null)
+        	if (!specialistId.equals(""))
+        		where = where + " and visit.specialist.id = " + specialistId;
+        String orderBy = " order by visit.timeScheduled ASC";
+        
+        Query query = session.createQuery(select + from + where + orderBy);
         
 		@SuppressWarnings("unchecked")
-		List<BBRVisit> list = (List<BBRVisit>)query.list();
-        BBRDataSet<BBRVisit> ds = new BBRDataSet<BBRVisit>(list, count);
+		List<Object[]> list = query.list();
+		DateFormat tf = new SimpleDateFormat("HH:mm");
+		
+		for(Object[] line: list) {
+			line[0] = tf.format((Date)line[0]);
+		}
+			
         BBRUtil.commitTran(sessionIndex, tr);
 		
-		return null;
+		return list;
 	}
 }

@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,9 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import BBR.BBRDataSet;
 import BBR.BBRErrors;
-import BBRCust.BBRVisit;
+import BBR.BBRUtil;
+import BBRClientApp.BBRContext;
 import BBRCust.BBRVisitManager;
 
 @WebServlet("/BBRSchedule")
@@ -25,10 +26,12 @@ public class BBRSchedule extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String respText = "";
 		try {
+			BBRContext context = BBRContext.getContext(request);
 			BBRVisitManager mgr = new BBRVisitManager();
 			BBRParams params = new BBRParams(request.getQueryString());
 			Date dateSelected;
-			DateFormat df = new SimpleDateFormat("y-M-d");
+			DateFormat df = new SimpleDateFormat("d/M/y");
+			respText = "";
 			
 			try {
 				dateSelected = df.parse(params.get("date"));
@@ -37,8 +40,17 @@ public class BBRSchedule extends HttpServlet {
 			}
 			
 			String specId = params.get("spec");
-			BBRDataSet<BBRVisit> ds = mgr.getSchedule(dateSelected, specId);
+			List<Object[]> list = mgr.getSchedule(dateSelected, context.planningVisit.getPos().getId().toString(), specId);
+			respText = BBRUtil.gson.toJson(list);
 			
+			/*
+			Iterator listIterator = list.iterator();
+			
+			while (listIterator.hasNext()) {
+			    Object[] line = (Object[]) listIterator.next();
+			    Date timeScheduled = (Date) line[0];
+			    Double length = (Double) line[1];
+			}*/			
 		} catch (Exception ex) {
 			respText = ex.getLocalizedMessage();
 			response.setStatus(700);
