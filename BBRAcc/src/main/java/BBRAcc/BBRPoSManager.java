@@ -1,5 +1,6 @@
 package BBRAcc;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -19,7 +20,7 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 		classTitle = "Point of service";	
 	}
 	
-	public void createAndStorePoS(BBRShop shop, String title, String locationDescription, BBRGPS locationGPS) throws Exception {
+	public void createAndStorePoS(BBRShop shop, String title, String locationDescription, BBRGPS locationGPS, Date startWorkHour, Date endWorkHour) throws Exception {
 		if (shop == null)
 			throw new Exception(BBRErrors.ERR_SHOP_MUST_BE_SPECIFIED);
 		
@@ -34,6 +35,8 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
         pos.setTitle(title);
         pos.setLocationDescription(locationDescription);
         pos.setLocationGPS(locationGPS);
+        pos.setStartWorkHour(startWorkHour);
+        pos.setEndWorkHour(endWorkHour);
         session.save(pos);
 
         BBRUtil.commitTran(sessionIndex, tr);

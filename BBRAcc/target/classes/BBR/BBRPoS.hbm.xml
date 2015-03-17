@@ -14,6 +14,8 @@
         	<property name="lat" column="LOC_LAT"/>
         	<property name="lng" column="LOC_LNG"/>
         </component>
+        <property name="startWorkHour" column="START_WORK_HOUR"/>
+        <property name="endWorkHour" column="END_WORK_HOUR"/>
         <many-to-one name="shop" column="SHOP_ID" class="BBRShop" not-null="true" lazy="false" fetch="join"/>
     </class>
 </hibernate-mapping>

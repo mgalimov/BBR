@@ -139,7 +139,7 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 		}
 	}
 
-	protected Cls beforeUpdate(Cls obj, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+	protected Cls beforeUpdate(Cls obj, BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		return obj;
 	}
 	
@@ -155,7 +155,7 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 		}
 	}
 
-	protected Cls beforeDelete(Cls obj, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+	protected Cls beforeDelete(Cls obj, BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		return obj;
 	};
 	

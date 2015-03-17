@@ -34,6 +34,20 @@
 					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.text(\"').concat(defaultValue).concat('\");')}"/>
 				</c:if>
 			</c:when>
+			<c:when test="${type.equals('time')}">
+		        <div class="input-append bootstrap-timepicker">
+           			<input id="${ft.concat('input')}" type="text" class="form-control input-small" placeholder="${label}" ${isRequired} ${isDisabled} />
+		            <span class="add-on">
+		                <i class="icon-time"></i>
+		            </span>
+		        </div>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
+				<c:if test="${defaultValue != null}">
+					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
+					        $(\"#').concat(ft).concat('input\")')}"/>
+					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.val(\"').concat(defaultValue).concat('\");')}"/>
+				</c:if>
+			</c:when>
 			<c:when test="${type.equals('text')}">
 				<input type="text" class="form-control" id="${ft.concat('input')}" placeholder="${label}" ${isRequired} ${isDisabled}/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>

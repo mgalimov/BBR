@@ -30,7 +30,7 @@ public class BBRSchedule extends HttpServlet {
 			BBRVisitManager mgr = new BBRVisitManager();
 			BBRParams params = new BBRParams(request.getQueryString());
 			Date dateSelected;
-			DateFormat df = new SimpleDateFormat("d/M/y");
+			DateFormat df = new SimpleDateFormat("MM/dd/yy");
 			respText = "";
 			
 			try {

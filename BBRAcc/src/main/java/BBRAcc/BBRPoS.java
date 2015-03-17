@@ -1,5 +1,7 @@
 package BBRAcc;
 
+import java.util.Date;
+
 import BBR.BBRDataElement;
 import BBR.BBRGPS;
 
@@ -8,6 +10,8 @@ public class BBRPoS extends BBRDataElement {
 	private String title;
 	private String locationDescription;
 	private BBRGPS locationGPS;
+	private Date startWorkHour;
+	private Date endWorkHour;
 	public BBRShop shop;
 	
 	public BBRPoS() {}
@@ -50,6 +54,22 @@ public class BBRPoS extends BBRDataElement {
 	
 	public BBRShop getShop() {
 		return shop;
+	}
+
+	public Date getStartWorkHour() {
+		return startWorkHour;
+	}
+
+	public void setStartWorkHour(Date startWorkHour) {
+		this.startWorkHour = startWorkHour;
+	}
+
+	public Date getEndWorkHour() {
+		return endWorkHour;
+	}
+
+	public void setEndWorkHour(Date endWorkHour) {
+		this.endWorkHour = endWorkHour;
 	}
 
 }

@@ -5,6 +5,8 @@
 		<t:card method="BBRPoSes" gridPage="admin-pos-list.jsp" title="Point of Sale">
 			<t:card-item label="Shop" field="shop" type="reference" referenceMethod="BBRShops" referenceFieldTitle="title" isRequired="required"/>
 			<t:card-item label="Title" field="title" type="text" isRequired="required"/>
+			<t:card-item label="Start Work Hour" field="startWorkHour" type="time" isRequired="required"/>
+			<t:card-item label="End Work Hour" field="endWorkHour" type="time" isRequired="required"/>
 			<t:card-item label="Location Description" field="locationDescription" type="text"/>
 			<t:card-item label="Location lattitude" field="locationGPS.lat" type="text"/>
 			<t:card-item label="Location longitude" field="locationGPS.lng" type="text"/>
