@@ -34,20 +34,7 @@
 					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.text(\"').concat(defaultValue).concat('\");')}"/>
 				</c:if>
 			</c:when>
-			<c:when test="${type.equals('time')}">
-		        <div class="input-append bootstrap-timepicker">
-           			<input id="${ft.concat('input')}" type="text" class="form-control input-small" placeholder="${label}" ${isRequired} ${isDisabled} />
-		            <span class="add-on">
-		                <i class="icon-time"></i>
-		            </span>
-		        </div>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
-				<c:if test="${defaultValue != null}">
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
-					        $(\"#').concat(ft).concat('input\")')}"/>
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.val(\"').concat(defaultValue).concat('\");')}"/>
-				</c:if>
-			</c:when>
+			
 			<c:when test="${type.equals('text')}">
 				<input type="text" class="form-control" id="${ft.concat('input')}" placeholder="${label}" ${isRequired} ${isDisabled}/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
@@ -57,6 +44,7 @@
 					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.val(\"').concat(defaultValue).concat('\");')}"/>
 				</c:if>
 			</c:when>
+			
 			<c:when test="${type.equals('password')}">
 				<input type="password" class="form-control" id="${ft.concat('input')}" placeholder="${label}" ${isRequired} ${isDisabled}/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
@@ -66,6 +54,28 @@
 					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.val(\"').concat(defaultValue).concat('\");')}"/>
 				</c:if>
 			</c:when>
+			
+			<c:when test="${type.equals('time')}">
+		        <div class="input-group bootstrap-timepicker col-md-2">
+           			<input id="${ft.concat('input')}" type="text" class="form-control" placeholder="${label}" ${isRequired} ${isDisabled} />
+					<span class="input-group-addon">
+						<i class="glyphicon glyphicon-time"></i>
+					</span>
+				</div>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
+				<c:if test="${defaultValue != null}">
+					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
+					        $(\"#').concat(ft).concat('input\")')}"/>
+					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.val(\"').concat(defaultValue).concat('\");')}"/>
+				</c:if>
+				<script>
+					$("#${ft.concat('input')}").timepicker({
+						minuteStep: 15,
+						showMeridian: false
+					});
+				</script>
+			</c:when>
+			
 			<c:when test="${type.equals('select')}">
 				<select class="form-control" id="${ft.concat('input')}" ${isRequired} ${isDisabled}>
 					<c:forTokens items="${options}" delims="," var="option">
@@ -82,6 +92,7 @@
 					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.val(\"').concat(defaultValue).concat('\");')}"/>
 				</c:if>
 			</c:when>
+			
 			<c:when test="${type.equals('reference')}">
 				<select class="selectized" style="display: none" id="${ft.concat('input')}" ${isRequired}  ${isDisabled}>
 				</select>

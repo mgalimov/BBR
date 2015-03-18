@@ -39,12 +39,12 @@
 		<script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
 		  
 		<!-- SELECTIZE -->
-		<script type="text/javascript" src="js/selectize.js"></script>
+		<script type="text/javascript" src="js/selectize.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/selectize.css" />
 
 		<!-- Time Picker -->
 		<link type="text/css" href="css/bootstrap-timepicker.min.css" />
-		<script type="text/javascript" src="js/bootstrap-timepicker.min.js" ></script>
+		<script type="text/javascript" src="js/bootstrap-timepicker.js" ></script>
 
   		<!-- BBR Utils -->
 	    <script src="js/bbr-utils.js"></script>
