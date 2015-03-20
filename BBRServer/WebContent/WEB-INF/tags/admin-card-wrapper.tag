@@ -43,8 +43,8 @@
 		<link rel="stylesheet" type="text/css" href="css/selectize.css" />
 
 		<!-- Time Picker -->
-		<link type="text/css" href="css/bootstrap-timepicker.min.css" />
-		<script type="text/javascript" src="js/bootstrap-timepicker.js" ></script>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-timepicker.min.css" />
+		<script type="text/javascript" src="js/bootstrap-timepicker.min.js" ></script>
 
   		<!-- BBR Utils -->
 	    <script src="js/bbr-utils.js"></script>

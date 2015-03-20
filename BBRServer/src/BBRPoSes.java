@@ -1,10 +1,7 @@
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import BBR.BBRGPS;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRPoSManager;
