@@ -85,7 +85,17 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         return ds;
 	}
 	
-	public List<Object[]> getSchedule(Date date, String posId, String specialistId) {
+	public class BBRScheduleList {
+		public Long specCount;
+		public List<Object[]> list;
+		
+		BBRScheduleList(Long specCount, List<Object[]> list) {
+			this.specCount = specCount;
+			this.list = list;
+		}
+	}
+	
+	public BBRScheduleList getSchedule(Date date, String posId, String specialistId) {
 		if (posId == null) return null;
 		if (posId == "") return null;
 		
@@ -95,21 +105,30 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         Date endOfDay = BBRUtil.getEndOfDay(date);
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         
-        String select = "select visit.timeScheduled as timeScheduled, visit.length as length";
+        String select = "select visit.timeScheduled as timeScheduled, visit.length as length, visit.spec.id as spec";
         String from = " from BBRVisit visit";
         String where = " where timeScheduled >= '" + df.format(startOfDay) + "' and "
         			 + "timeScheduled <= '" + df.format(endOfDay) + "'";
         where = where + " and visit.pos.id = " + posId;
+        Long specCount = (long) 0;
         
         if (specialistId != null)
-        	if (!specialistId.equals(""))
-        		where = where + " and visit.specialist.id = " + specialistId;
+        	if (!specialistId.equals("")) {
+        		where = where + " and visit.spec.id = " + specialistId;
+        		specCount = (long) 1;
+        	}
         String orderBy = " order by visit.timeScheduled ASC";
         
         Query query = session.createQuery(select + from + where + orderBy);
         
 		@SuppressWarnings("unchecked")
 		List<Object[]> list = query.list();
+		
+		if (specCount == 0) {
+			query = session.createQuery("select count(*) from BBRSpec spec where spec.pos.id = " + posId);
+			specCount = (Long) query.uniqueResult();
+		}
+        
 		DateFormat tf = new SimpleDateFormat("HHmm");
 		
 		for(Object[] line: list) {
@@ -118,6 +137,6 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 			
         BBRUtil.commitTran(sessionIndex, tr);
 		
-		return list;
+		return new BBRScheduleList(specCount, list);
 	}
 }

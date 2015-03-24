@@ -46,7 +46,7 @@
 <c:choose>
 	<c:when test="${visitStep == 1}">
 		<t:card title="Plan your visit. Step 1" gridPage="general-plan-visit.jsp" method="BBRVisits" buttonSave="Go to step 2" buttonCancel="Cancel">
-			<div class="panel col-md-12" id="map" style="height: 400px"></div>
+			<div class="panel col-md-12" id="map" style="height: 300px"></div>
 			<t:card-item label="Select place" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes" defaultValue="${closestPoS}" defaultDisplay="${closestPoSName}"/>
 		</t:card>
 		
