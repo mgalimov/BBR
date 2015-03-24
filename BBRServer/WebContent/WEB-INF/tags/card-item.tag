@@ -70,7 +70,7 @@
 				</c:if>
 				<script>
 					$("#${ft.concat('input')}").timepicker({
-						minuteStep: 15,
+						minuteStep: 30,
 						showMeridian: false
 					});
 				</script>

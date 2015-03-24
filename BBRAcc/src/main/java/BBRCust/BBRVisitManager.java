@@ -2,13 +2,10 @@ package BBRCust;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
-
 import BBR.BBRDataManager;
 import BBR.BBRDataSet;
 import BBR.BBRUtil;
@@ -113,7 +110,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         
 		@SuppressWarnings("unchecked")
 		List<Object[]> list = query.list();
-		DateFormat tf = new SimpleDateFormat("HH:mm");
+		DateFormat tf = new SimpleDateFormat("HHmm");
 		
 		for(Object[] line: list) {
 			line[0] = tf.format((Date)line[0]);
