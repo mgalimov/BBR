@@ -35,19 +35,20 @@
 	int hh = startWorkHour;
 	
 	if (startWorkMin > 0) {
-		schOut += "<tr id='sc" + hh + "30'><td class='col-md-1'>" + hh + ":30</td></tr>";
+		schOut += "<tr id='sc" + hh + "30'><td class='col-md-1'>" + hh + ":30</td><td class='col-md-1' id='oc" + hh + "30'></tr>";
 		hh++;
 	}
 		
 	for (Integer h = hh; h <= endWorkHour - 1; h++) {
-		schOut += "<tr id='sc" + h + "00'><td class='col-md-1'>" + h + ":00</td></tr>";
-		schOut += "<tr id='sc" + h + "30'><td class='col-md-1'>" + h + ":30</td></tr>";
+		schOut += "<tr id='sc" + h + "00'><td class='col-md-1'>" + h + ":00</td><td class='col-md-1' id='oc" + h + "00'></tr>";
+		schOut += "<tr id='sc" + h + "30'><td class='col-md-1'>" + h + ":30</td><td class='col-md-1' id='oc" + h + "30'></tr>";
 	}
 
-	schOut += "<tr id='sc" + endWorkHour + "00'><td class='col-md-1'>" + endWorkHour + ":00</td></tr>";
+	hh = endWorkHour;
+	schOut += "<tr id='sc" + hh + "00'><td class='col-md-1'>" + hh + ":00</td><td class='col-md-1' id='oc" + hh + "00'></tr>";
 	
 	if (endWorkMin > 0) {
-		schOut += "<tr id='sc" + endWorkHour + "30'><td class='col-md-1'>" + endWorkHour + ":30</td></tr>";
+		schOut += "<tr id='sc" + hh + "30'><td class='col-md-1'>" + hh + ":30</td><td class='col-md-1' id='oc" + hh + "30'></tr>";
 	}
 
 %>
@@ -81,40 +82,15 @@ $(function() {
     			date: dateSelected
     		}, function (responseText) {
     			var arr = $.parseJSON(responseText);
-    			hh = <%=startWorkHour%>;
-    			if (<%=startWorkMin%> > 0) {
-    				$("#oc" + hh + "30").remove();
-    				$("#sc" + hh + "30").append("<td class='col-md-1' id='oc" + hh + "30'>");
-    				hh++;
-    			}
-    			for (h = hh; h <= <%=endWorkHour - 1%>; h++) {
-    				$("#oc" + h + "00").remove();
-    				$("#sc" + h + "00").append("<td class='col-md-1' id='oc" + h + "00'>");
-    				$("#oc" + h + "30").remove();
-    				$("#sc" + h + "30").append("<td class='col-md-1' id='oc" + h + "30'>");
-    			}
-    			
-    			hh = <%=endWorkHour%>;
-
-    			$("#oc" + hh + "00").remove();
-				$("#sc" + hh + "00").append("<td class='col-md-1' id='oc" + hh + "00'>");
-
-    			if (<%=endWorkMin%> > 0) {
-    				$("#oc" + hh + "30").remove();
-    				$("#sc" + hh + "30").append("<td class='col-md-1' id='oc" + hh + "30'>");
-    			}
-    			
+    			$("td.info").removeClass('info');
     			for (i = 0; i < arr.length; i++) {
-    				idsc = "#sc"+arr[i][0];
     				idoc = "#oc"+arr[i][0];
+					$(idoc).addClass('info');
     				sz = Math.round(arr[i][1] * 2);
-    				$(idoc).remove();
-    				$(idsc).append("<td class='col-md-1' rowspan='" + sz + "'>");
-    				
-    				id = idsc;
-    				for (m = 2; m <= sz; m++) {
-    					$(id).next().children().first().next().remove();
-    					id = $(id).next().id;
+    				obj = $(idoc); 
+    				for (m = 1; m < sz; m++) {
+    					obj = obj.parent().next().children().first().next();
+        				obj.addClass('info');
     				}
     			}
     		})
