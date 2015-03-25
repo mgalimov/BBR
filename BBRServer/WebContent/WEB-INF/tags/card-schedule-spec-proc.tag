@@ -109,7 +109,17 @@
  	});
  	
  	$("#scheduleTable tr").on("click", function(e) {
- 		alert("me!");
+ 		obj1 = $(this).children().first();
+ 		obj2 = $(obj1).next();
+ 		if (!$(obj2).hasClass('info')) {
+ 	 		$("td.success").removeClass('success');
+ 	 		$(obj2).addClass('success');
+ 	 		
+ 	 		dateSelected = $("#dateinput").val();
+ 	 		timeSelected = $(obj1).text();
+ 	 		$("timeScheduledinput").val(dateSelected + " " + timeSelected);
+ 	 		alert($("timeScheduledinput").val());
+ 		}
  	})
 
 </script>

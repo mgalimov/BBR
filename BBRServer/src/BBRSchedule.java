@@ -42,15 +42,6 @@ public class BBRSchedule extends HttpServlet {
 			String specId = params.get("spec");
 			BBRScheduleList list = mgr.getSchedule(dateSelected, context.planningVisit.getPos().getId().toString(), specId);
 			respText = BBRUtil.gson.toJson(list);
-			
-			/*
-			Iterator listIterator = list.iterator();
-			
-			while (listIterator.hasNext()) {
-			    Object[] line = (Object[]) listIterator.next();
-			    Date timeScheduled = (Date) line[0];
-			    Double length = (Double) line[1];
-			}*/			
 		} catch (Exception ex) {
 			respText = ex.getLocalizedMessage();
 			response.setStatus(700);
