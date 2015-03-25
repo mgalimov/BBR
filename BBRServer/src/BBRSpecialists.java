@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRPoSManager;
+import BBRClientApp.BBRContext;
 import BBRCust.BBRSpecialist;
 import BBRCust.BBRSpecialistManager;
 
@@ -44,5 +45,15 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 			manager.update(spec);
 		}
 		return null;		
+	}
+	
+	@Override
+	protected String getReferenceData(String query, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+		BBRContext context = BBRContext.getContext(request);
+
+		if (context.planningVisit != null)
+			return manager.list(query, manager.getTitleField(), context.planningVisit.getPos()).toJson();
+		else
+			return manager.list(query, manager.getTitleField()).toJson();
 	}
 }

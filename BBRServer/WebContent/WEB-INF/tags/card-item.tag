@@ -6,6 +6,7 @@
 <%@ attribute name="referenceFieldTitle" %>
 <%@ attribute name="isRequired" %>
 <%@ attribute name="isDisabled" %>
+<%@ attribute name="isHidden" %>
 <%@ attribute name="options" %>
 <%@ attribute name="defaultValue" %>
 <%@ attribute name="defaultDisplay" %>
@@ -36,7 +37,7 @@
 			</c:when>
 			
 			<c:when test="${type.equals('text')}">
-				<input type="text" class="form-control" id="${ft.concat('input')}" placeholder="${label}" ${isRequired} ${isDisabled}/>
+				<input type="text" class="form-control ${isHidden}" id="${ft.concat('input')}" placeholder="${label}" ${isRequired} ${isDisabled}/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
@@ -46,7 +47,7 @@
 			</c:when>
 			
 			<c:when test="${type.equals('password')}">
-				<input type="password" class="form-control" id="${ft.concat('input')}" placeholder="${label}" ${isRequired} ${isDisabled}/>
+				<input type="password" class="form-control ${isHidden}" id="${ft.concat('input')}" placeholder="${label}" ${isRequired} ${isDisabled}/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
@@ -57,9 +58,9 @@
 			
 			<c:when test="${type.equals('time')}">
 		        <div class="input-group bootstrap-timepicker col-md-2">
-           			<input id="${ft.concat('input')}" type="text" class="form-control" placeholder="${label}" ${isRequired} ${isDisabled} />
-					<span class="input-group-addon">
-						<i class="glyphicon glyphicon-time"></i>
+           			<input id="${ft.concat('input')}" type="text" class="form-control ${isHidden}" placeholder="${label}" ${isRequired} ${isDisabled} />
+					<span class="input-group-addon ${isHidden}">
+						<i class="glyphicon glyphicon-time ${isHidden}"></i>
 					</span>
 				</div>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
@@ -77,7 +78,7 @@
 			</c:when>
 			
 			<c:when test="${type.equals('select')}">
-				<select class="form-control" id="${ft.concat('input')}" ${isRequired} ${isDisabled}>
+				<select class="form-control ${isHidden}" id="${ft.concat('input')}" ${isRequired} ${isDisabled}>
 					<c:forTokens items="${options}" delims="," var="option">
 						<option value="${option.split(':')[0]}">${option.split(':')[1]}</option>
 						<c:if test="${defaultValue != null}">

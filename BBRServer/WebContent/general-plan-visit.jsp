@@ -45,7 +45,7 @@
 
 <c:choose>
 	<c:when test="${visitStep == 1}">
-		<t:card title="Plan your visit. Step 1" gridPage="general-plan-visit.jsp" method="BBRVisits" buttonSave="Go to step 2" buttonCancel="Cancel">
+		<t:card title="Plan your visit. Step 1. Place to visit" gridPage="general-plan-visit.jsp" method="BBRVisits" buttonSave="Go to step 2" buttonCancel="Cancel">
 			<div class="panel col-md-12" id="map" style="height: 300px"></div>
 			<t:card-item label="Select place" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes" defaultValue="${closestPoS}" defaultDisplay="${closestPoSName}"/>
 		</t:card>
@@ -64,13 +64,13 @@
 	</c:when>
 
 	<c:when test="${visitStep == 2}">
-		<t:card title="Plan your visit. Step 2" gridPage="general-plan-visit.jsp" method="BBRVisits" buttonSave="Go to step 3" buttonCancel="Cancel">
-			<t:card-schedule-spec-proc fieldTime="timeScheduled" fieldSpecialist="spec" fieldProcedure="procedure" />
+		<t:card title="Plan your visit. Step 2. Date and time" gridPage="general-plan-visit.jsp" method="BBRVisits" buttonSave="Go to step 3" buttonCancel="Cancel">
+			<t:card-schedule-spec-proc/>
 		</t:card>
 	</c:when>
 
 	<c:when test="${visitStep == 3}">
-		<t:card title="Plan your visit. Step 3" gridPage="general-plan-visit.jsp" method="BBRVisits" buttonSave="Get it done" buttonCancel="Cancel">
+		<t:card title="Plan your visit. Step 3. Contact information" gridPage="general-plan-visit.jsp" method="BBRVisits" buttonSave="Get it done" buttonCancel="Cancel">
 			<t:card-item label="Your name" type="text" field="userName" isRequired="required" defaultValue="${userName}"/>
 			<t:card-item label="Your phone" type="text" field="userContacts" isRequired="required" />
 		</t:card>

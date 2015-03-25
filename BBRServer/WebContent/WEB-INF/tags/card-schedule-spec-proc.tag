@@ -1,9 +1,6 @@
 <%@ tag language="java" pageEncoding="UTF-8" description="Card Schedule-Spec-Proc" import="BBRClientApp.BBRContext"%>
 <%@tag import="BBRAcc.BBRPoS"%>
 <%@tag import="java.util.Calendar"%>
-<%@ attribute name="fieldTime" required="true" %>
-<%@ attribute name="fieldSpecialist" required="true" %>
-<%@ attribute name="fieldProcedure" required="true" %>
 
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
@@ -22,7 +19,6 @@
 	int endWorkMin = calendar.get(Calendar.MINUTE);
 	
 	String schOut = "";
-	String arrOut = "var sch = {};";
 	
 	if (startWorkHour <= 0)
 		startWorkHour = 8;
@@ -36,22 +32,18 @@
 	int hh = startWorkHour;
 	
 	if (startWorkMin > 0) {
-		schOut += "<tr id='sc" + hh + "30'><td class='col-md-1'>" + hh + ":30</td><td class='col-md-1' id='oc" + hh + "30'></tr>";
-		arrOut += "sch['" + hh + "30'] = 0;";
+		schOut += "<tr><td class='col-md-1'>" + hh + ":30</td><td class='col-md-3' id='oc" + hh + "30'></tr>";
 		hh++;
 	}
 		
 	for (Integer h = hh; h <= endWorkHour - 1; h++) {
-		schOut += "<tr id='sc" + h + "00'><td class='col-md-1'>" + h + ":00</td><td class='col-md-1' id='oc" + h + "00'></tr>";
-		schOut += "<tr id='sc" + h + "30'><td class='col-md-1'>" + h + ":30</td><td class='col-md-1' id='oc" + h + "30'></tr>";
-		arrOut += "sch['" + h + "00'] = 0;";
-		arrOut += "sch['" + h + "30'] = 0;";
+		schOut += "<tr><td class='col-md-1'>" + h + ":00</td><td class='col-md-3' id='oc" + h + "00'></tr>";
+		schOut += "<tr><td class='col-md-1'>" + h + ":30</td><td class='col-md-3' id='oc" + h + "30'></tr>";
 	}
 
 	if (endWorkMin > 0) {
 		hh = endWorkHour;
-		schOut += "<tr id='sc" + hh + "00'><td class='col-md-1'>" + hh + ":00</td><td class='col-md-1' id='oc" + hh + "00'></tr>";
-		arrOut += "sch['" + hh + "00'] = 0;";
+		schOut += "<tr><td class='col-md-1'>" + hh + ":00</td><td class='col-md-3' id='oc" + hh + "00'></tr>";
 	}
 %>
 
@@ -59,9 +51,11 @@
 	<div id="dateinput" class="panel"></div>
 	<t:card-item label="Select specialist" type="reference" field="spec" referenceFieldTitle="name" referenceMethod="BBRSpecialists"/>
 	<t:card-item label="Select procedure" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures"/>
+	<t:card-item label="" type="text" field="timeScheduled" isHidden="hidden"/>
+	<div id="summary"></div>
 </div>
 <div class="panel col-md-8">
-	<table class="table table-striped table-hover">
+	<table class="table table-striped table-hover" id="scheduleTable">
 		<tbody>
 			<%=schOut %>
 		</tbody>
@@ -69,11 +63,12 @@
 </div>
 
 <script>
-	function initSch() {
-		<%=arrOut %>
-	}
-
-	function select(dateSelected, specSelected) {
+	function select() {
+ 		dateSelected = $("#dateinput").val();
+ 		specSelected = $("#specinput").val();
+ 		
+ 		$("#timeScheduled").val(dateSelected + " ");
+ 		
 		$.get('BBRSchedule', {
 				date: dateSelected,
 				spec: specSelected
@@ -82,42 +77,39 @@
 				obj = $.parseJSON(responseText);
 				arr = obj.list;
 				specCount = obj.specCount;
-				for (var s in sch) {
-					sch[s] = 0;
-				}
+				
+				var sch = new Array(47);
+
+				for (i = 0; i <= 47; i++)
+					sch[i] = 0; 
 				
 				for (i = 0; i < arr.length; i++) {
-					sz = Math.round(arr[i][1] * 2);
-					sp = arr[i][2];
-					for (m = 0; m < sz; m++) {
-						
-					}
+					for (m = arr[i][0]; m < arr[i][0] + arr[i][1]; m++)
+						sch[m]++;
 				}
 				
 				$("td.info").removeClass('info');
-				for (var s in sch) {
-					if (sch[s] < specCount) {
-						$("#oc"+s).addClass('info');
-					}
+				for (i = 0; i <= 23; i++) {
+					if (sch[i*2] >= specCount)
+						if ($("#oc"+i+"00").length > 0)
+							$("#oc"+i+"00").addClass('info');
+					if (sch[i*2 + 1] >= specCount) 
+						if ($("#oc"+i+"30").length > 0)
+							$("#oc"+i+"30").addClass('info');			
 				}
 
 			});
 	}
 
- 	$("#dateinput").datepicker({
-    	onSelect: 	function(dateSelected) {
-    					specSelected = $("#specinput").val();
-    					select(dateSelected, specSelected);
-    				}
-    });
- 	
- 	$("#specinput").on("change", function(e) {
- 		dateSelected = $("#dateinput").val();
- 		specSelected = $("#specinput").val();
-		select(dateSelected, specSelected);
- 	});
-</script>
+ 	$("#dateinput").datepicker({onSelect: select});
+ 	$("#specinput").on("change", select);
 
-<div class="panel">
-	<t:card-item label="Date and time YYYY-MM-DD HH-MM" type="text" field="timeScheduled" isRequired="required" />
-</div>
+ 	$("#procinput").on("change", function(e) {
+		$("#summary").text("hey!");
+ 	});
+ 	
+ 	$("#scheduleTable tr").on("click", function(e) {
+ 		alert("me!");
+ 	})
+
+</script>

@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +13,7 @@ import BBR.BBRErrors;
 import BBR.BBRUtil;
 import BBRClientApp.BBRContext;
 import BBRCust.BBRVisitManager;
+import BBRCust.BBRVisitManager.BBRScheduleList;
 
 @WebServlet("/BBRSchedule")
 public class BBRSchedule extends HttpServlet {
@@ -40,7 +40,7 @@ public class BBRSchedule extends HttpServlet {
 			}
 			
 			String specId = params.get("spec");
-			List<Object[]> list = mgr.getSchedule(dateSelected, context.planningVisit.getPos().getId().toString(), specId);
+			BBRScheduleList list = mgr.getSchedule(dateSelected, context.planningVisit.getPos().getId().toString(), specId);
 			respText = BBRUtil.gson.toJson(list);
 			
 			/*

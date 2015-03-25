@@ -105,7 +105,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         Date endOfDay = BBRUtil.getEndOfDay(date);
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         
-        String select = "select visit.timeScheduled as timeScheduled, visit.length as length, visit.spec.id as spec";
+        String select = "select visit.timeScheduled as timeScheduled, visit.length as length";
         String from = " from BBRVisit visit";
         String where = " where timeScheduled >= '" + df.format(startOfDay) + "' and "
         			 + "timeScheduled <= '" + df.format(endOfDay) + "'";
@@ -125,14 +125,19 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		List<Object[]> list = query.list();
 		
 		if (specCount == 0) {
-			query = session.createQuery("select count(*) from BBRSpec spec where spec.pos.id = " + posId);
+			query = session.createQuery("select count(*) from BBRSpecialist spec where spec.pos.id = " + posId);
 			specCount = (Long) query.uniqueResult();
 		}
         
-		DateFormat tf = new SimpleDateFormat("HHmm");
+		DateFormat hf = new SimpleDateFormat("HH");
+		DateFormat mf = new SimpleDateFormat("mm");
 		
 		for(Object[] line: list) {
-			line[0] = tf.format((Date)line[0]);
+			if (mf.format((Date)line[0]).equals("00"))
+				line[0] = Long.parseLong(hf.format((Date)line[0])) * 2;
+			else
+				line[0] = Long.parseLong(hf.format((Date)line[0])) * 2 + 1;
+			line[1] = Math.round(((Float) line[1]) * 2);
 		}
 			
         BBRUtil.commitTran(sessionIndex, tr);
