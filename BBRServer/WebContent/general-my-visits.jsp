@@ -9,6 +9,7 @@
 			<t:grid-item label="Contacts" field="userContacts"/>
 			<t:grid-item label="Specialist" field="spec.title"/>
 			<t:grid-item label="Status" field="status"/>
+			<t:grid-item label="Length, hours" field="length"/>
 		</t:grid>
 	</jsp:body>
 </t:admin-grid-wrapper>

@@ -13,7 +13,7 @@ public class BBRVisit extends BBRDataElement {
 	private String userName;
 	private String userContacts;
 	private String posTitle;
-	private float length;
+	private Float length = 0F;
 	private BBRSpecialist spec;
 	private BBRProcedure procedure;
 	
@@ -109,11 +109,11 @@ public class BBRVisit extends BBRDataElement {
 		this.procedure = procedure;
 	}
 
-	public float getLength() {
+	public Float getLength() {
 		return length;
 	}
 
-	public void setLength(float length) {
+	public void setLength(Float length) {
 		this.length = length;
 	}
 }

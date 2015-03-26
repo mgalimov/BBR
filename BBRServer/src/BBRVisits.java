@@ -60,7 +60,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			}
 			
 
-			DateFormat df = new SimpleDateFormat("y-M-d H:mm");
+			DateFormat df = new SimpleDateFormat("M/d/y H:mm");
 			try {
 				Date timeScheduled = df.parse(params.get("timeScheduled"));
 				context.planningVisit.setTimeScheduled(timeScheduled);
@@ -86,7 +86,8 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 					context.planningVisit.getProcedure(), 
 					context.planningVisit.getUserName(),
 					context.planningVisit.getUserContacts()));
-			context.planningVisit.setId(id);
+			
+			context.planningVisit = manager.findById(id);
 		}
 
 		context.setLastVisitStep(++visitStep);

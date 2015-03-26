@@ -100,4 +100,8 @@ public class BBRPoS extends BBRDataElement {
 		
 		BBRPoSString() {}
 	}
+	
+	public String getMapHref() {
+		return "https://maps.yandex.ru/?ll=" + locationGPS.lng + "," + locationGPS.lat;
+	}
 }

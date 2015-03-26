@@ -101,25 +101,35 @@
 			});
 	}
 
- 	$("#dateinput").datepicker({onSelect: select});
+	function setTime(trObj) {
+		if (trObj == null) {
+			timeSelected = "12:00";
+		} else {
+ 			obj1 = $(trObj).children().first();
+ 			obj2 = $(obj1).next();
+		}
+ 		if (!$(obj2).hasClass('info')) {
+ 	 		$("td.success").removeClass('success');
+ 	 		$(obj2).addClass('success');
+ 	 		timeSelected = $(obj1).text();
+ 	 		
+ 		}
+ 		dateSelected = $("#dateinput").val();
+ 		dtString = dateSelected + " " + timeSelected;
+ 	 	$("#timeScheduledinput").val(dtString);
+	}
+	
+ 	$("#dateinput").datepicker({onSelect: function(e) {
+ 			select();
+ 			setTime(null);
+ 		}
+ 	});
+
  	$("#specinput").on("change", select);
+ 	$("#scheduleTable td").on("click", function(e) {setTime($(e.target).parent());});
 
  	$("#procinput").on("change", function(e) {
 		$("#summary").text("hey!");
  	});
  	
- 	$("#scheduleTable tr").on("click", function(e) {
- 		obj1 = $(this).children().first();
- 		obj2 = $(obj1).next();
- 		if (!$(obj2).hasClass('info')) {
- 	 		$("td.success").removeClass('success');
- 	 		$(obj2).addClass('success');
- 	 		
- 	 		dateSelected = $("#dateinput").val();
- 	 		timeSelected = $(obj1).text();
- 	 		$("timeScheduledinput").val(dateSelected + " " + timeSelected);
- 	 		alert($("timeScheduledinput").val());
- 		}
- 	})
-
 </script>

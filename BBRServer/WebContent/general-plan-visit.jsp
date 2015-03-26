@@ -20,7 +20,6 @@
 	Long visitId = Long.parseLong("0");
 	if (context.planningVisit != null)
 		visitId = context.planningVisit.getId();
-	request.setAttribute("visitId", visitId);
 	
 	if (context.user != null)
 		request.setAttribute("userName", context.user.getFirstName() + " " + context.user.getLastName());
@@ -39,6 +38,23 @@
 	}
 	request.setAttribute("posCoords", posCoords);
 	request.setAttribute("posIds", posIds);
+	
+	if (visitStep == 4) {
+		String outString = "<p>Your visit id is " + context.planningVisit.getId() + "</p>";
+		outString += "<p>Place " + context.planningVisit.getPos().getTitle() + " at " + 
+					  context.planningVisit.getPos().getLocationDescription() + "<a href='" + context.planningVisit.getPos().getMapHref() + "'>See map</a></p>";
+		outString += "<p>Date and time " + context.planningVisit.getTimeScheduled() + "</p>";
+		if (context.planningVisit.getSpec() != null) {
+			outString += "<p>Your specialist is " + context.planningVisit.getSpec().getName() + "</p>";
+		}
+		if (context.planningVisit.getProcedure() != null) {
+			outString += "<p>Your procedure is " + context.planningVisit.getProcedure().getTitle() + "</p>";
+		}
+		outString += "<p>It will take " + context.planningVisit.getLength() + " hours.</p>";
+		
+		request.setAttribute("outString", outString);
+	}
+	
 %>
 <t:general-wrapper title="Plan your visit">
 <jsp:body>
@@ -78,9 +94,9 @@
 	
 	<c:when test="${visitStep == 4}">
 		<div>
-			<h1>Your visit planned.</h1>
-			<p>You'll get approved soon. Your visit id is ${visitId}. Please use this number for any reference.
-			</p>
+			<h1>Your visit planned</h1>
+			<p>You'll get approved soon. Please find your visit information below:</p>
+			<c:out value="${outString}" escapeXml="false"/>
 		</div>
 	</c:when>
 </c:choose>
