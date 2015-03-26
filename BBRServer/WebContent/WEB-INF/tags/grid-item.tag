@@ -2,6 +2,7 @@
 <%@ attribute name="label" required="true" %>
 <%@ attribute name="field" required="true" %>
 <%@ attribute name="sort" %>
+<%@ attribute name="type" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 	

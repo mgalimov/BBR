@@ -82,8 +82,15 @@ public class BBRPoS extends BBRDataElement {
 		ps.title = title;
 		ps.locationDescription = locationDescription;
 		ps.locationGPS = locationGPS;
-		ps.startWorkHour = df.format(startWorkHour);
-		ps.endWorkHour = df.format(endWorkHour);
+		if (startWorkHour != null)
+			ps.startWorkHour = df.format(startWorkHour);
+		else
+			ps.startWorkHour = "08:00";
+		
+		if (endWorkHour != null)
+			ps.endWorkHour = df.format(endWorkHour);
+		else
+			ps.endWorkHour = "21:00";
 		ps.shop = shop;
 		return BBRUtil.gson.toJson(ps);
 	}

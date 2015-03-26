@@ -10,11 +10,13 @@
 	BBRPoS pos = context.planningVisit.getPos();
 	Calendar calendar = Calendar.getInstance();
 	
-	calendar.setTime(pos.getStartWorkHour());
+	if (pos.getStartWorkHour() != null)
+		calendar.setTime(pos.getStartWorkHour());
 	int startWorkHour = calendar.get(Calendar.HOUR_OF_DAY);
 	int startWorkMin = calendar.get(Calendar.MINUTE);
 
-	calendar.setTime(pos.getEndWorkHour());
+	if (pos.getEndWorkHour() != null)
+		calendar.setTime(pos.getEndWorkHour());
 	int endWorkHour = calendar.get(Calendar.HOUR_OF_DAY);
 	int endWorkMin = calendar.get(Calendar.MINUTE);
 	

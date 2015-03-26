@@ -1,7 +1,10 @@
 package BBRCust;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import BBR.BBRDataElement;
+import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRUser;
 
@@ -115,5 +118,41 @@ public class BBRVisit extends BBRDataElement {
 
 	public void setLength(Float length) {
 		this.length = length;
+	}
+	
+	@Override
+	public String toJson() {
+		SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+		BBRVisitString vs = new BBRVisitString();
+		vs.id = id;
+		if (timeScheduled != null)
+			vs.timeScheduled = df.format(timeScheduled);
+		else
+			vs.timeScheduled = "08:00";
+		vs.pos = pos;
+		vs.user = user;
+		vs.userName = userName;
+		vs.userContacts = userContacts;
+		vs.length = length;
+		vs.spec = spec;
+		vs.procedure = procedure;
+		vs.posTitle = posTitle;
+		return BBRUtil.gson.toJson(vs);
+	}
+	
+	@SuppressWarnings("unused")
+	private class BBRVisitString {
+		private Long id;
+		private String timeScheduled;
+		private BBRPoS pos;
+		private BBRUser user;
+		private String userName;
+		private String userContacts;
+		private Float length = 0F;
+		private BBRSpecialist spec;
+		private BBRProcedure procedure;
+		private String posTitle;
+		
+		BBRVisitString() {}
 	}
 }

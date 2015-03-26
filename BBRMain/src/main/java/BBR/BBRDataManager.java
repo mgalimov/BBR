@@ -6,7 +6,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 //http://stackoverflow.com/questions/3403909/get-generic-type-of-class-at-runtime
-public class BBRDataManager<T> {
+public class BBRDataManager<T extends BBRDataElement> {
 	protected final String typeName;
 	protected int sessionIndex = -1;
 	protected final int maxRowsToReturn = -100;
@@ -15,7 +15,6 @@ public class BBRDataManager<T> {
 
 	public BBRDataManager() {
 		typeName = BBRUtil.getGenericParameterClass(this.getClass(), 0).getName();
-	//	get session index in all ascentors!
 	}
 	 
     @SuppressWarnings("unchecked")
@@ -65,7 +64,7 @@ public class BBRDataManager<T> {
 
     @SuppressWarnings("unchecked")
 	public T findById(Long id) {
-        boolean tr = BBRUtil.beginTran(sessionIndex);
+    	boolean tr = BBRUtil.beginTran(sessionIndex);
        		
         T result = (T) BBRUtil.getSession(sessionIndex).createQuery("from " + typeName + " as t where t.id = '" + id.toString() + "'").uniqueResult();
         BBRUtil.commitTran(sessionIndex, tr);
