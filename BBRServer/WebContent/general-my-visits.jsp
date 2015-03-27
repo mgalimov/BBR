@@ -10,6 +10,8 @@
 			<t:grid-item label="Specialist" field="spec.title"/>
 			<t:grid-item label="Status" field="status"/>
 			<t:grid-item label="Length, hours" field="length"/>
+			<t:grid-item label="Pos start time" field="pos.startWorkHour"/>
+			<t:grid-item label="Pos end time" field="pos.endWorkHour"/>
 		</t:grid>
 	</jsp:body>
 </t:admin-grid-wrapper>

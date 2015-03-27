@@ -14,6 +14,9 @@ import org.hibernate.cfg.Configuration;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 public class BBRUtil {
     private static final List<SessionFactory> sessionFactory = new ArrayList<SessionFactory>();
@@ -35,7 +38,8 @@ public class BBRUtil {
 
     private static Gson buildGson() {
     	GsonBuilder b = new GsonBuilder();
-    	b.registerTypeAdapterFactory(BBR.HibernateProxyTypeAdapter.FACTORY);
+    	//b.registerTypeAdapterFactory(BBR.HibernateProxyTypeAdapter.FACTORY);
+    	b.registerTypeAdapterFactory(new BBRDataElementTypeAdapterFactory());
     	Gson gson = b.create();
 		return gson;
 	}
