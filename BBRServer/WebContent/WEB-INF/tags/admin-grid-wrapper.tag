@@ -28,40 +28,14 @@
 	    <!-- Include all compiled plugins (below), or include individual files as needed -->
 	    <script src="js/bootstrap.min.js"></script>
 	  
-		<!--  JQUERY-UI (only sortable and datepicker is needed) -->
-		<link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
-		<script type="text/javascript" src="js/jquery-ui.min.js"></script>
-		<!--  if timepicker is used in filters -->
-		
-		<link rel="stylesheet" type="text/css" href="css/jquery-ui-timepicker-addon.min.css"/>
-		<script type="text/javascript" src="js/jquery-ui-timepicker-addon.min.js"></script>
-		<!--  if touch event support is needed (mobile devices) -->
-		<script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
-		
-		<!--  PAGINATION plugin -->
-		<link rel="stylesheet" type="text/css" href="css/jquery.bs_pagination.min.css">
-		<script type="text/javascript" src="js/jquery.bs_pagination.min.js"></script>
-		<script type="text/javascript" src="js/bs_pagination/localization/en.min.js"></script>
-		 
-		<!--  FILTERS plugin --> 
-		<link rel="stylesheet" type="text/css" href="css/jquery.jui_filter_rules.bs.css">
-		<script type="text/javascript" src="js/jquery.jui_filter_rules.js"></script>
-		<script type="text/javascript" src="js/jui_filter_rules/localization/en.js"></script>
-		<!--  required from filters plugin -->
-		<script type="text/javascript" src="js/moment.min.js"></script>
-
 		<!-- BBR Utils -->
 	    <script src="js/bbr-utils.js"></script>
 	    <link href="css/bbr-admin.css" type="text/css" rel="stylesheet">
 		 
-		<!--  DATAGRID plugin -->
-		<link rel="stylesheet" type="text/css" href="css/jquery.bs_grid.min.css">
-		<script type="text/javascript" src="js/jquery.bs_grid.js"></script>
-		<script type="text/javascript" src="js/bs_grid/localization/en.js"></script>
-
 		<!--  ANOTHER DATAGRID -->
-		<link rel="stylesheet" type="text/css" href="css/jquery.dataTables.min.css">
+		<link rel="stylesheet" type="text/css" href="css/dataTables.bootstrap.css">
 		<script type="text/javascript" src="js/jquery.dataTables.js"></script>
+		<script type="text/javascript" src="js/dataTables.bootstrap.js"></script>
   	</head>
   	<body>
 		<t:top-menu title="Control panel. ${title}" />

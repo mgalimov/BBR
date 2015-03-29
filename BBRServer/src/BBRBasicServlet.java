@@ -117,7 +117,7 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 								Hashtable<Integer, Hashtable<String, String>> sortingFields,
 								BBRParams params, HttpServletRequest request, 
 								HttpServletResponse response) {
-		return manager.list(pageNumber, pageSize, BBRContext.getSelectFields(fields), BBRContext.getOrderBy(sortingFields, fields)).toJson();
+		return manager.list(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, fields)).toJson();
 	}
 
 	protected String getReferenceData(String query, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
@@ -172,7 +172,7 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 		return -1;
 	};
 	
-	protected String cancel(String id, BBRParams params,	HttpServletRequest request, HttpServletResponse response) {
+	protected String cancel(String id, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		return "";
 	}
 }

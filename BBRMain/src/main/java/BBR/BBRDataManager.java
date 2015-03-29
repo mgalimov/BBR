@@ -1,23 +1,22 @@
 package BBR;
 
-import java.util.Collections;
-import java.util.Hashtable;
 import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.transform.Transformers;
 
 //http://stackoverflow.com/questions/3403909/get-generic-type-of-class-at-runtime
 public class BBRDataManager<T extends BBRDataElement> {
 	protected final String typeName;
+	protected final Class<?> type;
 	protected int sessionIndex = -1;
 	protected final int maxRowsToReturn = -100;
 	protected String titleField = "title";
 	protected String classTitle = "abstract Data Element";
 
 	public BBRDataManager() {
-		typeName = BBRUtil.getGenericParameterClass(this.getClass(), 0).getName();
+		type = BBRUtil.getGenericParameterClass(this.getClass(), 0);
+		typeName = type.getName();
 	}
 	 
     @SuppressWarnings("unchecked")
@@ -28,12 +27,9 @@ public class BBRDataManager<T extends BBRDataElement> {
         return new BBRDataSet<T>(list);
     }
 
-	public BBRDataSet<T> list(int pageNumber, int pageSize, String orderBy) {
-        return list(pageNumber, pageSize, "", orderBy);
-    }
     
     @SuppressWarnings({ "unchecked", "unused" })
-   	public BBRDataSet<T> list(int pageNumber, int pageSize, String fields, String orderBy) {
+   	public BBRDataSet<T> list(int pageNumber, int pageSize, String where, String orderBy) {
         boolean tr = BBRUtil.beginTran(sessionIndex);
            
        Session session = BBRUtil.getSession(sessionIndex);
@@ -45,16 +41,12 @@ public class BBRDataManager<T extends BBRDataElement> {
        		orderBy = "order by " + orderBy.trim();
        }
        
-       if (fields == null) 
-    	   fields = "";
-       if (fields == "") 
-    	   fields = "*";
+       Long count = (Long)session.createQuery("Select count(*) from " + typeName + " " + where).uniqueResult();
        
-       Long count = (Long)session.createQuery("Select count(*) from " + typeName).uniqueResult();
-       Query query = session.createQuery(" from " + typeName + " " + orderBy);
-       query.setFirstResult((pageNumber - 1) * pageSize);
+       Query query = session.createQuery( " from " + typeName + " " + where + " " + orderBy);
+       query.setFirstResult(pageNumber * pageSize);
        if (pageSize > maxRowsToReturn && maxRowsToReturn > 0)
-       	pageSize = maxRowsToReturn;
+       	 pageSize = maxRowsToReturn;
        query.setMaxResults(pageSize);
        List<T> list = query.list();
        BBRDataSet<T> ds = new BBRDataSet<T>(list, count);
@@ -63,6 +55,10 @@ public class BBRDataManager<T extends BBRDataElement> {
        return ds;
     }
     
+   	public BBRDataSet<T> list(int pageNumber, int pageSize, String orderBy) {
+       return list(pageNumber, pageSize, "", orderBy);
+    }
+   	
 	public void delete(T record){
         boolean tr = BBRUtil.beginTran(sessionIndex);
         BBRUtil.getSession(sessionIndex).delete(record);

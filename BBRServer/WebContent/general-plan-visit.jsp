@@ -32,7 +32,7 @@
 	String posIds = "";
 	BBRPoSManager mgr = new BBRPoSManager();
 	BBRDataSet<BBRPoS> poses = mgr.listLocal(context.getLocation(), 10.0);
-	for (BBRPoS pos : poses.page_data) {
+	for (BBRPoS pos : poses.data) {
 		posCoords = posCoords + "[" + pos.getLocationGPS().getLat() + "," + pos.getLocationGPS().getLng() + "], ";
 		posIds = posIds + pos.getId().toString() + ", ";
 	}

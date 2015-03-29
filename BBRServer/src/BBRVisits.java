@@ -114,8 +114,8 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 	
 	@Override
 	protected String getData(int pageNumber, int pageSize, 
-								Hashtable<Integer, Hashtable<String, String>> sortingFields, 
 								Hashtable<Integer, Hashtable<String, String>> columns, 
+								Hashtable<Integer, Hashtable<String, String>> sortingFields, 
 								BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		BBRContext context = BBRContext.getContext(request);
 		if (context.user != null)

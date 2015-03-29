@@ -6,8 +6,8 @@
 			<t:grid-item label="Title" field="title" sort="asc"/>
 			<t:grid-item label="Location Description" field="locationDescription" sort="asc"/>
 			<t:grid-item label="Shop" field="shop.title"/>
-			<t:grid-item label="Start Work Hour" field="startWorkHour"/>
-			<t:grid-item label="End Work Hour" field="endWorkHour"/>
+			<t:grid-item label="Start Work Hour" field="startWorkHour" type="time"/>
+			<t:grid-item label="End Work Hour" field="endWorkHour" type="time"/>
 		</t:grid>
 	</jsp:body>
 </t:admin-grid-wrapper>

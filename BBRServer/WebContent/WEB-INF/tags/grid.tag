@@ -7,7 +7,7 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 
-<c:set var="items" scope="request" value="{data: \"id\"}"/>
+<c:set var="items" scope="request" value="{data: \"id\", visible: false}"/>
 <c:set var="itemsHF" scope="request" value="<th>ID</th>"/>
 <c:set var="sorting" scope="request" value=""/>
 <c:set var="index" scope="request" value="0"/>
@@ -45,21 +45,17 @@
     </div>
   </div>
 </div>
+<div class="panel">
+	<table id="grid" class="table table-stripped table-bordered no-footer">
+		<jsp:doBody/>
+		<thead>
+			<tr>
+				<c:out value="${itemsHF}" escapeXml="false"/>
+			</tr>
+		</thead>
+	</table>
+</div>
 
-<table id="grid">
-	<jsp:doBody/>
-	<thead>
-		<tr>
-			<c:out value="${itemsHF}" escapeXml="false"/>
-		</tr>
-	</thead>
-	<tfoot>
-		<tr>
-			<c:out value="${itemsHF}" escapeXml="false"/>
-		</tr>
-	</tfoot>
-</table>
-		
 <script>
 	$('#create').click(
 			function(event) {
@@ -67,30 +63,41 @@
 			});
 	$('#edit').click(
 			function(event) {
-				var row = $("#grid").bs_grid('selectedRows', 'get_ids');
+				var row = table.row('.success');
 				if (row.length > 0)
-					window.location.href = '${editPage}?id=' + row;
+					window.location.href = '${editPage}?id=' + row.data().id;
 			});
 	$('#deletionConfirmed').click(
 			function(event) {
-				var row = $("#grid").bs_grid('selectedRows', 'get_ids');
+				var row = table.row('.success');
 				if (row.length > 0) {
-					$.get('${method}', {id:row[0],operation:'delete'}, function(responseText) {
+					$.get('${method}', {id:row.data().id,operation:'delete'}, function(responseText) {
 						$('#sureToDelete').modal('hide');
-						$("#grid").bs_grid('displayGrid', true);
+						table.draw();
 					});
 				}
 			});
 	
-	$('#grid').DataTable({
+	var table = $('#grid').DataTable({
 	 			ajax: {
 	 				url: '${method}',
 	 				type: 'POST'
 	 			},
 	 			columns: [${items}],
 	 	    	order: [${sorting}],
-	 	    	serverSide: true
+	 	    	serverSide: true,
+	 	    	lengthChange: false
 		  	});
+
+    $('#grid').on( 'click', 'tr', function () {
+        if ( $(this).hasClass('success') ) {
+            $(this).removeClass('success');
+        }
+        else {
+            table.$('tr.success').removeClass('success');
+            $(this).addClass('success');
+        }
+    } );
 	// 
 	</script>
 

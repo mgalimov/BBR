@@ -19,13 +19,14 @@ public class BBRDataSet<T extends BBRDataElement> {
 
 	public String toJson() {
 		String s = "{\"recordsTotal\":\"" + totalRecords + "\",\"recordsFiltered\":\"" + totalRecords + "\",\"data\":[";
+		
 		for (BBRDataElement el: data) {
 			s += BBRUtil.gson.toJson(el) + ",";
 		}
-		s = s.substring(0, s.length() - 1);
+		if (data.size() > 0)
+			s = s.substring(0, s.length() - 1);
 		s += "]}";
 		return s;
-		//return BBRUtil.gson.toJson(this);
 	}
 
 }

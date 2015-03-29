@@ -50,40 +50,12 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         }
     }
 
-	@SuppressWarnings("unused")
 	public BBRDataSet<BBRVisit> list(Long userId, int pageNumber, int pageSize, String orderBy) {
-   		if (userId == null) {
+   		if (userId == null)
    			return null;
-   		}
-
-		boolean tr = BBRUtil.beginTran(sessionIndex);
-        
-        Session session = BBRUtil.getSession(sessionIndex);
-        if (orderBy == null)
-        	orderBy = "";
-        if (orderBy.length() > 0) {
-        	orderBy = orderBy.trim();
-        	if (!orderBy.startsWith("order by"))
-        		orderBy = "order by " + orderBy.trim();
-        	orderBy = " " + orderBy;
-        }
-
-        String where = " where visit.user.id=" + userId.toString() + "";
-        //join visit.user user 
-        Long count = (Long)session.createQuery("Select count(*) from BBRVisit visit join visit.user user " + where).uniqueResult();
-        Query query = session.createQuery("from BBRVisit visit " + where + orderBy);
-        
-        query.setFirstResult((pageNumber - 1) * pageSize);
-        if (pageSize > maxRowsToReturn && maxRowsToReturn > 0)
-        	pageSize = maxRowsToReturn;
-        query.setMaxResults(pageSize);
-        
-        @SuppressWarnings("unchecked")
-		List<BBRVisit> list = (List<BBRVisit>)query.list();
-        BBRDataSet<BBRVisit> ds = new BBRDataSet<BBRVisit>(list, count);
-        BBRUtil.commitTran(sessionIndex, tr);
-		
-        return ds;
+   			
+        String where = " where user.id=" + userId.toString() + "";
+        return list(pageNumber, pageSize, where, orderBy);
 	}
 	
 	public class BBRScheduleList {

@@ -115,7 +115,7 @@
 				<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
 					$(\"#').concat(ft).concat('input\")')}"/>
 				<c:set var="itemPreload" scope="request" value="${itemPreload.concat('[0].selectize')}"/>
-				<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.load(function(callback){$.ajax({url:\"').concat(referenceMethod).concat('\",type:\"GET\",dataType:\"json\",data:{q:\"\",operation:\"reference\"},error:function(){callback();},success:function(res){callback(res.page_data);}})});')}"/>
+				<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.load(function(callback){$.ajax({url:\"').concat(referenceMethod).concat('\",type:\"GET\",dataType:\"json\",data:{q:\"\",operation:\"reference\"},error:function(){callback();},success:function(res){callback(res.data);}})});')}"/>
 
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
@@ -159,7 +159,7 @@
 				                callback();
 				            },
 				            success: function(res) {
-				            	callback(res.page_data);
+				            	callback(res.data);
 				            }
 				        });
 				    }
