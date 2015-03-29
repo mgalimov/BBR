@@ -33,7 +33,10 @@
 	BBRPoSManager mgr = new BBRPoSManager();
 	BBRDataSet<BBRPoS> poses = mgr.listLocal(context.getLocation(), 10.0);
 	for (BBRPoS pos : poses.data) {
-		posCoords = posCoords + "[" + pos.getLocationGPS().getLat() + "," + pos.getLocationGPS().getLng() + "], ";
+		if (pos.getLocationGPS() != null)
+			posCoords = posCoords + "[" + pos.getLocationGPS().getLat() + "," + pos.getLocationGPS().getLng() + "], ";
+		else
+			posCoords = posCoords + "[0,0], ";
 		posIds = posIds + pos.getId().toString() + ", ";
 	}
 	request.setAttribute("posCoords", posCoords);
@@ -41,8 +44,12 @@
 	
 	if (visitStep == 4) {
 		String outString = "<p>Your visit id is " + context.planningVisit.getId() + "</p>";
-		outString += "<p>Place " + context.planningVisit.getPos().getTitle() + " at " + 
-					  context.planningVisit.getPos().getLocationDescription() + "<a href='" + context.planningVisit.getPos().getMapHref() + "'>See map</a></p>";
+		BBRPoS pos = context.planningVisit.getPos(); 
+		if (pos != null) {
+			outString += "<p>Place " + pos.getTitle() + " at ";
+			outString += pos.getLocationDescription();
+			outString += "<a href='" + context.planningVisit.getPos().getMapHref() + "'>See map</a></p>";
+		}
 		outString += "<p>Date and time " + context.planningVisit.getTimeScheduled() + "</p>";
 		if (context.planningVisit.getSpec() != null) {
 			outString += "<p>Your specialist is " + context.planningVisit.getSpec().getName() + "</p>";
