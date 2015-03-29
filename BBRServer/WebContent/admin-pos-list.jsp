@@ -3,8 +3,8 @@
 <t:admin-grid-wrapper title="Points of sale (service)">
 	<jsp:body>
 		<t:grid method="BBRPoSes" editPage="admin-pos-edit.jsp" createPage="admin-pos-create.jsp" title="Point of Sales">
-			<t:grid-item label="Title" field="title" sort="ascending"/>
-			<t:grid-item label="Location Description" field="locationDescription" sort="ascending"/>
+			<t:grid-item label="Title" field="title" sort="asc"/>
+			<t:grid-item label="Location Description" field="locationDescription" sort="asc"/>
 			<t:grid-item label="Shop" field="shop.title"/>
 			<t:grid-item label="Start Work Hour" field="startWorkHour"/>
 			<t:grid-item label="End Work Hour" field="endWorkHour"/>

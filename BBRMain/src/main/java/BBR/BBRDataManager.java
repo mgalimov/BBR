@@ -1,9 +1,12 @@
 package BBR;
 
+import java.util.Collections;
+import java.util.Hashtable;
 import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.transform.Transformers;
 
 //http://stackoverflow.com/questions/3403909/get-generic-type-of-class-at-runtime
 public class BBRDataManager<T extends BBRDataElement> {
@@ -25,29 +28,39 @@ public class BBRDataManager<T extends BBRDataElement> {
         return new BBRDataSet<T>(list);
     }
 
-    @SuppressWarnings({ "unchecked", "unused" })
 	public BBRDataSet<T> list(int pageNumber, int pageSize, String orderBy) {
+        return list(pageNumber, pageSize, "", orderBy);
+    }
+    
+    @SuppressWarnings({ "unchecked", "unused" })
+   	public BBRDataSet<T> list(int pageNumber, int pageSize, String fields, String orderBy) {
         boolean tr = BBRUtil.beginTran(sessionIndex);
-        
-        Session session = BBRUtil.getSession(sessionIndex);
-        if (orderBy == null)
-        	orderBy = "";
-        if (orderBy.length() > 0) {
-        	orderBy = orderBy.trim();
-        	if (!orderBy.startsWith("order by"))
-        		orderBy = "order by " + orderBy.trim();
-        }
-        Long count = (Long)session.createQuery("Select count(*) from " + typeName).uniqueResult();
-        Query query = session.createQuery("from " + typeName + " " + orderBy);
-        query.setFirstResult((pageNumber - 1) * pageSize);
-        if (pageSize > maxRowsToReturn && maxRowsToReturn > 0)
-        	pageSize = maxRowsToReturn;
-        query.setMaxResults(pageSize);
-        List<T> list = query.list();
-        BBRDataSet<T> ds = new BBRDataSet<T>(list, count);
-        BBRUtil.commitTran(sessionIndex, tr);
-		
-        return ds;
+           
+       Session session = BBRUtil.getSession(sessionIndex);
+       if (orderBy == null)
+       	orderBy = "";
+       if (orderBy.length() > 0) {
+       	orderBy = orderBy.trim();
+       	if (!orderBy.startsWith("order by"))
+       		orderBy = "order by " + orderBy.trim();
+       }
+       
+       if (fields == null) 
+    	   fields = "";
+       if (fields == "") 
+    	   fields = "*";
+       
+       Long count = (Long)session.createQuery("Select count(*) from " + typeName).uniqueResult();
+       Query query = session.createQuery(" from " + typeName + " " + orderBy);
+       query.setFirstResult((pageNumber - 1) * pageSize);
+       if (pageSize > maxRowsToReturn && maxRowsToReturn > 0)
+       	pageSize = maxRowsToReturn;
+       query.setMaxResults(pageSize);
+       List<T> list = query.list();
+       BBRDataSet<T> ds = new BBRDataSet<T>(list, count);
+       BBRUtil.commitTran(sessionIndex, tr);
+	
+       return ds;
     }
     
 	public void delete(T record){

@@ -137,7 +137,8 @@ public class BBRVisit extends BBRDataElement {
 		vs.spec = spec;
 		vs.procedure = procedure;
 		vs.posTitle = posTitle;
-		return BBRUtil.gson.toJson(vs);
+		String s = BBRUtil.gson.toJson(vs); 
+		return s;
 	}
 	
 	@SuppressWarnings("unused")

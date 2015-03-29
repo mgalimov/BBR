@@ -90,11 +90,16 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 		String respText = "";
 		try {
 			BBRParams params = new BBRParams(request.getReader());
-			String pageNum = params.get("page_num");
-			String rowsPerPage = params.get("rows_per_page");
-			Hashtable<Integer, Hashtable<String, String>> sortingFields = params.getArray("sorting");
+			String startItem = params.get("start");
+			String pageLength = params.get("length");
+			Integer rowsPerPage = Integer.parseInt(pageLength);
+			Integer pageNum = Integer.parseInt(startItem) / rowsPerPage;
+			Hashtable<Integer, Hashtable<String, String>> sortingFields = params.getArray("order");
+			Hashtable<Integer, Hashtable<String, String>> columns = params.getArray("columns");
 			
-			respText = getData(Integer.parseInt(pageNum), Integer.parseInt(rowsPerPage), sortingFields, params, request, response);
+			String drawIndex = params.get("draw");
+			respText = getData(pageNum, rowsPerPage, columns, sortingFields, params, request, response);
+			respText = "{\"draw\":" + drawIndex + "," + respText.substring(1);
 		} catch (Exception ex) {
 			respText = ex.getLocalizedMessage();
 			response.setStatus(700);
@@ -107,8 +112,12 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 	
 	// Application methods
 	
-	protected String getData(int pageNumber, int pageSize, Hashtable<Integer, Hashtable<String, String>> sortingFields, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
-		return manager.list(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields)).toJson();
+	protected String getData(int pageNumber, int pageSize, 
+								Hashtable<Integer, Hashtable<String, String>> fields,
+								Hashtable<Integer, Hashtable<String, String>> sortingFields,
+								BBRParams params, HttpServletRequest request, 
+								HttpServletResponse response) {
+		return manager.list(pageNumber, pageSize, BBRContext.getSelectFields(fields), BBRContext.getOrderBy(sortingFields, fields)).toJson();
 	}
 
 	protected String getReferenceData(String query, BBRParams params, HttpServletRequest request, HttpServletResponse response) {

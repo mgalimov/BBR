@@ -4,7 +4,7 @@
 	<jsp:body>
 		<t:grid method="BBRProcedures" editPage="manager-proc-edit.jsp" createPage="manager-proc-create.jsp" title="Procedures">
 			<t:grid-item label="Point of sale (service)" field="pos.title"/>
-			<t:grid-item label="Title" field="title" sort="ascending"/>
+			<t:grid-item label="Title" field="title" sort="asc"/>
 			<t:grid-item label="length, hrs" field="length"/>
 			<t:grid-item label="Price" field="price"/>
 			<t:grid-item label="Currency" field="currency"/>

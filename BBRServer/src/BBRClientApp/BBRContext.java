@@ -157,7 +157,8 @@ public class BBRContext {
 		return false;
 	}
 	
-    public static String getOrderBy(Hashtable<Integer, Hashtable<String, String>> sortingFields) {
+    public static String getOrderBy(Hashtable<Integer, Hashtable<String, String>> sortingFields, 
+    								Hashtable<Integer, Hashtable<String, String>> columns) {
     	String orderBy = "";
     	Hashtable<String, String> element;
     	
@@ -166,14 +167,12 @@ public class BBRContext {
     	
     	for (Integer key : keys) {
     		element = sortingFields.get(key);
-    		String orderBylocal = element.get("field");
-    		if (element.get("order").equals("ascending"))
-    			orderBylocal += " asc, ";
-    		else if (element.get("order").equals("descending"))
-    			orderBylocal += " desc, ";
-    		else 
-    			orderBylocal = "";
-    		orderBy += orderBylocal;
+    		Integer orderByColumnIndex = Integer.parseInt(element.get("column"));
+    		String orderBylocal = columns.get(orderByColumnIndex).get("data");
+    		String direction = element.get("dir");
+    		if (direction != null)
+    			orderBylocal += " " + direction;
+    		orderBy += orderBylocal + ", ";
     	}
     	if (orderBy.length() > 2)
     		orderBy = orderBy.substring(0, orderBy.length() - 2);
@@ -194,6 +193,22 @@ public class BBRContext {
 
 	public void setLastVisitStep(int lastVisitStep) {
 		this.lastVisitStep = lastVisitStep;
+	}
+
+	public static String getSelectFields(Hashtable<Integer, Hashtable<String, String>> fields) {
+	       String selectFields = "";
+	       List<Integer> keys = Collections.list(fields.keys());
+	   	   Collections.sort(keys);
+	   	   Hashtable<String, String> element;
+	     
+	   	   for (Integer key: keys) {
+	    	   element = fields.get(key);
+	    	   selectFields += element.get("data") + ", ";
+	       }
+	       if (selectFields.length() > 0)
+	    	   selectFields = selectFields.substring(0, selectFields.length() - 2);
+	       
+	       return selectFields;
 	}
 
 }

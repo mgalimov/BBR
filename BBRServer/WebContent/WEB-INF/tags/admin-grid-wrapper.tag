@@ -59,6 +59,9 @@
 		<script type="text/javascript" src="js/jquery.bs_grid.js"></script>
 		<script type="text/javascript" src="js/bs_grid/localization/en.js"></script>
 
+		<!--  ANOTHER DATAGRID -->
+		<link rel="stylesheet" type="text/css" href="css/jquery.dataTables.min.css">
+		<script type="text/javascript" src="js/jquery.dataTables.js"></script>
   	</head>
   	<body>
 		<t:top-menu title="Control panel. ${title}" />

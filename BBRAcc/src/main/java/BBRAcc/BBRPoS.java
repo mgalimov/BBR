@@ -92,7 +92,8 @@ public class BBRPoS extends BBRDataElement {
 		else
 			ps.endWorkHour = "21:00";
 		ps.shop = shop;
-		return BBRUtil.gson.toJson(ps);
+		String s = BBRUtil.gson.toJson(ps);
+		return s;
 	}
 	
 	@SuppressWarnings("unused")

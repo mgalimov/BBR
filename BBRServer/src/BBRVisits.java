@@ -113,10 +113,13 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 	}
 	
 	@Override
-	protected String getData(int pageNumber, int pageSize, Hashtable<Integer, Hashtable<String, String>> sortingFields, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+	protected String getData(int pageNumber, int pageSize, 
+								Hashtable<Integer, Hashtable<String, String>> sortingFields, 
+								Hashtable<Integer, Hashtable<String, String>> columns, 
+								BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		BBRContext context = BBRContext.getContext(request);
 		if (context.user != null)
-			return manager.list(context.user.getId(), pageNumber, pageSize, BBRContext.getOrderBy(sortingFields)).toJson();
+			return manager.list(context.user.getId(), pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
 		else
 			return "";
 	}

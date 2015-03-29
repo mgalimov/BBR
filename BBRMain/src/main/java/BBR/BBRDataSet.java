@@ -3,24 +3,24 @@ package BBR;
 import java.util.*;
 
 public class BBRDataSet<T extends BBRDataElement> {
-	public String total_rows;
-	public List<T> page_data;
+	public String totalRecords;
+	public List<T> data;
 	
 	public BBRDataSet (List<T> rows) {
 		Integer i = rows.size();
-		total_rows = i.toString();
-		this.page_data = rows;
+		totalRecords = i.toString();
+		this.data = rows;
 	}
 
 	public BBRDataSet (List<T> rows, Long realSize) {
-		total_rows = realSize.toString();
-		this.page_data = rows;
+		totalRecords = realSize.toString();
+		this.data = rows;
 	}
 
 	public String toJson() {
-		String s = "{\"total_rows\":\"" + total_rows + "\",\"page_data\":[";
-		for (T el: page_data) {
-			s += el.toJson() + ",";
+		String s = "{\"recordsTotal\":\"" + totalRecords + "\",\"recordsFiltered\":\"" + totalRecords + "\",\"data\":[";
+		for (BBRDataElement el: data) {
+			s += BBRUtil.gson.toJson(el) + ",";
 		}
 		s = s.substring(0, s.length() - 1);
 		s += "]}";

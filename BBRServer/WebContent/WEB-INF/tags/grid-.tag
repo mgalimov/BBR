@@ -7,10 +7,8 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 
-<c:set var="items" scope="request" value="{data: \"id\"}"/>
-<c:set var="itemsHF" scope="request" value="<th>ID</th>"/>
+<c:set var="items" scope="request" value="{field: \"id\", header: \"ID\", visible: \"no\"}"/>
 <c:set var="sorting" scope="request" value=""/>
-<c:set var="index" scope="request" value="0"/>
 
 <!-- http://www.onjava.com/pub/a/onjava/excerpt/jserverpages3_ch11/ -->
 
@@ -46,19 +44,9 @@
   </div>
 </div>
 
-<table id="grid">
-	<jsp:doBody/>
-	<thead>
-		<tr>
-			<c:out value="${itemsHF}" escapeXml="false"/>
-		</tr>
-	</thead>
-	<tfoot>
-		<tr>
-			<c:out value="${itemsHF}" escapeXml="false"/>
-		</tr>
-	</tfoot>
-</table>
+<div id="grid"></div>
+
+<jsp:doBody/>
 		
 <script>
 	$('#create').click(
@@ -82,15 +70,26 @@
 				}
 			});
 	
-	$('#grid').DataTable({
-	 			ajax: {
-	 				url: '${method}',
-	 				type: 'POST'
-	 			},
-	 			columns: [${items}],
-	 	    	order: [${sorting}],
-	 	    	serverSide: true
-		  	});
-	// 
-	</script>
-
+	$('#grid').bs_grid({
+	 			ajaxFetchDataURL: '${method}',
+	 	        row_primary_key: 'id',
+	 	    	columns: [
+	 	    	    ${items}
+	 	    	],
+	 	        sorting: [
+	 	            ${sorting}
+	 	        ],
+	 	        useFilters: false,
+	 	        useSortableLists: true,
+	 	        showSortingIndicator: true,
+	 	     	bootstrap_version: '3',
+	 	     	pageNum: 1,
+	 	  		rowsPerPage: 10,
+	 	  		maxRowsPerPage: 100,
+	 	  		rowSelectionMode: 'single',
+	 	  		debug_mode: 'no',
+	     	  	onDatagridError: function(event, data) {
+	  	          alert(data['err_description'] + ' (' + data['err_code'] + ')');
+	  	    }
+	  	});
+</script>
