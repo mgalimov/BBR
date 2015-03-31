@@ -13,6 +13,8 @@ import BBRAcc.BBRPoSManager;
 import BBRClientApp.BBRContext;
 import BBRCust.BBRProcedure;
 import BBRCust.BBRProcedureManager;
+import BBRCust.BBRSpecialist;
+import BBRCust.BBRSpecialistManager;
 import BBRCust.BBRVisitManager;
 import BBRCust.BBRVisit;
 import BBRCust.BBRVisit.BBRVisitStatus;
@@ -49,17 +51,22 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			if (context.planningVisit == null)
 				throw new Exception(BBRErrors.ERR_VISIT_NOTFOUND);
 			
-			BBRProcedure proc = null;
-			
 			if (!params.get("procedure").isEmpty()) {
 				Long procedureId = Long.parseLong(params.get("procedure"));
 
 				BBRProcedureManager mgrProc = new BBRProcedureManager();
-				proc = mgrProc.findById(procedureId);						
+				BBRProcedure proc = mgrProc.findById(procedureId);						
 				context.planningVisit.setProcedure(proc);
 			}
 			
+			if (!params.get("spec").isEmpty()) {
+				Long specId = Long.parseLong(params.get("spec"));
 
+				BBRSpecialistManager mgrSpec = new BBRSpecialistManager();
+				BBRSpecialist spec = mgrSpec.findById(specId);						
+				context.planningVisit.setSpec(spec);
+			}
+			
 			DateFormat df = new SimpleDateFormat("M/d/y H:mm");
 			try {
 				Date timeScheduled = df.parse(params.get("timeScheduled"));
@@ -84,6 +91,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 					context.user, 
 					context.planningVisit.getTimeScheduled(), 
 					context.planningVisit.getProcedure(), 
+					context.planningVisit.getSpec(), 
 					context.planningVisit.getUserName(),
 					context.planningVisit.getUserContacts()));
 			

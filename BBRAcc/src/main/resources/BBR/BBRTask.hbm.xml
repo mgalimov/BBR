@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="BBRCust">
+    <class name="BBRTask" table="tasks">
+        <id name="id" column="TASK_ID">
+            <generator class="native"/>
+        </id>
+        <property name="title" column="TITLE"/>
+        <property name="deadline" column="DEADLINE"/>
+        <property name="createdAt" column="CREATEDAT"/>
+        <property name="text" column="TEXT"/>
+        <property name="state" column="STATE" not-null="true"/>
+        <property name="objectType" column="OBJECT_TYPE" />
+        <property name="objectId" column="OBJECT_ID" />
+        <many-to-one name="performer" column="USER_ID" class="BBRAcc.BBRUser" lazy="false" fetch="select"/>
+    </class>
+</hibernate-mapping>

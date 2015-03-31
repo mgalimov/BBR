@@ -85,18 +85,20 @@ public class BBRDataManager<T extends BBRDataElement> {
     }
     
     @SuppressWarnings({ "unchecked", "unused" })
-	public BBRDataSet<T> list(String queryTerm, String sortBy) {
+	public BBRDataSet<T> list(String queryTerm, String sortBy, String where) {
         boolean tr = BBRUtil.beginTran(sessionIndex);
         
         Session session = BBRUtil.getSession(sessionIndex);
    		String orderBy = " order by " + sortBy;
-   		String where = "";
    		
    		if (queryTerm != null && !queryTerm.equals("")) {
    			queryTerm.replaceAll("\\s", "%");
-   			where = " where title like '%" + queryTerm + "%'";
+   			where = titleField + "like '%" + queryTerm + "%' " + where;
    		}
-   			
+   		
+   		if (!where.equals(""))
+   			where = " where " + where;
+   		
         Long count = (Long)session.createQuery("Select count(*) from " + typeName + where).uniqueResult();
         Query query = session.createQuery("from " + typeName + where + orderBy);
         
@@ -109,6 +111,11 @@ public class BBRDataManager<T extends BBRDataElement> {
         return new BBRDataSet<T>(list, count);
     }
 
+	public BBRDataSet<T> list(String queryTerm, String sortBy) {
+		return list(queryTerm, sortBy, "");
+	}
+
+    
     public String getTitleField() {
     	return titleField;
     }
