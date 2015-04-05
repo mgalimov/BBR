@@ -128,10 +128,5 @@
  	});
 
  	$("#specinput").on("change", select);
- 	$("#scheduleTable td").on("click", function(e) {setTime($(e.target).parent());});
-
- 	$("#procinput").on("change", function(e) {
-		$("#summary").text("hey!");
- 	});
- 	
+ 	$("#scheduleTable td").on("click", function(e) {setTime($(e.target).parent());}); 	
 </script>

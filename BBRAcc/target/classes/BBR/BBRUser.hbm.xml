@@ -14,5 +14,7 @@
         <property name="encodedPassword" column="PASS"/>
         <property name="approved" column="APPROVED"/>
         <property name="role" column="ROLE"/>
+        <many-to-one name="shop" column="SHOP_ID" class="BBRAcc.BBRShop" lazy="false" fetch="select"/>
+        <many-to-one name="pos" column="POS_ID" class="BBRAcc.BBRPoS" lazy="false" fetch="select"/>
     </class>
 </hibernate-mapping>

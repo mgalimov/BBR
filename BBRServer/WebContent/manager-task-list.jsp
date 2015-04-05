@@ -4,6 +4,7 @@
 	<jsp:body>
 		<t:grid method="BBRTasks" editPage="manager-task-edit.jsp" createPage="manager-task-create.jsp" title="Tasks">
 			<t:grid-item label="Title" field="title" sort="asc"/>
+			<t:grid-item label="Point of Service" field="pos"/>
 			<t:grid-item label="Performer" field="performer"/>
 			<t:grid-item label="Created" field="createdAt"/>
 			<t:grid-item label="Deadline" field="deadline"/>

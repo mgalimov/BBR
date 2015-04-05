@@ -1,12 +1,15 @@
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Hashtable;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import BBRAcc.BBRUser;
+import BBRAcc.BBRUser.BBRUserRole;
 import BBRAcc.BBRUserManager;
+import BBRClientApp.BBRContext;
 import BBRCust.BBRTask;
 import BBRCust.BBRTaskManager;
 
@@ -67,4 +70,27 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 		return null;		
 	}
 	
+	@Override
+	protected String getData(int pageNumber, int pageSize, 
+			Hashtable<Integer, Hashtable<String, String>> fields,
+			Hashtable<Integer, Hashtable<String, String>> sortingFields,
+			BBRParams params, HttpServletRequest request, 
+			HttpServletResponse response) {
+		BBRContext context = BBRContext.getContext(request); 
+		if (context.user == null)
+			return null;
+		if (context.user.getRole() < BBRUserRole.ROLE_SHOP_ADMIN)
+			return null;
+		
+		String where = "";
+		if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
+			if (context.user.getPos() != null)
+				where = " pos.id = " + context.user.getPos() + " or ";
+		if (context.user.getRole() == BBRUserRole.ROLE_SHOP_OWNER)
+			if (context.user.getShop() != null)
+				where = " pos.shop.id = " + context.user.getPos() + " or ";
+		where += " user.id = " + context.user.getId();
+		
+		return manager.list(pageNumber, pageSize, where, BBRContext.getOrderBy(sortingFields, fields)).toJson();
+	}
 }

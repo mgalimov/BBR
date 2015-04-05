@@ -3,11 +3,13 @@ package BBRCust;
 import java.util.Date;
 
 import BBR.BBRDataElement;
+import BBRAcc.BBRPoS;
 import BBRAcc.BBRUser;
 
 public class BBRTask extends BBRDataElement {
 	private Long id;
 	private String title;
+	private BBRPoS pos;
 	private BBRUser performer;
 	private Date deadline;
 	private Date createdAt;
@@ -94,6 +96,14 @@ public class BBRTask extends BBRDataElement {
 
 	public void setObjectId(Long objectId) {
 		this.objectId = objectId;
+	}
+
+	public BBRPoS getPos() {
+		return pos;
+	}
+
+	public void setPos(BBRPoS pos) {
+		this.pos = pos;
 	}
 	
 }
