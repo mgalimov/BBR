@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRPoSManager;
+import BBRClientApp.BBRContext;
 import BBRCust.BBRProcedure;
 import BBRCust.BBRProcedureManager;
 
@@ -68,5 +69,12 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 		}
 		return null;		
 	}
-	
+
+	@Override
+	protected String getReferenceData(String query, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+		BBRContext context = BBRContext.getContext(request);
+		return manager.list(query, manager.getTitleField(), context.planningVisit).toJson();
+	}
+
+
 }

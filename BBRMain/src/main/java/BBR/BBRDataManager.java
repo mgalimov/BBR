@@ -41,6 +41,9 @@ public class BBRDataManager<T extends BBRDataElement> {
        		orderBy = "order by " + orderBy.trim();
        }
        
+       if (!where.equals("") && !where.trim().startsWith("where"))
+    	   where = " where " + where;
+       
        Long count = (Long)session.createQuery("Select count(*) from " + typeName + " " + where).uniqueResult();
        
        Query query = session.createQuery( " from " + typeName + " " + where + " " + orderBy);
@@ -96,8 +99,8 @@ public class BBRDataManager<T extends BBRDataElement> {
    			where = titleField + "like '%" + queryTerm + "%' " + where;
    		}
    		
-   		if (!where.equals(""))
-   			where = " where " + where;
+        if (!where.equals("") && !where.trim().startsWith("where"))
+     	   where = " where " + where;
    		
         Long count = (Long)session.createQuery("Select count(*) from " + typeName + where).uniqueResult();
         Query query = session.createQuery("from " + typeName + where + orderBy);

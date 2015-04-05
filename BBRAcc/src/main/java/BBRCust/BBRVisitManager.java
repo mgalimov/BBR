@@ -43,6 +43,10 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        if (visit.getLength() < minimalLength)
 	        	visit.setLength(minimalLength);
 	        session.save(visit);
+	        
+	        BBRTaskManager tmgr = new BBRTaskManager();
+	        tmgr.createAndStoreTask("Approve visit", null, new Date(), new Date(), 
+	        						"Approve visit id = " + visit.getId(), BBRVisit.class.getName(), visit.getId());
 	
 	        BBRUtil.commitTran(sessionIndex, tr);
 	        return visit.getId().toString();

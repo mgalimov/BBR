@@ -15,7 +15,8 @@ public class BBRUser extends BBRDataElement {
 	private String lastName;
 	private String encodedPassword;
 	private boolean approved;
-	private BBRDataSet<BBRShop> shops;
+	private BBRShop shop;
+	private BBRPoS pos;
 
 	public class BBRUserRole {
 		public static final int ROLE_BBR_OWNER = 256;
@@ -84,6 +85,21 @@ public class BBRUser extends BBRDataElement {
 		return role;
 	}
 
+	public void setShop(BBRShop shop) {
+		this.shop = shop;
+	}
+	
+	public BBRShop getShop() {
+		return shop;
+	}
+
+	public void setPos(BBRPoS pos) {
+		this.pos = pos;
+	}
+	
+	public BBRPoS getPos() {
+		return pos;
+	}
 	public boolean comparePasswordTo(String comparingEncodedPassword) {
 		return encodedPassword.equals(comparingEncodedPassword);
 	}

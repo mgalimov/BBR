@@ -3,6 +3,7 @@ package BBRCust;
 import org.hibernate.Session;
 
 import BBR.BBRDataManager;
+import BBR.BBRDataSet;
 import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
 import BBRCust.BBRCustReg;
@@ -30,4 +31,12 @@ public class BBRProcedureManager extends BBRDataManager<BBRProcedure>{
 
         BBRUtil.commitTran(sessionIndex, tr);
     }
+
+	public BBRDataSet<BBRProcedure> list(String query, String titleField, BBRVisit visit) {
+		if (visit == null)
+			return null;
+		
+		String where = "visit.id = " + visit.getId();
+		return (BBRDataSet<BBRProcedure>)list(query, titleField, where);
+	}
 }

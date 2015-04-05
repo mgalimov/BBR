@@ -16,5 +16,6 @@
         <property name="objectType" column="OBJECT_TYPE" />
         <property name="objectId" column="OBJECT_ID" />
         <many-to-one name="performer" column="USER_ID" class="BBRAcc.BBRUser" lazy="false" fetch="select"/>
+        <many-to-one name="pos" column="POS_ID" class="BBRAcc.BBRPoS" lazy="false" fetch="select"/>
     </class>
 </hibernate-mapping>
