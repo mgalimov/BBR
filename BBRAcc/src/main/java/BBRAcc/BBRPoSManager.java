@@ -75,4 +75,14 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 
         return new BBRDataSet<BBRPoS>(list, count);
 	}
+	
+	@Override
+    public String wherePos(Long posId) {
+    	return "id = " + posId;
+    };
+    
+    @Override
+    public String whereShop(Long shopId) {
+    	return "shop.id = " + shopId;
+    };
 }

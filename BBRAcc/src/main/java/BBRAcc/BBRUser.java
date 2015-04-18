@@ -20,10 +20,9 @@ public class BBRUser extends BBRDataElement {
 
 	public class BBRUserRole {
 		public static final int ROLE_BBR_OWNER = 256;
-		public static final int ROLE_SHOP_OWNER = 16;
 		public static final int ROLE_SHOP_ADMIN = 8;
-		public static final int ROLE_SHOP_BRANCH_ADMIN = 4;
-		public static final int ROLE_SHOP_SPECIALIST = 2;
+		public static final int ROLE_POS_ADMIN = 4;
+		public static final int ROLE_POS_SPECIALIST = 2;
 		public static final int ROLE_VISITOR = 1;
 	}
 

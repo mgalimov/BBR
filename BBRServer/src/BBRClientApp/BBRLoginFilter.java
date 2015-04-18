@@ -38,7 +38,7 @@ public class BBRLoginFilter implements Filter {
     		chain.doFilter(request, response);
     	} else
         if (!context.isPageAllowed(page)){
-        	response.sendRedirect(context.getWelcomePage());
+       		response.sendRedirect(context.getWelcomePage());
         } else
         	chain.doFilter(request, response);
     }

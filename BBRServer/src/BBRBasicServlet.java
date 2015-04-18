@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import BBR.BBRDataElement;
 import BBR.BBRDataManager;
 import BBR.BBRErrors;
+import BBRAcc.BBRUser.BBRUserRole;
 import BBRClientApp.BBRContext;
 
 @SuppressWarnings("rawtypes")
@@ -117,11 +118,29 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 								Hashtable<Integer, Hashtable<String, String>> sortingFields,
 								BBRParams params, HttpServletRequest request, 
 								HttpServletResponse response) {
-		return manager.list(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, fields)).toJson();
+		BBRContext context = BBRContext.getContext(request);
+		String where = "";
+		if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
+			if (context.user.getPos() != null)
+				where = manager.wherePos(context.user.getPos().getId());
+		if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
+			if (context.user.getShop() != null)
+				where = manager.whereShop(context.user.getShop().getId());
+		
+		return manager.list(pageNumber, pageSize, where, BBRContext.getOrderBy(sortingFields, fields)).toJson();
 	}
 
 	protected String getReferenceData(String query, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
-		return manager.list(query, manager.getTitleField()).toJson();
+		BBRContext context = BBRContext.getContext(request);
+		String where = "";
+		if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
+			if (context.user.getPos() != null)
+				where = manager.wherePos(context.user.getPos().getId());
+		if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
+			if (context.user.getShop() != null)
+				where = manager.whereShop(context.user.getShop().getId());
+		
+		return manager.list(query, manager.getTitleField(), where).toJson();
 	}
 
 	@SuppressWarnings("unchecked")

@@ -50,4 +50,21 @@ public class BBRShopManager extends BBRDataManager<BBRShop>{
 
         return new BBRDataSet<BBRShop>(list, count);
     }
+    
+    @Override
+    public String wherePos(Long posId) {
+    	BBRPoSManager mgr = new BBRPoSManager();
+    	BBRPoS pos = mgr.findById(posId);
+    	if (pos != null)
+    		if (pos.getShop() != null)
+    			return "id = " + pos.getShop().getId();
+    	
+    	return "1=0";
+    };
+    
+    @Override
+    public String whereShop(Long shopId) {
+    	return "id = " + shopId;
+    };
+    
 }

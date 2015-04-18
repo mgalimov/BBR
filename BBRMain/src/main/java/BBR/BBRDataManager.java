@@ -118,7 +118,6 @@ public class BBRDataManager<T extends BBRDataElement> {
 		return list(queryTerm, sortBy, "");
 	}
 
-    
     public String getTitleField() {
     	return titleField;
     }
@@ -126,4 +125,12 @@ public class BBRDataManager<T extends BBRDataElement> {
     public String getClassTitle() {
     	return classTitle;
     }
+    
+    public String wherePos(Long posId) {
+    	return "pos.id = " + posId;
+    };
+    
+    public String whereShop(Long shopId) {
+    	return "shop.id = " + shopId;
+    };
 }

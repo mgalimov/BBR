@@ -16,4 +16,5 @@ public class BBRErrors {
 	public static final String ERR_PROC_NOTFOUND = "Procedure not found";
 	public static final String ERR_RECORD_NOTFOUND = "Record not found";
 	public static final String ERR_DATE_INCORRECT = "Date/time is incorrect";
+	public static final String ERR_POS_MUST_BE_SPECIFIED = "PoS must be specified";
 }

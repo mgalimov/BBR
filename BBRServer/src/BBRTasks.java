@@ -1,15 +1,12 @@
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Hashtable;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import BBRAcc.BBRUser;
-import BBRAcc.BBRUser.BBRUserRole;
 import BBRAcc.BBRUserManager;
-import BBRClientApp.BBRContext;
 import BBRCust.BBRTask;
 import BBRCust.BBRTaskManager;
 
@@ -37,7 +34,7 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 				deadline = createdAt;
 			}
 			String text = params.get("text");
-			manager.createAndStoreTask(title, performer, createdAt, deadline, text, null, null);
+			manager.createAndStoreTask(title, performer, null, createdAt, deadline, text, null, null);
 		}
 		return "";
 	}
@@ -70,6 +67,7 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 		return null;		
 	}
 	
+/*
 	@Override
 	protected String getData(int pageNumber, int pageSize, 
 			Hashtable<Integer, Hashtable<String, String>> fields,
@@ -79,18 +77,19 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 		BBRContext context = BBRContext.getContext(request); 
 		if (context.user == null)
 			return null;
-		if (context.user.getRole() < BBRUserRole.ROLE_SHOP_ADMIN)
+		if (context.user.getRole() < BBRUserRole.ROLE_POS_ADMIN)
 			return null;
 		
 		String where = "";
-		if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
+		if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
 			if (context.user.getPos() != null)
 				where = " pos.id = " + context.user.getPos() + " or ";
-		if (context.user.getRole() == BBRUserRole.ROLE_SHOP_OWNER)
+		if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
 			if (context.user.getShop() != null)
 				where = " pos.shop.id = " + context.user.getPos() + " or ";
 		where += " user.id = " + context.user.getId();
 		
 		return manager.list(pageNumber, pageSize, where, BBRContext.getOrderBy(sortingFields, fields)).toJson();
 	}
+*/
 }

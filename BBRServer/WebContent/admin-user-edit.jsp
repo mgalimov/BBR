@@ -9,7 +9,7 @@
 			<t:card-item label="Shop" field="shop" type="reference" referenceFieldTitle="title" referenceMethod="BBRShops" isRequired="required" />
 			<t:card-item label="PoS" field="pos" type="reference" referenceFieldTitle="title" referenceMethod="BBRPoSes" isRequired="required" />
 			<t:card-item label="Approved" field="approved" type="select" options="true:Approved,false:Not approved yet" isRequired="required" />
-			<t:card-item label="Role" field="role" type="select" options="1:Visitor,2:Shop specialist,4:Branch administrator,8:Shop administrator,16:Shop owner,256:BBR Service Owner" isRequired="required" />
+			<t:card-item label="Role" field="role" type="select" options="1:Visitor,2:Pos specialist,4:Pos administrator,8:Shop administrator,256:BBR Service Owner" isRequired="required" />
 		</t:card>
 	</jsp:body>
 </t:admin-card-wrapper>

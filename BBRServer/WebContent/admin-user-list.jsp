@@ -6,8 +6,8 @@
 			<t:grid-item label="Email" field="email" sort="asc"/>
 			<t:grid-item label="First name" field="firstName"/>
 			<t:grid-item label="Last name" field="lastName"/>
-			<t:grid-item label="Shop" field="shop"/>
-			<t:grid-item label="PoS" field="pos"/>
+			<t:grid-item label="Shop" field="shop.title"/>
+			<t:grid-item label="PoS" field="pos.title"/>
 			<t:grid-item label="Approved" field="approved"/>
 			<t:grid-item label="Role" field="role"/>
 		</t:grid>

@@ -10,11 +10,12 @@
    request.setAttribute("allowed", context.isPageAllowed(href));%>
 
 <c:if test="${allowed}">
-	<c:if test="${active.equals('true')}">
+	<c:choose>
+	<c:when test="${active.equals('true')}">
 		<li><a href="${href}" class="active"><c:out value="${title}"/></a></li>
-		<c:otherwise>
-			<li><a href="${href}"><c:out value="${title}"/></a></li>
-		</c:otherwise>
-	</c:if>
-	<li><a href="${href}"><c:out value="${title}"/></a></li>
+	</c:when>
+	<c:otherwise>
+		<li><a href="${href}"><c:out value="${title}"/></a></li>
+	</c:otherwise>
+	</c:choose>
 </c:if>

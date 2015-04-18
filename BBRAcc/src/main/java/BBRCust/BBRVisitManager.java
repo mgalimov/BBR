@@ -45,7 +45,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        session.save(visit);
 	        
 	        BBRTaskManager tmgr = new BBRTaskManager();
-	        tmgr.createAndStoreTask("Approve visit", null, new Date(), new Date(), 
+	        tmgr.createAndStoreTask("Approve visit", null, pos, new Date(), new Date(), 
 	        						"Approve visit id = " + visit.getId(), BBRVisit.class.getName(), visit.getId());
 	
 	        BBRUtil.commitTran(sessionIndex, tr);

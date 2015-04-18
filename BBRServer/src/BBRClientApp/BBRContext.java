@@ -17,7 +17,6 @@ import BBRCust.BBRVisit;
 
 public class BBRContext {
 	public BBRAcc.BBRUser user = null;
-	public BBRAcc.BBRShop shop = null;
 	private String lastSignInError = "";
 	private BBRGPS location = null;
 	private int lastVisitStep = 1;
@@ -58,10 +57,6 @@ public class BBRContext {
 		return lastSignInError;
 	}
 	
-	public String getLastSignInError() {
-		return lastSignInError;
-	}
-
 	public String SignInByCookie(HttpServletRequest request) {
 		BBRUserManager mgr = new BBRUserManager();
 		
@@ -110,12 +105,16 @@ public class BBRContext {
 		}
 			
 		try {
-			BBRUser candidate = mgr.createAndStoreUser(email, firstName, lastName, password, BBRUserRole.ROLE_VISITOR);
+			BBRUser candidate = mgr.createAndStoreUser(email, firstName, lastName, password, BBRUserRole.ROLE_VISITOR, null, null);
 			user = candidate;
 			lastSignInError = "";
 		} catch (Exception ex) {
 			lastSignInError = ex.getLocalizedMessage();
 		}
+		return lastSignInError;
+	}
+
+	public String getLastSignInError() {
 		return lastSignInError;
 	}
 
@@ -146,13 +145,14 @@ public class BBRContext {
 			else return false;
 		
 		if (user.getRole() == BBRUser.BBRUserRole.ROLE_BBR_OWNER)
-			if (page.startsWith("admin-")) return true;
+			if (page.startsWith("admin")) return true;
 
-		if (user.getRole() >= BBRUser.BBRUserRole.ROLE_SHOP_ADMIN)
-			if (page.startsWith("manager-")) return true;
+		if (user.getRole() >= BBRUser.BBRUserRole.ROLE_POS_ADMIN) {
+			if (page.startsWith("manager")) return true;
+		}
 
 		if (user.getRole() >= BBRUser.BBRUserRole.ROLE_VISITOR)
-			if (page.startsWith("general-")) return true;
+			if (page.startsWith("general")) return true;
 
 		return false;
 	}

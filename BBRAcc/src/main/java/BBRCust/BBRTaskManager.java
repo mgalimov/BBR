@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import BBR.BBRDataManager;
 import BBR.BBRDataSet;
 import BBR.BBRUtil;
+import BBRAcc.BBRPoS;
 import BBRAcc.BBRUser;
 import BBRCust.BBRCustReg;
 import BBRCust.BBRTask.BBRTaskState;
@@ -20,7 +21,7 @@ public class BBRTaskManager extends BBRDataManager<BBRTask>{
 		classTitle = "Task";	
 	}
 
-	public void createAndStoreTask(String title, BBRUser performer, Date createdAt, Date deadline,
+	public void createAndStoreTask(String title, BBRUser performer, BBRPoS pos, Date createdAt, Date deadline,
 								   String text, String objectType, Long objectId) {
         boolean tr = BBRUtil.beginTran(sessionIndex);
         Session session = BBRUtil.getSession(sessionIndex);
@@ -28,6 +29,10 @@ public class BBRTaskManager extends BBRDataManager<BBRTask>{
         BBRTask task = new BBRTask();
     	task.setTitle(title);
     	task.setPerformer(performer);
+    	if (performer != null)
+    		if (performer.getPos() != null)
+    			pos = performer.getPos();
+    	task.setPos(pos);
     	task.setDeadline(deadline);
     	task.setCreatedAt(createdAt);
     	task.setText(text);
@@ -56,4 +61,9 @@ public class BBRTaskManager extends BBRDataManager<BBRTask>{
         String where = " where performer.id=" + performerId.toString();
         return list(pageNumber, pageSize, where, orderBy);
 	}
+	
+	@Override
+    public String whereShop(Long shopId) {
+    	return "pos.shop.id = " + shopId;
+    };
 }

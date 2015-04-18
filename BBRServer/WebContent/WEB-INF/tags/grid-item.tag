@@ -23,5 +23,4 @@
 
 <c:set var="items" scope="request" value="${items.concat('}')}"/>
 
-
 <c:set var="index" scope="request" value="${index+1}"/>

@@ -98,12 +98,12 @@
 				<select class="selectized" style="display: none" id="${ft.concat('input')}" ${isRequired}  ${isDisabled}>
 				</select>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('.addOption({id: obj.').concat(field).concat('.id').concat(', ')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat(referenceFieldTitle).concat(': obj.').concat(field).concat('.').concat(referenceFieldTitle).concat('});')}"/>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('.addOption(obj.').concat(field).concat('?{id: obj.').concat(field).concat('.id').concat(', ')}"/>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat(referenceFieldTitle).concat(': obj.').concat(field).concat('.').concat(referenceFieldTitle).concat('}:{});')}"/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('
 				    $(\"#').concat(ft).concat('input\")')}"/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('.addItem(obj.').concat(field).concat('.id').concat(');')}"/>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('.addItem(obj.').concat(field).concat('?obj.').concat(field).concat('.id').concat(':null);')}"/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('
 				    $(\"#').concat(ft).concat('input\")')}"/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize.refreshOptions(false);')}"/>
