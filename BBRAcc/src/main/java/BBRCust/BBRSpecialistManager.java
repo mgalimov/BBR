@@ -93,4 +93,8 @@ public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
         return new BBRDataSet<BBRSpecialist>(list, count);
     }
 
+	@Override
+    public String whereShop(Long shopId) {
+    	return "pos.shop.id = " + shopId;
+    };
 }

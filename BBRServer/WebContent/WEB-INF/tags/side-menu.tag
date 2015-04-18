@@ -10,7 +10,7 @@
 	<t:nav-group title="Управление" level="manager">
 		<t:nav-item href="manager-spec-list.jsp" title="Специалисты" />
 		<t:nav-item href="manager-proc-list.jsp" title="Процедуры" />
-		<t:nav-item href="manager-task-list.jsp" title="Задачи" />
+		<t:nav-item href="manager-task-list.jsp" title="Задачи" badge="true" badgeMethod="BBRTasks"/>
 	</t:nav-group>
 	<t:nav-group title="Пользователь" level="general">
 		<t:nav-item href="general-plan-visit.jsp" title="Спланируйте ваш визит" />

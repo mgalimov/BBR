@@ -39,4 +39,9 @@ public class BBRProcedureManager extends BBRDataManager<BBRProcedure>{
 		String where = "visit.id = " + visit.getId();
 		return (BBRDataSet<BBRProcedure>)list(query, titleField, where);
 	}
+	
+	@Override
+    public String whereShop(Long shopId) {
+    	return "pos.shop.id = " + shopId;
+    };
 }

@@ -68,6 +68,9 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 				String q = params.get("q");
 				respText = getReferenceData(q, params, request, response);
 			} else 
+			if (operation.equals("badge")) {
+				respText = getBadgeNumber(params, request, response);
+			} else 
 			if (operation.equals("cancel")) {
 				respText = cancel(id, params, request, response);
 			} else	{
@@ -190,7 +193,21 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 	protected int processOperation(String operation, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		return -1;
 	};
-	
+
+	private String getBadgeNumber(BBRParams params, HttpServletRequest request,
+			HttpServletResponse response) {
+		BBRContext context = BBRContext.getContext(request);
+		String where = "";
+		if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
+			if (context.user.getPos() != null)
+				where = manager.wherePos(context.user.getPos().getId());
+		if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
+			if (context.user.getShop() != null)
+				where = manager.whereShop(context.user.getShop().getId());
+		
+		return manager.count(where).toString();
+	}
+
 	protected String cancel(String id, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		return "";
 	}

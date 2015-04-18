@@ -57,6 +57,20 @@ public class BBRDataManager<T extends BBRDataElement> {
 	
        return ds;
     }
+
+   	public Long count(String where) {
+       boolean tr = BBRUtil.beginTran(sessionIndex);
+           
+       Session session = BBRUtil.getSession(sessionIndex);
+       
+       if (!where.equals("") && !where.trim().startsWith("where"))
+    	   where = " where " + where;
+       
+       Long count = (Long)session.createQuery("Select count(*) from " + typeName + " " + where).uniqueResult();
+       BBRUtil.commitTran(sessionIndex, tr);
+	
+       return count;
+    }
     
    	public BBRDataSet<T> list(int pageNumber, int pageSize, String orderBy) {
        return list(pageNumber, pageSize, "", orderBy);
