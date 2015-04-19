@@ -33,10 +33,13 @@ public class BBRProcedureManager extends BBRDataManager<BBRProcedure>{
     }
 
 	public BBRDataSet<BBRProcedure> list(String query, String titleField, BBRVisit visit) {
-		if (visit == null)
-			return null;
+		String where = "";
 		
-		String where = "visit.id = " + visit.getId();
+		if (visit != null) {
+			if (visit.getPos() != null)
+				where = "pos.id = " + visit.getPos().getId();
+		}
+		
 		return (BBRDataSet<BBRProcedure>)list(query, titleField, where);
 	}
 	

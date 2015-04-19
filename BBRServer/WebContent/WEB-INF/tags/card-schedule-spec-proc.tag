@@ -109,13 +109,12 @@
 		} else {
  			obj1 = $(trObj).children().first();
  			obj2 = $(obj1).next();
+ 	 		if (!$(obj2).hasClass('info')) {
+ 	 	 		$("td.success").removeClass('success');
+ 	 	 		$(obj2).addClass('success');
+ 	 	 		timeSelected = $(obj1).text();
+ 	 		}
 		}
- 		if (!$(obj2).hasClass('info')) {
- 	 		$("td.success").removeClass('success');
- 	 		$(obj2).addClass('success');
- 	 		timeSelected = $(obj1).text();
- 	 		
- 		}
  		dateSelected = $("#dateinput").val();
  		dtString = dateSelected + " " + timeSelected;
  	 	$("#timeScheduledinput").val(dtString);
