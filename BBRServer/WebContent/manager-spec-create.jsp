@@ -6,6 +6,7 @@
 			<t:card-item label="Name" field="name" type="text" isRequired="required"/>
 			<t:card-item label="Point of service" type="reference" field="pos" referenceFieldTitle="title" referenceMethod="BBRPoSes"/>
 			<t:card-item label="Position" field="position" type="text" isRequired="required"/>
+			<t:card-item label="Status" type="select" field="status" options="1:Active,2:Inactive"/>
 		</t:card>
 	</jsp:body>
 </t:admin-card-wrapper>

@@ -49,6 +49,8 @@
 	}
 %>
 
+<h4 id="dateInfo">Set date and time</h4>
+
 <div class="panel col-md-4">
 	<div id="dateinput" class="panel"></div>
 	<t:card-item label="Select specialist" type="reference" field="spec" referenceFieldTitle="name" referenceMethod="BBRSpecialists"/>
@@ -56,7 +58,7 @@
 	<t:card-item label="" type="text" field="timeScheduled" isHidden="hidden"/>
 	<div id="summary"></div>
 </div>
-<div class="panel col-md-8">
+<div class="panel col-md-8" style="min-height: 100px; max-height: 300px; overflow-y: scroll;">
 	<table class="table table-striped table-hover" id="scheduleTable">
 		<tbody>
 			<%=schOut %>
@@ -65,20 +67,26 @@
 </div>
 
 <script>
+	var timeSelected = "12:00";
+	var procLength = 1;
+
 	function select() {
  		dateSelected = $("#dateinput").val();
  		specSelected = $("#specinput").val();
+ 		procSelected = $("#procedureinput").val();
  		
  		$("#timeScheduled").val(dateSelected + " ");
  		
 		$.get('BBRSchedule', {
 				date: dateSelected,
-				spec: specSelected
+				spec: specSelected,
+				proc: procSelected
 			}, 
 			function (responseText) {
 				obj = $.parseJSON(responseText);
 				arr = obj.list;
 				specCount = obj.specCount;
+				procLength = obj.procLength;
 				
 				var sch = new Array(47);
 
@@ -99,33 +107,44 @@
 						if ($("#oc"+i+"30").length > 0)
 							$("#oc"+i+"30").addClass('info');			
 				}
-
+				
+				setTime(null);
 			});
 	}
 
 	function setTime(trObj) {
 		if (trObj == null) {
-			timeSelected = "12:00";
-		} else {
- 			obj1 = $(trObj).children().first();
- 			obj2 = $(obj1).next();
- 	 		if (!$(obj2).hasClass('info')) {
- 	 	 		$("td.success").removeClass('success');
- 	 	 		$(obj2).addClass('success');
- 	 	 		timeSelected = $(obj1).text();
+			trObj = $("#oc"+timeSelected.replace(":", "")).parent();
+		}
+		obj1 = $(trObj).children().first();
+		obj2 = $(obj1).next();
+ 		if (!$(obj2).hasClass('info')) {
+ 	 		$("td.success").removeClass('success');
+ 	 		$("td.danger").addClass('success');
+ 	 		$("td.danger").removeClass('danger');
+ 	 		$(obj2).addClass('success');
+ 	 		timeSelected = $(obj1).text();
+ 	 		
+ 	 		for (i = 2; i <= procLength; i++) {
+ 	 			trObj = $(trObj).next();
+ 	 			obj1 = $(trObj).children().first();
+ 	 			obj2 = $(obj1).next();
+ 	 	 		if (!$(obj2).hasClass('info')) {
+ 	 	 	 		$(obj2).addClass('success');
+ 	 	 		} else
+ 	 	 		{
+ 	 	 	 		$(obj2).addClass('danger');
+ 	 	 		}
  	 		}
 		}
  		dateSelected = $("#dateinput").val();
  		dtString = dateSelected + " " + timeSelected;
  	 	$("#timeScheduledinput").val(dtString);
+ 		$("#dateInfo").text(dtString);
 	}
 	
- 	$("#dateinput").datepicker({onSelect: function(e) {
- 			select();
- 			setTime(null);
- 		}
- 	});
-
+ 	$("#dateinput").datepicker({onSelect: select});
  	$("#specinput").on("change", select);
+ 	$("#procedureinput").on("change", select);
  	$("#scheduleTable td").on("click", function(e) {setTime($(e.target).parent());}); 	
 </script>

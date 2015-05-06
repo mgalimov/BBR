@@ -21,7 +21,7 @@ public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
 		classTitle = "Specialist";	
 	}
 
-	public void createAndStoreSpecialist(String name, String position, BBRUser user, BBRPoS pos) {
+	public void createAndStoreSpecialist(String name, String position, BBRUser user, BBRPoS pos, int status) {
         boolean tr = BBRUtil.beginTran(sessionIndex);
         Session session = BBRUtil.getSession(sessionIndex);
 
@@ -30,6 +30,7 @@ public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
         spec.setPosition(position);
         spec.setUser(user);
         spec.setPos(pos);
+        spec.setStatus(status);
         session.save(spec);
 
         BBRUtil.commitTran(sessionIndex, tr);

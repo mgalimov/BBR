@@ -11,6 +11,13 @@ public class BBRSpecialist extends BBRDataElement {
 	private BBRUser user;
 	private BBRPoS pos;
 	
+	public class BBRSpecialistState {
+		public static final int SPECSTATE_ACTIVE = 1;
+		public static final int SPECSTATE_INACTIVE = 2;
+	}
+	
+	private int status;
+	
 	public BBRSpecialist() {}
 	
 	public void setId(Long id) {
@@ -53,4 +60,13 @@ public class BBRSpecialist extends BBRDataElement {
 	public void setUser(BBRUser user) {
 		this.user = user;
 	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
 }

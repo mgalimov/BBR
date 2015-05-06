@@ -6,6 +6,7 @@
 			<t:grid-item label="Name" field="name" sort="asc"/>
 			<t:grid-item label="Point of service" field="pos.title"/>
 			<t:grid-item label="Position" field="position"/>
+			<t:grid-item label="Status" field="status"/>
 		</t:grid>
 	</jsp:body>
 </t:admin-grid-wrapper>

@@ -22,10 +22,11 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 		String name = params.get("name");
 		String position = params.get("position");
 		String posId = params.get("pos");
+		int status = Integer.parseInt(params.get("status"));
 		BBRPoSManager mgrPos = new BBRPoSManager();
 		BBRPoS pos = mgrPos.findById(Long.parseLong(posId));
 		if (pos != null) {	
-			manager.createAndStoreSpecialist(name, position, null, pos);
+			manager.createAndStoreSpecialist(name, position, null, pos, status);
 		}
 		return "";
 	}
