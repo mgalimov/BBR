@@ -29,6 +29,7 @@ public class BBRSchedule extends HttpServlet {
 			BBRContext context = BBRContext.getContext(request);
 			BBRVisitManager mgr = new BBRVisitManager();
 			BBRParams params = new BBRParams(request.getQueryString());
+
 			Date dateSelected;
 			DateFormat df = new SimpleDateFormat("MM/dd/yy");
 			respText = "";
@@ -40,8 +41,10 @@ public class BBRSchedule extends HttpServlet {
 			}
 			
 			String specId = params.get("spec");
-			BBRScheduleList list = mgr.getSchedule(dateSelected, context.planningVisit.getPos().getId().toString(), specId);
-			respText = BBRUtil.gson.toJson(list);
+			String procId = params.get("proc");
+			BBRScheduleList list = mgr.getSchedule(dateSelected, context.planningVisit.getPos().getId().toString(), specId, procId);
+
+			respText += BBRUtil.gson.toJson(list); 
 		} catch (Exception ex) {
 			respText = ex.getLocalizedMessage();
 			response.setStatus(700);

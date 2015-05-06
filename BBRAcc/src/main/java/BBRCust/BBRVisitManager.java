@@ -4,8 +4,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
+
 import BBR.BBRDataManager;
 import BBR.BBRDataSet;
 import BBR.BBRUtil;
@@ -44,10 +46,14 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        	visit.setLength(minimalLength);
 	        session.save(visit);
 	        
+	        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	        
 	        BBRTaskManager tmgr = new BBRTaskManager();
 	        tmgr.createAndStoreTask("Approve visit", null, pos, new Date(), new Date(), 
-	        						"Approve visit id = " + visit.getId(), BBRVisit.class.getName(), visit.getId());
-	
+	        						df.format(visit.getTimeScheduled()) + " --> " + visit.getPos().getTitle() + 
+	        						", " + visit.getUserName() + ", " + visit.getUserContacts(), 
+	        						BBRVisit.class.getName(), visit.getId());
+
 	        BBRUtil.commitTran(sessionIndex, tr);
 	        return visit.getId().toString();
         } catch (Exception ex) {
@@ -66,14 +72,16 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	public class BBRScheduleList {
 		public Long specCount;
 		public List<Object[]> list;
+		public int procLength;
 		
-		BBRScheduleList(Long specCount, List<Object[]> list) {
+		BBRScheduleList(Long specCount, List<Object[]> list, int procLength) {
 			this.specCount = specCount;
 			this.list = list;
+			this.procLength = procLength;
 		}
 	}
 	
-	public BBRScheduleList getSchedule(Date date, String posId, String specialistId) {
+	public BBRScheduleList getSchedule(Date date, String posId, String specialistId, String procedureId) {
 		if (posId == null) return null;
 		if (posId == "") return null;
 		
@@ -120,6 +128,13 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 			
         BBRUtil.commitTran(sessionIndex, tr);
 		
-		return new BBRScheduleList(specCount, list);
+        Integer procLength = 1;
+		if (!procedureId.equals("")) {
+			BBRProcedureManager pmgr = new BBRProcedureManager();
+			BBRProcedure proc = pmgr.findById(Long.parseLong(procedureId));
+			procLength = Math.round(proc.getLength() * 2);
+		}
+
+		return new BBRScheduleList(specCount, list, procLength);
 	}
 }
