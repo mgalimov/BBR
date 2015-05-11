@@ -15,7 +15,7 @@
 </c:if>
 
 <c:if test="${type.equals('time')}">
-	<c:set var="items" scope="request" value="${items.concat(', \"render\": 
+	<c:set var="items" scope="request" value="${items.concat(', render: 
 		function(data, type, row, meta) 
 			{if (data) return data.substring(11); else return \"\";}
 		')}"/>
