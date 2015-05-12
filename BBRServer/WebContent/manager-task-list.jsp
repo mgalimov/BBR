@@ -3,22 +3,31 @@
 <t:admin-grid-wrapper title="Tasks">
 	<jsp:body>
 		<t:grid method="BBRTasks" editPage="manager-task-edit.jsp" createPage="manager-task-create.jsp" title="Tasks">
-			<t:grid-button label="" icon="glyphicon-ok" />
+			<t:grid-button label="" icon="glyphicon-ok" condition="state != 2"/>
 			<t:grid-item label="Title" field="title" sort="asc"/>
 			<t:grid-item label="Point of Service" field="pos.title"/>
 			<t:grid-item label="Performer" field="performer"/>
 			<t:grid-item label="Text" field="text"/>
 			<t:grid-item label="Deadline" field="deadline"/>
-			<t:grid-item label="State" field="state"/>
+			<t:grid-item label="State" field="state" type="select" options="0:Initialized,1:Read,2:Completed"/>
 		</t:grid>
 		
 		<script>
 			$('#grid tbody').on("click", "[data-btncolumn=0]", function(event) {
-				var tr = $(this).closest('tr');
-		        var row = $("#grid").DataTable().row(tr);
-		        var data = row.data(); 
+				tr = $(this).closest('tr');
+				table = $("#grid").DataTable();
+		        row = table.row(tr);
+		        data = row.data(); 
 		        
-		        alert(data.title + " " + data.text);
+		        $.ajax({
+		        	url: 'BBRTasks',
+		        	data: {
+		        		operation: 'approve',
+		        		taskId: data.id
+		        	}
+		        }).success(function(d) {
+					table.draw();
+		        });
 			});
 		</script>
 	</jsp:body>

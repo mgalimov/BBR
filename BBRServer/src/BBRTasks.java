@@ -11,6 +11,7 @@ import BBRAcc.BBRUser.BBRUserRole;
 import BBRAcc.BBRUserManager;
 import BBRClientApp.BBRContext;
 import BBRCust.BBRTask;
+import BBRCust.BBRTask.BBRTaskState;
 import BBRCust.BBRTaskManager;
 
 @WebServlet("/BBRTasks")
@@ -95,4 +96,18 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 		return manager.list(pageNumber, pageSize, where, BBRContext.getOrderBy(sortingFields, fields)).toJson();
 	}
 
+	@Override
+	protected int processOperation(String operation, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+		int res = -1;
+		if (operation.equals("approve")) {
+			Long taskId = Long.parseLong(params.get("taskId"));
+			BBRTask task = manager.findById(taskId);
+			if (task != null) {
+				task.setState(BBRTaskState.TASKSTATE_COMPLETED);
+				manager.update(task);
+			}
+			res = 0;
+		};
+		return res;
+	};
 }
