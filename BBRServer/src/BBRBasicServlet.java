@@ -194,7 +194,7 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 		return -1;
 	};
 
-	private String getBadgeNumber(BBRParams params, HttpServletRequest request,
+	protected String getBadgeNumber(BBRParams params, HttpServletRequest request,
 			HttpServletResponse response) {
 		BBRContext context = BBRContext.getContext(request);
 		String where = "";

@@ -71,7 +71,6 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 		return null;		
 	}
 	
-
 	@Override
 	protected String getData(int pageNumber, int pageSize, 
 			Hashtable<Integer, Hashtable<String, String>> fields,
@@ -109,5 +108,21 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 			res = 0;
 		};
 		return res;
-	};
+	}
+	
+	@Override
+	protected String getBadgeNumber(BBRParams params, HttpServletRequest request,
+			HttpServletResponse response) {
+		BBRContext context = BBRContext.getContext(request);
+		String where = "";
+		if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
+			if (context.user.getPos() != null)
+				where = manager.wherePos(context.user.getPos().getId());
+		if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
+			if (context.user.getShop() != null)
+				where = manager.whereShop(context.user.getShop().getId());
+		
+		where += " and (state <> 2)";
+		return manager.count(where).toString();
+	}
 }

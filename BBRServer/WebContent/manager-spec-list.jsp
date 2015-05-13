@@ -6,7 +6,7 @@
 			<t:grid-item label="Name" field="name" sort="asc"/>
 			<t:grid-item label="Point of service" field="pos.title"/>
 			<t:grid-item label="Position" field="position"/>
-			<t:grid-item label="Status" field="status"/>
+			<t:grid-item label="Status" field="status" type="select" options="0:Unassigned,1:Active,2:Inactive"/>
 		</t:grid>
 	</jsp:body>
 </t:admin-grid-wrapper>
