@@ -98,6 +98,7 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 	@Override
 	protected int processOperation(String operation, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		int res = -1;
+		
 		if (operation.equals("approve")) {
 			Long taskId = Long.parseLong(params.get("taskId"));
 			BBRTask task = manager.findById(taskId);
@@ -107,6 +108,19 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 			}
 			res = 0;
 		};
+
+		if (operation.equals("markread")) {
+			Long taskId = Long.parseLong(params.get("taskId"));
+			BBRTask task = manager.findById(taskId);
+			if (task != null) {
+				if (task.getState() < BBRTaskState.TASKSTATE_READ) {
+					task.setState(BBRTaskState.TASKSTATE_READ);
+					manager.update(task);
+				}
+			}
+			res = 0;
+		};
+		
 		return res;
 	}
 	

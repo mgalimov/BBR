@@ -3,6 +3,7 @@
 <%@ attribute name="method" required="true"%>
 <%@ attribute name="editPage" required="true"%>
 <%@ attribute name="createPage" required="true"%>
+<%@ attribute name="customToolbar" %>
 
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
@@ -11,21 +12,11 @@
 <c:set var="itemsHF" scope="request" value="<th>ID</th>"/>
 <c:set var="sorting" scope="request" value=""/>
 <c:set var="index" scope="request" value="0"/>
+<c:set var="itemToolbar" scope="request" value="${''}"/>
 
 <!-- http://www.onjava.com/pub/a/onjava/excerpt/jserverpages3_ch11/ -->
 
 <h3>${title}</h3>	
-
-<!-- Toolbar -->
-<button type="button" class="btn btn-default" id="create">
-  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Create
-</button>
-<button type="button" class="btn btn-info" id="edit">
-  <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit
-</button>
-<button type="button" class="btn btn-warning" id="delete" data-toggle="modal" data-target="#sureToDelete">
-  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
-</button>
 		
 <!-- Modal -->
 <div class="modal fade" id="sureToDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -45,59 +36,80 @@
     </div>
   </div>
 </div>
+
 <div class="panel">
-	<table id="grid" class="table table-stripped table-bordered no-footer">
-		<jsp:doBody/>
-		<thead>
-			<tr>
-				<c:out value="${itemsHF}" escapeXml="false"/>
-			</tr>
-		</thead>
-	</table>
+  <div class="panel-heading" id="toolbar">
+  	  <c:if test="${customToolbar != true}">
+		<button type="button" class="btn btn-default" id="create">
+		  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Create
+		</button>
+		<button type="button" class="btn btn-info" id="edit">
+		  <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit
+		</button>
+		<button type="button" class="btn btn-warning" id="delete" data-toggle="modal" data-target="#sureToDelete">
+		  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
+		</button>
+	  </c:if>
+  </div>
+  <div class="panel-body">
+	  <table id="grid" class="table table-stripped table-bordered no-footer">
+			<jsp:doBody/>
+			<thead>
+				<tr>
+					<c:out value="${itemsHF}" escapeXml="false"/>
+				</tr>
+			</thead>
+	  </table>
+  </div>
 </div>
 
 <script>
-	$('#create').click(
-			function(event) {
-				window.location.href = '${createPage}?id=new';
-			});
-	$('#edit').click(
-			function(event) {
-				var row = table.row('.success');
-				if (row.length > 0)
-					window.location.href = '${editPage}?id=' + row.data().id;
-			});
-	$('#deletionConfirmed').click(
-			function(event) {
-				var row = table.row('.success');
-				if (row.length > 0) {
-					$.get('${method}', {id:row.data().id,operation:'delete'}, function(responseText) {
-						$('#sureToDelete').modal('hide');
-						table.draw();
-					});
-				}
-			});
+	$(document).ready(function() {
+		$('#toolbar').html(${itemToolbar});
+		
+		$('#create').click(
+				function(event) {
+					window.location.href = '${createPage}?id=new';
+				});
+		
+		$('#edit').click(
+				function(event) {
+					var row = table.row('.success');
+					if (row.length > 0)
+						window.location.href = '${editPage}?id=' + row.data().id;
+				});
+		
+		$('#deletionConfirmed').click(
+				function(event) {
+					var row = table.row('.success');
+					if (row.length > 0) {
+						$.get('${method}', {id:row.data().id,operation:'delete'}, function(responseText) {
+							$('#sureToDelete').modal('hide');
+							table.draw();
+						});
+					}
+				});
+		
+		var table = $('#grid').DataTable({
+		 			ajax: {
+		 				url: '${method}',
+		 				type: 'POST'
+		 			},
+		 			columns: [${items}],
+		 	    	order: [${sorting}],
+		 	    	serverSide: true,
+		 	    	lengthChange: false,
+		 	    	searching: false
+			  	});
 	
-	var table = $('#grid').DataTable({
-	 			ajax: {
-	 				url: '${method}',
-	 				type: 'POST'
-	 			},
-	 			columns: [${items}],
-	 	    	order: [${sorting}],
-	 	    	serverSide: true,
-	 	    	lengthChange: false
-		  	});
-
-    $('#grid').on( 'click', 'tr', function () {
-        if ( $(this).hasClass('success') ) {
-            $(this).removeClass('success');
-        }
-        else {
-            table.$('tr.success').removeClass('success');
-            $(this).addClass('success');
-        }
-    } );
-	// 
+	    $('#grid').on( 'click', 'tr', function () {
+	        if ( $(this).hasClass('success') ) {
+	            $(this).removeClass('success');
+	        }
+	        else {
+	            table.$('tr.success').removeClass('success');
+	            $(this).addClass('success');
+	        }
+	    } );
+	});
 	</script>
-

@@ -4,6 +4,8 @@
 <%@ attribute name="gridPage" %>
 <%@ attribute name="buttonSave" %>
 <%@ attribute name="buttonCancel" %>
+<%@ attribute name="showFooter" %>
+<%@ attribute name="showToolbar" %>
 
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
@@ -13,6 +15,7 @@
 <c:set var="itemVal" scope="request" value="${''}"/>
 <c:set var="itemSet" scope="request" value="${''}"/>
 <c:set var="itemPreload" scope="request" value="${''}"/>
+<c:set var="itemToolbar" scope="request" value="${''}"/>
 
 <!-- http://www.onjava.com/pub/a/onjava/excerpt/jserverpages3_ch11/ -->
 
@@ -44,13 +47,19 @@
 <h3>${title}</h3>
 <form role="form">
 	<div class="panel panel-default">
+	  <c:if test="${showToolbar == true || showToolbar == null}">
+		  <div class="panel-heading" id="toolbar">
+		  </div>
+	  </c:if>
 	  <div class="panel-body">
 	  	<jsp:doBody/>
 	  </div>
-	  <div class="panel-footer">
-	  		<button type="button" class="btn btn-default" data-toggle="modal" data-target="#sureToCancelChanges"><c:if test="${buttonCancel == null}">Cancel changes</c:if><c:if test="${buttonCancel != null}">${buttonCancel}</c:if></button>
-	  		<button type="button" class="btn btn-primary" id="saveChanges"><c:if test="${buttonSave == null}">Save changes</c:if><c:if test="${buttonSave != null}">${buttonSave}</c:if></button>
-	  </div>
+	  <c:if test="${showFooter == true || showFooter == null}">
+		  <div class="panel-footer">
+		  		<button type="button" class="btn btn-default" data-toggle="modal" data-target="#sureToCancelChanges"><c:if test="${buttonCancel == null}">Cancel changes</c:if><c:if test="${buttonCancel != null}">${buttonCancel}</c:if></button>
+		  		<button type="button" class="btn btn-primary" id="saveChanges"><c:if test="${buttonSave == null}">Save changes</c:if><c:if test="${buttonSave != null}">${buttonSave}</c:if></button>
+		  </div>
+	  </c:if>
 	</div>
 </form>
 </div>
@@ -71,6 +80,8 @@
 			});
  		}
 
+		$('#toolbar').html(${itemToolbar});
+		
 		$('#saveChanges').click(function(event) { 
 	 		idParam = getUrlParameter('id');
             ${itemVal}

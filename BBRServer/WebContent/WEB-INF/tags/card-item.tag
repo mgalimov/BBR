@@ -46,6 +46,16 @@
 				</c:if>
 			</c:when>
 			
+			<c:when test="${type.equals('textarea')}">
+				<textarea class="form-control ${isHidden}" rows="3" id="${ft.concat('input')}" placeholder="${label}" ${isRequired} ${isDisabled}></textarea>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
+				<c:if test="${defaultValue != null}">
+					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
+					        $(\"#').concat(ft).concat('input\")')}"/>
+					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.val(\"').concat(defaultValue).concat('\");')}"/>
+				</c:if>
+			</c:when>			
+			
 			<c:when test="${type.equals('password')}">
 				<input type="password" class="form-control ${isHidden}" id="${ft.concat('input')}" placeholder="${label}" ${isRequired} ${isDisabled}/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
@@ -78,7 +88,11 @@
 			</c:when>
 			
 			<c:when test="${type.equals('select')}">
-				<select class="form-control ${isHidden}" id="${ft.concat('input')}" ${isRequired} ${isDisabled}>
+				<c:set var="isDis" value="${isDisabled}" />
+				<c:if test="${isDisabled.equals('readonly')}">
+					<c:set var="isDis" value="disabled" />
+				</c:if>
+				<select class="form-control ${isHidden}" id="${ft.concat('input')}" ${isRequired} ${isDis}>
 					<c:forTokens items="${options}" delims="," var="option">
 						<option value="${option.split(':')[0]}">${option.split(':')[1]}</option>
 						<c:if test="${defaultValue != null}">
@@ -95,7 +109,11 @@
 			</c:when>
 			
 			<c:when test="${type.equals('reference')}">
-				<select class="selectized" style="display: none" id="${ft.concat('input')}" ${isRequired}  ${isDisabled}>
+				<c:set var="isDis" value="${isDisabled}" />
+				<c:if test="${isDisabled.equals('readonly')}">
+					<c:set var="isDis" value="disabled" />
+				</c:if>
+				<select class="selectized" style="display: none" id="${ft.concat('input')}" ${isRequired}  ${isDis}>
 				</select>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize')}"/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('.addOption(obj.').concat(field).concat('?{id: obj.').concat(field).concat('.id').concat(', ')}"/>
