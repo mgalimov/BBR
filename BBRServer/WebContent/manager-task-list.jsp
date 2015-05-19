@@ -16,6 +16,7 @@
 		</t:grid>
 		
 		<script>
+		$(document).ready(function() {
 			$('#grid tbody').on("click", "[data-btncolumn=0]", function(event) {
 				tr = $(this).closest('tr');
 				table = $("#grid").DataTable();
@@ -32,6 +33,7 @@
 					table.draw();
 		        });
 			});
+		});
 		</script>
 	</jsp:body>
 </t:admin-grid-wrapper>
