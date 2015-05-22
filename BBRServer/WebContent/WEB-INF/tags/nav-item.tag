@@ -32,7 +32,10 @@
 	$.ajax({url: "${badgeMethod}", 
 			data: {operation: "badge"}})
 	 	.done(function(data){
-	 		$("#${itemId}").text(data);
+	 		if (data == "0")
+	 			$("#${itemId}").addClass(" hidden");
+	 		else
+	 			$("#${itemId}").text(data);
 	 	});
 </script>
 </c:if>

@@ -96,8 +96,8 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 	}
 
 	@Override
-	protected int processOperation(String operation, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
-		int res = -1;
+	protected String processOperation(String operation, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+		String res = "";
 		
 		if (operation.equals("approve")) {
 			Long taskId = Long.parseLong(params.get("taskId"));
@@ -106,9 +106,8 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 				task.setState(BBRTaskState.TASKSTATE_COMPLETED);
 				manager.update(task);
 			}
-			res = 0;
-		};
-
+			res = "";
+		} else
 		if (operation.equals("markread")) {
 			Long taskId = Long.parseLong(params.get("taskId"));
 			BBRTask task = manager.findById(taskId);
@@ -118,8 +117,16 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 					manager.update(task);
 				}
 			}
-			res = 0;
-		};
+			res = "";
+		} else
+		if (operation.equals("getvisit")) {
+			Long taskId = Long.parseLong(params.get("taskId"));
+			BBRTask task = manager.findById(taskId);
+			if (task != null) {
+				if (task.getObjectType().equals("BBRVisit"))
+					res = task.getObjectId().toString();
+			}
+		};	
 		
 		return res;
 	}

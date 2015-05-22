@@ -80,7 +80,7 @@
 			});
  		}
 
-		$('#toolbar').html(${itemToolbar});
+		$('#toolbar').html("${itemToolbar}");
 		
 		$('#saveChanges').click(function(event) { 
 	 		idParam = getUrlParameter('id');

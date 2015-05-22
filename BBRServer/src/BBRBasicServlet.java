@@ -74,10 +74,7 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 			if (operation.equals("cancel")) {
 				respText = cancel(id, params, request, response);
 			} else	{
-				if (processOperation(operation, params, request, response) < 0) {
-					respText = "Unknown operation";
-					response.setStatus(errorResponseCode);
-				}
+				respText = processOperation(operation, params, request, response);
 			}
 		} catch (Exception ex) {
 			respText = ex.getLocalizedMessage();
@@ -190,8 +187,8 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 		return obj;
 	};
 	
-	protected int processOperation(String operation, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
-		return -1;
+	protected String processOperation(String operation, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+		return "";
 	};
 
 	protected String getBadgeNumber(BBRParams params, HttpServletRequest request,
