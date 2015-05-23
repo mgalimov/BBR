@@ -92,6 +92,9 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 				where = " pos.shop.id = " + context.user.getShop().getId() + " or ";
 		where += " performer.id = " + context.user.getId();
 		
+		if (!context.viewAllTasks)
+			where = "(" + where + ") and (state < " + BBRTaskState.TASKSTATE_COMPLETED + ")";
+				
 		return manager.list(pageNumber, pageSize, where, BBRContext.getOrderBy(sortingFields, fields)).toJson();
 	}
 
@@ -123,9 +126,13 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 			Long taskId = Long.parseLong(params.get("taskId"));
 			BBRTask task = manager.findById(taskId);
 			if (task != null) {
-				if (task.getObjectType().equals("BBRVisit"))
+				if (task.getObjectType().equals("BBRCust.BBRVisit"))
 					res = task.getObjectId().toString();
 			}
+		} else
+		if (operation.equals("togglealltasks")) {
+			BBRContext context = BBRContext.getContext(request);
+			context.viewAllTasks = !context.viewAllTasks;
 		};	
 		
 		return res;

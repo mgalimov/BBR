@@ -21,6 +21,7 @@ public class BBRContext {
 	private BBRGPS location = null;
 	private int lastVisitStep = 1;
 	public BBRVisit planningVisit = null;
+	public boolean viewAllTasks = false;
 	
 	public BBRContext() {
 	}

@@ -18,8 +18,8 @@
 		</script>
 		
 		<t:card method="BBRTasks" gridPage="manager-task-list.jsp" title="Task" showFooter="false" showToolbar="true">
-			<t:toolbar-item label="Approve" id="approveButton"/> 
-			<t:toolbar-item label="Open visit" id="openVisitButton"/> 
+			<t:toolbar-item label="Approve" id="approveButton" accent="btn-info"/> 
+			<t:toolbar-item label="Open visit" id="openVisitButton" /> 
 			<t:card-item label="Title" field="title" type="text" isDisabled="readonly"/>
 			<t:card-item label="Point of Service" field="pos" type="reference" referenceFieldTitle="title" referenceMethod="BBRPoSes" isDisabled="readonly"/>
 			<t:card-item label="Performer" field="performer" type="reference" referenceFieldTitle="name" referenceMethod="BBRUsers" isDisabled="readonly"/>

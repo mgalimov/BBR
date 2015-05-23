@@ -64,6 +64,14 @@
 </form>
 </div>
 
+<c:if test="${showToolbar == true || showToolbar == null}">
+<script>
+	$(document).ready(function() {
+		$('#toolbar').html("${itemToolbar}");
+	});
+</script>
+</c:if>
+
 <script>
 	var saved = false;
 
@@ -79,8 +87,6 @@
 				};
 			});
  		}
-
-		$('#toolbar').html("${itemToolbar}");
 		
 		$('#saveChanges').click(function(event) { 
 	 		idParam = getUrlParameter('id');

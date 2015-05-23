@@ -11,7 +11,7 @@
 <c:set var="items" scope="request" value="{data: \"id\", visible: false}"/>
 <c:set var="itemsHF" scope="request" value="<th>ID</th>"/>
 <c:set var="sorting" scope="request" value=""/>
-<c:set var="index" scope="request" value="0"/>
+<c:set var="index" scope="request" value="1"/>
 <c:set var="itemToolbar" scope="request" value="${''}"/>
 
 <!-- http://www.onjava.com/pub/a/onjava/excerpt/jserverpages3_ch11/ -->
@@ -52,7 +52,7 @@
 	  </c:if>
   </div>
   <div class="panel-body">
-	  <table id="grid" class="table table-stripped table-bordered no-footer">
+	  <table id="grid" class="table table-stripped table-bordered no-footer" style="cursor: pointer">
 			<jsp:doBody/>
 			<thead>
 				<tr>
@@ -63,10 +63,16 @@
   </div>
 </div>
 
+<c:if test="${customToolbar == true}">
 <script>
 	$(document).ready(function() {
-		$('#toolbar').html(${itemToolbar});
-		
+		$('#toolbar').html("${itemToolbar}");
+	});
+</script>
+</c:if>
+
+<script>
+	$(document).ready(function() {
 		$('#create').click(
 				function(event) {
 					window.location.href = '${createPage}?id=new';
@@ -110,6 +116,18 @@
 	            table.$('tr.success').removeClass('success');
 	            $(this).addClass('success');
 	        }
+	    });
+	    
+	    $('#grid').on( 'dblclick', 'tr', function (e) {
+	    	if ( $(this).hasClass('success') ) {
+	            $(this).removeClass('success');
+	        }
+	        else {
+	            table.$('tr.success').removeClass('success');
+	            $(this).addClass('success');
+	        }
+	    	$("#edit").click();
+	    	e.stopPropagation();
 	    } );
 	});
 	</script>

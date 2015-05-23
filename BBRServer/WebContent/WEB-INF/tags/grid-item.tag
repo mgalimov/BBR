@@ -11,7 +11,7 @@
 
 <c:set var="items" scope="request" value="${items.concat(',{data:\"').concat(field).concat('\", defaultContent: \"\"')}"/>
 
-<c:if test="${sort > ''}">
+<c:if test="${sort != null && sort != ''}">
 	<c:set var="sorting" scope="request" value="${sorting.concat('[').concat(index).concat(',\"').concat(sort).concat('\"],')}"/>
 </c:if>
 
