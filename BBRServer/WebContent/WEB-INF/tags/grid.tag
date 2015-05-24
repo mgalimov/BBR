@@ -52,7 +52,7 @@
 	  </c:if>
   </div>
   <div class="panel-body">
-	  <table id="grid" class="table table-stripped table-bordered no-footer" style="cursor: pointer">
+	  <table id="grid" class="table table-stripped table-bordered no-footer noselection">
 			<jsp:doBody/>
 			<thead>
 				<tr>
@@ -108,24 +108,12 @@
 		 	    	searching: false
 			  	});
 	
-	    $('#grid').on( 'click', 'tr', function () {
-	        if ( $(this).hasClass('success') ) {
-	            $(this).removeClass('success');
-	        }
-	        else {
-	            table.$('tr.success').removeClass('success');
-	            $(this).addClass('success');
-	        }
+	    $('#grid').on( 'click', 'tbody tr', function () {
+            table.$('tr.success').removeClass('success');
+            $(this).addClass('success');
 	    });
 	    
-	    $('#grid').on( 'dblclick', 'tr', function (e) {
-	    	if ( $(this).hasClass('success') ) {
-	            $(this).removeClass('success');
-	        }
-	        else {
-	            table.$('tr.success').removeClass('success');
-	            $(this).addClass('success');
-	        }
+	    $('#grid').on( 'dblclick', 'tbody tr', function (e) {
 	    	$("#edit").click();
 	    	e.stopPropagation();
 	    } );

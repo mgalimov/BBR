@@ -6,7 +6,7 @@
 				createPage="manager-task-create.jsp" title="Tasks" 
 				customToolbar="true">
 			<t:toolbar-item label="Open" id="edit" accent="btn-info"></t:toolbar-item>
-			<t:toolbar-item label="View all" id="viewAll" icon="glyphicon-tasks"></t:toolbar-item>
+			<t:toolbar-item label="Toggle view all" id="viewAll" icon="glyphicon-tasks"></t:toolbar-item>
 			<t:grid-button label="" icon="glyphicon-ok" condition="state != 2"/>
 			<t:grid-item label="Title" field="title"/>
 			<t:grid-item label="Point of Service" field="pos.title"/>

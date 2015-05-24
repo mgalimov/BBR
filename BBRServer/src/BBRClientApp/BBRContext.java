@@ -1,8 +1,11 @@
 package BBRClientApp;
 
 import java.util.Collections;
+import java.util.Formatter;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +25,8 @@ public class BBRContext {
 	private int lastVisitStep = 1;
 	public BBRVisit planningVisit = null;
 	public boolean viewAllTasks = false;
+	private Locale locale = null;
+	private ResourceBundle resourceBundle;
 	
 	public BBRContext() {
 	}
@@ -31,6 +36,7 @@ public class BBRContext {
 		BBRContext app = (BBRContext)session.getAttribute("BBRContext");
 		if (app == null) {
 			app = new BBRContext();
+			app.setLocale("ru", "RU");
 			session.setAttribute("BBRContext", app);
 		}
 		return app;
@@ -40,17 +46,17 @@ public class BBRContext {
 		BBRUserManager mgr = new BBRUserManager();
 		
 		if (email == null || email == "") {
-			lastSignInError = BBRErrors.ERR_EMPTY_EMAIL;
+			lastSignInError = gs(BBRErrors.ERR_EMPTY_EMAIL);
 		} else {
 			BBRUser candidate = mgr.findUserByEmail(email);
 			if (candidate == null) {
-				lastSignInError = BBRErrors.ERR_USER_NOTFOUND;
+				lastSignInError = gs(BBRErrors.ERR_USER_NOTFOUND);
 			} else {
 				if (candidate.comparePasswordTo(BBRUserManager.encodePassword(password))) {
 					user = candidate;
 					lastSignInError = "";
 				} else {
-					lastSignInError = BBRErrors.ERR_INCORRECT_PASSWORD;
+					lastSignInError = gs(BBRErrors.ERR_INCORRECT_PASSWORD);
 				}
 			}
 		}
@@ -75,13 +81,13 @@ public class BBRContext {
 		if (email != "" && pwdhash != "") {
 			BBRUser candidate = mgr.findUserByEmail(email);
 			if (candidate == null) {
-				lastSignInError = BBRErrors.ERR_USER_NOTFOUND;
+				lastSignInError = gs(BBRErrors.ERR_USER_NOTFOUND);
 			} else {
 				if (candidate.comparePasswordTo(pwdhash)) {
 					user = candidate;
 					lastSignInError = "";
 				} else {
-					lastSignInError = BBRErrors.ERR_INCORRECT_PASSWORD;
+					lastSignInError = gs(BBRErrors.ERR_INCORRECT_PASSWORD);
 				}
 			}
 			
@@ -90,18 +96,19 @@ public class BBRContext {
 		return lastSignInError;
 	}
 
-	public String SignOut(HttpServletResponse response) {
+	public String SignOut(HttpServletRequest request, HttpServletResponse response) {
+		BBRContext context = BBRContext.getContext(request);
 		response.addCookie(new Cookie("email", ""));
 		response.addCookie(new Cookie("pwdhash", ""));
 		user = null;
-		return BBRErrors.MSG_USER_SIGNED_OUT;
+		return context.gs(BBRErrors.MSG_USER_SIGNED_OUT);
 	}
 	
 	public String SignUp(String email, String firstName, String lastName, String password, String passwordCopy) {
 		BBRUserManager mgr = new BBRUserManager();
 			
 		if (!password.equals(passwordCopy)) {
-			lastSignInError = BBRErrors.ERR_INCORRECT_PASSWORD;
+			lastSignInError = gs(BBRErrors.ERR_INCORRECT_PASSWORD);
 			return lastSignInError;
 		}
 			
@@ -211,5 +218,21 @@ public class BBRContext {
 	       
 	       return selectFields;
 	}
+	
+	public void setLocale(String language, String country) {
+		locale = new Locale(language, country);
+		resourceBundle = ResourceBundle.getBundle("bbr", locale, new BBR.UTF8Control());
+	}
 
+	public Locale getLocale() {
+		return locale;
+	}
+	
+	public String gs(String msg, Object... args) {
+		String res = resourceBundle.getString(msg);
+		
+		@SuppressWarnings("resource")
+		Formatter fmt = new Formatter(locale);
+		return fmt.format(res, args).out().toString();
+	}
 }

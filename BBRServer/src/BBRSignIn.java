@@ -64,7 +64,7 @@ public class BBRSignIn extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		BBRContext context = BBRContext.getContext(request);
-		context.SignOut(response);
+		context.SignOut(request, response);
 		response.sendRedirect(request.getContextPath() + "/" + context.getWelcomePage());
 	}
 

@@ -28,7 +28,7 @@ public class HibernateProxyTypeAdapter extends TypeAdapter<HibernateProxy> {
 
     @Override
     public HibernateProxy read(JsonReader in) throws IOException {
-        throw new UnsupportedOperationException("Not supported");
+        throw new UnsupportedOperationException(BBRErrors.ERR_NOT_IMPLEMENTED);
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})

@@ -1,20 +1,21 @@
 package BBR;
 
 public class BBRErrors {
-	public static final String ERR_DUPLICATE_EMAIL = "Duplicate email";
-	public static final String ERR_EMPTY_EMAIL = "Email cannot be empty";
-	public static final String ERR_USER_NOTFOUND = "User not found";
-	public static final String MSG_USER_SIGNED_IN = "User signed in successfully";
-	public static final String MSG_USER_SIGNED_OUT = "User signed out successfully";
-	public static final String ERR_INCORRECT_PASSWORD = "User password is incorrect";
-	public static final String ERR_SHOP_MUST_BE_SPECIFIED = "Shop must be specified";
-	public static final String ERR_TITLE_MUST_BE_UNIQUE = "Title must be unique";
-	public static final String ERR_SHOP_NOTFOUND = "Shop not found";
-	public static final String ERR_POS_NOTFOUND = "Point of Sale not found";
-	public static final String ERR_VISIT_NOTFOUND = "Visit not found";
-	public static final String ERR_USER_NOTSPECIFIED = "User not specified";
-	public static final String ERR_PROC_NOTFOUND = "Procedure not found";
-	public static final String ERR_RECORD_NOTFOUND = "Record not found";
-	public static final String ERR_DATE_INCORRECT = "Date/time is incorrect";
-	public static final String ERR_POS_MUST_BE_SPECIFIED = "PoS must be specified";
+	public static final String ERR_DUPLICATE_EMAIL = "ERR_DUPLICATE_EMAIL";
+	public static final String ERR_EMPTY_EMAIL = "ERR_EMPTY_EMAIL";
+	public static final String ERR_USER_NOTFOUND = "ERR_USER_NOTFOUND";
+	public static final String MSG_USER_SIGNED_IN = "MSG_USER_SIGNED_IN";
+	public static final String MSG_USER_SIGNED_OUT = "MSG_USER_SIGNED_OUT";
+	public static final String ERR_INCORRECT_PASSWORD = "ERR_INCORRECT_PASSWORD";
+	public static final String ERR_SHOP_MUST_BE_SPECIFIED = "ERR_SHOP_MUST_BE_SPECIFIED";
+	public static final String ERR_TITLE_MUST_BE_UNIQUE = "ERR_TITLE_MUST_BE_UNIQUE";
+	public static final String ERR_SHOP_NOTFOUND = "ERR_SHOP_NOTFOUND";
+	public static final String ERR_POS_NOTFOUND = "ERR_POS_NOTFOUND";
+	public static final String ERR_VISIT_NOTFOUND = "ERR_VISIT_NOTFOUND";
+	public static final String ERR_USER_NOTSPECIFIED = "ERR_USER_NOTSPECIFIED";
+	public static final String ERR_PROC_NOTFOUND = "ERR_PROC_NOTFOUND";
+	public static final String ERR_RECORD_NOTFOUND = "ERR_RECORD_NOTFOUND";
+	public static final String ERR_DATE_INCORRECT = "ERR_DATE_INCORRECT";
+	public static final String ERR_POS_MUST_BE_SPECIFIED = "ERR_POS_MUST_BE_SPECIFIED";
+	public static final String ERR_NOT_IMPLEMENTED = "ERR_NOT_IMPLEMENTED";
 }

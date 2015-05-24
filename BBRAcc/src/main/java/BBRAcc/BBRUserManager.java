@@ -65,9 +65,9 @@ public class BBRUserManager extends BBRDataManager<BBRUser> {
 	        
 	        return hexString.toString();
 		} catch (NoSuchAlgorithmException ex) {
-	        throw new RuntimeException("No MD5 implementation? Really?");
+	        throw new RuntimeException(BBRErrors.ERR_NOT_IMPLEMENTED);
 	    } catch (UnsupportedEncodingException ex) {
-	        throw new RuntimeException("No UTF-8 encoding? Really?");
+	        throw new RuntimeException(BBRErrors.ERR_NOT_IMPLEMENTED);
 	    }
 	}
 

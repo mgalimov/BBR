@@ -30,6 +30,8 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
     // Performing operations
 	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		BBRContext context = BBRContext.getContext(request); 
+
 		String respText = "";
 		try {
 			BBRParams params = new BBRParams(request.getQueryString());
@@ -40,26 +42,18 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 				respText = getRecordData(Long.parseLong(id), params, request, response);
 			} else
 			if (operation.equals("delete")) {
-				try {
-					Cls obj = (Cls)manager.findById(Long.parseLong(id));
-					if (obj != null) 
-						respText = delete(obj, params, request, response);
-					else
-						respText = BBRErrors.ERR_RECORD_NOTFOUND + ": " + manager.getClassTitle();
-				} catch (Exception ex) {
-					respText = ex.getLocalizedMessage();
-				}
+				Cls obj = (Cls)manager.findById(Long.parseLong(id));
+				if (obj != null) 
+					respText = delete(obj, params, request, response);
+				else
+					respText = context.gs(BBRErrors.ERR_RECORD_NOTFOUND, manager.getClassTitle());
 			} else
 			if (operation.equals("update")) {
-				try {
-					Cls obj = (Cls)manager.findById(Long.parseLong(id));
-					if (obj != null) 
-						respText = update(obj, params, request, response);
-					else
-						respText = BBRErrors.ERR_RECORD_NOTFOUND + ": " + manager.getClassTitle();
-				} catch (Exception ex) {
-					respText = ex.getLocalizedMessage();
-				}
+				Cls obj = (Cls)manager.findById(Long.parseLong(id));
+				if (obj != null) 
+					respText = update(obj, params, request, response);
+				else
+					respText = context.gs(BBRErrors.ERR_RECORD_NOTFOUND, manager.getClassTitle());
 			} else
 			if (operation.equals("create")) {
 				respText = create(params, request, response);
@@ -77,7 +71,9 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 				respText = processOperation(operation, params, request, response);
 			}
 		} catch (Exception ex) {
-			respText = ex.getLocalizedMessage();
+			respText = ex.getMessage();
+			if (context != null)
+				respText = context.gs(respText);
 			response.setStatus(errorResponseCode);
 		}
 		response.setContentType("text/plain");  
@@ -89,6 +85,7 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 	// Getting data
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String respText = "";
+		BBRContext context = BBRContext.getContext(request);
 		try {
 			BBRParams params = new BBRParams(request.getReader());
 			String startItem = params.get("start");
@@ -102,7 +99,7 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 			respText = getData(pageNum, rowsPerPage, columns, sortingFields, params, request, response);
 			respText = "{\"draw\":" + drawIndex + "," + respText.substring(1);
 		} catch (Exception ex) {
-			respText = ex.getLocalizedMessage();
+			respText = context.gs(ex.getMessage());
 			response.setStatus(700);
 		}
 		
@@ -145,26 +142,23 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 
 	@SuppressWarnings("unchecked")
 	protected String getRecordData(long id, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+		BBRContext context = BBRContext.getContext(request);
 		Cls obj = (Cls)manager.findById(id);
 		if (obj != null)
 			return obj.toJson();
 		else
-			return BBRErrors.ERR_RECORD_NOTFOUND + ": " + manager.getClassTitle();
+			return context.gs(BBRErrors.ERR_RECORD_NOTFOUND, manager.getClassTitle());
 	}
 
 
 	abstract String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception;
 
 	@SuppressWarnings("unchecked")
-	protected String update(Cls obj, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
-		try {
-			obj = beforeUpdate(obj, params, request, response);
-			if (obj != null)
-				manager.update(obj);
-			return "";
-		} catch (Exception ex) {
-			return ex.getLocalizedMessage();
-		}
+	protected String update(Cls obj, BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		obj = beforeUpdate(obj, params, request, response);
+		if (obj != null)
+			manager.update(obj);
+		return "";
 	}
 
 	protected Cls beforeUpdate(Cls obj, BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -172,15 +166,11 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected String delete(Cls obj, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
-		try {
-			obj = beforeDelete(obj, params, request, response);
-			if (obj != null)
-				manager.delete(obj);
-			return "";
-		} catch (Exception ex) {
-			return ex.getLocalizedMessage();
-		}
+	protected String delete(Cls obj, BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		obj = beforeDelete(obj, params, request, response);
+		if (obj != null)
+			manager.delete(obj);
+		return "";
 	}
 
 	protected Cls beforeDelete(Cls obj, BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
