@@ -25,14 +25,14 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Cancel changes confirmation</h4>
+        <h4 class="modal-title" id="myModalLabel">${context.gs('LBL_CANCEL_CHANGES_TITLE')}</h4>
       </div>
       <div class="modal-body">
-      	 Are you sure to cancel changes? All your changes will be lost. 
+     	 ${context.gs('LBL_CANCEL_CHANGES_TITLE')} 
   	  </div>
 	  <div class="modal-footer">
-	      <button type="button" class="btn btn-default" data-dismiss="modal">Keep editing</button>
-	      <button type="button" class="btn btn-warning" id="cancelChanges">Cancel changes</button>
+	      <button type="button" class="btn btn-default" data-dismiss="modal">${context.gs('LBL_CANCEL_CHANGES_KEEP_EDITING_BTN')}</button>
+	      <button type="button" class="btn btn-warning" id="cancelChanges">${context.gs('LBL_CANCEL_CHANGES_CANCEL_BTN')}</button>
 	  </div>
     </div>
   </div>
@@ -44,7 +44,7 @@
 </div>
 
 <div class="container-fluid"  id="editForm">
-<h3>${title}</h3>
+<h3>${context.gs(title)}</h3>
 <form role="form">
 	<div class="panel panel-default">
 	  <c:if test="${showToolbar == true || showToolbar == null}">
@@ -56,8 +56,8 @@
 	  </div>
 	  <c:if test="${showFooter == true || showFooter == null}">
 		  <div class="panel-footer">
-		  		<button type="button" class="btn btn-default" data-toggle="modal" data-target="#sureToCancelChanges"><c:if test="${buttonCancel == null}">Cancel changes</c:if><c:if test="${buttonCancel != null}">${buttonCancel}</c:if></button>
-		  		<button type="button" class="btn btn-primary" id="saveChanges"><c:if test="${buttonSave == null}">Save changes</c:if><c:if test="${buttonSave != null}">${buttonSave}</c:if></button>
+		  		<button type="button" class="btn btn-default" data-toggle="modal" data-target="#sureToCancelChanges"><c:if test="${buttonCancel == null}">${context.gs('LBL_CANCEL_CHANGES_CANCEL_BTN')}</c:if><c:if test="${buttonCancel != null}">${context.gs(buttonCancel)}</c:if></button>
+		  		<button type="button" class="btn btn-primary" id="saveChanges"><c:if test="${buttonSave == null}">${context.gs('LBL_CANCEL_CHANGES_SAVE_BTN')}</c:if><c:if test="${buttonSave != null}">${context.gs(buttonSave)}</c:if></button>
 		  </div>
 	  </c:if>
 	</div>

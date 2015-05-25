@@ -33,11 +33,11 @@ public class BBRContext {
 	
 	public static BBRContext getContext(HttpServletRequest request) {
 		HttpSession session = request.getSession(true);		
-		BBRContext app = (BBRContext)session.getAttribute("BBRContext");
+		BBRContext app = (BBRContext)session.getAttribute("context");
 		if (app == null) {
 			app = new BBRContext();
 			app.setLocale("ru", "RU");
-			session.setAttribute("BBRContext", app);
+			session.setAttribute("context", app);
 		}
 		return app;
 	}
@@ -229,10 +229,21 @@ public class BBRContext {
 	}
 	
 	public String gs(String msg, Object... args) {
-		String res = resourceBundle.getString(msg);
+		String res = gs(msg);
 		
 		@SuppressWarnings("resource")
 		Formatter fmt = new Formatter(locale);
 		return fmt.format(res, args).out().toString();
+	}
+	
+	public String gs(String msg) {
+		String res;
+		try {
+			res = resourceBundle.getString(msg);
+		} catch (Exception ex) {
+			res = "[*" + msg + "*]";
+		}
+		
+		return res;
 	}
 }

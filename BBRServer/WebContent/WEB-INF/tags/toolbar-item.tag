@@ -9,5 +9,5 @@
 <c:if test="${accent == null}">
 	<c:set var="accent" value="btn-default"/>
 </c:if>
-<c:set var="buttonDef" value="<button type='button' class='btn ${accent}' id='${id}'>\n<span class='glyphicon ${icon}' aria-hidden='true'></span>\n${label}\n</button>\n"/>
+<c:set var="buttonDef" value="<button type='button' class='btn ${accent}' id='${id}'>\n<span class='glyphicon ${icon}' aria-hidden='true'></span>\n${context.gs(label)}\n</button>\n"/>
 <c:set var="itemToolbar" scope="request" value="${itemToolbar.concat(buttonDef)}"/>

@@ -16,7 +16,7 @@
 
 <!-- http://www.onjava.com/pub/a/onjava/excerpt/jserverpages3_ch11/ -->
 
-<h3>${title}</h3>	
+<h3>${context.gs(title)}</h3>	
 		
 <!-- Modal -->
 <div class="modal fade" id="sureToDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -24,14 +24,14 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Confirm deletion</h4>
+        <h4 class="modal-title" id="myModalLabel">${context.gs('LBL_GRID_CONFIRM_DELETION_TITLE')}</h4>
       </div>
       <div class="modal-body">
-      	 Are you sure to delete record? You cannot restore record. 
+      	 ${context.gs('MSG_GRID_CONFIRM_DELETION')} 
 	  </div>
 	  <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-warning" id="deletionConfirmed">Delete</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">${context.gs('LBL_GRID_CONFIRM_DELETION_CANCEL_BTN')}</button>
+        <button type="button" class="btn btn-warning" id="deletionConfirmed">${context.gs('LBL_GRID_CONFIRM_DELETION_CONFIRM_BTN')}</button>
       </div>
     </div>
   </div>
@@ -41,13 +41,13 @@
   <div class="panel-heading" id="toolbar">
   	  <c:if test="${customToolbar != true}">
 		<button type="button" class="btn btn-default" id="create">
-		  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Create
+		  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ${context.gs('LBL_GRID_CREATE_RECORD_BTN')}
 		</button>
 		<button type="button" class="btn btn-info" id="edit">
-		  <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit
+		  <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> ${context.gs('LBL_GRID_EDIT_RECORD_BTN')}
 		</button>
 		<button type="button" class="btn btn-warning" id="delete" data-toggle="modal" data-target="#sureToDelete">
-		  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
+		  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> ${context.gs('LBL_GRID_DELETE_RECORD_BTN')}
 		</button>
 	  </c:if>
   </div>

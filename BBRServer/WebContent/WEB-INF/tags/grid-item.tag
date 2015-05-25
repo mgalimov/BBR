@@ -7,7 +7,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 	
-<c:set var="itemsHF" scope="request" value="${itemsHF.concat('<th>').concat(label).concat('</th>')}"/>
+<c:set var="itemsHF" scope="request" value="${itemsHF.concat('<th>').concat(context.gs(label)).concat('</th>')}"/>
 
 <c:set var="items" scope="request" value="${items.concat(',{data:\"').concat(field).concat('\", defaultContent: \"\"')}"/>
 

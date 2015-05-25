@@ -16,7 +16,7 @@
 
 <c:set var="ft" scope="request" value="${fn:replace(field, '.', '_')}" />
 <div class="form-group">
-	<label for="${ft.concat('input')}">${label}</label>
+	<label for="${ft.concat('input')}">${context.gs(label)}</label>
 		<c:set var="itemids" scope="request" value="${itemids.concat('
 		      ').concat(ft).concat('input,')}"/>
 		<c:set var="itemReq" scope="request" value="${itemReq.concat('
@@ -37,7 +37,7 @@
 			</c:when>
 			
 			<c:when test="${type.equals('text')}">
-				<input type="text" class="form-control ${isHidden}" id="${ft.concat('input')}" placeholder="${label}" ${isRequired} ${isDisabled}/>
+				<input type="text" class="form-control ${isHidden}" id="${ft.concat('input')}" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
@@ -47,7 +47,7 @@
 			</c:when>
 			
 			<c:when test="${type.equals('textarea')}">
-				<textarea class="form-control ${isHidden}" rows="3" id="${ft.concat('input')}" placeholder="${label}" ${isRequired} ${isDisabled}></textarea>
+				<textarea class="form-control ${isHidden}" rows="3" id="${ft.concat('input')}" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}></textarea>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
@@ -57,7 +57,7 @@
 			</c:when>			
 			
 			<c:when test="${type.equals('password')}">
-				<input type="password" class="form-control ${isHidden}" id="${ft.concat('input')}" placeholder="${label}" ${isRequired} ${isDisabled}/>
+				<input type="password" class="form-control ${isHidden}" id="${ft.concat('input')}" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
@@ -68,7 +68,7 @@
 			
 			<c:when test="${type.equals('time')}">
 		        <div class="input-group bootstrap-timepicker col-md-2">
-           			<input id="${ft.concat('input')}" type="text" class="form-control ${isHidden}" placeholder="${label}" ${isRequired} ${isDisabled} />
+           			<input id="${ft.concat('input')}" type="text" class="form-control ${isHidden}" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled} />
 					<span class="input-group-addon ${isHidden}">
 						<i class="glyphicon glyphicon-time ${isHidden}"></i>
 					</span>

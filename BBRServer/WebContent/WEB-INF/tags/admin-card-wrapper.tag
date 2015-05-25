@@ -10,7 +10,7 @@
 	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
 	    <title>
-	    	<c:out value="${title}"/>
+	    	<c:out value="${context.gs(title)}"/>
 	    </title>
 
 	    <!-- Bootstrap -->
@@ -51,7 +51,7 @@
 	    <link href="css/bbr-admin.css" rel="stylesheet">	
   	</head>
   	<body>
-		<t:top-menu title="Control Panel. ${title}"/>
+		<t:top-menu title="${context.gs('LBL_CONTROL_PANEL').concat(' ').concat(context.gs(title))}"/>
   		<div class="container-fluid">
   			<div class="row">
 		  		<t:side-menu />

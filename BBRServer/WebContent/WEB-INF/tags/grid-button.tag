@@ -21,7 +21,7 @@
 <c:set var="items" scope="request" value="${items.concat(', {orderable: false, render: 
 	function(data, type, row, meta)	{
 		').concat(ifterm).concat('
-		  return \"').concat(buttonDef).concat(label).concat('</button>\";
+		  return \"').concat(buttonDef).concat(context.gs(label)).concat('</button>\";
 		').concat(elseterm).concat('
 	}
 ')}"/>

@@ -9,7 +9,7 @@
    request.setAttribute("allowed", context.isPageAllowed(level));%>
 
 <c:if test="${allowed}">
-    <h5>${title}</h5>
+    <h5>${context.gs(title)}</h5>
 	<ul class="nav nav-sidebar">
 		<jsp:doBody/>
 	</ul>

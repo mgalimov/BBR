@@ -23,7 +23,7 @@
 		<c:if test="${badge.equals('true')}">
 			<span class="badge pull-right" id="${itemId}"></span>
 		</c:if>
-		<c:out value="${title}"/></a>
+		<c:out value="${context.gs(title)}"/></a>
 	</li>
 </c:if>
 

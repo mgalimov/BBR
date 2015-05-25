@@ -9,12 +9,12 @@
    <div class="container-fluid">
      <div class="navbar-header">
        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-         <span class="sr-only">Toggle navigation</span>
+         <span class="sr-only">${context.gs('LBL_TOP_MENU_TOGGLE_NAV')}</span>
          <span class="icon-bar"></span>
          <span class="icon-bar"></span>
          <span class="icon-bar"></span>
        </button>
-       <a class="navbar-brand" href="#">BBR Service <c:out value="${title}"/></a>
+       <a class="navbar-brand" href="#"><c:out value="${context.gs('LBL_APPLICATION_NAME')}"/> <c:out value="${title}"/></a>
      </div>
      <div class="navbar-collapse collapse">
        <ul class="nav navbar-nav navbar-right">
@@ -30,9 +30,9 @@
 					    <li class="divider"></li>
 					    <li><a href="#" id="signOutLink">
 		         		<% if (context.user != null) 
-		         				out.println("Sign Out");
+		         				out.println(context.gs("LBL_SIGN_OUT_BTN"));
 		         		   else 
-		         		   		out.println("Sign In");%></a></li>
+		         		   		out.println(context.gs("LBL_SIGN_IN_BTN"));%></a></li>
 					</ul>
 		 </li>
 		 <li class="dropdown">
@@ -53,7 +53,7 @@
 		 </li>
        </ul>
        <form class="navbar-form navbar-right">
-         <input type="text" class="form-control" placeholder="Search...">
+         <input type="text" class="form-control" placeholder="${context.gs('LBL_SEARCH_FIELD_PLACEHOLDER')}">
        </form>
      </div>
    </div>
