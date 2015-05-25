@@ -241,6 +241,8 @@ public class BBRContext {
 	}
 	
 	public String gs(String msg) {
+		if (msg.equals("")) return "";
+		
 		String res;
 		try {
 			res = resourceBundle.getString(msg);
