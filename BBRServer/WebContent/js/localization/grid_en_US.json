@@ -1,0 +1,22 @@
+{
+  "processing": "Please wait...",
+  "search": "Search:",
+  "lengthMenu": "Show _MENU_ records",
+  "info": "Records from _START_ to _END_ of _TOTAL_ records",
+  "infoEmpty": "Records from 0 to 0 of 0 records",
+  "infoFiltered": "(filtered from _MAX_ records)",
+  "infoPostFix": "",
+  "loadingRecords": "Loading records...",
+  "zeroRecords": "No records.",
+  "emptyTable": "There are not records in the table.",
+  "paginate": {
+    "first": "First",
+    "previous": "Previous",
+    "next": "Next",
+    "last": "Last"
+  },
+  "aria": {
+    "sortAscending": ": click to sort column ascending",
+    "sortDescending": ": click to sort column descending"
+  }
+}

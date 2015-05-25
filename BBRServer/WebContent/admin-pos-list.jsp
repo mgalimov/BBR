@@ -4,7 +4,7 @@
 	<jsp:body>
 		<t:grid method="BBRPoSes" editPage="admin-pos-edit.jsp" createPage="admin-pos-create.jsp" title="LBL_POSES_TITLE">
 			<t:grid-item label="LBL_TITLE" field="title" sort="asc"/>
-			<t:grid-item label="LBL_LOCATION_DESC" field="locationDescription" sort="asc"/>
+			<t:grid-item label="LBL_LOC_DESCRIPTION" field="locationDescription" sort="asc"/>
 			<t:grid-item label="LBL_SHOP" field="shop.title"/>
 			<t:grid-item label="LBL_START_WORKHOUR" field="startWorkHour" type="time"/>
 			<t:grid-item label="LBL_END_WORKHOUR" field="endWorkHour" type="time"/>

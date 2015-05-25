@@ -227,7 +227,11 @@ public class BBRContext {
 	public Locale getLocale() {
 		return locale;
 	}
-	
+
+	public String getLocaleString() {
+		return locale.getLanguage()+"_"+locale.getCountry();
+	}
+
 	public String gs(String msg, Object... args) {
 		String res = gs(msg);
 		

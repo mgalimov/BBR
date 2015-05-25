@@ -105,7 +105,10 @@
 		 	    	order: [${sorting}],
 		 	    	serverSide: true,
 		 	    	lengthChange: false,
-		 	    	searching: false
+		 	    	searching: false,
+		 	    	language: {
+		 	    		url: 'js/localization/grid_${context.getLocaleString()}.json'
+		 	    	}
 			  	});
 	
 	    $('#grid').on( 'click', 'tbody tr', function () {
