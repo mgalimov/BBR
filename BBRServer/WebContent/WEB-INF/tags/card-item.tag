@@ -92,8 +92,9 @@
 				<c:if test="${isDisabled.equals('readonly')}">
 					<c:set var="isDis" value="disabled" />
 				</c:if>
+				<c:set var="opts" scope="request" value="${context.gs(options)}" />
 				<select class="form-control ${isHidden}" id="${ft.concat('input')}" ${isRequired} ${isDis}>
-					<c:forTokens items="${options}" delims="," var="option">
+					<c:forTokens items="${opts}" delims="," var="option">
 						<option value="${option.split(':')[0]}">${option.split(':')[1]}</option>
 						<c:if test="${defaultValue != null}">
 							<option value="${defaultValue}">${defaultDisplay}</option>

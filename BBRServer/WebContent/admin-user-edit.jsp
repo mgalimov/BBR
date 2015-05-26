@@ -1,15 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
-<t:admin-card-wrapper title="Edit user">
+<t:admin-card-wrapper title="LBL_EDIT_USER_TITLE">
 	<jsp:body>
-		<t:card method="BBRUsers" gridPage="admin-user-list.jsp" title="Edit user">
-			<t:card-item label="Email" field="email" type="info" isRequired="required" />
-			<t:card-item label="First name" field="firstName" type="text" isRequired="required" />
-			<t:card-item label="Last name" field="lastName" type="text" isRequired="required" />
-			<t:card-item label="Shop" field="shop" type="reference" referenceFieldTitle="title" referenceMethod="BBRShops" isRequired="required" />
-			<t:card-item label="PoS" field="pos" type="reference" referenceFieldTitle="title" referenceMethod="BBRPoSes" isRequired="required" />
-			<t:card-item label="Approved" field="approved" type="select" options="true:Approved,false:Not approved yet" isRequired="required" />
-			<t:card-item label="Role" field="role" type="select" options="1:Visitor,2:Pos specialist,4:Pos administrator,8:Shop administrator,256:BBR Service Owner" isRequired="required" />
+		<t:card method="BBRUsers" gridPage="admin-user-list.jsp" title="LBL_EDIT_USER_TITLE">
+			<t:card-item label="LBL_EMAIL" field="email" type="info" isRequired="required" />
+			<t:card-item label="LBL_FIRST_NAME" field="firstName" type="text" isRequired="required" />
+			<t:card-item label="LBL_LAST_NAME" field="lastName" type="text" isRequired="required" />
+			<t:card-item label="LBL_SHOP" field="shop" type="reference" referenceFieldTitle="title" referenceMethod="BBRShops" isRequired="required" />
+			<t:card-item label="LBL_POS" field="pos" type="reference" referenceFieldTitle="title" referenceMethod="BBRPoSes" isRequired="required" />
+			<t:card-item label="LBL_APPROVED" field="approved" type="select" options="true:Approved,false:Not approved yet" isRequired="required" />
+			<t:card-item label="LBL_ROLE" field="role" type="select" options="OPT_ROLES" isRequired="required" />
 		</t:card>
 	</jsp:body>
 </t:admin-card-wrapper>

@@ -49,12 +49,12 @@
 	}
 %>
 
-<h4 id="dateInfo">Set date and time</h4>
+<h4 id="dateInfo">${context.gs('LBL_SET_DATE_TIME_TITLE')}</h4>
 
 <div class="panel col-md-4">
 	<div id="dateinput" class="panel"></div>
-	<t:card-item label="Select specialist" type="reference" field="spec" referenceFieldTitle="name" referenceMethod="BBRSpecialists"/>
-	<t:card-item label="Select procedure" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures"/>
+	<t:card-item label="LBL_SELECT_SPECIALIST" type="reference" field="spec" referenceFieldTitle="name" referenceMethod="BBRSpecialists"/>
+	<t:card-item label="LBL_SELECT_PROCEDURE" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures"/>
 	<t:card-item label="" type="text" field="timeScheduled" isHidden="hidden"/>
 	<div id="summary"></div>
 </div>
@@ -66,7 +66,10 @@
 	</table>
 </div>
 
+<script type="text/javascript" src="http://jqueryui.com/ui/i18n/jquery.ui.datepicker-${context.getLocale().getLanguage()}.js"></script>
+
 <script>
+ $(document).ready(function() {
 	var timeSelected = "12:00";
 	var procLength = 1;
 
@@ -143,8 +146,9 @@
  		$("#dateInfo").text(dtString);
 	}
 	
- 	$("#dateinput").datepicker({onSelect: select});
+ 	$("#dateinput").datepicker({onSelect: select}, $.datepicker.regional['${context.getLocale().getLanguage()}']);
  	$("#specinput").on("change", select);
  	$("#procedureinput").on("change", select);
- 	$("#scheduleTable td").on("click", function(e) {setTime($(e.target).parent());}); 	
+ 	$("#scheduleTable td").on("click", function(e) {setTime($(e.target).parent());});
+ });
 </script>
