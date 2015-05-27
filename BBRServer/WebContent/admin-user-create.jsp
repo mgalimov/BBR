@@ -9,7 +9,7 @@
 			<t:card-item label="LBL_PASSWORD" field="password" type="password" isRequired="required"/>
 			<t:card-item label="LBL_SHOP" field="shop" type="reference" referenceFieldTitle="title" referenceMethod="BBRShops" isRequired="required" />
 			<t:card-item label="LBL_POS" field="pos" type="reference" referenceFieldTitle="title" referenceMethod="BBRPoSes" isRequired="required" />
-			<t:card-item label="LBL_ROLE" field="role" type="select" options="OPT_ROLES" isRequired="required" />
+			<t:card-item label="LBL_ROLE" field="role" type="select" options="OPT_ROLES" isRequired="required" defaultValue="4"/>
 		</t:card>
 	</jsp:body>
 </t:admin-card-wrapper>

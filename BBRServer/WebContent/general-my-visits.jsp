@@ -1,17 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
-<t:admin-grid-wrapper title="My visits">
+<t:admin-grid-wrapper title="LBL_MY_VISITS_TITLE">
 	<jsp:body>
-		<t:grid method="BBRVisits" editPage="general-edit-visit.jsp" createPage="general-plan-visit.jsp" title="Visits">
-			<t:grid-item label="Date and Time" field="timeScheduled" />
-			<t:grid-item label="Point of sale (service)" field="pos.title"/>
-			<t:grid-item label="Name" field="userName"/>
-			<t:grid-item label="Contacts" field="userContacts"/>
-			<t:grid-item label="Specialist" field="spec.title"/>
-			<t:grid-item label="Status" field="status"/>
-			<t:grid-item label="Length, hours" field="length"/>
-			<t:grid-item label="Pos start time" field="pos.startWorkHour" type="time"/>
-			<t:grid-item label="Pos end time" field="pos.endWorkHour" type="time"/>
+		<t:grid method="BBRVisits" editPage="general-edit-visit.jsp" createPage="general-plan-visit.jsp" title="LBL_MY_VISITS_TITLE">
+			<t:grid-item label="LBL_DATE_TIME" field="timeScheduled" />
+			<t:grid-item label="LBL_POS" field="pos.title"/>
+			<t:grid-item label="LBL_USER_NAME" field="userName"/>
+			<t:grid-item label="LBL_CONTACT_INFO" field="userContacts"/>
+			<t:grid-item label="LBL_SPEC" field="spec.title"/>
+			<t:grid-item label="LBL_VISIT_STATUS" field="status"/>
+			<t:grid-item label="LBL_VISIT_LENGTH" field="length"/>
+			<t:grid-item label="LBL_POS_START_WORKHOUR" field="pos.startWorkHour" type="time"/>
+			<t:grid-item label="LBL_POS_END_WORKHOUR" field="pos.endWorkHour" type="time"/>
 		</t:grid>
 	</jsp:body>
 </t:admin-grid-wrapper>

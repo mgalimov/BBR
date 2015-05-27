@@ -149,8 +149,9 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 		if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
 			if (context.user.getShop() != null)
 				where = manager.whereShop(context.user.getShop().getId());
-		
-		where += " and (state <> 2)";
+		if (!where.equals("")) 
+			where = "(" + where +") and";
+		where += "(state <> 2)";
 		return manager.count(where).toString();
 	}
 }

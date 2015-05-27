@@ -2,19 +2,19 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:nav>
-	<t:nav-group title="Общее администрирование" level="admin">
-		<t:nav-item href="admin-user-list.jsp" title="Пользователи" />
-		<t:nav-item href="admin-shop-list.jsp" title="Салоны" />
-		<t:nav-item href="admin-pos-list.jsp" title="Точки продаж" />
+	<t:nav-group title="LBL_GENERAL_ADMINISTRATION_MENU" level="admin">
+		<t:nav-item href="admin-user-list.jsp" title="LBL_USERS_MENU" />
+		<t:nav-item href="admin-shop-list.jsp" title="LBL_SHOPS_MENU" />
+		<t:nav-item href="admin-pos-list.jsp" title="LBL_POSES_MENU" />
 	</t:nav-group>
-	<t:nav-group title="Управление" level="manager">
-		<t:nav-item href="manager-spec-list.jsp" title="Специалисты" />
-		<t:nav-item href="manager-proc-list.jsp" title="Процедуры" />
-		<t:nav-item href="manager-task-list.jsp" title="Задачи" badge="true" badgeMethod="BBRTasks"/>
+	<t:nav-group title="LBL_POS_MANAGEMENT_MENU" level="manager">
+		<t:nav-item href="manager-spec-list.jsp" title="LBL_SPECS_MENU" />
+		<t:nav-item href="manager-proc-list.jsp" title="LBL_PROCEDURES_MENU" />
+		<t:nav-item href="manager-task-list.jsp" title="LBL_TASKS_MENU" badge="true" badgeMethod="BBRTasks"/>
 	</t:nav-group>
-	<t:nav-group title="Пользователь" level="general">
-		<t:nav-item href="general-plan-visit.jsp" title="Спланируйте ваш визит" />
-		<t:nav-item href="general-my-visits.jsp" title="Мои визиты" />
+	<t:nav-group title="LBL_USER_MENU" level="general">
+		<t:nav-item href="general-plan-visit.jsp" title="LBL_PLAN_YOUR_VISIT_MENU" />
+		<t:nav-item href="general-my-visits.jsp" title="LBL_MY_VISITS_MENU" />
 	</t:nav-group>
 </t:nav>
 

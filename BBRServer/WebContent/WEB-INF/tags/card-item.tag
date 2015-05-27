@@ -93,20 +93,24 @@
 					<c:set var="isDis" value="disabled" />
 				</c:if>
 				<c:set var="opts" scope="request" value="${context.gs(options)}" />
-				<select class="form-control ${isHidden}" id="${ft.concat('input')}" ${isRequired} ${isDis}>
+
+				<select class="selectized" style="display: none" id="${ft.concat('input')}" ${isRequired}  ${isDis}>
 					<c:forTokens items="${opts}" delims="," var="option">
-						<option value="${option.split(':')[0]}">${option.split(':')[1]}</option>
-						<c:if test="${defaultValue != null}">
-							<option value="${defaultValue}">${defaultDisplay}</option>
+						<c:set var="selected" value="" />
+						<c:if test="${defaultValue != null && defaultValue.equals(option.split(':')[0])}">
+							<c:set var="selected" value="selected" />
 						</c:if>
+						<option value="${option.split(':')[0]}" ${selected}>${option.split(':')[1]}</option>
 					</c:forTokens>
 				</select>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat('.toString());')}"/>
-				<c:if test="${defaultValue != null}">
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
-					        $(\"#').concat(ft).concat('input\")')}"/>
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.val(\"').concat(defaultValue).concat('\");')}"/>
-				</c:if>
+				
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize.setValue([obj.').concat(field).concat(']);')}"/>
+				
+				<script>
+				$("#${field.concat('input')}").selectize({
+				    openOnFocus: true
+				 });
+				</script>
 			</c:when>
 			
 			<c:when test="${type.equals('reference')}">
