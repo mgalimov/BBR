@@ -26,7 +26,8 @@
 		         		<span class="caret"></span>
 		         	</a>
 	         		<ul class="dropdown-menu" role="menu">
-					    <li><a href="general-user-profile.jsp">Profile and Settings</a></li>
+					    <li><a href="general-user-profile.jsp">
+					    	<% out.println(context.gs("LBL_USER_PROFILE_BTN"));%></a></li>
 					    <li class="divider"></li>
 					    <li><a href="#" id="signOutLink">
 		         		<% if (context.user != null) 

@@ -54,8 +54,7 @@ public class BBRContext {
 			} else {
 				if (candidate.comparePasswordTo(BBRUserManager.encodePassword(password))) {
 					user = candidate;
-/*					BBRContext context = BBRContext.getContext(request);
-					context.setLocale(user.getLanguage().split("_")[0], user.getLanguage().split("_")[1]);*/
+					setLocale(user.getLanguage());
 					lastSignInError = "";
 				} else {
 					lastSignInError = gs(BBRErrors.ERR_INCORRECT_PASSWORD);
@@ -87,6 +86,7 @@ public class BBRContext {
 			} else {
 				if (candidate.comparePasswordTo(pwdhash)) {
 					user = candidate;
+					setLocale(user.getLanguage());
 					lastSignInError = "";
 				} else {
 					lastSignInError = gs(BBRErrors.ERR_INCORRECT_PASSWORD);
@@ -117,6 +117,7 @@ public class BBRContext {
 		try {
 			BBRUser candidate = mgr.createAndStoreUser(email, firstName, lastName, password, BBRUserRole.ROLE_VISITOR, null, null);
 			user = candidate;
+			setLocale(user.getLanguage());
 			lastSignInError = "";
 		} catch (Exception ex) {
 			lastSignInError = ex.getLocalizedMessage();
@@ -227,7 +228,16 @@ public class BBRContext {
 	
 	public void setLocale(String language, String country) {
 		locale = new Locale(language, country);
+		if (resourceBundle != null)
+			ResourceBundle.clearCache();
 		resourceBundle = ResourceBundle.getBundle("bbr", locale, new BBR.UTF8Control());
+	}
+
+	public void setLocale(String lang_country) {
+		String lang = lang_country.split("_")[0];
+		String country = lang_country.split("_")[1];
+		if (lang != null && country != null)
+			setLocale(lang, country);
 	}
 
 	public Locale getLocale() {

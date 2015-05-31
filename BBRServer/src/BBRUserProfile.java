@@ -25,6 +25,9 @@ public class BBRUserProfile extends BBRBasicServlet<BBRUser, BBRUserManager> {
     		HttpServletRequest request, HttpServletResponse response)
     		throws Exception {
     	obj.setLanguage(params.get("language"));
+    	BBRContext context = BBRContext.getContext(request);
+    	context.setLocale(obj.getLanguage());
+    	context.user = obj;
     	return obj;
     }
 }
