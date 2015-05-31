@@ -25,7 +25,7 @@
 <c:if test="${type.equals('select')}">
 	<c:set var="optarrK" value="" />
 	<c:set var="optarrV" value="" />
-	<c:forTokens items="${options}" delims="," var="option">
+	<c:forTokens items="${context.gs(options)}" delims="," var="option">
 		<c:set var="optarrK" value="${optarrK.concat(option.split(':')[0]).concat(',')}" />
 		<c:set var="optarrV" value="${optarrV.concat('\"').concat(option.split(':')[1]).concat('\",')}" />
 	</c:forTokens>

@@ -17,7 +17,7 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
     }
 
 	@Override
-	String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+	protected String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		String title = params.get("title");
 		String posId = params.get("pos");
 		BBRPoSManager mgr = new BBRPoSManager();

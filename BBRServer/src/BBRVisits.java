@@ -28,7 +28,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
     }
 
 	@Override
-	String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	protected String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		BBRContext context = BBRContext.getContext(request);
 		int visitStep = context.getLastVisitStep();
 		

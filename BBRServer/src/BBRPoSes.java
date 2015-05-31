@@ -19,7 +19,7 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
     }
 
 	@Override
-	String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	protected String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String shopId = params.get("shop");
 		String title = params.get("title");
 		String locationDescription = params.get("locationDescription");

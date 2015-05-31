@@ -151,7 +151,9 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 	}
 
 
-	abstract String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	protected String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		return null;
+	}
 
 	@SuppressWarnings("unchecked")
 	protected String update(Cls obj, BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {

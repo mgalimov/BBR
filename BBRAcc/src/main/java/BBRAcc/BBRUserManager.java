@@ -38,6 +38,7 @@ public class BBRUserManager extends BBRDataManager<BBRUser> {
         user.setRole(role);
         user.setShop(shop);
         user.setPos(pos);
+        user.setLanguage(BBRAccReg.defaultLanguage);
         session.save(user);
 
         BBRUtil.commitTran(sessionIndex, tr);

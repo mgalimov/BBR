@@ -14,7 +14,7 @@ public class BBRShops extends BBRBasicServlet<BBRShop, BBRShopManager> {
     }
 
 	@Override
-	String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	protected String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String title = params.get("title");
 		manager.createAndStoreShop(title);
 		return "";

@@ -77,6 +77,8 @@
 
  	$(document).ready(function () {
  		idParam = getUrlParameter('id');
+ 		if (idParam == "")
+ 			idParam = 0;
 		${itemPreload}
 		if (idParam && idParam != 'new') 
 		{

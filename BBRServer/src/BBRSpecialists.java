@@ -18,7 +18,7 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
     }
 
 	@Override
-	String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	protected String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String name = params.get("name");
 		String position = params.get("position");
 		String posId = params.get("pos");

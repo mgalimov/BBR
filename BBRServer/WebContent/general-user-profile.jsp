@@ -5,11 +5,16 @@
 	BBRContext context = BBRContext.getContext(request);
 	if (context.user == null)
 		response.sendRedirect(request.getContextPath() + "/" + context.getSignInPage());
-	else
-		request.setAttribute("userName", context.user.getFirstName() + " " + context.user.getLastName());
+	 else
+		if (request.getParameter("id") == null)
+			response.sendRedirect(request.getContextPath() + "/" + context.getUserProfilePage() + "?id=" + context.user.getId().toString());
+	
 %>
-<t:general-wrapper title="User profile">
+<t:general-wrapper title="LBL_USER_PROFILE_TITLE">
 <jsp:body>
- ${userName}
+ 	<t:card title="LBL_USER_PROFILE_TITLE" gridPage="general-user-profile.jsp" method="BBRUserProfile">
+ 		<t:card-item type="info" field="userName" label="LBL_USER_NAME" />
+ 		<t:card-item type="select" field="language" label="LBL_LANGUAGE" options="OPT_LANGUAGE" />
+ 	</t:card>
 </jsp:body>
 </t:general-wrapper>

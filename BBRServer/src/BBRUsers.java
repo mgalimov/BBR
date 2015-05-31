@@ -10,8 +10,6 @@ import BBRAcc.BBRShopManager;
 import BBRAcc.BBRUser;
 import BBRAcc.BBRUserManager;
 import BBRAcc.BBRUser.BBRUserRole;
-import BBRClientApp.BBRContext;
-
 
 @WebServlet("/BBRUsers")
 public class BBRUsers extends BBRBasicServlet<BBRUser, BBRUserManager> {
@@ -22,8 +20,7 @@ public class BBRUsers extends BBRBasicServlet<BBRUser, BBRUserManager> {
     }
 
 	@Override
-	String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		BBRContext context = BBRContext.getContext(request);
+	protected String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String email = params.get("email");
 		String firstName = params.get("firstName");
 		String lastName = params.get("lastName");
@@ -56,7 +53,6 @@ public class BBRUsers extends BBRBasicServlet<BBRUser, BBRUserManager> {
 
 	@Override
 	protected BBRUser beforeUpdate(BBRUser user, BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		BBRContext context = BBRContext.getContext(request);
 		String firstName = params.get("firstName");
 		String lastName = params.get("lastName");
 		String approved = params.get("approved");

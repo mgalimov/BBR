@@ -54,6 +54,8 @@ public class BBRContext {
 			} else {
 				if (candidate.comparePasswordTo(BBRUserManager.encodePassword(password))) {
 					user = candidate;
+/*					BBRContext context = BBRContext.getContext(request);
+					context.setLocale(user.getLanguage().split("_")[0], user.getLanguage().split("_")[1]);*/
 					lastSignInError = "";
 				} else {
 					lastSignInError = gs(BBRErrors.ERR_INCORRECT_PASSWORD);
@@ -134,14 +136,18 @@ public class BBRContext {
 			return "admin-index.jsp";
 		
 		if (user.getApproved())
-			return "general-user-profile.jsp";
+			return getUserProfilePage();
 		else
-			return "general-user-profile.jsp";
+			return getUserProfilePage();
 		
 	}
 
 	public String getSignInPage() {
 		return "general-signin.jsp";
+	}
+	
+	public String getUserProfilePage() {
+		return "general-user-profile.jsp";
 	}
 	
 	public boolean isPageAllowed(String page) {
@@ -252,4 +258,9 @@ public class BBRContext {
 		
 		return res;
 	}
+	
+	public String addJsonField(String json, String field, String value) {
+		return json.substring(0, json.length() - 2) + ",\"" + field + "\":\"" + value + "\"}";
+	}
+	
 }

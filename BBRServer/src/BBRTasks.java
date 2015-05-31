@@ -23,7 +23,7 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
     }
 
 	@Override
-	String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+	protected String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		String title = params.get("title");
 		String performerId = params.get("performer");
 		BBRUserManager mgr = new BBRUserManager();

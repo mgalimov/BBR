@@ -17,6 +17,7 @@ public class BBRUser extends BBRDataElement {
 	private boolean approved;
 	private BBRShop shop;
 	private BBRPoS pos;
+	private String language;
 
 	public class BBRUserRole {
 		public static final int ROLE_BBR_OWNER = 256;
@@ -104,6 +105,14 @@ public class BBRUser extends BBRDataElement {
 	}
 
 	public BBRUser() {
+		language = BBRAccReg.defaultLanguage;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 	
+	public String getLanguage() {
+		return language;
+	}
 }

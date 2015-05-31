@@ -1,19 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
-<t:admin-grid-wrapper title="Tasks">
+<t:admin-grid-wrapper title="LBL_TASKS_TITLE">
 	<jsp:body>
 		<t:grid method="BBRTasks" editPage="manager-task-edit.jsp" 
-				createPage="manager-task-create.jsp" title="Tasks" 
+				createPage="manager-task-create.jsp" title="LBL_TASKS_TITLE" 
 				customToolbar="true">
-			<t:toolbar-item label="Open" id="edit" accent="btn-info"></t:toolbar-item>
-			<t:toolbar-item label="Toggle view all" id="viewAll" icon="glyphicon-tasks"></t:toolbar-item>
+			<t:toolbar-item label="LBL_OPEN_BTN" id="edit" accent="btn-info"></t:toolbar-item>
+			<t:toolbar-item label="LBL_TOGGLE_ALL_BTN" id="viewAll" icon="glyphicon-tasks"></t:toolbar-item>
 			<t:grid-button label="" icon="glyphicon-ok" condition="state != 2"/>
-			<t:grid-item label="Title" field="title"/>
-			<t:grid-item label="Point of Service" field="pos.title"/>
-			<t:grid-item label="Performer" field="performer"/>
-			<t:grid-item label="Text" field="text"/>
-			<t:grid-item label="Deadline" field="deadline" sort="desc"/>
-			<t:grid-item label="State" field="state" type="select" options="0:Initialized,1:Read,2:Completed"/>
+			<t:grid-item label="LBL_TITLE" field="title"/>
+			<t:grid-item label="LBL_POS" field="pos.title"/>
+			<t:grid-item label="LBL_PERFORMER" field="performer"/>
+			<t:grid-item label="LBL_TASK_TEXT" field="text"/>
+			<t:grid-item label="LBL_DEADLINE" field="deadline" sort="desc"/>
+			<t:grid-item label="LBL_TASK_STATE" field="state" type="select" options="OPT_TASK_STATE"/>
 		</t:grid>
 		
 		<script>
