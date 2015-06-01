@@ -1,14 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
-<t:admin-grid-wrapper title="Procedures">
+<t:admin-grid-wrapper title="LBL_PROCEDURES_TITLE">
 	<jsp:body>
-		<t:grid method="BBRProcedures" editPage="manager-proc-edit.jsp" createPage="manager-proc-create.jsp" title="Procedures">
-			<t:grid-item label="Point of sale (service)" field="pos.title"/>
-			<t:grid-item label="Title" field="title" sort="asc"/>
-			<t:grid-item label="length, hrs" field="length"/>
-			<t:grid-item label="Price" field="price"/>
-			<t:grid-item label="Currency" field="currency"/>
-			<t:grid-item label="Status" field="status" type="select" options="0:Initialized,1:Approved,2:Inactive"/>
+		<t:grid method="BBRProcedures" editPage="manager-proc-edit.jsp" createPage="manager-proc-create.jsp" title="LBL_PROCEDURES_TITLE">
+			<t:grid-item label="LBL_POS" field="pos.title"/>
+			<t:grid-item label="LBL_TITLE" field="title" sort="asc"/>
+			<t:grid-item label="LBL_PROC_LENGTH" field="length"/>
+			<t:grid-item label="LBL_PROC_PRICE" field="price"/>
+			<t:grid-item label="LBL_CURRENCY" field="currency"/>
+			<t:grid-item label="LBL_PROC_STATUS" field="status" type="select" options="OPT_PROC_STATUS"/>
 		</t:grid>
 	</jsp:body>
 </t:admin-grid-wrapper>

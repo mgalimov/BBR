@@ -36,7 +36,7 @@ public class BBRContext {
 		BBRContext app = (BBRContext)session.getAttribute("context");
 		if (app == null) {
 			app = new BBRContext();
-			app.setLocale("ru", "RU");
+			app.setLocale("en", "US");
 			session.setAttribute("context", app);
 		}
 		return app;
@@ -227,10 +227,11 @@ public class BBRContext {
 	}
 	
 	public void setLocale(String language, String country) {
-		locale = new Locale(language, country);
-		if (resourceBundle != null)
-			ResourceBundle.clearCache();
-		resourceBundle = ResourceBundle.getBundle("bbr", locale, new BBR.UTF8Control());
+		Locale alocale = new Locale(language, country);
+		ResourceBundle aresourceBundle = ResourceBundle.getBundle("bbr", alocale, new BBR.UTF8Control());
+		ResourceBundle.clearCache();
+		locale = alocale;
+		resourceBundle = aresourceBundle;
 	}
 
 	public void setLocale(String lang_country) {

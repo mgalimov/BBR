@@ -43,34 +43,33 @@
 	request.setAttribute("posIds", posIds);
 	
 	if (visitStep == 4) {
-		String outString = "<p>Your visit id is " + context.planningVisit.getId() + "</p>";
+		String outString = "<p>" + context.gs("LBL_YOUR_VISIT_ID", context.planningVisit.getId()) + "</p>";
 		BBRPoS pos = context.planningVisit.getPos(); 
 		if (pos != null) {
-			outString += "<p>Place " + pos.getTitle() + " at ";
-			outString += pos.getLocationDescription();
-			outString += "<a href='" + context.planningVisit.getPos().getMapHref() + "'>See map</a></p>";
+			outString += "<p>" + context.gs("LBL_YOUR_VISIT_AT", pos.getTitle(), pos.getLocationDescription());
+			outString += "<a href='" + context.planningVisit.getPos().getMapHref() + "'>"+context.gs("LBL_YOUR_VISIT_SEE_MAP")+"</a></p>";
 		}
-		outString += "<p>Date and time " + context.planningVisit.getTimeScheduled() + "</p>";
+		outString += "<p>" + context.gs("LBL_YOUR_VISIT_TIME", context.planningVisit.getTimeScheduled()) + "</p>";
 		if (context.planningVisit.getSpec() != null) {
-			outString += "<p>Your specialist is " + context.planningVisit.getSpec().getName() + "</p>";
+			outString += "<p>" + context.gs("LBL_YOUR_VISIT_SPEC", context.planningVisit.getSpec().getName()) + "</p>";
 		}
 		if (context.planningVisit.getProcedure() != null) {
-			outString += "<p>Your procedure is " + context.planningVisit.getProcedure().getTitle() + "</p>";
+			outString += "<p>" + context.gs("LBL_YOUR_VISIT_PROC", context.planningVisit.getProcedure().getTitle()) + "</p>";
 		}
-		outString += "<p>It will take " + context.planningVisit.getLength() + " hours.</p>";
+		outString += "<p>" + context.gs("LBL_YOUR_VISIT_LENGTH", context.planningVisit.getLength()) + "</p>";
 		
 		request.setAttribute("outString", outString);
 	}
 	
 %>
-<t:general-wrapper title="Plan your visit">
+<t:general-wrapper title="LBL_PLAN_VISIT_TITLE">
 <jsp:body>
 
 <c:choose>
 	<c:when test="${visitStep == 1}">
-		<t:card title="Plan your visit. Step 1. Place to visit" gridPage="general-plan-visit.jsp" method="BBRVisits" buttonSave="Go to step 2" buttonCancel="Cancel">
+		<t:card title="LBL_PLAN_VISIT_STEP_1" gridPage="general-plan-visit.jsp" method="BBRVisits" buttonSave="LBL_GOTO_STEP2_BTN" buttonCancel="LBL_CANCEL_VISIT_BTN">
 			<div class="panel col-md-12" id="map" style="height: 300px"></div>
-			<t:card-item label="Select place" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes" defaultValue="${closestPoS}" defaultDisplay="${closestPoSName}"/>
+			<t:card-item label="LBL_SELECT_PLACE" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes" defaultValue="${closestPoS}" defaultDisplay="${closestPoSName}"/>
 		</t:card>
 		
 		<script>
@@ -87,22 +86,22 @@
 	</c:when>
 
 	<c:when test="${visitStep == 2}">
-		<t:card title="Plan your visit. Step 2. Date and time" gridPage="general-plan-visit.jsp" method="BBRVisits" buttonSave="Go to step 3" buttonCancel="Cancel">
+		<t:card title="LBL_PLAN_VISIT_STEP_2" gridPage="general-plan-visit.jsp" method="BBRVisits" buttonSave="LBL_GOTO_STEP3_BTN" buttonCancel="LBL_CANCEL_VISIT_BTN">
 			<t:card-schedule-spec-proc/>
 		</t:card>
 	</c:when>
 
 	<c:when test="${visitStep == 3}">
-		<t:card title="Plan your visit. Step 3. Contact information" gridPage="general-plan-visit.jsp" method="BBRVisits" buttonSave="Get it done" buttonCancel="Cancel">
-			<t:card-item label="Your name" type="text" field="userName" isRequired="required" defaultValue="${userName}"/>
-			<t:card-item label="Your phone" type="text" field="userContacts" isRequired="required" />
+		<t:card title="LBL_PLAN_VISIT_STEP_3" gridPage="general-plan-visit.jsp" method="BBRVisits" buttonSave="LBL_GET_IT_DONE_BTN" buttonCancel="LBL_CANCEL_VISIT_BTN">
+			<t:card-item label="LBL_YOUR_NAME" type="text" field="userName" isRequired="required" defaultValue="${userName}"/>
+			<t:card-item label="LBL_YOUR_PHONE" type="text" field="userContacts" isRequired="required" />
 		</t:card>
 	</c:when>
 	
 	<c:when test="${visitStep == 4}">
 		<div>
-			<h1>Your visit planned</h1>
-			<p>You'll get approved soon. Please find your visit information below:</p>
+			<h1>${context.gs('LBL_VISIT_CREATED')}</h1>
+			<p>${context.gs('LBL_YOULL_GET_APPROVED_SOON')}</p>
 			<c:out value="${outString}" escapeXml="false"/>
 		</div>
 	</c:when>

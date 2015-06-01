@@ -2,15 +2,15 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 
-<t:general-wrapper title="Create procedure">
+<t:general-wrapper title="LBL_CREATE_PROCEDURE_TITLE">
 <jsp:body>
-		<t:card title="Create procedure" gridPage="manager-proc-list.jsp" method="BBRProcedures">
-			<t:card-item label="Select place" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes" />
-			<t:card-item label="Title" type="text" field="title" isRequired="required" />
-			<t:card-item label="Length, hrs" type="text" field="length" isRequired="required" defaultValue="0.5"/>
-			<t:card-item label="Price" type="text" field="price" />
-			<t:card-item label="Currency" type="text" field="currency" />
-			<t:card-item label="Status" type="select" field="status" options="0:Initialized,1:Approved,2:Inactive"/>
+		<t:card title="LBL_CREATE_PROCEDURE_TITLE" gridPage="manager-proc-list.jsp" method="BBRProcedures">
+			<t:card-item label="LBL_POS" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes" />
+			<t:card-item label="LBL_TITLE" type="text" field="title" isRequired="required" />
+			<t:card-item label="LBL_PROC_LENGTH" type="text" field="length" isRequired="required" defaultValue="0.5"/>
+			<t:card-item label="LBL_PROC_PRICE" type="text" field="price" />
+			<t:card-item label="LBL_CURRENCY" type="text" field="currency" />
+			<t:card-item label="LBL_PROC_STATUS" type="select" field="status" options="OPT_PROC_STATUS"/>
 		</t:card>
 </jsp:body>
 </t:general-wrapper>
