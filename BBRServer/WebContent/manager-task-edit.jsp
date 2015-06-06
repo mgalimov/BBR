@@ -19,7 +19,8 @@
 		
 		<t:card method="BBRTasks" gridPage="manager-task-list.jsp" title="LBL_TASK_TITLE" showFooter="false" showToolbar="true">
 			<t:toolbar-item label="LBL_APPROVE_BTN" id="approveButton" accent="btn-info"/> 
-			<t:toolbar-item label="LBL_OPEN_VISIT_BTN visit" id="openVisitButton" /> 
+			<t:toolbar-item label="LBL_DISAPPROVE_BTN" id="disapproveButton" accent="btn-warning"/> 
+			<t:toolbar-item label="LBL_OPEN_VISIT_BTN" id="openVisitButton" /> 
 			<t:card-item label="LBL_TITLE" field="title" type="text" isDisabled="readonly"/>
 			<t:card-item label="LBL_POS" field="pos" type="reference" referenceFieldTitle="title" referenceMethod="BBRPoSes" isDisabled="readonly"/>
 			<t:card-item label="LBL_PERFORMER" field="performer" type="reference" referenceFieldTitle="name" referenceMethod="BBRUsers" isDisabled="readonly"/>
@@ -44,7 +45,21 @@
 				        });									
 					}					
 				});
-				
+
+				$("#disapproveButton").on("click", function() {
+					idParam = getUrlParameter('id');
+					if (idParam && idParam != 'new') {
+						$.ajax({
+				        	url: 'BBRTasks',
+				        	data: {
+				        		operation: 'disapprove',
+				        		taskId: idParam
+				        	}
+				        }).success(function(d) {
+				        	window.location.href = 'manager-task-list.jsp'; 
+				        });									
+					}					
+				});
 				$("#openVisitButton").on("click", function() {
 					idParam = getUrlParameter('id');
 					if (idParam && idParam != 'new') {

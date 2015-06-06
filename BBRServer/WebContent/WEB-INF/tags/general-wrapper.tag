@@ -28,21 +28,15 @@
 	    <script src="js/jquery-1.11.2.min.js"></script>
 	    <!-- Include all compiled plugins (below), or include individual files as needed -->
 	    <script src="js/bootstrap.min.js"></script>
-	  
-		<!--  JQUERY-UI (only sortable and datepicker is needed) -->
-		<link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
-		<script type="text/javascript" src="js/jquery-ui.min.js"></script>
-		<!--  if timepicker is used in filters -->
-		
-		<link rel="stylesheet" type="text/css" href="css/jquery-ui-timepicker-addon.min.css"/>
-		<script type="text/javascript" src="js/jquery-ui-timepicker-addon.min.js"></script>
-		<!--  if touch event support is needed (mobile devices) -->
-		<script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
-
-		<!-- SELECTIZE -->
-		<script type="text/javascript" src="js/selectize.js"></script>
-		<link rel="stylesheet" type="text/css" href="css/selectize.css" />
 		  
+		<!-- SELECTIZE -->
+		<script type="text/javascript" src="js/selectize.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/selectize.css" />
+
+		<!-- Time Picker -->
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-timepicker.min.css" />
+		<script type="text/javascript" src="js/bootstrap-timepicker.min.js" ></script>
+
   		<!-- BBR Utils -->
 	    <script src="js/bbr-utils.js"></script>
 	    <link href="css/bbr-admin.css" rel="stylesheet">	

@@ -25,6 +25,7 @@ public class BBRVisit extends BBRDataElement {
 		public static final int VISSTATUS_APPROVED = 1;
 		public static final int VISSTATUS_CANCELLED = 3;
 		public static final int VISSTATUS_PERFORMED = 4;
+		public static final int VISSTATUS_DISAPPROVED = 4;
 	}
 	
 	private int status = 0;

@@ -45,7 +45,7 @@ public class BBRContext {
 	public String SignIn(String email, String password) {
 		BBRUserManager mgr = new BBRUserManager();
 		
-		if (email == null || email == "") {
+		if (email == null || email.equals("")) {
 			lastSignInError = gs(BBRErrors.ERR_EMPTY_EMAIL);
 		} else {
 			BBRUser candidate = mgr.findUserByEmail(email);
@@ -79,7 +79,7 @@ public class BBRContext {
 				pwdhash = c.getValue();
 		}
 		
-		if (email != "" && pwdhash != "") {
+		if (email != "" && !pwdhash.equals("")) {
 			BBRUser candidate = mgr.findUserByEmail(email);
 			if (candidate == null) {
 				lastSignInError = gs(BBRErrors.ERR_USER_NOTFOUND);
@@ -235,6 +235,8 @@ public class BBRContext {
 	}
 
 	public void setLocale(String lang_country) {
+		if (lang_country == null)
+			return;
 		String lang = lang_country.split("_")[0];
 		String country = lang_country.split("_")[1];
 		if (lang != null && country != null)
@@ -271,7 +273,7 @@ public class BBRContext {
 	}
 	
 	public String addJsonField(String json, String field, String value) {
-		return json.substring(0, json.length() - 2) + ",\"" + field + "\":\"" + value + "\"}";
+		return json.substring(0, json.length() - 1) + ",\"" + field + "\":\"" + value + "\"}";
 	}
 	
 }

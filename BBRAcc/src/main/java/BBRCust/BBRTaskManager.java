@@ -66,4 +66,15 @@ public class BBRTaskManager extends BBRDataManager<BBRTask>{
     public String whereShop(Long shopId) {
     	return "pos.shop.id = " + shopId;
     };
+    
+    public BBRVisit getVisit(BBRTask task) {
+    	if (task == null)
+    		return null;
+    	
+    	if (task.getObjectType().equals("BBRCust.BBRVisit")) {
+    		BBRVisitManager mgr = new BBRVisitManager();
+    		return mgr.findById(task.getObjectId());
+    	} else
+    		return null;
+    }
 }

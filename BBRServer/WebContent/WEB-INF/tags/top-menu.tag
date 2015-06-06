@@ -18,6 +18,22 @@
      </div>
      <div class="navbar-collapse collapse">
        <ul class="nav navbar-nav navbar-right">
+       	 <li class="dropdown">
+		 	<a href="#">
+ 	   		<span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+         		<% 
+         			if (context.user != null) {
+         		   		if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
+         		   			if (context.user.getShop() != null)
+    	     		   			out.println(context.user.getShop().getTitle());
+         		
+	         			if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
+         		   			if (context.user.getPos() != null)
+	        	 				out.println(context.user.getPos().getShop().getTitle() + " / " + context.user.getPos().getTitle());
+         			}
+	        	 %>
+	        </a>
+		 </li>
          <li class="dropdown">
                  	<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" role="button">
 		         		<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
@@ -36,26 +52,8 @@
 		         		   		out.println(context.gs("LBL_SIGN_IN_BTN"));%></a></li>
 					</ul>
 		 </li>
-		 <li class="dropdown">
-		 	<a href="#">
- 	   		<span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
-         		<% 
-         			if (context.user != null) {
-         		   		if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
-         		   			if (context.user.getShop() != null)
-    	     		   			out.println(context.user.getShop().getTitle());
-         		
-	         			if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
-         		   			if (context.user.getPos() != null)
-	        	 				out.println(context.user.getPos().getShop().getTitle() + " / " + context.user.getPos().getTitle());
-         			}
-	        	 %>
-	        </a>
-		 </li>
+		 
        </ul>
-       <form class="navbar-form navbar-right">
-         <input type="text" class="form-control" placeholder="${context.gs('LBL_SEARCH_FIELD_PLACEHOLDER')}">
-       </form>
      </div>
    </div>
 </div> 

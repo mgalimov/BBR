@@ -137,4 +137,20 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 
 		return new BBRScheduleList(specCount, list, procLength);
 	}
+	
+
+	public void approve(BBRVisit visit) {
+		if (visit != null) {
+			visit.setStatus(BBRVisitStatus.VISSTATUS_APPROVED);
+			update(visit);
+		}
+	}
+
+	public void disapprove(BBRVisit visit) {
+		if (visit != null) {
+			visit.setStatus(BBRVisitStatus.VISSTATUS_DISAPPROVED);
+			update(visit);
+		}		
+	}
+
 }

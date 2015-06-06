@@ -11,6 +11,8 @@
 			<t:card-item label="LBL_PHONE_SELECTED" type="text" field="userContacts"  isDisabled="readonly" />
 			<t:card-item label="LBL_PROCEDURE_SELECTED" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures" isDisabled="readonly"/>
 			<t:card-item label="LBL_SPEC_SELECTED" type="reference" field="spec" referenceFieldTitle="name" referenceMethod="BBRSpecialists" isDisabled="readonly"/>
+			<t:card-item label="LBL_POS_START_WORKHOUR" field="pos.startWorkHour" type="time" isDisabled="readonly"/>
+			<t:card-item label="LBL_POS_END_WORKHOUR" field="pos.endWorkHour" type="time" isDisabled="reaadonly"/>
 		</t:card>
 </jsp:body>
 </t:general-wrapper>

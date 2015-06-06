@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
-<t:admin-card-wrapper title="Point of Sale">
+<t:admin-card-wrapper title="LBL_POS_TITLE">
 	<jsp:body>
 		<t:card method="BBRPoSes" gridPage="admin-pos-list.jsp" title="LBL_POS_TITLE">
 			<t:card-item label="LBL_SHOP" field="shop" type="reference" referenceMethod="BBRShops" referenceFieldTitle="title"/>

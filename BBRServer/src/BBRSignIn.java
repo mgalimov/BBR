@@ -51,6 +51,8 @@ public class BBRSignIn extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + "/" + context.getWelcomePage());
 		} catch (Exception ex) {
 			String respText = ex.getLocalizedMessage();
+			if (respText == null)
+				respText = "";
 			response.setStatus(700);
 			response.setContentType("text/plain");  
 			response.setCharacterEncoding("UTF-8"); 

@@ -13,6 +13,8 @@ import BBRClientApp.BBRContext;
 import BBRCust.BBRTask;
 import BBRCust.BBRTask.BBRTaskState;
 import BBRCust.BBRTaskManager;
+import BBRCust.BBRVisit;
+import BBRCust.BBRVisitManager;
 
 @WebServlet("/BBRTasks")
 public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
@@ -107,6 +109,25 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 			BBRTask task = manager.findById(taskId);
 			if (task != null) {
 				task.setState(BBRTaskState.TASKSTATE_COMPLETED);
+				BBRVisit visit = manager.getVisit(task);
+				if (visit != null) {
+					BBRVisitManager mgr = new BBRVisitManager();
+					mgr.approve(visit);
+				}
+				manager.update(task);
+			}
+			res = "";
+		} else
+		if (operation.equals("disapprove")) {
+			Long taskId = Long.parseLong(params.get("taskId"));
+			BBRTask task = manager.findById(taskId);
+			if (task != null) {
+				task.setState(BBRTaskState.TASKSTATE_COMPLETED);
+				BBRVisit visit = manager.getVisit(task);
+				if (visit != null) {
+					BBRVisitManager mgr = new BBRVisitManager();
+					mgr.disapprove(visit);
+				}
 				manager.update(task);
 			}
 			res = "";
@@ -126,8 +147,9 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 			Long taskId = Long.parseLong(params.get("taskId"));
 			BBRTask task = manager.findById(taskId);
 			if (task != null) {
-				if (task.getObjectType().equals("BBRCust.BBRVisit"))
-					res = task.getObjectId().toString();
+				BBRVisit visit = manager.getVisit(task);
+				if (visit != null)
+					res = visit.getId().toString();
 			}
 		} else
 		if (operation.equals("togglealltasks")) {
@@ -143,6 +165,9 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 			HttpServletResponse response) {
 		BBRContext context = BBRContext.getContext(request);
 		String where = "";
+		if (context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER)
+			return "0";
+		
 		if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
 			if (context.user.getPos() != null)
 				where = manager.wherePos(context.user.getPos().getId());

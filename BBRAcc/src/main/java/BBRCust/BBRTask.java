@@ -105,5 +105,5 @@ public class BBRTask extends BBRDataElement {
 	public void setPos(BBRPoS pos) {
 		this.pos = pos;
 	}
-	
+
 }
