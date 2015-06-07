@@ -12,8 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import BBR.BBRErrors;
-import BBR.BBRGPS;
+import BBR.*;
 import BBRAcc.*;
 import BBRAcc.BBRUser.BBRUserRole;
 import BBRCust.BBRVisit;
@@ -228,7 +227,7 @@ public class BBRContext {
 	
 	public void setLocale(String language, String country) {
 		Locale alocale = new Locale(language, country);
-		ResourceBundle aresourceBundle = ResourceBundle.getBundle("bbr", alocale, new BBR.UTF8Control());
+		ResourceBundle aresourceBundle = ResourceBundle.getBundle("bbr", alocale, new UTF8Control());
 		ResourceBundle.clearCache();
 		locale = alocale;
 		resourceBundle = aresourceBundle;
