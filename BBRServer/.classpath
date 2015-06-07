@@ -12,7 +12,6 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/BBRMain"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/BBRData"/>
 	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Tomcat7">
 		<attributes>

@@ -3,7 +3,6 @@
 	<name>BBRServer</name>
 	<comment></comment>
 	<projects>
-		<project>BBRMain</project>
 		<project>BBRData</project>
 	</projects>
 	<buildSpec>

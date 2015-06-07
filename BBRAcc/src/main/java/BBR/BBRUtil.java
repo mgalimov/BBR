@@ -35,7 +35,8 @@ public class BBRUtil {
 
     private static Gson buildGson() {
     	GsonBuilder b = new GsonBuilder();
-    	Gson gson = b.registerTypeAdapterFactory(BBR.HibernateProxyTypeAdapter.FACTORY).serializeNulls().setDateFormat("yyyy-MM-dd HH:mm").create();
+    	b.registerTypeAdapterFactory(BBR.HibernateProxyTypeAdapter.FACTORY).serializeNulls().setDateFormat("yyyy-MM-dd HH:mm");
+    	Gson gson = b.create();
 		return gson;
 	}
 

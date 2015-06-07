@@ -260,6 +260,7 @@ public class BBRContext {
 	}
 	
 	public String gs(String msg) {
+		if (msg == null) return "";
 		if (msg.equals("")) return "";
 		
 		String res;

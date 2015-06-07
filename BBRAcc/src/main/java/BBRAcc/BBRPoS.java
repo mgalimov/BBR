@@ -1,11 +1,11 @@
 package BBRAcc;
 
-import java.text.SimpleDateFormat;
+//import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import BBR.BBRDataElement;
 import BBR.BBRGPS;
-import BBR.BBRUtil;
+//import BBR.BBRUtil;
 
 public class BBRPoS extends BBRDataElement {
 	private Long id;
@@ -73,7 +73,7 @@ public class BBRPoS extends BBRDataElement {
 	public void setEndWorkHour(Date endWorkHour) {
 		this.endWorkHour = endWorkHour;
 	}
-
+/*
 	@Override
 	public String toJson() {
 		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
@@ -108,6 +108,7 @@ public class BBRPoS extends BBRDataElement {
 		
 		BBRPoSString() {}
 	}
+ */
 	
 	public String getMapHref() {
 		if (locationGPS != null)

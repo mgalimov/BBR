@@ -13,7 +13,13 @@ public class BBRGPS {
 		this.lat = lat;
 		this.lng = lng;
 	}
-	
+
+	public BBRGPS(String gps) {
+		String[] s = gps.split(",");
+		this.lat = Double.parseDouble(s[0]);
+		this.lng = Double.parseDouble(s[1]);
+	}
+
 	public String toString() {
 		return String.format("%.3f, %.3f", lat, lng);
 	}
