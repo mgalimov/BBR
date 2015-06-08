@@ -8,7 +8,7 @@
 			<t:grid-item label="LBL_USER_NAME" field="userName"/>
 			<t:grid-item label="LBL_CONTACT_INFO" field="userContacts"/>
 			<t:grid-item label="LBL_SPEC" field="spec.title"/>
-			<t:grid-item label="LBL_VISIT_STATUS" field="status"/>
+			<t:grid-item label="LBL_VISIT_STATUS" field="status" type="select" options="OPT_VISIT_STATUS"/>
 			<t:grid-item label="LBL_VISIT_LENGTH" field="length"/>
 			<t:grid-item label="LBL_POS_START_WORKHOUR" field="pos.startWorkHour" type="time"/>
 			<t:grid-item label="LBL_POS_END_WORKHOUR" field="pos.endWorkHour" type="time"/>

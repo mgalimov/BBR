@@ -18,7 +18,7 @@ import com.google.gson.GsonBuilder;
 public class BBRUtil {
     private static final List<SessionFactory> sessionFactory = new ArrayList<SessionFactory>();
     private static int lastIndex = 0;
-    public static final Gson gson = buildGson();
+    public static final GsonBuilder gsonBuilder = createGsonBuilder();
 
     public static int buildSessionFactory(Configuration configuration) {
         try {
@@ -33,11 +33,16 @@ public class BBRUtil {
         }
     }
 
-    private static Gson buildGson() {
+    private static GsonBuilder createGsonBuilder() {
     	GsonBuilder b = new GsonBuilder();
-    	b.registerTypeAdapterFactory(BBR.HibernateProxyTypeAdapter.FACTORY).serializeNulls().setDateFormat("yyyy-MM-dd HH:mm");
-    	Gson gson = b.create();
-		return gson;
+    	b.registerTypeAdapterFactory(BBR.HibernateProxyTypeAdapter.FACTORY);
+    	b.serializeNulls();
+    	b.setDateFormat("yyyy-MM-dd HH:mm");
+		return b;
+	}
+
+	public static Gson gson() {
+		return gsonBuilder.create();
 	}
 
 	public static SessionFactory getSessionFactory(int index) {

@@ -1,5 +1,6 @@
 package BBRCust;
 
+import BBR.BBRUtil;
 import BBRAcc.BBRAccReg;
 
 public class BBRCustReg {
@@ -12,6 +13,9 @@ public class BBRCustReg {
 		
 			return BBRUtil.buildSessionFactory(config);
 		 */
+
+		BBRUtil.gsonBuilder.registerTypeAdapter(BBRVisit.class, new BBRVisitSerializer());
+
 		return BBRAccReg.sessionIndex;
 	}
 }

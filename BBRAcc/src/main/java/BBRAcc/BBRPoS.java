@@ -5,7 +5,6 @@ import java.util.Date;
 
 import BBR.BBRDataElement;
 import BBR.BBRGPS;
-//import BBR.BBRUtil;
 
 public class BBRPoS extends BBRDataElement {
 	private Long id;
@@ -73,43 +72,7 @@ public class BBRPoS extends BBRDataElement {
 	public void setEndWorkHour(Date endWorkHour) {
 		this.endWorkHour = endWorkHour;
 	}
-/*
-	@Override
-	public String toJson() {
-		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-		BBRPoSString ps = new BBRPoSString();
-		ps.id = id;
-		ps.title = title;
-		ps.locationDescription = locationDescription;
-		ps.locationGPS = locationGPS;
-		if (startWorkHour != null)
-			ps.startWorkHour = df.format(startWorkHour);
-		else
-			ps.startWorkHour = "08:00";
-		
-		if (endWorkHour != null)
-			ps.endWorkHour = df.format(endWorkHour);
-		else
-			ps.endWorkHour = "21:00";
-		ps.shop = shop;
-		String s = BBRUtil.gson.toJson(ps);
-		return s;
-	}
-	
-	@SuppressWarnings("unused")
-	private class BBRPoSString {
-		public Long id;
-		public String title;
-		public String locationDescription;
-		public BBRGPS locationGPS;
-		public String startWorkHour;
-		public String endWorkHour;
-		public BBRShop shop;
-		
-		BBRPoSString() {}
-	}
- */
-	
+
 	public String getMapHref() {
 		if (locationGPS != null)
 			return "https://maps.yandex.ru/?ll=" + locationGPS.lng + "," + locationGPS.lat;

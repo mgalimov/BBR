@@ -44,7 +44,7 @@ public class BBRSchedule extends HttpServlet {
 			String procId = params.get("proc");
 			BBRScheduleList list = mgr.getSchedule(dateSelected, context.planningVisit.getPos().getId().toString(), specId, procId);
 
-			respText += BBRUtil.gson.toJson(list); 
+			respText += BBRUtil.gson().toJson(list); 
 		} catch (Exception ex) {
 			respText = ex.getLocalizedMessage();
 			response.setStatus(700);
