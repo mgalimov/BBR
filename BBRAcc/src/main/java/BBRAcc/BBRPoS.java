@@ -1,18 +1,23 @@
 package BBRAcc;
 
-//import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import BBR.BBRDataElement;
 import BBR.BBRGPS;
+import BBR.JsonFormat;
 
 public class BBRPoS extends BBRDataElement {
 	private Long id;
 	private String title;
 	private String locationDescription;
 	private BBRGPS locationGPS;
+
+	@JsonFormat(format="HH:mm")
 	private Date startWorkHour;
+
+	@JsonFormat(format="HH:mm")
 	private Date endWorkHour;
+
 	public BBRShop shop;
 	
 	public BBRPoS() {}

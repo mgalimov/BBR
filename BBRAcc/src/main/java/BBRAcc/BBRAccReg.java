@@ -11,8 +11,6 @@ public class BBRAccReg {
 		Configuration config = new Configuration();
 		config.configure("hibernate.cfg.xml");
 		
-		BBRUtil.gsonBuilder.registerTypeAdapter(BBRPoS.class, new BBRPoSSerializer());
-		
 		return BBRUtil.buildSessionFactory(config);
 	}
 }
