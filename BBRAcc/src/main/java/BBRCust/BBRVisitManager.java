@@ -70,18 +70,19 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	}
 	
 	public class BBRScheduleList {
-		public Long specCount;
 		public List<Object[]> list;
+		public List<Object[]> specs;
 		public int procLength;
-		
-		BBRScheduleList(Long specCount, List<Object[]> list, int procLength) {
-			this.specCount = specCount;
+				
+		BBRScheduleList(List<Object[]> list, int procLength, List<Object[]> specs) {
 			this.list = list;
+			this.specs = specs;
 			this.procLength = procLength;
 		}
 	}
 	
-	public BBRScheduleList getSchedule(Date date, String posId, String specialistId, String procedureId) {
+	@SuppressWarnings("unchecked")
+	public BBRScheduleList getSchedule(Date date, String posId, String procedureId) {
 		if (posId == null) return null;
 		if (posId == "") return null;
 		
@@ -91,29 +92,19 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         Date endOfDay = BBRUtil.getEndOfDay(date);
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         
-        String select = "select visit.timeScheduled as timeScheduled, visit.length as length";
+        String select = "select visit.timeScheduled as timeScheduled, visit.spec.id as spec, visit.length as length";
         String from = " from BBRVisit visit";
         String where = " where timeScheduled >= '" + df.format(startOfDay) + "' and "
         			 + "timeScheduled <= '" + df.format(endOfDay) + "'";
         where = where + " and visit.pos.id = " + posId;
-        Long specCount = (long) 0;
         
-        if (specialistId != null)
-        	if (!specialistId.equals("")) {
-        		where = where + " and visit.spec.id = " + specialistId;
-        		specCount = (long) 1;
-        	}
         String orderBy = " order by visit.timeScheduled ASC";
         
         Query query = session.createQuery(select + from + where + orderBy);
-        
-		@SuppressWarnings("unchecked")
 		List<Object[]> list = query.list();
 		
-		if (specCount == 0) {
-			query = session.createQuery("select count(*) from BBRSpecialist spec where spec.pos.id = " + posId);
-			specCount = (Long) query.uniqueResult();
-		}
+		query = session.createQuery("select spec.id, spec.name from BBRSpecialist spec where spec.pos.id = " + posId);
+		List<Object[]> specs = query.list();
         
 		DateFormat hf = new SimpleDateFormat("HH");
 		DateFormat mf = new SimpleDateFormat("mm");
@@ -123,19 +114,19 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 				line[0] = Long.parseLong(hf.format((Date)line[0])) * 2;
 			else
 				line[0] = Long.parseLong(hf.format((Date)line[0])) * 2 + 1;
-			line[1] = Math.round(((Float) line[1]) * 2);
+			line[2] = Math.round(((Float) line[2]) * 2);
 		}
 			
         BBRUtil.commitTran(sessionIndex, tr);
 		
         Integer procLength = 1;
-		if (!procedureId.equals("")) {
+		if (procedureId != null && !procedureId.equals("")) {
 			BBRProcedureManager pmgr = new BBRProcedureManager();
 			BBRProcedure proc = pmgr.findById(Long.parseLong(procedureId));
 			procLength = Math.round(proc.getLength() * 2);
 		}
 
-		return new BBRScheduleList(specCount, list, procLength);
+		return new BBRScheduleList(list, procLength, specs);
 	}
 	
 

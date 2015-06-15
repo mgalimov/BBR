@@ -1,4 +1,12 @@
-<%@ tag language="java" pageEncoding="UTF-8" description="Card Schedule-Spec-Proc" import="BBRClientApp.BBRContext"%>
+<%@tag import="java.util.Date"%>
+<%@tag import="java.text.SimpleDateFormat"%>
+<%@tag import="BBRCust.BBRVisitManager"%>
+<%@tag import="BBRCust.BBRVisitManager.*"%>
+<%@tag import="BBRCust.BBRSpecialistManager"%>
+<%@tag import="BBRCust.BBRSpecialist"%>
+<%@tag import="BBR.BBRDataSet"%>
+
+<%@tag language="java" pageEncoding="UTF-8" description="Card Schedule-Spec-Proc" import="BBRClientApp.BBRContext"%>
 <%@tag import="BBRAcc.BBRPoS"%>
 <%@tag import="java.util.Calendar"%>
 
@@ -8,6 +16,15 @@
 <%
 	BBRContext context = BBRContext.getContext(request);
 	BBRPoS pos = context.planningVisit.getPos();
+	Date dateSelected = new Date();
+	SimpleDateFormat df = new SimpleDateFormat("dd MMMM");
+	SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+	
+	BBRVisitManager vmgr = new BBRVisitManager();
+	
+	BBRSpecialistManager smgr = new BBRSpecialistManager();
+	BBRDataSet<BBRSpecialist> slist = smgr.list("", "spec.name ASC", pos);
+	
 	Calendar calendar = Calendar.getInstance();
 	
 	if (pos.getStartWorkHour() != null)
@@ -21,6 +38,7 @@
 	int endWorkMin = calendar.get(Calendar.MINUTE);
 	
 	String schOut = "";
+	String specOut = "<tr><td><small><span class='glyphicon glyphicon-user'></span>&nbsp;</small></td></tr>";
 	
 	if (startWorkHour <= 0)
 		startWorkHour = 8;
@@ -32,123 +50,198 @@
 		endWorkHour = 23;
 	
 	int hh = startWorkHour;
-	
+	String hs;
+
+	schOut += "<thead><tr>";
 	if (startWorkMin > 0) {
-		schOut += "<tr><td class='col-md-1'>" + hh + ":30</td><td class='col-md-3' id='oc" + hh + "30'></tr>";
+		if (hh < 10) hs = "0" + hh; else hs = "" + hh;
+		schOut += "<th><small>" + hs + ":30</small></th>";
 		hh++;
 	}
-		
 	for (Integer h = hh; h <= endWorkHour - 1; h++) {
-		schOut += "<tr><td class='col-md-1'>" + h + ":00</td><td class='col-md-3' id='oc" + h + "00'></tr>";
-		schOut += "<tr><td class='col-md-1'>" + h + ":30</td><td class='col-md-3' id='oc" + h + "30'></tr>";
+		if (h < 10) hs = "0" + h; else hs = "" + h;
+		schOut += "<th colspan='2'><small>" + hs + ":00</small></th>";
+		//schOut += "<th class='col-sm-1'><small>" + hs + ":30</small></th>";
 	}
-
 	if (endWorkMin > 0) {
 		hh = endWorkHour;
-		schOut += "<tr><td class='col-md-1'>" + hh + ":00</td><td class='col-md-3' id='oc" + hh + "00'></tr>";
+		if (hh < 10) hs = "0" + hh; else hs = "" + hh;
+		schOut += "<th><small>" + hs + ":30</small></th>";
 	}
+	schOut += "</tr></thead><tbody>";
+
+	for (BBRSpecialist spec : slist.data) {
+		hh = startWorkHour;
+		schOut += "<tr>";
+		specOut += "<tr><td><small>" + spec.getName() + "</small></td></tr>";
+		String sid = spec.getId().toString(); 
+		if (startWorkMin > 0) {
+			if (hh < 10) hs = "0" + hh; else hs = "" + hh;
+			schOut += "<td id='sp"+ sid + "_oc" + hs + "_30'><small>&nbsp;</small></td>";
+			hh++;
+		}
+		for (Integer h = hh; h <= endWorkHour - 1; h++) {
+			if (h < 10) hs = "0" + h; else hs = "" + h;
+			schOut += "<td id='sp"+ sid + "_oc" + hs + "_00'><small>&nbsp;</small></td>";
+			schOut += "<td id='sp"+ sid + "_oc" + hs + "_30'><small>&nbsp;</small></td>";
+		}
+		if (endWorkMin > 0) {
+			hh = endWorkHour;
+			if (hh < 10) hs = "0" + hh; else hs = "" + hh;
+			schOut += "<td id='sp"+ sid + "_oc" + hs + "_00'><small>&nbsp;</small></td>";
+		}
+		schOut += "</tr></tbody>";
+	}
+	
+	calendar.setTime(dateSelected);
 %>
-
-<h4 id="dateInfo">${context.gs('LBL_SET_DATE_TIME_TITLE')}</h4>
-
-<div class="panel col-md-4">
-	<div id="dateinput" class="panel"></div>
-	<t:card-item label="LBL_SELECT_SPECIALIST" type="reference" field="spec" referenceFieldTitle="name" referenceMethod="BBRSpecialists"/>
-	<t:card-item label="LBL_SELECT_PROCEDURE" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures"/>
-	<t:card-item label="" type="text" field="timeScheduled" isHidden="hidden"/>
-	<div id="summary"></div>
+<div class="row">
+	<div class="panel col-md-10">
+		<t:card-item label="LBL_SELECT_PROCEDURE" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures"/>
+	</div>
 </div>
-<div class="panel col-md-8" style="min-height: 100px; max-height: 300px; overflow-y: scroll;">
-	<table class="table table-striped table-hover" id="scheduleTable">
-		<tbody>
+
+<div class="row">
+	<div class="panel col-md-10">
+		<label>${context.gs('LBL_SET_DATE_TIME_TITLE')}</label>
+	</div>
+</div>
+<div class="row">
+	<div class="panel col-md-10" style="overflow: hidden">
+		<nobr>
+		<%
+			out.print("<button type='button' class='btn btn-info btn-sm' id='sd" + sf.format(calendar.getTime()) + "'>" + df.format(calendar.getTime()) + "</button>");
+			for (int i = 1; i <= 10; i++) {
+				calendar.add(Calendar.DATE, 1);
+				out.print("<button type='button' class='btn btn-link btn-sm' id='sd" + sf.format(calendar.getTime()) + "'>" + df.format(calendar.getTime()) + "</button>");
+			}
+		%>
+		</nobr>
+		<button class='btn btn-link' id='nextDateBtn'><span class="glyphicon glyphicon-chevron-right"></span></button>
+	</div>
+</div>
+<div class="row">
+	<div class="panel col-md-2" style="overflow:hidden">
+		<table class="table table-condensed noselection">
+			<tbody>
+				<%=specOut %>
+			</tbody>
+		</table>
+	</div>
+	<div class="panel col-md-8" style="overflow-x: auto">
+		<table class="table table-hover table-condensed table-bordered noselection" id="scheduleTable">
 			<%=schOut %>
-		</tbody>
-	</table>
-</div>
-
-<script type="text/javascript" src="http://jqueryui.com/ui/i18n/jquery.ui.datepicker-${context.getLocale().getLanguage()}.js"></script>
+		</table>
+	</div>
+</div>	
+	
+<t:card-item label="" type="text" field="timeScheduled" isHidden="hidden"/>
+<t:card-item label="" type="text" field="spec" isHidden="hidden"/>
 
 <script>
- $(document).ready(function() {
 	var timeSelected = "12:00";
+	var specSelected = -1;
 	var procLength = 1;
 
+	$(document).ready(function() {
+		$("button[id^='sd']").click(function(e) {
+			$("button[id^='sd']").removeClass('btn-info').addClass('btn-link');
+			$(this).removeClass('btn-link').addClass('btn-info');
+			select();
+		});
+	
+	 	$("#procedureinput").on("change", select);
+	 	$("#scheduleTable td").on("click", function(e) {setTime($(e.target));});
+	 	
+	 	select();
+	 });
+ 		
 	function select() {
- 		dateSelected = $("#dateinput").val();
- 		specSelected = $("#specinput").val();
+ 		dateSelected = $("button[id^='sd'].btn-info").attr('id').substring(2, 12);
  		procSelected = $("#procedureinput").val();
  		
- 		$("#timeScheduled").val(dateSelected + " ");
+ 		$("#timeScheduledinput").val(dateSelected + " ");
  		
 		$.get('BBRSchedule', {
 				date: dateSelected,
-				spec: specSelected,
 				proc: procSelected
 			}, 
 			function (responseText) {
 				obj = $.parseJSON(responseText);
 				arr = obj.list;
-				specCount = obj.specCount;
+				specs = obj.specs;
 				procLength = obj.procLength;
 				
-				var sch = new Array(47);
+				var spc = new Object();
+				
+				var sch = new Array(specs.length);
+				for (j = 0; j < specs.length; j++) {
+					sch[j] = new Array(47);
+					spc[specs[j][0]] = j;
+				}
+				
+				for (i = 0; i < 47; i++)
+					for (j = 0; j < specs.length; j++)
+						sch[j][i] = 0; 
 
-				for (i = 0; i <= 47; i++)
-					sch[i] = 0; 
+				$("td.info").removeClass('info');
 				
 				for (i = 0; i < arr.length; i++) {
-					for (m = arr[i][0]; m < arr[i][0] + arr[i][1]; m++)
-						sch[m]++;
+					for (m = arr[i][0]; m < arr[i][0] + arr[i][2]; m++)
+						sch[spc[arr[i][1]]][m] = 1;
 				}
 				
-				$("td.info").removeClass('info');
-				for (i = 0; i <= 23; i++) {
-					if (sch[i*2] >= specCount)
-						if ($("#oc"+i+"00").length > 0)
-							$("#oc"+i+"00").addClass('info');
-					if (sch[i*2 + 1] >= specCount) 
-						if ($("#oc"+i+"30").length > 0)
-							$("#oc"+i+"30").addClass('info');			
-				}
+				for (i = 0; i <= 23; i++)
+					for (j = 0; j < specs.length; j++) {
+						if (sch[j][i*2] > 0) {
+							e = $("#sp"+specs[j][0]+"_oc"+i+"_00");
+							if (e.length > 0) e.addClass('info');
+						}
+						if (sch[j][i*2 + 1] > 0) {
+							e = $("#sp"+specs[j][0]+"_oc"+i+"_30");
+							if (e.length > 0) e.addClass('info');			
+						}
+					}
 				
 				setTime(null);
 			});
 	}
 
-	function setTime(trObj) {
-		if (trObj == null) {
-			trObj = $("#oc"+timeSelected.replace(":", "")).parent();
+	function setTime(obj) {
+		if (obj == null) {
+			if (specSelected >= 0)
+				obj = $("#sp"+specSelected+"_oc"+timeSelected.replace(":", "_"));
 		}
-		obj1 = $(trObj).children().first();
-		obj2 = $(obj1).next();
- 		if (!$(obj2).hasClass('info')) {
+
+		if (!obj) return;
+		
+		objId = obj.attr('id');
+		
+		if (!objId) return;
+		
+ 		timeSelected = objId.substring(objId.length - 5, objId.length).replace('_', ':');
+ 		specSelected = objId.substring(2, objId.length - 8);
+
+ 		if (!obj.hasClass('info')) {
  	 		$("td.success").removeClass('success');
  	 		$("td.danger").addClass('success');
  	 		$("td.danger").removeClass('danger');
- 	 		$(obj2).addClass('success');
- 	 		timeSelected = $(obj1).text();
+ 	 		obj.addClass('success');
  	 		
  	 		for (i = 2; i <= procLength; i++) {
- 	 			trObj = $(trObj).next();
- 	 			obj1 = $(trObj).children().first();
- 	 			obj2 = $(obj1).next();
- 	 	 		if (!$(obj2).hasClass('info')) {
- 	 	 	 		$(obj2).addClass('success');
+ 	 			obj = obj.next();
+ 	 	 		if (!obj.hasClass('info')) {
+ 	 	 	 		obj.addClass('success');
  	 	 		} else
  	 	 		{
- 	 	 	 		$(obj2).addClass('danger');
+ 	 	 	 		obj.addClass('danger');
  	 	 		}
  	 		}
 		}
- 		dateSelected = $("#dateinput").val();
+ 		dateSelected = $("button[id^='sd'].btn-info").attr('id').substring(2, 12);
  		dtString = dateSelected + " " + timeSelected;
  	 	$("#timeScheduledinput").val(dtString);
- 		$("#dateInfo").text(dtString);
+ 	 	$("#specinput").val(specSelected);
 	}
-	
- 	$("#dateinput").datepicker({onSelect: select}, $.datepicker.regional['${context.getLocale().getLanguage()}']);
- 	$("#specinput").on("change", select);
- 	$("#procedureinput").on("change", select);
- 	$("#scheduleTable td").on("click", function(e) {setTime($(e.target).parent());});
- });
+ 	
 </script>

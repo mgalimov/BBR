@@ -31,7 +31,7 @@ public class BBRSchedule extends HttpServlet {
 			BBRParams params = new BBRParams(request.getQueryString());
 
 			Date dateSelected;
-			DateFormat df = new SimpleDateFormat("MM/dd/yy");
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			respText = "";
 			
 			try {
@@ -40,11 +40,10 @@ public class BBRSchedule extends HttpServlet {
 				throw new Exception(BBRErrors.ERR_DATE_INCORRECT);
 			}
 			
-			String specId = params.get("spec");
 			String procId = params.get("proc");
-			BBRScheduleList list = mgr.getSchedule(dateSelected, context.planningVisit.getPos().getId().toString(), specId, procId);
+			BBRScheduleList list = mgr.getSchedule(dateSelected, context.planningVisit.getPos().getId().toString(), procId);
 
-			respText += BBRUtil.gson().toJson(list); 
+			respText = BBRUtil.gson().toJson(list); 
 		} catch (Exception ex) {
 			respText = ex.getLocalizedMessage();
 			response.setStatus(700);

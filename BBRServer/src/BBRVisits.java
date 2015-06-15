@@ -67,7 +67,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				context.planningVisit.setSpec(spec);
 			}
 			
-			DateFormat df = new SimpleDateFormat("M/d/y H:mm");
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd H:mm");
 			try {
 				Date timeScheduled = df.parse(params.get("timeScheduled"));
 				context.planningVisit.setTimeScheduled(timeScheduled);
