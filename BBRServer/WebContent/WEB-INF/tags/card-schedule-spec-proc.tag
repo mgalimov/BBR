@@ -1,4 +1,4 @@
-<%@tag import="java.util.Date"%>
+<%@tag import="java.util.*"%>
 <%@tag import="java.text.SimpleDateFormat"%>
 <%@tag import="BBRCust.BBRVisitManager"%>
 <%@tag import="BBRCust.BBRVisitManager.*"%>
@@ -14,6 +14,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 
 <%
+	int datesPerPage = 7;
+
 	BBRContext context = BBRContext.getContext(request);
 	BBRPoS pos = context.planningVisit.getPos();
 	Date dateSelected = new Date();
@@ -25,7 +27,7 @@
 	BBRSpecialistManager smgr = new BBRSpecialistManager();
 	BBRDataSet<BBRSpecialist> slist = smgr.list("", "spec.name ASC", pos);
 	
-	Calendar calendar = Calendar.getInstance();
+	Calendar calendar = Calendar.getInstance(context.getLocale());
 	
 	if (pos.getStartWorkHour() != null)
 		calendar.setTime(pos.getStartWorkHour());
@@ -93,6 +95,13 @@
 		schOut += "</tr></tbody>";
 	}
 	
+	Map<String, Integer> months = calendar.getDisplayNames(Calendar.MONTH, Calendar.LONG, context.getLocale());
+	
+	String dtOut = "var months = {};\n";
+	for (String month : months.keySet()) {
+		dtOut += "months[" + months.get(month) + "] = '" + month + "';\n";
+	}
+	
 	calendar.setTime(dateSelected);
 %>
 <div class="row">
@@ -107,17 +116,24 @@
 	</div>
 </div>
 <div class="row">
-	<div class="panel col-md-10" style="overflow: hidden">
+	<div class="panel col-sm-2">
+		<button class='btn btn-link' id='prevDateBtn' type="button"><span class="glyphicon glyphicon-chevron-left"></span></button>
+		<button class='btn btn-link' id='todayDateBtn' type="button"><span class="glyphicon glyphicon-time"></span></button>
+		<button class='btn btn-link' id='nextDateBtn' type="button"><span class="glyphicon glyphicon-chevron-right"></span></button>
+	</div>
+	<div class="panel col-md-8" >
 		<nobr>
 		<%
-			out.print("<button type='button' class='btn btn-info btn-sm' id='sd" + sf.format(calendar.getTime()) + "'>" + df.format(calendar.getTime()) + "</button>");
-			for (int i = 1; i <= 10; i++) {
+			out.print("<button type='button' class='btn btn-info btn-sm' style='width: 90px' id='sd" + sf.format(calendar.getTime()) + "'>" + df.format(calendar.getTime()) + "</button>");
+			for (int i = 1; i < datesPerPage; i++) {
 				calendar.add(Calendar.DATE, 1);
-				out.print("<button type='button' class='btn btn-link btn-sm' id='sd" + sf.format(calendar.getTime()) + "'>" + df.format(calendar.getTime()) + "</button>");
+				out.print("<button type='button' class='btn btn-link btn-sm' style='width: 90px' id='sd" + sf.format(calendar.getTime()) + "'>" + df.format(calendar.getTime()) + "</button>");
 			}
 		%>
 		</nobr>
-		<button class='btn btn-link' id='nextDateBtn'><span class="glyphicon glyphicon-chevron-right"></span></button>
+	</div>
+	<div class="panel col-md-1">
+		
 	</div>
 </div>
 <div class="row">
@@ -142,6 +158,7 @@
 	var timeSelected = "12:00";
 	var specSelected = -1;
 	var procLength = 1;
+	<%=dtOut %>
 
 	$(document).ready(function() {
 		$("button[id^='sd']").click(function(e) {
@@ -153,9 +170,23 @@
 	 	$("#procedureinput").on("change", select);
 	 	$("#scheduleTable td").on("click", function(e) {setTime($(e.target));});
 	 	
+	 	$("#nextDateBtn").click(function(e) { changeDatesOnButtons(<%=datesPerPage %>); });
+	 	$("#prevDateBtn").click(function(e) { changeDatesOnButtons(-<%=datesPerPage %>); });
+	 	
 	 	select();
 	 });
- 		
+	
+	function changeDatesOnButtons(modifier) {
+		$("button[id^='sd']").each(function (i) {
+			dt = new Date();
+ 			if (modifier != 0) 
+ 				dt.setTime(Date.parse($(this).attr('id').substring(2, 12)));
+ 			dt.setDate(dt.getDate() + modifier);
+ 			$(this).attr("id", "sd" + dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate());
+ 			$(this).text(dt.getDate() + " " + months[dt.getMonth()]);
+ 		}); 
+	}
+	
 	function select() {
  		dateSelected = $("button[id^='sd'].btn-info").attr('id').substring(2, 12);
  		procSelected = $("#procedureinput").val();
