@@ -122,15 +122,13 @@
 		<button class='btn btn-link' id='nextDateBtn' type="button"><span class="glyphicon glyphicon-chevron-right"></span></button>
 	</div>
 	<div class="panel col-md-8" >
-		<nobr>
 		<%
-			out.print("<button type='button' class='btn btn-info btn-sm' style='width: 90px' id='sd" + sf.format(calendar.getTime()) + "'>" + df.format(calendar.getTime()) + "</button>");
+			out.print("<button type='button' class='btn btn-info btn-sm' id='sd" + sf.format(calendar.getTime()) + "'>" + df.format(calendar.getTime()) + "</button>");
 			for (int i = 1; i < datesPerPage; i++) {
 				calendar.add(Calendar.DATE, 1);
-				out.print("<button type='button' class='btn btn-link btn-sm' style='width: 90px' id='sd" + sf.format(calendar.getTime()) + "'>" + df.format(calendar.getTime()) + "</button>");
+				out.print("<button type='button' class='btn btn-link btn-sm' id='sd" + sf.format(calendar.getTime()) + "'>" + df.format(calendar.getTime()) + "</button>");
 			}
 		%>
-		</nobr>
 	</div>
 	<div class="panel col-md-1">
 		
@@ -172,6 +170,7 @@
 	 	
 	 	$("#nextDateBtn").click(function(e) { changeDatesOnButtons(<%=datesPerPage %>); });
 	 	$("#prevDateBtn").click(function(e) { changeDatesOnButtons(-<%=datesPerPage %>); });
+	 	$("#todayDateBtn").click(function(e) { changeDatesOnButtons(0); });
 	 	
 	 	select();
 	 });
@@ -179,12 +178,15 @@
 	function changeDatesOnButtons(modifier) {
 		$("button[id^='sd']").each(function (i) {
 			dt = new Date();
- 			if (modifier != 0) 
+ 			if (modifier != 0) {
  				dt.setTime(Date.parse($(this).attr('id').substring(2, 12)));
- 			dt.setDate(dt.getDate() + modifier);
+	 			dt.setDate(dt.getDate() + modifier);
+ 			} else
+ 				dt.setDate(dt.getDate() + i);
  			$(this).attr("id", "sd" + dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate());
  			$(this).text(dt.getDate() + " " + months[dt.getMonth()]);
  		}); 
+		select();
 	}
 	
 	function select() {
@@ -219,7 +221,8 @@
 				
 				for (i = 0; i < arr.length; i++) {
 					for (m = arr[i][0]; m < arr[i][0] + arr[i][2]; m++)
-						sch[spc[arr[i][1]]][m] = 1;
+						if (arr[i][1])
+							sch[spc[arr[i][1]]][m] = 1;
 				}
 				
 				for (i = 0; i <= 23; i++)
