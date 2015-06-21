@@ -2,20 +2,44 @@ package BBRCust;
 
 import java.util.Date;
 
+import javax.persistence.*;
+
 import BBR.BBRDataElement;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRUser;
 
+@Entity
+@Table(name="visits")
 public class BBRVisit extends BBRDataElement {
+	@Id
+	@GeneratedValue
+	@Column(name="VIS_ID")
 	private Long id;
+	
+	@Column(name="TIME_SCHEDULED")
 	private Date timeScheduled;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
 	private BBRPoS pos;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
 	private BBRUser user;
+	
+	@Column(name="USER_NAME")
 	private String userName;
+	
+	@Column(name="USER_CONTACTS")
 	private String userContacts;
+
 	private String posTitle;
+	
+	@Column(name="LENGTH")
 	private Float length = 0F;
+
+	@ManyToOne(fetch=FetchType.EAGER)
 	private BBRSpecialist spec;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
 	private BBRProcedure procedure;
 	
 	public class BBRVisitStatus {
@@ -26,6 +50,7 @@ public class BBRVisit extends BBRDataElement {
 		public static final int VISSTATUS_DISAPPROVED = 4;
 	}
 	
+	@Column(name="STATUS")
 	private int status = 0;
 	
 	public BBRVisit() {}

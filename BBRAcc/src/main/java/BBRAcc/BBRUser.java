@@ -4,19 +4,42 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import javax.persistence.*;
+
 import BBR.BBRDataElement;
 import BBR.BBRDataSet;
 
 @SuppressWarnings("unused")
+@Entity
+@Table(name="users")
 public class BBRUser extends BBRDataElement {
+	@Id
+	@GeneratedValue
+	@Column(name="USER_ID")
 	private Long id;
+	
+	@Column(name="EMAIL")
 	private String email;
+	
+	@Column(name="FIRSTNAME")
 	private String firstName;
+	
+	@Column(name="LASTNAME")
 	private String lastName;
+	
+	@Column(name="PASS")
 	private String encodedPassword;
+	
+	@Column(name="APPROVED")
 	private boolean approved;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
 	private BBRShop shop;
+
+	@ManyToOne(fetch=FetchType.EAGER)
 	private BBRPoS pos;
+	
+	@Column(name="LANG")
 	private String language;
 
 	public class BBRUserRole {
@@ -27,6 +50,7 @@ public class BBRUser extends BBRDataElement {
 		public static final int ROLE_VISITOR = 1;
 	}
 
+	@Column(name="ROLE")	
 	private int role = 0;
 
 	public void setId(Long id) {

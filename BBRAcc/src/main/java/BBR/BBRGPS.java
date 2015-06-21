@@ -1,7 +1,13 @@
 package BBR;
 
+import javax.persistence.*;
+
+@Embeddable
 public class BBRGPS {
+	@Column(name="LOC_LAT")
 	public double lat;
+	
+	@Column(name="LOC_LNG")
 	public double lng;
 
 	public BBRGPS() {

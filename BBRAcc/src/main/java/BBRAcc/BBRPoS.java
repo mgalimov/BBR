@@ -2,22 +2,45 @@ package BBRAcc;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import BBR.BBRDataElement;
 import BBR.BBRGPS;
 import BBR.JsonFormat;
 
+@Entity
+@Table(name="poses")
 public class BBRPoS extends BBRDataElement {
+	@Id
+	@GeneratedValue
+	@Column(name="POS_ID")
 	private Long id;
+	
+	@Column(name="TITLE")
 	private String title;
+	
+	@Column(name="LOC_DESC")
 	private String locationDescription;
+	
+	@Embedded
 	private BBRGPS locationGPS;
 
 	@JsonFormat(format="HH:mm")
+	@Column(name="START_WORK_HOUR")
 	private Date startWorkHour;
 
 	@JsonFormat(format="HH:mm")
+	@Column(name="END_WORK_HOUR")
 	private Date endWorkHour;
 
+	@ManyToOne(fetch=FetchType.EAGER)
 	public BBRShop shop;
 	
 	public BBRPoS() {}

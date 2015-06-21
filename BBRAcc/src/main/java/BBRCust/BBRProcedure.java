@@ -1,14 +1,31 @@
 package BBRCust;
 
+import javax.persistence.*;
+
 import BBR.BBRDataElement;
 import BBRAcc.BBRPoS;
 
+@Entity
+@Table(name="procedures")
 public class BBRProcedure extends BBRDataElement {
+	@Id
+	@GeneratedValue
+	@Column(name="PROC_ID")
 	private Long id;
+	
+	@Column(name="TITLE")
 	private String title;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
 	private BBRPoS pos;
+	
+	@Column(name="LENGTH")
 	private float length;
+	
+	@Column(name="PRICE")
 	private float price;
+	
+	@Column(name="CURRENCY")
 	private String currency;
 	
 	public class BBRProcedureStatus {
@@ -17,6 +34,7 @@ public class BBRProcedure extends BBRDataElement {
 		public static final int PROCSTATUS_INACTIVE = 2;
 	}
 	
+	@Column(name="STATUS")
 	private int status;
 	
 	BBRProcedure() {

@@ -1,14 +1,29 @@
 package BBRCust;
 
+import javax.persistence.*;
+
 import BBR.BBRDataElement;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRUser;
 
+@Entity
+@Table(name="specialists")
 public class BBRSpecialist extends BBRDataElement {
+	@Id
+	@GeneratedValue
+	@Column(name="SPEC_ID")
 	private Long id;
+	
+	@Column(name="NAME")
 	private String name;
-	private String position; 
+	
+	@Column(name="POSITION")
+	private String position;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
 	private BBRUser user;
+
+	@ManyToOne(fetch=FetchType.EAGER)
 	private BBRPoS pos;
 	
 	public class BBRSpecialistState {

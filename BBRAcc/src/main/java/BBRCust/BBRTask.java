@@ -2,20 +2,46 @@ package BBRCust;
 
 import java.util.Date;
 
+import javax.persistence.*;
+
 import BBR.BBRDataElement;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRUser;
 
+@Entity
+@Table(name="tasks")
 public class BBRTask extends BBRDataElement {
+	
+	@Id
+	@GeneratedValue
+	@Column(name="TASK_ID")
 	private Long id;
+	
+	@Column(name="TITLE")
 	private String title;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
 	private BBRPoS pos;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
 	private BBRUser performer;
+	
+	@Column(name="DEADLINE")
 	private Date deadline;
+	
+	@Column(name="CREATEDAT")
 	private Date createdAt;
+	
+	@Column(name="TEXT")
 	private String text;
+	
+	@Column(name="STATE")
 	private int state;
+	
+	@Column(name="OBJECT_TYPE")
 	private String objectType;
+	
+	@Column(name="OBJECT_ID")
 	private Long objectId;
 	
 	BBRTask() {}
