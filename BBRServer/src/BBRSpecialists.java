@@ -1,3 +1,6 @@
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,20 +25,34 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 		String name = params.get("name");
 		String position = params.get("position");
 		String posId = params.get("pos");
+		String startWorkHour = params.get("startWorkHour");
+		String endWorkHour = params.get("endWorkHour");
+		Date startWH = null;
+		Date endWH = null;
+		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
 		int status = Integer.parseInt(params.get("status"));
 		BBRPoSManager mgrPos = new BBRPoSManager();
 		BBRPoS pos = mgrPos.findById(Long.parseLong(posId));
 		if (pos != null) {	
-			manager.createAndStoreSpecialist(name, position, null, pos, status);
+			if (!startWorkHour.equals(""))
+				startWH = df.parse(startWorkHour);
+			if (!endWorkHour.equals(""))
+				endWH = df.parse(endWorkHour);
+			
+			manager.createAndStoreSpecialist(name, position, null, pos, status, startWH, endWH);
 		}
 		return "";
 	}
 
 	@Override
-	protected BBRSpecialist beforeUpdate(BBRSpecialist spec, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+	protected BBRSpecialist beforeUpdate(BBRSpecialist spec, BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String name = params.get("name");
 		String position = params.get("position");
 		String posId = params.get("pos");
+		String startWorkHour = params.get("startWorkHour");
+		String endWorkHour = params.get("endWorkHour");
+		int status = Integer.parseInt(params.get("status"));
+		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
 		BBRPoSManager mgrPos = new BBRPoSManager();
 		BBRPoS pos = mgrPos.findById(Long.parseLong(posId));
 		if (pos != null) {						
@@ -43,6 +60,11 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 			spec.setPosition(position);
 			spec.setPos(pos);
 			spec.setUser(null);
+			if (!startWorkHour.equals(""))
+				spec.setStartWorkHour(df.parse(startWorkHour));
+			if (!endWorkHour.equals(""))
+				spec.setEndWorkHour(df.parse(endWorkHour));
+			spec.setStatus(status);
 			manager.update(spec);
 		}
 		return null;		

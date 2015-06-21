@@ -14,6 +14,7 @@ import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRUser;
 import BBRCust.BBRCustReg;
+import BBRCust.BBRSpecialist.BBRSpecialistState;
 import BBRCust.BBRVisit.BBRVisitStatus;
 import BBRCust.BBRVisit;
 
@@ -97,13 +98,16 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         String where = " where timeScheduled >= '" + df.format(startOfDay) + "' and "
         			 + "timeScheduled <= '" + df.format(endOfDay) + "'";
         where = where + " and visit.pos.id = " + posId;
+        where = where + " and visit.spec.status = " + BBRSpecialistState.SPECSTATE_ACTIVE;
         
         String orderBy = " order by visit.timeScheduled ASC";
         
         Query query = session.createQuery(select + from + where + orderBy);
 		List<Object[]> list = query.list();
 		
-		query = session.createQuery("select spec.id, spec.name from BBRSpecialist spec where spec.pos.id = " + posId);
+		query = session.createQuery("select spec.id, spec.startWorkHour, spec.endWorkHour from " + 
+									"BBRSpecialist spec where spec.status = " + BBRSpecialistState.SPECSTATE_ACTIVE +  
+									" and spec.pos.id = " + posId);
 		List<Object[]> specs = query.list();
         
 		DateFormat hf = new SimpleDateFormat("HH");
@@ -116,7 +120,22 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 				line[0] = Long.parseLong(hf.format((Date)line[0])) * 2 + 1;
 			line[2] = Math.round(((Float) line[2]) * 2);
 		}
-			
+		
+		for(Object[] line: specs) {
+			for (int i = 1; i <= 2; i++) {
+				if (line[i] != null) {
+					if (mf.format((Date)line[i]).equals("00"))
+						line[i] = Long.parseLong(hf.format((Date)line[i])) * 2;
+					else
+						line[i] = Long.parseLong(hf.format((Date)line[i])) * 2 + 1;
+				} else
+					if (i == 1)
+						line[i] = 0L;
+					else 
+						line[i] = 48L;
+			}
+		}
+		
         BBRUtil.commitTran(sessionIndex, tr);
 		
         Integer procLength = 1;

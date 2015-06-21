@@ -103,3 +103,16 @@ body {
   user-select: none;
   cursor: default;    
 }
+
+/* Addition to tables */
+td.occupied {
+	background-color: #A7A0B2;
+}
+
+td.selected {
+	background-color: #A6B792;
+}
+
+td.conflict {
+	background-color: #CC6E9D;
+}

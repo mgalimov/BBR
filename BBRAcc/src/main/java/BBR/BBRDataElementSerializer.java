@@ -35,9 +35,11 @@ public class BBRDataElementSerializer implements JsonSerializer<BBRDataElement>{
     						j.add(fieldName, gson.toJsonTree(field.get(src)));
     					else
 	    					if (java.util.Date.class.isAssignableFrom(field.getType())) {
-	    				 		SimpleDateFormat df = new SimpleDateFormat(ann.format());
-	    						String s;
-	    						s = df.format(field.get(src));
+	    						String s = null;
+	    						if (field.get(src) != null) {
+		    				 		SimpleDateFormat df = new SimpleDateFormat(ann.format());
+		    						s = df.format(field.get(src));
+	    						}
 	    						j.addProperty(fieldName, s);
 	    					}
 					} catch (IllegalArgumentException e) {

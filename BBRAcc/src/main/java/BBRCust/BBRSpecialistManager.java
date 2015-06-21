@@ -1,5 +1,6 @@
 package BBRCust;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -11,6 +12,7 @@ import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRUser;
 import BBRCust.BBRCustReg;
+import BBRCust.BBRSpecialist.BBRSpecialistState;
 
 public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
 	
@@ -21,7 +23,8 @@ public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
 		classTitle = "Specialist";	
 	}
 
-	public void createAndStoreSpecialist(String name, String position, BBRUser user, BBRPoS pos, int status) {
+	public void createAndStoreSpecialist(String name, String position, BBRUser user, BBRPoS pos, int status,
+										 Date startWorkHour, Date endWorkHour) {
         boolean tr = BBRUtil.beginTran(sessionIndex);
         Session session = BBRUtil.getSession(sessionIndex);
 
@@ -31,6 +34,8 @@ public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
         spec.setUser(user);
         spec.setPos(pos);
         spec.setStatus(status);
+        spec.setStartWorkHour(startWorkHour);
+        spec.setEndWorkHour(endWorkHour);
         session.save(spec);
 
         BBRUtil.commitTran(sessionIndex, tr);
@@ -98,4 +103,12 @@ public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
     public String whereShop(Long shopId) {
     	return "pos.shop.id = " + shopId;
     };
+    
+    public BBRDataSet<BBRSpecialist> listAvailableSpecialists(BBRPoS pos) {
+    	if (pos == null) return null;
+    	String where = "pos.id = " + pos.getId();
+    	where += " and status = " + BBRSpecialistState.SPECSTATE_ACTIVE;
+    	
+    	return list(-1, 0, where, "name ASC");
+    }
 }

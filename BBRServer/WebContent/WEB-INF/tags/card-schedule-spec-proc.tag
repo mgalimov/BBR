@@ -25,7 +25,7 @@
 	BBRVisitManager vmgr = new BBRVisitManager();
 	
 	BBRSpecialistManager smgr = new BBRSpecialistManager();
-	BBRDataSet<BBRSpecialist> slist = smgr.list("", "spec.name ASC", pos);
+	BBRDataSet<BBRSpecialist> slist = smgr.listAvailableSpecialists(pos);
 	
 	Calendar calendar = Calendar.getInstance(context.getLocale());
 	
@@ -40,7 +40,7 @@
 	int endWorkMin = calendar.get(Calendar.MINUTE);
 	
 	String schOut = "";
-	String specOut = "<tr><td><small><span class='glyphicon glyphicon-user'></span>&nbsp;</small></td></tr>";
+	String specOut = "<td><small><span class='glyphicon glyphicon-user'></span>&nbsp;</small></td>";
 	
 	if (startWorkHour <= 0)
 		startWorkHour = 8;
@@ -54,7 +54,7 @@
 	int hh = startWorkHour;
 	String hs;
 
-	schOut += "<thead><tr>";
+	schOut += "<thead><tr>" + specOut;
 	if (startWorkMin > 0) {
 		if (hh < 10) hs = "0" + hh; else hs = "" + hh;
 		schOut += "<th><small>" + hs + ":30</small></th>";
@@ -75,7 +75,7 @@
 	for (BBRSpecialist spec : slist.data) {
 		hh = startWorkHour;
 		schOut += "<tr>";
-		specOut += "<tr><td><small>" + spec.getName() + "</small></td></tr>";
+		schOut += "<td><small>" + spec.getName() + "</small></td>";
 		String sid = spec.getId().toString(); 
 		if (startWorkMin > 0) {
 			if (hh < 10) hs = "0" + hh; else hs = "" + hh;
@@ -135,15 +135,8 @@
 	</div>
 </div>
 <div class="row">
-	<div class="panel col-md-2" style="overflow:hidden">
-		<table class="table table-condensed noselection">
-			<tbody>
-				<%=specOut %>
-			</tbody>
-		</table>
-	</div>
-	<div class="panel col-md-8" style="overflow-x: auto">
-		<table class="table table-hover table-condensed table-bordered noselection" id="scheduleTable">
+	<div class="panel col-md-10" style="overflow-x: auto">
+		<table class="table table-condensed table-bordered noselection" id="scheduleTable">
 			<%=schOut %>
 		</table>
 	</div>
@@ -217,7 +210,7 @@
 					for (j = 0; j < specs.length; j++)
 						sch[j][i] = 0; 
 
-				$("td.info").removeClass('info');
+				$("td.occupied").removeClass('occupied');
 				
 				for (i = 0; i < arr.length; i++) {
 					for (m = arr[i][0]; m < arr[i][0] + arr[i][2]; m++)
@@ -225,15 +218,19 @@
 							sch[spc[arr[i][1]]][m] = 1;
 				}
 				
+				for (i = 0; i < specs.length; i++) {
+					for (m = specs[i][1]; m < specs[i][2]; m++)
+						sch[spc[specs[i][0]]][m] = 2;
+				}
 				for (i = 0; i <= 23; i++)
 					for (j = 0; j < specs.length; j++) {
 						if (sch[j][i*2] > 0) {
 							e = $("#sp"+specs[j][0]+"_oc"+i+"_00");
-							if (e.length > 0) e.addClass('info');
+							if (e.length > 0) e.addClass('occupied');
 						}
 						if (sch[j][i*2 + 1] > 0) {
 							e = $("#sp"+specs[j][0]+"_oc"+i+"_30");
-							if (e.length > 0) e.addClass('info');			
+							if (e.length > 0) e.addClass('occupied');			
 						}
 					}
 				
@@ -256,20 +253,19 @@
  		timeSelected = objId.substring(objId.length - 5, objId.length).replace('_', ':');
  		specSelected = objId.substring(2, objId.length - 8);
 
- 		if (!obj.hasClass('info')) {
- 	 		$("td.success").removeClass('success');
- 	 		$("td.danger").addClass('success');
- 	 		$("td.danger").removeClass('danger');
- 	 		obj.addClass('success');
- 	 		
- 	 		for (i = 2; i <= procLength; i++) {
- 	 			obj = obj.next();
- 	 	 		if (!obj.hasClass('info')) {
- 	 	 	 		obj.addClass('success');
+ 		if (!obj.hasClass('occupied')) {
+ 	 		$("td.selected").removeClass('selected');
+ 	 		//$("td.conflict").addClass('selected');
+ 	 		$("td.conflict").removeClass('conflict');
+	 		
+ 	 		for (i = 1; i <= procLength; i++) {
+ 	 	 		if (!obj.hasClass('occupied')) {
+ 	 	 	 		obj.addClass('selected');
  	 	 		} else
  	 	 		{
- 	 	 	 		obj.addClass('danger');
+ 	 	 	 		obj.addClass('conflict');
  	 	 		}
+ 	 			obj = obj.next();
  	 		}
 		}
  		dateSelected = $("button[id^='sd'].btn-info").attr('id').substring(2, 12);

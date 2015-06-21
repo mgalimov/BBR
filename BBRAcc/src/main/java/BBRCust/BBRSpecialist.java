@@ -1,8 +1,11 @@
 package BBRCust;
 
+import java.util.Date;
+
 import javax.persistence.*;
 
 import BBR.BBRDataElement;
+import BBR.JsonFormat;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRUser;
 
@@ -31,8 +34,17 @@ public class BBRSpecialist extends BBRDataElement {
 		public static final int SPECSTATE_INACTIVE = 2;
 	}
 	
+	@Column(name="STATUS")
 	private int status;
-	
+
+	@JsonFormat(format="HH:mm")
+	@Column(name="START_WORK_HOUR")
+	private Date startWorkHour;
+
+	@JsonFormat(format="HH:mm")
+	@Column(name="END_WORK_HOUR")
+	private Date endWorkHour;
+
 	public BBRSpecialist() {}
 	
 	public void setId(Long id) {
@@ -82,6 +94,22 @@ public class BBRSpecialist extends BBRDataElement {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	public Date getStartWorkHour() {
+		return startWorkHour;
+	}
+
+	public void setStartWorkHour(Date startWorkHour) {
+		this.startWorkHour = startWorkHour;
+	}
+
+	public Date getEndWorkHour() {
+		return endWorkHour;
+	}
+
+	public void setEndWorkHour(Date endWorkHour) {
+		this.endWorkHour = endWorkHour;
 	}
 
 }

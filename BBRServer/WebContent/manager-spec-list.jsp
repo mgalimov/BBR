@@ -7,6 +7,8 @@
 			<t:grid-item label="LBL_POS" field="pos.title"/>
 			<t:grid-item label="LBL_POSITION" field="position"/>
 			<t:grid-item label="LBL_SPEC_STATUS" field="status" type="select" options="OPT_SPEC_STATUS"/>
+			<t:grid-item label="LBL_START_WORKHOUR" field="startWorkHour" type="time"/>
+			<t:grid-item label="LBL_END_WORKHOUR" field="endWorkHour" type="time"/>
 		</t:grid>
 	</jsp:body>
 </t:admin-grid-wrapper>
