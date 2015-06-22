@@ -63,7 +63,6 @@
 	for (Integer h = hh; h <= endWorkHour - 1; h++) {
 		if (h < 10) hs = "0" + h; else hs = "" + h;
 		schOut += "<th colspan='2'><small>" + hs + ":00</small></th>";
-		//schOut += "<th class='col-sm-1'><small>" + hs + ":30</small></th>";
 	}
 	if (endWorkMin > 0) {
 		hh = endWorkHour;
@@ -78,22 +77,21 @@
 		schOut += "<td><small>" + spec.getName() + "</small></td>";
 		String sid = spec.getId().toString(); 
 		if (startWorkMin > 0) {
-			if (hh < 10) hs = "0" + hh; else hs = "" + hh;
-			schOut += "<td id='sp"+ sid + "_oc" + hs + "_30'><small>&nbsp;</small></td>";
+			schOut += "<td id='sp"+ sid + "_oc" + hh + "_30'><small>&nbsp;</small></td>";
 			hh++;
 		}
 		for (Integer h = hh; h <= endWorkHour - 1; h++) {
-			if (h < 10) hs = "0" + h; else hs = "" + h;
-			schOut += "<td id='sp"+ sid + "_oc" + hs + "_00'><small>&nbsp;</small></td>";
-			schOut += "<td id='sp"+ sid + "_oc" + hs + "_30'><small>&nbsp;</small></td>";
+			schOut += "<td id='sp"+ sid + "_oc" + h + "_00'><small>&nbsp;</small></td>";
+			schOut += "<td id='sp"+ sid + "_oc" + h + "_30'><small>&nbsp;</small></td>";
 		}
 		if (endWorkMin > 0) {
 			hh = endWorkHour;
-			if (hh < 10) hs = "0" + hh; else hs = "" + hh;
-			schOut += "<td id='sp"+ sid + "_oc" + hs + "_00'><small>&nbsp;</small></td>";
+			schOut += "<td id='sp"+ sid + "_oc" + hh + "_00'><small>&nbsp;</small></td>";
 		}
-		schOut += "</tr></tbody>";
+		schOut += "</tr>";
 	}
+	
+	schOut += "</tbody>";
 	
 	Map<String, Integer> months = calendar.getDisplayNames(Calendar.MONTH, Calendar.LONG, context.getLocale());
 	
@@ -206,31 +204,42 @@
 					spc[specs[j][0]] = j;
 				}
 				
-				for (i = 0; i < 47; i++)
+				for (i = 0; i <= 47; i++)
 					for (j = 0; j < specs.length; j++)
-						sch[j][i] = 0; 
+						sch[j][i] = 2; 
 
 				$("td.occupied").removeClass('occupied');
-				
+				$("td.order").removeClass('order');
+
+				for (i = 0; i < specs.length; i++) {
+					for (m = specs[i][1]; m < specs[i][2]; m++)
+						sch[spc[specs[i][0]]][m] = 0;
+				}
+
 				for (i = 0; i < arr.length; i++) {
 					for (m = arr[i][0]; m < arr[i][0] + arr[i][2]; m++)
 						if (arr[i][1])
 							sch[spc[arr[i][1]]][m] = 1;
 				}
 				
-				for (i = 0; i < specs.length; i++) {
-					for (m = specs[i][1]; m < specs[i][2]; m++)
-						sch[spc[specs[i][0]]][m] = 2;
-				}
 				for (i = 0; i <= 23; i++)
 					for (j = 0; j < specs.length; j++) {
 						if (sch[j][i*2] > 0) {
 							e = $("#sp"+specs[j][0]+"_oc"+i+"_00");
-							if (e.length > 0) e.addClass('occupied');
+							if (e.length > 0) {
+								e.addClass('occupied');
+								if (sch[j][i*2] == 1)
+									e.addClass('order');
+							}
+							
 						}
 						if (sch[j][i*2 + 1] > 0) {
 							e = $("#sp"+specs[j][0]+"_oc"+i+"_30");
-							if (e.length > 0) e.addClass('occupied');			
+							if (e.length > 0) {
+								e.addClass('occupied');
+								if (sch[j][i*2 + 1] == 1)
+									e.addClass('order');
+							}
 						}
 					}
 				

@@ -116,3 +116,7 @@ td.selected {
 td.conflict {
 	background-color: #CC6E9D;
 }
+
+td.order {
+	background-color: #BAB2C5;
+}
