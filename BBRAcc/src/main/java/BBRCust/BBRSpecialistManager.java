@@ -2,6 +2,7 @@ package BBRCust;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -24,7 +25,7 @@ public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
 	}
 
 	public void createAndStoreSpecialist(String name, String position, BBRUser user, BBRPoS pos, int status,
-										 Date startWorkHour, Date endWorkHour) {
+										 Date startWorkHour, Date endWorkHour, Set<BBRProcedure> procedures) {
         boolean tr = BBRUtil.beginTran(sessionIndex);
         Session session = BBRUtil.getSession(sessionIndex);
 
@@ -36,6 +37,7 @@ public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
         spec.setStatus(status);
         spec.setStartWorkHour(startWorkHour);
         spec.setEndWorkHour(endWorkHour);
+        spec.setProcedures(procedures);
         session.save(spec);
 
         BBRUtil.commitTran(sessionIndex, tr);

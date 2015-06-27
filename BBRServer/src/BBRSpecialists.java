@@ -1,5 +1,7 @@
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +12,8 @@ import BBRAcc.BBRPoSManager;
 import BBRClientApp.BBRContext;
 import BBRCust.BBRSpecialist;
 import BBRCust.BBRSpecialistManager;
-
+import BBRCust.BBRProcedure;
+import BBRCust.BBRProcedureManager;
 
 @WebServlet("/BBRSpecialists")
 public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialistManager> {
@@ -27,6 +30,7 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 		String posId = params.get("pos");
 		String startWorkHour = params.get("startWorkHour");
 		String endWorkHour = params.get("endWorkHour");
+		String procs = params.get("procedures");
 		Date startWH = null;
 		Date endWH = null;
 		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
@@ -39,7 +43,17 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 			if (!endWorkHour.equals(""))
 				endWH = df.parse(endWorkHour);
 			
-			manager.createAndStoreSpecialist(name, position, null, pos, status, startWH, endWH);
+			Set<BBRProcedure> procedures = new HashSet<BBRProcedure>();
+			BBRProcedureManager pmgr = new BBRProcedureManager();
+			if (!procs.equals("")) {
+				for (String proc : procs.split(",")) {
+					BBRProcedure procedure = pmgr.findById(Long.parseLong(proc));
+					if (procedure != null) 
+						procedures.add(procedure);
+				}
+			}
+			
+			manager.createAndStoreSpecialist(name, position, null, pos, status, startWH, endWH, procedures);
 		}
 		return "";
 	}
@@ -51,6 +65,7 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 		String posId = params.get("pos");
 		String startWorkHour = params.get("startWorkHour");
 		String endWorkHour = params.get("endWorkHour");
+		String procs = params.get("procedures");
 		int status = Integer.parseInt(params.get("status"));
 		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
 		BBRPoSManager mgrPos = new BBRPoSManager();
@@ -65,6 +80,18 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 			if (!endWorkHour.equals(""))
 				spec.setEndWorkHour(df.parse(endWorkHour));
 			spec.setStatus(status);
+			
+			Set<BBRProcedure> procedures = new HashSet<BBRProcedure>();
+			BBRProcedureManager pmgr = new BBRProcedureManager();
+			if (!procs.equals("")) {
+				for (String proc : procs.split(",")) {
+					BBRProcedure procedure = pmgr.findById(Long.parseLong(proc));
+					if (procedure != null) 
+						procedures.add(procedure);
+				}
+			}
+			spec.setProcedures(procedures);
+			
 			manager.update(spec);
 		}
 		return null;		

@@ -21,12 +21,27 @@ public class BBRParams {
 		
 		for (int i = 0; i < params.length; i++) {
 			param = params[i].split("=");
-			if (param.length >= 2) {
-				parameters.put(param[0], param[1]);
-			} else
-				if (param.length == 1) {
-					parameters.put(param[0], "");
+			if (param.length > 0) {
+				String prm = "";
+				String vle = "";
+				if (param[0].endsWith("[]")) {
+					prm = param[0].substring(0, param[0].length() - 2);
+					vle = parameters.get(prm);
+					if (param.length >= 2) { 
+						if (vle == null)
+							vle = param[1];
+						else
+							vle = vle + "," + param[1];
+					}
 				}
+				else {
+					prm = param[0];
+					if (param.length >= 2) { 
+						vle = param[1];
+					}
+				}
+				parameters.put(prm, vle);
+			}
 		}		
 	}
 	

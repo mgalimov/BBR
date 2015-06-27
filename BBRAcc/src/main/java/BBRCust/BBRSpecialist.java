@@ -1,6 +1,7 @@
 package BBRCust;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -45,6 +46,14 @@ public class BBRSpecialist extends BBRDataElement {
 	@Column(name="END_WORK_HOUR")
 	private Date endWorkHour;
 
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "SPEC_PROC", joinColumns = {
+			@JoinColumn(name = "SPEC_ID")
+	}, inverseJoinColumns = {
+			@JoinColumn(name = "PROC_ID")
+	})
+	private Set<BBRProcedure> procedures;
+	
 	public BBRSpecialist() {}
 	
 	public void setId(Long id) {
@@ -110,6 +119,14 @@ public class BBRSpecialist extends BBRDataElement {
 
 	public void setEndWorkHour(Date endWorkHour) {
 		this.endWorkHour = endWorkHour;
+	}
+
+	public Set<BBRProcedure> getProcedures() {
+		return procedures;
+	}
+
+	public void setProcedures(Set<BBRProcedure> procedures) {
+		this.procedures = procedures;
 	}
 
 }

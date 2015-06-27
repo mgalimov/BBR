@@ -10,6 +10,7 @@
 <%@ attribute name="options" %>
 <%@ attribute name="defaultValue" %>
 <%@ attribute name="defaultDisplay" %>
+<%@ attribute name="multiple" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -92,6 +93,12 @@
 				<c:if test="${isDisabled.equals('readonly')}">
 					<c:set var="isDis" value="disabled" />
 				</c:if>
+
+				<c:set var="mult" value="1" />
+				<c:if test="${multiple.equals('true')}">
+					<c:set var="mult" value="50" />
+				</c:if>
+				
 				<c:set var="opts" scope="request" value="${context.gs(options)}" />
 
 				<select class="selectized" style="display: none" id="${ft.concat('input')}" ${isRequired}  ${isDis}>
@@ -108,7 +115,8 @@
 				
 				<script>
 				$("#${field.concat('input')}").selectize({
-				    openOnFocus: true
+				    openOnFocus: true,
+				    maxItems: ${mult}
 				 });
 				</script>
 			</c:when>
@@ -118,15 +126,42 @@
 				<c:if test="${isDisabled.equals('readonly')}">
 					<c:set var="isDis" value="disabled" />
 				</c:if>
+
+				<c:set var="mult" value="1" />
+				<c:set var="mind" value="" />
+				<c:if test="${multiple.equals('true')}">
+					<c:set var="mult" value="50" />
+					<c:set var="mind" value="[0]" />
+				</c:if>
 				<select class="selectized" style="display: none" id="${ft.concat('input')}" ${isRequired}  ${isDis}>
 				</select>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('.addOption(obj.').concat(field).concat('?{id: obj.').concat(field).concat('.id').concat(', ')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat(referenceFieldTitle).concat(': obj.').concat(field).concat('.').concat(referenceFieldTitle).concat('}:{});')}"/>
+
+				<c:set var="itemSet" scope="request" value="${itemSet.concat(';')}"/>
+				
+				<c:if test="${multiple.equals('true')}">
+					<c:set var="itemSet" scope="request" value="${itemSet.concat('
+					obj.').concat(field).concat('.forEach(function (objItem) {')}"/>
+				</c:if>
+				<c:if test="${!multiple.equals('true')}">
+					<c:set var="itemSet" scope="request" value="${itemSet.concat('
+					objItem = obj.').concat(field).concat(';')}"/>
+				</c:if>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('
 				    $(\"#').concat(ft).concat('input\")')}"/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('.addItem(obj.').concat(field).concat('?obj.').concat(field).concat('.id').concat(':null);')}"/>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('.addOption(objItem?{id: objItem.id, ')}"/>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat(referenceFieldTitle).concat(': objItem.').concat(referenceFieldTitle).concat('}:{});')}"/>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('
+				    $(\"#').concat(ft).concat('input\")')}"/>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize')}"/>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('.addItem(objItem?objItem.id:null);')}"/>
+				<c:if test="${multiple.equals('true')}">
+					<c:set var="itemSet" scope="request" value="${itemSet.concat('
+					});
+					  ')}"/>
+				</c:if>
+
+
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('
 				    $(\"#').concat(ft).concat('input\")')}"/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize.refreshOptions(false);')}"/>
@@ -168,6 +203,7 @@
 				    searchField: '${referenceFieldTitle}',
 				    create: false,
 				    maxOptions: 10,
+				    maxItems: ${mult},
 				    openOnFocus: true,
 				    load: function(query, callback) {
 				        $.ajax({
