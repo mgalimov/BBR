@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRPoSManager;
+import BBRAcc.BBRShop;
+import BBRAcc.BBRUser.BBRUserRole;
 import BBRClientApp.BBRContext;
 import BBRCust.BBRProcedure;
 import BBRCust.BBRProcedureManager;
@@ -73,7 +75,20 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 	@Override
 	protected String getReferenceData(String query, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		BBRContext context = BBRContext.getContext(request);
-		return manager.list(query, manager.getTitleField(), context.planningVisit).toJson();
+		
+		BBRPoS pos = null;
+		BBRShop shop = null;
+
+		if (context.planningVisit != null)
+			pos = context.planningVisit.getPos();
+		else
+			if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN || context.user.getRole() == BBRUserRole.ROLE_POS_SPECIALIST )
+				pos = context.user.getPos();
+			else
+				if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
+					shop = context.user.getShop();
+		
+		return manager.list(query, manager.getTitleField(), pos, shop).toJson();
 	}
 
 

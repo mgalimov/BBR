@@ -2,9 +2,11 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:nav>
+	<t:nav-group title="LBL_SYSTEM_ADMINISTRATION_MENU" level="system">
+		<t:nav-item href="system-user-list.jsp" title="LBL_USERS_MENU" />
+		<t:nav-item href="system-shop-list.jsp" title="LBL_SHOPS_MENU" />
+	</t:nav-group>
 	<t:nav-group title="LBL_GENERAL_ADMINISTRATION_MENU" level="admin">
-		<t:nav-item href="admin-user-list.jsp" title="LBL_USERS_MENU" />
-		<t:nav-item href="admin-shop-list.jsp" title="LBL_SHOPS_MENU" />
 		<t:nav-item href="admin-pos-list.jsp" title="LBL_POSES_MENU" />
 	</t:nav-group>
 	<t:nav-group title="LBL_POS_MANAGEMENT_MENU" level="manager">

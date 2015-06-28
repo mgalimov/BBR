@@ -11,6 +11,7 @@ import BBR.BBRDataManager;
 import BBR.BBRDataSet;
 import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
+import BBRAcc.BBRShop;
 import BBRAcc.BBRUser;
 import BBRCust.BBRCustReg;
 import BBRCust.BBRSpecialist.BBRSpecialistState;
@@ -44,7 +45,7 @@ public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
     }
 	
     @SuppressWarnings({ "unchecked", "unused" })
-	public BBRDataSet<BBRSpecialist> list(String queryTerm, String sortBy, BBRPoS pos) {
+	public BBRDataSet<BBRSpecialist> list(String queryTerm, String sortBy, BBRPoS pos, BBRShop shop) {
         boolean tr = BBRUtil.beginTran(sessionIndex);
         
         Session session = BBRUtil.getSession(sessionIndex);
@@ -64,6 +65,14 @@ public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
    			where += " spec.pos.id = " + pos.getId();		
    		}
    			
+   		if (shop != null) {
+   			if (where.equals(""))
+   				where = " where";
+   			else
+   				where += " and";	
+   			where += " spec.pos.shop.id = " + shop.getId();		
+   		}
+   		
         Long count = (Long)session.createQuery("Select count(*) from " + typeName + " spec " + where).uniqueResult();
         Query query = session.createQuery("from " + typeName + " spec " + where + orderBy);
         

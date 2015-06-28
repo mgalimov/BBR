@@ -6,6 +6,7 @@ import BBR.BBRDataManager;
 import BBR.BBRDataSet;
 import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
+import BBRAcc.BBRShop;
 import BBRCust.BBRCustReg;
 
 public class BBRProcedureManager extends BBRDataManager<BBRProcedure>{
@@ -32,14 +33,25 @@ public class BBRProcedureManager extends BBRDataManager<BBRProcedure>{
         BBRUtil.commitTran(sessionIndex, tr);
     }
 
-	public BBRDataSet<BBRProcedure> list(String query, String titleField, BBRVisit visit) {
+	public BBRDataSet<BBRProcedure> list(String query, String titleField, BBRPoS pos, BBRShop shop) {
 		String where = "";
 		
-		if (visit != null) {
-			if (visit.getPos() != null)
-				where = "pos.id = " + visit.getPos().getId();
-		}
-		
+   		if (pos != null) {
+   			if (where.equals(""))
+   				where = " where";
+   			else
+   				where += " and";	
+   			where += " pos.id = " + pos.getId();		
+   		}
+
+   		if (shop != null) {
+   			if (where.equals(""))
+   				where = " where";
+   			else
+   				where += " and";	
+   			where += " pos.shop.id = " + shop.getId();		
+   		}
+
 		return (BBRDataSet<BBRProcedure>)list(query, titleField, where);
 	}
 	

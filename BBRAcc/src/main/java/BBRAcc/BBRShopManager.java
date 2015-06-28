@@ -29,7 +29,7 @@ public class BBRShopManager extends BBRDataManager<BBRShop>{
     }
 	
     @SuppressWarnings("unchecked")
-	public BBRDataSet<BBRShop> list(BBRUser user, String queryTerm, String sortBy) {
+	public BBRDataSet<BBRShop> list(BBRUser user, String queryTerm, String sortBy, BBRShop shop) {
         boolean tr = BBRUtil.beginTran(sessionIndex);
         
         Session session = BBRUtil.getSession(sessionIndex);
@@ -40,7 +40,14 @@ public class BBRShopManager extends BBRDataManager<BBRShop>{
    			queryTerm.replaceAll("\\s", "%");
    			where = " where title like '%" + queryTerm + "%'";
    		}
-   			
+   		
+   		if (shop != null) {
+   			if (where.equals(""))
+   				where = " where";
+   			else
+   				where += " and";	
+   			where += " id = " + shop.getId();		
+   		}
         Long count = (Long)session.createQuery("Select count(*) from " + typeName + where).uniqueResult();
         Query query = session.createQuery("from " + typeName + where + orderBy);
         query.setMaxResults(maxRowsToReturn);

@@ -159,6 +159,9 @@ public class BBRContext {
 			else return false;
 		
 		if (user.getRole() == BBRUser.BBRUserRole.ROLE_BBR_OWNER)
+			if (page.startsWith("system")) return true;
+		
+		if (user.getRole() == BBRUser.BBRUserRole.ROLE_SHOP_ADMIN)
 			if (page.startsWith("admin")) return true;
 
 		if (user.getRole() >= BBRUser.BBRUserRole.ROLE_POS_ADMIN) {

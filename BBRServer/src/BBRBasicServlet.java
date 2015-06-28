@@ -117,7 +117,7 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 								HttpServletResponse response) {
 		BBRContext context = BBRContext.getContext(request);
 		String where = "";
-		if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
+		if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN || context.user.getRole() == BBRUserRole.ROLE_POS_SPECIALIST)
 			if (context.user.getPos() != null)
 				where = manager.wherePos(context.user.getPos().getId());
 		if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
