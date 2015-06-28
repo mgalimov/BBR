@@ -75,6 +75,7 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 	@Override
 	protected String getReferenceData(String query, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		BBRContext context = BBRContext.getContext(request);
+		String constrains = params.get("constrains");
 		
 		BBRPoS pos = null;
 		BBRShop shop = null;
@@ -82,6 +83,11 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 		if (context.planningVisit != null)
 			pos = context.planningVisit.getPos();
 		else
+			if (!constrains.equals("")) {
+				BBRPoSManager pmgr = new BBRPoSManager();
+				pmgr.findById(Long.parseLong(constrains));
+			}
+		if (pos == null)
 			if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN || context.user.getRole() == BBRUserRole.ROLE_POS_SPECIALIST )
 				pos = context.user.getPos();
 			else
