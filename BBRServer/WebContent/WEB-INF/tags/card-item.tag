@@ -128,10 +128,8 @@
 				</c:if>
 
 				<c:set var="mult" value="1" />
-				<c:set var="mind" value="" />
 				<c:if test="${multiple.equals('true')}">
 					<c:set var="mult" value="50" />
-					<c:set var="mind" value="[0]" />
 				</c:if>
 				<select class="selectized" style="display: none" id="${ft.concat('input')}" ${isRequired}  ${isDis}>
 				</select>
@@ -173,7 +171,7 @@
 				<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
 					$(\"#').concat(ft).concat('input\")')}"/>
 				<c:set var="itemPreload" scope="request" value="${itemPreload.concat('[0].selectize')}"/>
-				<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.load(function(callback){$.ajax({url:\"').concat(referenceMethod).concat('\",type:\"GET\",dataType:\"json\",data:{q:\"\",operation:\"reference\"},error:function(){callback();},success:function(res){callback(res.data);}})});')}"/>
+				<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.load(function(callback){$.ajax({url:\"').concat(referenceMethod).concat('\",type:\"GET\",dataType:\"json\",data:{q:\"\",constrains: function() {').concat(ft).concat('SetConstrains();}, operation:\"reference\"},error:function(){callback();},success:function(res){callback(res.data);}})});')}"/>
 
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
@@ -212,6 +210,7 @@
 				            dataType: 'json',
 				            data: {
 				                q: query,
+				                constrains: function() {${ft}SetConstrains(); },
 				                operation: 'reference'
 				            },
 				            error: function() {
@@ -223,6 +222,10 @@
 				        });
 				    }
 				});
+				
+				function ${ft}SetConstrains() {
+					return "";
+				}
 				</script>
 			</c:when>
 		</c:choose>
