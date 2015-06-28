@@ -28,6 +28,7 @@
 				inp = $("#proceduresinput")[0].selectize;
 				inp.clear();
 				inp.clearOptions();
+				inp.load();
 			}
 		});
 	});

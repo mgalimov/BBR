@@ -210,7 +210,7 @@
 				            dataType: 'json',
 				            data: {
 				                q: query,
-				                constrains: function() {${ft}SetConstrains(); },
+				                constrains: function() { return ${ft}SetConstrains(); },
 				                operation: 'reference'
 				            },
 				            error: function() {
