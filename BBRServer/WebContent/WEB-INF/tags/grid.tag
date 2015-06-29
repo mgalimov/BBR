@@ -16,7 +16,7 @@
 
 <!-- http://www.onjava.com/pub/a/onjava/excerpt/jserverpages3_ch11/ -->
 
-<h3>${context.gs(title)}</h3>	
+<h3>${context.gs(title)}</h3>
 		
 <!-- Modal -->
 <div class="modal fade" id="sureToDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
