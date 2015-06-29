@@ -2,7 +2,7 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <t:admin-card-wrapper title="LBL_CREATE_USER_TITLE">
 	<jsp:body>
-		<t:card method="BBRUsers" gridPage="admin-user-list.jsp" title="LBL_CREATE_USER_TITLE">
+		<t:card method="BBRUsers" gridPage="system-user-list.jsp" title="LBL_CREATE_USER_TITLE">
 			<t:card-item label="LBL_EMAIL" field="email" type="text" isRequired="required"/>
 			<t:card-item label="LBL_FIRST_NAME" field="firstName" type="text" isRequired="required"/>
 			<t:card-item label="LBL_LAST_NAME" field="lastName" type="text" isRequired="required"/>

@@ -28,12 +28,12 @@
 				inp = $("#proceduresinput")[0].selectize;
 				inp.clear();
 				inp.clearOptions();
-				inp.load();
+				inp.load(proceduresLoadInitialData);
 			}
 		});
 	});
 	
-	function proceduresSetConstrains() {
-		return posId;
+	proceduresSetConstrains = function () {
+		return $("#posinput").val();
 	}
 </script>

@@ -15,6 +15,7 @@
 <c:set var="itemVal" scope="request" value="${''}"/>
 <c:set var="itemSet" scope="request" value="${''}"/>
 <c:set var="itemPreload" scope="request" value="${''}"/>
+<c:set var="itemAfterLoad" scope="request" value="${''}"/>
 <c:set var="itemToolbar" scope="request" value="${''}"/>
 
 <!-- http://www.onjava.com/pub/a/onjava/excerpt/jserverpages3_ch11/ -->
@@ -89,6 +90,7 @@
 				};
 			});
  		}
+		${itemAfterLoad}
 		
 		$('#saveChanges').click(function(event) { 
 	 		idParam = getUrlParameter('id');

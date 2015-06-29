@@ -85,7 +85,7 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 		else
 			if (!constrains.equals("")) {
 				BBRPoSManager pmgr = new BBRPoSManager();
-				pmgr.findById(Long.parseLong(constrains));
+				pos = pmgr.findById(Long.parseLong(constrains));
 			}
 		if (pos == null)
 			if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN || context.user.getRole() == BBRUserRole.ROLE_POS_SPECIALIST )

@@ -2,7 +2,7 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <t:admin-grid-wrapper title="LBL_USERS_TITLE">
 	<jsp:body>
-		<t:grid method="BBRUsers" editPage="admin-user-edit.jsp" createPage="admin-user-create.jsp" title="LBL_USERS_TITLE">
+		<t:grid method="BBRUsers" editPage="system-user-edit.jsp" createPage="system-user-create.jsp" title="LBL_USERS_TITLE">
 			<t:grid-item label="LBL_EMAIL" field="email" sort="asc"/>
 			<t:grid-item label="LBL_FIRST_NAME" field="firstName"/>
 			<t:grid-item label="LBL_LAST_NAME" field="lastName"/>

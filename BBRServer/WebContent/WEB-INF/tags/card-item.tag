@@ -24,11 +24,11 @@
 		      ').concat(ft).concat(':').concat(ft).concat('String,')}"/>
 		<c:set var="itemVal" scope="request" value="${itemVal.concat('
 	            var ').concat(ft).concat('String = $(\"#').concat(ft).concat('input\").val();')}"/>
-		<c:set var="itemSet" scope="request" value="${itemSet.concat('
-		            $(\"#').concat(ft).concat('input\")')}"/>
 		<c:choose>
 			<c:when test="${type.equals('info')}">
 				<p class="form-control-static" id="${ft.concat('input')}"/>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('
+		            $(\"#').concat(ft).concat('input\")')}"/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('.text(obj.').concat(field).concat(');')}"/>
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
@@ -39,6 +39,8 @@
 			
 			<c:when test="${type.equals('text')}">
 				<input type="text" class="form-control ${isHidden}" id="${ft.concat('input')}" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}/>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('
+		            $(\"#').concat(ft).concat('input\")')}"/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
@@ -49,6 +51,8 @@
 			
 			<c:when test="${type.equals('textarea')}">
 				<textarea class="form-control ${isHidden}" rows="3" id="${ft.concat('input')}" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}></textarea>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('
+		            $(\"#').concat(ft).concat('input\")')}"/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
@@ -59,6 +63,8 @@
 			
 			<c:when test="${type.equals('password')}">
 				<input type="password" class="form-control ${isHidden}" id="${ft.concat('input')}" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}/>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('
+		            $(\"#').concat(ft).concat('input\")')}"/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
@@ -74,6 +80,8 @@
 						<i class="glyphicon glyphicon-time ${isHidden}"></i>
 					</span>
 				</div>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('
+		            $(\"#').concat(ft).concat('input\")')}"/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
@@ -111,6 +119,8 @@
 					</c:forTokens>
 				</select>
 				
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('
+		            $(\"#').concat(ft).concat('input\")')}"/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize.setValue([obj.').concat(field).concat(']);')}"/>
 				
 				<script>
@@ -134,8 +144,6 @@
 				<select class="selectized" style="display: none" id="${ft.concat('input')}" ${isRequired}  ${isDis}>
 				</select>
 
-				<c:set var="itemSet" scope="request" value="${itemSet.concat(';')}"/>
-				
 				<c:if test="${multiple.equals('true')}">
 					<c:set var="itemSet" scope="request" value="${itemSet.concat('
 					obj.').concat(field).concat('.forEach(function (objItem) {')}"/>
@@ -168,10 +176,9 @@
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize.refreshItems();')}"/>
 
 
-				<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
-					$(\"#').concat(ft).concat('input\")')}"/>
-				<c:set var="itemPreload" scope="request" value="${itemPreload.concat('[0].selectize')}"/>
-				<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.load(function(callback){$.ajax({url:\"').concat(referenceMethod).concat('\",type:\"GET\",dataType:\"json\",data:{q:\"\",constrains: function() {').concat(ft).concat('SetConstrains();}, operation:\"reference\"},error:function(){callback();},success:function(res){callback(res.data);}})});')}"/>
+				<c:set var="itemAfterLoad" scope="request" value="${itemAfterLoad.concat('$(\"#').concat(ft).concat('input\")')}"/>
+				<c:set var="itemAfterLoad" scope="request" value="${itemAfterLoad.concat('[0].selectize')}"/>
+				<c:set var="itemAfterLoad" scope="request" value="${itemAfterLoad.concat('.load(').concat(ft).concat('LoadInitialData);')}"/>
 
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
@@ -195,6 +202,45 @@
 				</c:if>
 
 				<script>
+				var ${ft}SetConstrains = function () {};
+				
+				var ${ft}LoadInitialData = function (callback) {
+			        $.ajax({
+			            url: '${referenceMethod}',
+			            type: 'GET',
+			            dataType: 'json',
+			            data: {
+			                constrains: ${ft}SetConstrains,
+			                operation: 'reference'
+			            },
+			            error: function() {
+			            	callback();
+			            },
+			            success: function(res) {
+			            	callback(res.data);
+			            }
+			        });
+			    } 
+
+				var ${ft}LoadData = function (query, callback) {
+			        $.ajax({
+			            url: '${referenceMethod}',
+			            type: 'GET',
+			            dataType: 'json',
+			            data: {
+			                q: query,
+			                constrains: ${ft}SetConstrains,
+			                operation: 'reference'
+			            },
+			            error: function() {
+			            	callback();
+			            },
+			            success: function(res) {
+			            	callback(res.data);
+			            }
+			        });
+			    } 
+				
 				$("#${field.concat('input')}").selectize({
 				    valueField: 'id',
 				    labelField: '${referenceFieldTitle}',
@@ -203,29 +249,8 @@
 				    maxOptions: 10,
 				    maxItems: ${mult},
 				    openOnFocus: true,
-				    load: function(query, callback) {
-				        $.ajax({
-				            url: '${referenceMethod}',
-				            type: 'GET',
-				            dataType: 'json',
-				            data: {
-				                q: query,
-				                constrains: function() { return ${ft}SetConstrains(); },
-				                operation: 'reference'
-				            },
-				            error: function() {
-				                callback();
-				            },
-				            success: function(res) {
-				            	callback(res.data);
-				            }
-				        });
-				    }
+				    load: ${ft}LoadData 
 				});
-				
-				function ${ft}SetConstrains() {
-					return "";
-				}
 				</script>
 			</c:when>
 		</c:choose>
