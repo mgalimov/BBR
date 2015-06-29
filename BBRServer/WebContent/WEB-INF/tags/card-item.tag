@@ -176,7 +176,8 @@
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize.refreshItems();')}"/>
 
 
-				<c:set var="itemAfterLoad" scope="request" value="${itemAfterLoad.concat('$(\"#').concat(ft).concat('input\")')}"/>
+				<c:set var="itemAfterLoad" scope="request" value="${itemAfterLoad.concat('
+		$(\"#').concat(ft).concat('input\")')}"/>
 				<c:set var="itemAfterLoad" scope="request" value="${itemAfterLoad.concat('[0].selectize')}"/>
 				<c:set var="itemAfterLoad" scope="request" value="${itemAfterLoad.concat('.load(').concat(ft).concat('LoadInitialData);')}"/>
 

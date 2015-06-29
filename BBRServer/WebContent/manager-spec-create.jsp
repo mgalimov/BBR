@@ -13,3 +13,27 @@
 		</t:card>
 	</jsp:body>
 </t:admin-card-wrapper>
+
+
+<script>
+	var posId; 
+
+	$(document).ready(function() {
+		posId = $("#posinput").val();
+		
+		$("#posinput").on("change", function () {
+			newPosId = $("#posinput").val();
+			if (newPosId != posId) {
+				posId = newPosId;
+				inp = $("#proceduresinput")[0].selectize;
+				inp.clear();
+				inp.clearOptions();
+				inp.load(proceduresLoadInitialData);
+			}
+		});
+	});
+	
+	proceduresSetConstrains = function () {
+		return $("#posinput").val();
+	}
+</script>
