@@ -23,7 +23,7 @@
 		<c:set var="itemReq" scope="request" value="${itemReq.concat('
 		      ').concat(ft).concat(':').concat(ft).concat('String,')}"/>
 		<c:set var="itemVal" scope="request" value="${itemVal.concat('
-	            var ').concat(ft).concat('String = $(\"#').concat(ft).concat('input\").val();')}"/>
+	        ').concat(ft).concat('String = $(\"#').concat(ft).concat('input\").val();')}"/>
 		<c:choose>
 			<c:when test="${type.equals('info')}">
 				<p class="form-control-static" id="${ft.concat('input')}"/>
@@ -144,6 +144,8 @@
 				<select class="selectized" style="display: none" id="${ft.concat('input')}" ${isRequired}  ${isDis}>
 				</select>
 
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('
+				    el = $(\"#').concat(ft).concat('input\")[0].selectize;')}"/>
 				<c:if test="${multiple.equals('true')}">
 					<c:set var="itemSet" scope="request" value="${itemSet.concat('
 					obj.').concat(field).concat('.forEach(function (objItem) {')}"/>
@@ -152,28 +154,22 @@
 					<c:set var="itemSet" scope="request" value="${itemSet.concat('
 					objItem = obj.').concat(field).concat(';')}"/>
 				</c:if>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('
-				    $(\"#').concat(ft).concat('input\")')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('.addOption(objItem?{id: objItem.id, ')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat(referenceFieldTitle).concat(': objItem.').concat(referenceFieldTitle).concat('}:{});')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('
-				    $(\"#').concat(ft).concat('input\")')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('.addItem(objItem?objItem.id:null);')}"/>
+					<c:set var="itemSet" scope="request" value="${itemSet.concat('
+						el.addOption(objItem?{id: objItem.id, ')}"/>
+					<c:set var="itemSet" scope="request" value="${itemSet.concat(referenceFieldTitle).concat(': objItem.').concat(referenceFieldTitle).concat('}:{});
+					')}"/>
+					<c:set var="itemSet" scope="request" value="${itemSet.concat('	el.addItem(objItem?objItem.id:null);')}"/>
 				<c:if test="${multiple.equals('true')}">
 					<c:set var="itemSet" scope="request" value="${itemSet.concat('
 					});
-					  ')}"/>
+					')}"/>
 				</c:if>
 
-
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('
-				    $(\"#').concat(ft).concat('input\")')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize.refreshOptions(false);')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('
-				    $(\"#').concat(ft).concat('input\")')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize.refreshItems();')}"/>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('el.load(').concat(ft).concat('LoadInitialData);
+				')}"/>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('	el.refreshOptions(false);
+				')}"/>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('	el.refreshItems();')}"/>
 
 
 				<c:set var="itemAfterLoad" scope="request" value="${itemAfterLoad.concat('
@@ -183,23 +179,17 @@
 
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
-						$(\"#').concat(ft).concat('input\")')}"/>
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('[0].selectize')}"/>
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.addOption({id: \"').concat(defaultValue).concat('\", ')}"/>
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat(referenceFieldTitle).concat(': \"').concat(defaultDisplay).concat('\"});')}"/>
-
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
-					    $(\"#').concat(ft).concat('input\")')}"/>
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('[0].selectize')}"/>
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.addItem(\"').concat(defaultValue).concat('\");')}"/>
-
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
-					    $(\"#').concat(ft).concat('input\")')}"/>
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('[0].selectize.refreshOptions(false);')}"/>
-
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
-					    $(\"#').concat(ft).concat('input\")')}"/>
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('[0].selectize.refreshItems();')}"/>
+				    	el = $(\"#').concat(ft).concat('input\")[0].selectize;
+				    	')}"/>
+					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('el.addOption({id: \"').concat(defaultValue).concat('\", ')}"/>
+					<c:set var="itemPreload" scope="request" value="${itemPreload.concat(referenceFieldTitle).concat(': \"').concat(defaultDisplay).concat('\"});
+					')}"/>
+					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('el.addItem(\"').concat(defaultValue).concat('\");
+					')}"/>
+   					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('el.refreshOptions(false);
+   					')}"/>
+					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('el.refreshItems();
+					')}"/>
 				</c:if>
 
 				<script>

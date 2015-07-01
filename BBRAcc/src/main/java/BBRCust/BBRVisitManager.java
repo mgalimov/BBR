@@ -105,14 +105,16 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         Query query = session.createQuery(select + from + where + orderBy);
 		List<Object[]> list = query.list();
 		
-		String whereProc = "";
+		String selProc = "";
 		
 		if (procedureId != null && !procedureId.isEmpty())
-			whereProc = " and " + procedureId + " in spec.procedures";
+			selProc = ", (" + procedureId + " in spec.procedures)";
+		else
+			selProc = ", 1";
 		
-		query = session.createQuery("select spec.id, spec.startWorkHour, spec.endWorkHour from " + 
+		query = session.createQuery("select spec.id, spec.startWorkHour, spec.endWorkHour " + selProc + "  from " + 
 									"BBRSpecialist spec where spec.status = " + BBRSpecialistState.SPECSTATE_ACTIVE +  
-									" and spec.pos.id = " + posId + whereProc);
+									" and spec.pos.id = " + posId);
 		List<Object[]> specs = query.list();
         
 		DateFormat hf = new SimpleDateFormat("HH");

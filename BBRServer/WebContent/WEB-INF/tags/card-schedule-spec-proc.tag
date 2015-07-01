@@ -212,8 +212,9 @@
 				$("td.order").removeClass('order');
 
 				for (i = 0; i < specs.length; i++) {
-					for (m = specs[i][1]; m < specs[i][2]; m++)
-						sch[spc[specs[i][0]]][m] = 0;
+					if (specs[i][3] == true)
+						for (m = specs[i][1]; m < specs[i][2]; m++)
+							sch[spc[specs[i][0]]][m] = 0;
 				}
 
 				for (i = 0; i < arr.length; i++) {

@@ -89,8 +89,9 @@
 					${itemSet}
 				};
 			});
+ 		} else {
+			${itemAfterLoad}
  		}
-		${itemAfterLoad}
 		
 		$('#saveChanges').click(function(event) { 
 	 		idParam = getUrlParameter('id');
@@ -101,15 +102,16 @@
     			op = 'update';
     			
             $.get('${method}',
-            		{id:idParam,${itemReq}operation: op}, 
-            		function(responseText) { 
-						saved = true; 
-            			window.location.href = '${gridPage}'; 
-            		}).fail(function(data) {
-            					saved = false;
-            					$('#welcomeText').text(data.responseText);
-            					$('#alertMessage').removeClass('hide');
-            				});
+             {id:idParam,${itemReq}
+              operation: op}, 
+              function(responseText) { 
+				saved = true; 
+	         	window.location.href = '${gridPage}'; 
+              }).fail(function(data) {
+				saved = false;
+				$('#welcomeText').text(data.responseText);
+				$('#alertMessage').removeClass('hide');
+              });
            });			 		
 
 		$('#cancelChanges').click(function(event) {
