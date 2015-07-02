@@ -269,12 +269,10 @@
  	 		$("td.conflict").removeClass('conflict');
 	 		
  	 		for (i = 1; i <= procLength; i++) {
- 	 	 		if (!obj.hasClass('occupied')) {
- 	 	 	 		obj.addClass('selected');
- 	 	 		} else
- 	 	 		{
- 	 	 	 		obj.addClass('conflict');
- 	 	 		}
+ 	 	 		if (obj.hasClass('occupied') || obj.hasClass('order'))
+ 	 	 			obj.addClass('conflict');
+ 	 	 		else
+ 	 	 			obj.addClass('selected');
  	 			obj = obj.next();
  	 		}
 		}

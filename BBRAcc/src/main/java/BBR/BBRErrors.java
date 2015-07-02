@@ -18,4 +18,5 @@ public class BBRErrors {
 	public static final String ERR_DATE_INCORRECT = "ERR_DATE_INCORRECT";
 	public static final String ERR_POS_MUST_BE_SPECIFIED = "ERR_POS_MUST_BE_SPECIFIED";
 	public static final String ERR_NOT_IMPLEMENTED = "ERR_NOT_IMPLEMENTED";
+	public static final String ERR_PROC_NOTSPECIFIED = "ERR_PROC_NOTSPECIFIED";
 }

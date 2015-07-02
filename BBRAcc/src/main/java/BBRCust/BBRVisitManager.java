@@ -107,14 +107,21 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		
 		String selProc = "";
 		
-		if (procedureId != null && !procedureId.isEmpty())
-			selProc = ", (" + procedureId + " in spec.procedures)";
-		else
-			selProc = ", 1";
+		if (procedureId != null && !procedureId.isEmpty()) {
+			selProc = "select spc.id " + 
+	                  "  from BBRSpecialist spc" + 
+			          " where spc.status = " + BBRSpecialistState.SPECSTATE_ACTIVE +
+			          "   and spc.pos.id = " + posId + 
+			          "   and (" + procedureId + " member of spc.procedures)";
 		
-		query = session.createQuery("select spec.id, spec.startWorkHour, spec.endWorkHour " + selProc + "  from " + 
-									"BBRSpecialist spec where spec.status = " + BBRSpecialistState.SPECSTATE_ACTIVE +  
-									" and spec.pos.id = " + posId);
+			selProc = " case when (spec.id in (" + selProc + ")) then 1 else 0 end";
+		} else
+			selProc = "1";
+		
+		query = session.createQuery("select spec.id, spec.startWorkHour, spec.endWorkHour, " + selProc + 
+								    "  from BBRSpecialist spec "+ 
+								    " where spec.status = " + BBRSpecialistState.SPECSTATE_ACTIVE +  
+									"   and spec.pos.id = " + posId);
 		List<Object[]> specs = query.list();
         
 		DateFormat hf = new SimpleDateFormat("HH");
@@ -136,10 +143,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 					else
 						line[i] = Long.parseLong(hf.format((Date)line[i])) * 2 + 1;
 				} else
-					if (i == 1)
-						line[i] = 0L;
-					else 
-						line[i] = 48L;
+					line[i] = (i == 1) ? 0L : 48L;
 			}
 		}
 		

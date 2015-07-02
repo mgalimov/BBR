@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import BBR.BBRErrors;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRPoSManager;
 import BBRAcc.BBRShop;
@@ -53,7 +54,8 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 					if (procedure != null) 
 						procedures.add(procedure);
 				}
-			}
+			} else
+				throw new Exception(BBRErrors.ERR_PROC_NOTSPECIFIED);
 			
 			manager.createAndStoreSpecialist(name, position, null, pos, status, startWH, endWH, procedures);
 		}
@@ -91,7 +93,8 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 					if (procedure != null) 
 						procedures.add(procedure);
 				}
-			}
+			} else
+				throw new Exception(BBRErrors.ERR_PROC_NOTSPECIFIED);
 			spec.setProcedures(procedures);
 			
 			manager.update(spec);
