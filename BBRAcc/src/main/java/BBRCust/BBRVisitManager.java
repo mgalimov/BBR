@@ -8,6 +8,7 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import BBR.BBRDataElement;
 import BBR.BBRDataManager;
 import BBR.BBRDataSet;
 import BBR.BBRUtil;
@@ -173,5 +174,38 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 			update(visit);
 		}		
 	}
+
+	public BBRDataElement listVisitors(int pageNumber, int pageSize, String orderBy) {
+       boolean tr = BBRUtil.beginTran(sessionIndex);
+        
+       Session session = BBRUtil.getSession(sessionIndex);
+       if (orderBy == null)
+    	   orderBy = "";
+       if (orderBy.length() > 0) {
+       		orderBy = orderBy.trim();
+       		if (!orderBy.startsWith("order by"))
+       			orderBy = "order by " + orderBy.trim();
+       }
+       
+       String where = " where ";
+       
+       Long count = (Long)session.createQuery("Select count(*) from " + typeName + " " + where).uniqueResult();
+       
+       Query query = session.createQuery( " from " + typeName + " " + where + " " + orderBy);
+       
+       if (pageNumber >= 0) {
+    	   query.setFirstResult(pageNumber * pageSize);
+       
+    	   if (pageSize > maxRowsToReturn && maxRowsToReturn > 0)
+    		   pageSize = maxRowsToReturn;
+           query.setMaxResults(pageSize);
+       }
+       
+       List<T> list = query.list();
+       BBRDataSet<T> ds = new BBRDataSet<T>(list, count);
+       BBRUtil.commitTran(sessionIndex, tr);
+	
+       return ds;
+  }
 
 }
