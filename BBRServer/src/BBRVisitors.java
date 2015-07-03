@@ -1,25 +1,17 @@
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Hashtable;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import BBR.BBRErrors;
 import BBRAcc.BBRPoS;
-import BBRAcc.BBRPoSManager;
+import BBRAcc.BBRShop;
+import BBRAcc.BBRUser.BBRUserRole;
 import BBRClientApp.BBRContext;
-import BBRCust.BBRProcedure;
-import BBRCust.BBRProcedureManager;
-import BBRCust.BBRSpecialist;
-import BBRCust.BBRSpecialistManager;
 import BBRCust.BBRVisitManager;
 import BBRCust.BBRVisit;
-import BBRCust.BBRVisit.BBRVisitStatus;
 
-@WebServlet("/BBRVisits")
+@WebServlet("/BBRVisitors")
 public class BBRVisitors extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 	private static final long serialVersionUID = 1L;
        
@@ -33,8 +25,20 @@ public class BBRVisitors extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 								Hashtable<Integer, Hashtable<String, String>> sortingFields, 
 								BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		BBRContext context = BBRContext.getContext(request);
+		
+		BBRPoS pos = null;
+		BBRShop shop = null;
+		
+		if (context.user == null) return "";
+		if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN || context.user.getRole() == BBRUserRole.ROLE_POS_SPECIALIST)
+			pos = context.user.getPos();
+		else
+			if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
+				shop = context.user.getShop();
+		
+		
 		if (context.user != null)
-			return manager.listVisitors(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
+			return manager.listVisitors(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns), pos, shop).toJson();
 		else
 			return "";
 	}

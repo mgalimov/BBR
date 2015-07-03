@@ -50,7 +50,8 @@ public class BBRDataElementSerializer implements JsonSerializer<BBRDataElement>{
 	    		}
 	    	} else
 				try {
-					j.add(field.getName(), gson.toJsonTree(field.get(src)));
+					if (!field.getName().equals("this$0"))
+						j.add(field.getName(), gson.toJsonTree(field.get(src)));
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {

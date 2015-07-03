@@ -2,6 +2,7 @@ package BBRCust;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import BBR.BBRDataManager;
 import BBR.BBRDataSet;
 import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
+import BBRAcc.BBRShop;
 import BBRAcc.BBRUser;
 import BBRCust.BBRCustReg;
 import BBRCust.BBRSpecialist.BBRSpecialistState;
@@ -175,37 +177,71 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		}		
 	}
 
-	public BBRDataElement listVisitors(int pageNumber, int pageSize, String orderBy) {
-       boolean tr = BBRUtil.beginTran(sessionIndex);
+	public class BBRVisitor extends BBRDataElement{
+		public Long id;
+		public String userName;
+		public String userContacts;
+		public Date lastVisitDate;
+		
+		BBRVisitor() {
+		}
+	}
+	
+	@SuppressWarnings({ "unchecked", "unused" })
+	public BBRDataSet<BBRVisitor> listVisitors(int pageNumber, int pageSize, String orderBy, BBRPoS pos, BBRShop shop) {
+		
+		
+		boolean tr = BBRUtil.beginTran(sessionIndex);
         
-       Session session = BBRUtil.getSession(sessionIndex);
-       if (orderBy == null)
+		Session session = BBRUtil.getSession(sessionIndex);
+		if (orderBy == null)
     	   orderBy = "";
-       if (orderBy.length() > 0) {
+		if (orderBy.length() > 0) {
        		orderBy = orderBy.trim();
        		if (!orderBy.startsWith("order by"))
        			orderBy = "order by " + orderBy.trim();
-       }
+		}
        
-       String where = " where ";
+		String where = "";
+		
+		if (pos != null)
+			where += "where pos.id = " + pos.getId() + " ";
+		else
+			if (shop != null)
+				where += "where pos.shop.id = " + shop.getId() + " ";
+		
+		String groupBy = " group by userName, userContacts ";
+
+		Long count = (Long)session.createQuery("select count(distinct userName + userContacts) from BBRVisit " + where).uniqueResult();
+		
+		Query query = session.createQuery("select userName, userContacts, max(timeScheduled) as lastVisitDate from BBRVisit " + where + groupBy + orderBy);
        
-       Long count = (Long)session.createQuery("Select count(*) from " + typeName + " " + where).uniqueResult();
-       
-       Query query = session.createQuery( " from " + typeName + " " + where + " " + orderBy);
-       
-       if (pageNumber >= 0) {
+		if (pageNumber >= 0) {
     	   query.setFirstResult(pageNumber * pageSize);
        
     	   if (pageSize > maxRowsToReturn && maxRowsToReturn > 0)
     		   pageSize = maxRowsToReturn;
            query.setMaxResults(pageSize);
+		}
+       
+        List<Object[]> list = query.list();
+		BBRUtil.commitTran(sessionIndex, tr);
+       
+       List<BBRVisitor> listVisitors = new ArrayList<BBRVisitor>();
+       
+       Long i = 0L;
+       
+       for(Object[] line: list) {
+    	   BBRVisitor visitor = new BBRVisitor();
+    	   visitor.id = ++i; 
+    	   visitor.userName = (String) line[0];
+    	   visitor.userContacts = (String) line[1];
+    	   visitor.lastVisitDate = (Date) line[2];
+    	   listVisitors.add(visitor);
        }
        
-       List<T> list = query.list();
-       BBRDataSet<T> ds = new BBRDataSet<T>(list, count);
-       BBRUtil.commitTran(sessionIndex, tr);
-	
-       return ds;
+		BBRDataSet<BBRVisitor> ds = new BBRDataSet<BBRVisitor>(listVisitors, count);
+		return ds;
   }
 
 }
