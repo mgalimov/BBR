@@ -212,7 +212,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		
 		String groupBy = " group by userName, userContacts ";
 
-		Long count = (Long)session.createQuery("select count(distinct userName + userContacts) from BBRVisit " + where).uniqueResult();
+		int count = session.createQuery("select distinct userName, userContacts from BBRVisit " + where).list().size();
 		
 		Query query = session.createQuery("select userName, userContacts, max(timeScheduled) as lastVisitDate from BBRVisit " + where + groupBy + orderBy);
        
@@ -240,7 +240,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
     	   listVisitors.add(visitor);
        }
        
-		BBRDataSet<BBRVisitor> ds = new BBRDataSet<BBRVisitor>(listVisitors, count);
+		BBRDataSet<BBRVisitor> ds = new BBRDataSet<BBRVisitor>(listVisitors, Long.valueOf(count));
 		return ds;
   }
 
