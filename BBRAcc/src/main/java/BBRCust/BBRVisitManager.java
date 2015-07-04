@@ -178,7 +178,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	}
 
 	public class BBRVisitor extends BBRDataElement{
-		public Long id;
+		public String id;
 		public String userName;
 		public String userContacts;
 		public Date lastVisitDate;
@@ -189,8 +189,6 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	
 	@SuppressWarnings({ "unchecked", "unused" })
 	public BBRDataSet<BBRVisitor> listVisitors(int pageNumber, int pageSize, String orderBy, BBRPoS pos, BBRShop shop) {
-		
-		
 		boolean tr = BBRUtil.beginTran(sessionIndex);
         
 		Session session = BBRUtil.getSession(sessionIndex);
@@ -229,19 +227,50 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
        
        List<BBRVisitor> listVisitors = new ArrayList<BBRVisitor>();
        
-       Long i = 0L;
-       
        for(Object[] line: list) {
     	   BBRVisitor visitor = new BBRVisitor();
-    	   visitor.id = ++i; 
     	   visitor.userName = (String) line[0];
     	   visitor.userContacts = (String) line[1];
     	   visitor.lastVisitDate = (Date) line[2];
+    	   visitor.id = visitor.userName + BBRUtil.recordDivider + visitor.userContacts; 
     	   listVisitors.add(visitor);
        }
        
 		BBRDataSet<BBRVisitor> ds = new BBRDataSet<BBRVisitor>(listVisitors, Long.valueOf(count));
 		return ds;
   }
+
+	public BBRVisitor findVisitor(String userName, String userContacts) {
+		boolean tr = BBRUtil.beginTran(sessionIndex);
+        
+		Session session = BBRUtil.getSession(sessionIndex);
+		
+		if (userName == null || userName.isEmpty() || userContacts == null || userContacts.isEmpty())
+			return null;
+
+		Query query = session.createQuery("select userName, userContacts, max(timeScheduled) as lastVisitDate"+ 
+		                                  "  from BBRVisit " +  
+										  " where userName = :userName" + 
+		                                  "   and userContacts = :userContacts" +
+										  " group by userName, userContacts").
+		                                  setParameter("userName", userName).
+		                                  setParameter("userContacts", userContacts);
+       
+        Object[] line = (Object[])query.uniqueResult();
+		BBRUtil.commitTran(sessionIndex, tr);
+       
+  	    BBRVisitor visitor = new BBRVisitor();
+		visitor.userName = (String) line[0];
+		visitor.userContacts = (String) line[1];
+		visitor.lastVisitDate = (Date) line[2];
+		visitor.id = visitor.userName + BBRUtil.recordDivider + visitor.userContacts; 
+       
+		return visitor;
+	}
+
+	public BBRDataSet<BBRVisit> listVisitsByNameAndContacts(String userName, String userContacts, int pageNumber, int pageSize, String orderBy) {
+		String where = "userName = '" + userName + "' and userContacts='" + userContacts + "'";
+		return list(pageNumber, pageSize, where, orderBy);
+	}
 
 }

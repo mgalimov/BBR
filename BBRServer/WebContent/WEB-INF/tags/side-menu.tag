@@ -13,7 +13,7 @@
 		<t:nav-item href="manager-spec-list.jsp" title="LBL_SPECS_MENU" />
 		<t:nav-item href="manager-proc-list.jsp" title="LBL_PROCEDURES_MENU" />
 		<t:nav-item href="manager-task-list.jsp" title="LBL_TASKS_MENU" badge="true" badgeMethod="BBRTasks"/>
-		<t:nav-item href="manager-visitors-list.jsp" title="LBL_VISITORS_LIST_MENU"/>
+		<t:nav-item href="manager-visitor-list.jsp" title="LBL_VISITORS_LIST_MENU"/>
 		<t:nav-item href="manager-spec-scedule-list.jsp" title="LBL_SPEC_SCHEDULE_MENU"/>
 	</t:nav-group>
 	<t:nav-group title="LBL_USER_MENU" level="general">

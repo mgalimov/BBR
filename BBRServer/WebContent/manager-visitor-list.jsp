@@ -3,7 +3,7 @@
 <t:admin-grid-wrapper title="LBL_VISITORS_TITLE">
 	<jsp:body>
 		<t:grid method="BBRVisitors" editPage="manager-visitor-edit.jsp" 
-				createPage="manager-visitor-create.jsp" title="LBL_TASKS_TITLE" 
+				createPage="" title="LBL_TASKS_TITLE" 
 				customToolbar="true">
 			<t:toolbar-item label="LBL_OPEN_BTN" id="edit" accent="btn-info"></t:toolbar-item>
 			<t:toolbar-item label="LBL_LAST_30_DAYS" id="view30Days" icon="glyphicon-tasks"></t:toolbar-item>

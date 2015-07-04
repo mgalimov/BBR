@@ -15,10 +15,10 @@ public class BBRUserProfile extends BBRBasicServlet<BBRUser, BBRUserManager> {
     }
 
     @Override
-    protected String getRecordData(long id, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+    protected String getRecordData(String id, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
     	BBRContext context = BBRContext.getContext(request);
     	return context.addJsonField(context.user.toJson(), "userName", context.user.getFirstName() + " " + context.user.getLastName());
-    };
+    }
 
     @Override
     protected BBRUser beforeUpdate(BBRUser obj, BBRParams params,

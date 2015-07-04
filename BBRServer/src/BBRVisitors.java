@@ -4,6 +4,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import BBR.BBRErrors;
+import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRShop;
 import BBRAcc.BBRUser.BBRUserRole;
@@ -36,11 +38,22 @@ public class BBRVisitors extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
 				shop = context.user.getShop();
 		
-		
 		if (context.user != null)
 			return manager.listVisitors(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns), pos, shop).toJson();
 		else
 			return "";
 	}
 
+	protected String getRecordData(String id, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+		BBRContext context = BBRContext.getContext(request);
+		
+		String[] userNC = params.get("id").split(BBRUtil.recordDivider);
+		
+		BBRVisitManager.BBRVisitor obj = (BBRVisitManager.BBRVisitor)manager.findVisitor(userNC[0], userNC[1]);
+		
+		if (obj != null)
+			return obj.toJson();
+		else
+			return context.gs(BBRErrors.ERR_RECORD_NOTFOUND, manager.getClassTitle());
+	}
 }

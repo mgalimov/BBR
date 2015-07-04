@@ -19,6 +19,7 @@ public class BBRUtil {
     private static final List<SessionFactory> sessionFactory = new ArrayList<SessionFactory>();
     private static int lastIndex = 0;
     public static final GsonBuilder gsonBuilder = createGsonBuilder();
+	public static final String recordDivider = "@@";
 
     public static int buildSessionFactory(Configuration configuration) {
         try {

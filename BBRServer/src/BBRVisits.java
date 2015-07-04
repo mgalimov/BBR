@@ -8,8 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import BBR.BBRErrors;
+import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRPoSManager;
+import BBRAcc.BBRUser.BBRUserRole;
 import BBRClientApp.BBRContext;
 import BBRCust.BBRProcedure;
 import BBRCust.BBRProcedureManager;
@@ -126,10 +128,17 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 								Hashtable<Integer, Hashtable<String, String>> sortingFields, 
 								BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		BBRContext context = BBRContext.getContext(request);
-		if (context.user != null)
-			return manager.list(context.user.getId(), pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
+		
+		String t = params.get("t");
+		if (!t.isEmpty() && t.equals("q")) {
+			String[] userNC = params.get("userParams").split(BBRUtil.recordDivider);
+			return manager.listVisitsByNameAndContacts(userNC[0], userNC[1], pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
+		}
 		else
-			return "";
+			if (context.user != null)
+				return manager.list(context.user.getId(), pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
+			else
+				return "";
 	}
 	
 	@Override
@@ -137,5 +146,23 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 		BBRContext context = BBRContext.getContext(request);
 		context.setLastVisitStep(1);
 		return "";
+	}
+	
+	protected String getRecordData(String id, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+		BBRContext context = BBRContext.getContext(request);
+		
+		BBRVisit obj = (BBRVisit)manager.findById(Long.parseLong(id));
+		if (obj != null) {
+			if ((context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER) ||
+				((context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN) && (obj.getPos().getShop().getId() == context.user.getShop().getId())) ||
+				((context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN) && (obj.getPos().getId() == context.user.getPos().getId())) ||
+				((context.user.getRole() == BBRUserRole.ROLE_POS_SPECIALIST) && (obj.getPos().getId() == context.user.getPos().getId())) ||
+				((context.user.getRole() == BBRUserRole.ROLE_VISITOR) && (obj.getUser().getId() == context.user.getId())))
+				return obj.toJson();
+			else
+				return context.gs(BBRErrors.ERR_RECORD_NOTFOUND, manager.getClassTitle());
+		}
+		else
+			return context.gs(BBRErrors.ERR_RECORD_NOTFOUND, manager.getClassTitle());
 	}
 }

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
-<t:admin-card-wrapper title="Task">
+<t:admin-card-wrapper title="LBL_TASK_TITLE">
 	<jsp:body>
 		<script>
 			$(document).ready(function() {

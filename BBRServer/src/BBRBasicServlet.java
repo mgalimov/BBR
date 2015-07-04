@@ -39,7 +39,7 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 			String operation = params.get("operation");
 			
 			if (operation.equals("getdata")) {
-				respText = getRecordData(Long.parseLong(id), params, request, response);
+				respText = getRecordData(id, params, request, response);
 			} else
 			if (operation.equals("delete")) {
 				Cls obj = (Cls)manager.findById(Long.parseLong(id));
@@ -141,9 +141,9 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 	}
 
 	@SuppressWarnings("unchecked")
-	protected String getRecordData(long id, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+	protected String getRecordData(String id, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		BBRContext context = BBRContext.getContext(request);
-		Cls obj = (Cls)manager.findById(id);
+		Cls obj = (Cls)manager.findById(Long.parseLong(id));
 		if (obj != null)
 			return obj.toJson();
 		else

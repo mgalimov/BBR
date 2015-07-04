@@ -14,7 +14,7 @@ public class BBRParams {
 			return;
 		
 		try {
-			params = URLDecoder.decode(queryString, "UTF-8").split("&");
+			params = URLDecoder.decode((URLDecoder.decode(queryString, "ISO-8859-1")), "UTF-8").split("&");
 		} catch (UnsupportedEncodingException ex) {
 			params = queryString.split("&");
 		}
