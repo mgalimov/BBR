@@ -10,6 +10,7 @@ import BBRAcc.BBRShopManager;
 import BBRAcc.BBRUser;
 import BBRAcc.BBRUserManager;
 import BBRAcc.BBRUser.BBRUserRole;
+import BBRClientApp.BBRParams;
 
 @WebServlet("/BBRUsers")
 public class BBRUsers extends BBRBasicServlet<BBRUser, BBRUserManager> {

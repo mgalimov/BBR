@@ -26,6 +26,7 @@ public class BBRContext {
 	public boolean viewAllTasks = false;
 	private Locale locale = null;
 	private ResourceBundle resourceBundle;
+	private Hashtable<String, Object> data = new Hashtable<String, Object>();
 	
 	public BBRContext() {
 	}
@@ -278,5 +279,16 @@ public class BBRContext {
 	public String addJsonField(String json, String field, String value) {
 		return json.substring(0, json.length() - 1) + ",\"" + field + "\":\"" + value + "\"}";
 	}
+
+	public Object set(String param, Object value) {
+		return data.put(param, value);
+	}
 	
+	public Object get(String param) {
+		return data.get(param);
+	}
+	
+	public Object clear(String param) {
+		return data.remove(param);
+	}
 }

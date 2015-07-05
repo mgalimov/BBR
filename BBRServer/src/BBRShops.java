@@ -6,6 +6,7 @@ import BBRAcc.BBRShop;
 import BBRAcc.BBRShopManager;
 import BBRAcc.BBRUser.BBRUserRole;
 import BBRClientApp.BBRContext;
+import BBRClientApp.BBRParams;
 
 @WebServlet("/BBRShops")
 public class BBRShops extends BBRBasicServlet<BBRShop, BBRShopManager> {

@@ -9,6 +9,7 @@ import BBRAcc.BBRPoS;
 import BBRAcc.BBRPoSManager;
 import BBRAcc.BBRShop;
 import BBRAcc.BBRShopManager;
+import BBRClientApp.BBRParams;
 
 @WebServlet("/BBRPoSes")
 public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {

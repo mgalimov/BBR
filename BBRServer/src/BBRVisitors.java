@@ -10,6 +10,7 @@ import BBRAcc.BBRPoS;
 import BBRAcc.BBRShop;
 import BBRAcc.BBRUser.BBRUserRole;
 import BBRClientApp.BBRContext;
+import BBRClientApp.BBRParams;
 import BBRCust.BBRVisitManager;
 import BBRCust.BBRVisit;
 
@@ -48,8 +49,14 @@ public class BBRVisitors extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 		BBRContext context = BBRContext.getContext(request);
 		
 		String[] userNC = params.get("id").split(BBRUtil.recordDivider);
+		String userN = userNC[0];
+		String userC = "";
 		
-		BBRVisitManager.BBRVisitor obj = (BBRVisitManager.BBRVisitor)manager.findVisitor(userNC[0], userNC[1]);
+		if (userNC.length > 2) {
+			userC = userNC[1];
+		}
+		
+		BBRVisitManager.BBRVisitor obj = (BBRVisitManager.BBRVisitor)manager.findVisitor(userN, userC);
 		
 		if (obj != null)
 			return obj.toJson();

@@ -13,6 +13,7 @@ import BBRAcc.BBRPoSManager;
 import BBRAcc.BBRShop;
 import BBRAcc.BBRUser.BBRUserRole;
 import BBRClientApp.BBRContext;
+import BBRClientApp.BBRParams;
 import BBRCust.BBRSpecialist;
 import BBRCust.BBRSpecialistManager;
 import BBRCust.BBRProcedure;

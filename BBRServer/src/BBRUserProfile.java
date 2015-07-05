@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import BBRAcc.BBRUser;
 import BBRAcc.BBRUserManager;
 import BBRClientApp.BBRContext;
+import BBRClientApp.BBRParams;
 
 @WebServlet("/BBRUserProfile")
 public class BBRUserProfile extends BBRBasicServlet<BBRUser, BBRUserManager> {

@@ -52,9 +52,13 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 	@SuppressWarnings({ "unchecked", "unused" })
 	public BBRDataSet<BBRPoS> listLocal(BBRGPS locationGPS, Double radius) {
 		//TODO: throw Exceptions
-		if (locationGPS == null) return null;
 		if (radius > 100.0 || radius <= 0.5) return null;
 		
+		if (locationGPS == null) {
+			locationGPS = new BBRGPS(37.620842, 55.754113);
+			radius = 10000.0;
+		}
+			
         boolean tr = BBRUtil.beginTran(sessionIndex);
         
         Session session = BBRUtil.getSession(sessionIndex);

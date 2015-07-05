@@ -103,7 +103,7 @@ public class BBRPoS extends BBRDataElement {
 
 	public String getMapHref() {
 		if (locationGPS != null)
-			return "https://maps.yandex.ru/?ll=" + locationGPS.lng + "," + locationGPS.lat;
+			return "https://maps.yandex.ru/?ll=" + locationGPS.lng + "," + locationGPS.lat + "&z=16";
 		else
 			return "#";
 	}

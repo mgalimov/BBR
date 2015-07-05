@@ -11,6 +11,7 @@ import BBR.BBRDataManager;
 import BBR.BBRErrors;
 import BBRAcc.BBRUser.BBRUserRole;
 import BBRClientApp.BBRContext;
+import BBRClientApp.BBRParams;
 
 @SuppressWarnings("rawtypes")
 public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BBRDataManager> extends HttpServlet {
@@ -117,26 +118,28 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 								HttpServletResponse response) {
 		BBRContext context = BBRContext.getContext(request);
 		String where = "";
-		if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN || context.user.getRole() == BBRUserRole.ROLE_POS_SPECIALIST)
-			if (context.user.getPos() != null)
-				where = manager.wherePos(context.user.getPos().getId());
-		if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
-			if (context.user.getShop() != null)
-				where = manager.whereShop(context.user.getShop().getId());
-		
+		if (context.user != null) {
+			if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN || context.user.getRole() == BBRUserRole.ROLE_POS_SPECIALIST)
+				if (context.user.getPos() != null)
+					where = manager.wherePos(context.user.getPos().getId());
+			if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
+				if (context.user.getShop() != null)
+					where = manager.whereShop(context.user.getShop().getId());
+		}
 		return manager.list(pageNumber, pageSize, where, BBRContext.getOrderBy(sortingFields, fields)).toJson();
 	}
 
 	protected String getReferenceData(String query, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		BBRContext context = BBRContext.getContext(request);
 		String where = "";
-		if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
-			if (context.user.getPos() != null)
-				where = manager.wherePos(context.user.getPos().getId());
-		if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
-			if (context.user.getShop() != null)
-				where = manager.whereShop(context.user.getShop().getId());
-		
+		if (context.user != null) {
+			if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
+				if (context.user.getPos() != null)
+					where = manager.wherePos(context.user.getPos().getId());
+			if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
+				if (context.user.getShop() != null)
+					where = manager.whereShop(context.user.getShop().getId());
+		}
 		return manager.list(query, manager.getTitleField(), where).toJson();
 	}
 

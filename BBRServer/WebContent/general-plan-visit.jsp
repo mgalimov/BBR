@@ -1,3 +1,4 @@
+<%@page import="BBR.BBRGPS"%>
 <%@page import="BBRAcc.BBRPoSManager"%>
 <%@page import="BBRAcc.BBRPoS"%>
 <%@page import="BBR.BBRDataSet"%>
@@ -26,12 +27,17 @@
 	else
 		request.setAttribute("userName", "");
 	
-	request.setAttribute("location", Double.toString(context.getLocation().lat) + ", " + Double.toString(context.getLocation().lng));
+	BBRGPS loc = context.getLocation(); 
+	if (loc != null)
+		request.setAttribute("location", Double.toString(loc.lat) + ", " + Double.toString(loc.lng));
+	else
+		request.setAttribute("location", "");
 	
 	String posCoords = "";
 	String posIds = "";
 	BBRPoSManager mgr = new BBRPoSManager();
 	BBRDataSet<BBRPoS> poses = mgr.listLocal(context.getLocation(), 10.0);
+
 	for (BBRPoS pos : poses.data) {
 		if (pos.getLocationGPS() != null)
 			posCoords = posCoords + "[" + pos.getLocationGPS().getLat() + "," + pos.getLocationGPS().getLng() + "], ";
@@ -47,7 +53,7 @@
 		BBRPoS pos = context.planningVisit.getPos(); 
 		if (pos != null) {
 			outString += "<p>" + context.gs("LBL_YOUR_VISIT_AT", pos.getTitle(), pos.getLocationDescription());
-			outString += "<a href='" + context.planningVisit.getPos().getMapHref() + "'>"+context.gs("LBL_YOUR_VISIT_SEE_MAP")+"</a></p>";
+			outString += "<a href='" + context.planningVisit.getPos().getMapHref() + "' target='_blank'>"+context.gs("LBL_YOUR_VISIT_SEE_MAP")+"</a></p>";
 		}
 		outString += "<p>" + context.gs("LBL_YOUR_VISIT_TIME", context.planningVisit.getTimeScheduled()) + "</p>";
 		if (context.planningVisit.getSpec() != null) {
@@ -77,8 +83,9 @@
 				ymaps.ready(function () {
 					initMap(${location});
 					addPosesToMap([${posCoords}], [${posIds}], function(posId) {
-						 $("#posinput")[0].selectize.addItem(posId);
-						 $("#posinput")[0].selectize.refreshItems();
+						 el = $("#posinput")[0].selectize;
+						 el.addItem(posId);
+						 el.refreshItems();
 					});
 				})
 			});

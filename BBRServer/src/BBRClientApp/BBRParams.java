@@ -1,3 +1,4 @@
+package BBRClientApp;
 import java.io.BufferedReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -14,10 +15,10 @@ public class BBRParams {
 			return;
 		
 		try {
-			params = URLDecoder.decode((URLDecoder.decode(queryString, "ISO-8859-1")), "UTF-8").split("&");
+			params = URLDecoder.decode(queryString, "UTF-8").split("&");
 		} catch (UnsupportedEncodingException ex) {
 			params = queryString.split("&");
-		}
+		} 
 		
 		for (int i = 0; i < params.length; i++) {
 			param = params[i].split("=");
