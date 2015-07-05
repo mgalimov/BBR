@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import BBR.BBRErrors;
-import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRPoSManager;
 import BBRAcc.BBRUser.BBRUserRole;
@@ -128,10 +127,9 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 								Hashtable<Integer, Hashtable<String, String>> sortingFields, 
 								BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		BBRContext context = BBRContext.getContext(request);
+		String[] userNC = (String[])request.getAttribute("userNC"); 
 		
-		String t = params.get("t");
-		if (!t.isEmpty() && t.equals("q")) {
-			String[] userNC = params.get("userParams").split(BBRUtil.recordDivider);
+		if (userNC != null) {
 			return manager.listVisitsByNameAndContacts(userNC[0], userNC[1], pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
 		}
 		else

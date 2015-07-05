@@ -1,5 +1,19 @@
+<%@ page import="BBRClientApp.BBRContext"%>
+<%@ page import="BBR.BBRUtil"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
+
+<%
+	BBRParams params = new BBRParams(request.getQueryString());	
+	String t = params.get("t");
+	if (!t.isEmpty() && t.equals("q")) {
+		String[] userNC = params.get("userParams").split(BBRUtil.recordDivider);
+		BBRContext context = BBRContext.getContext(request);
+		request.setAttribute("userNC", userNC);
+	}
+%>
+
 <t:admin-grid-wrapper title="LBL_USER_VISITS_TITLE">
 	<jsp:body>
 		<t:grid method="BBRVisits" editPage="general-edit-visit.jsp" createPage="" title="LBL_USER_VISITS_TITLE">
