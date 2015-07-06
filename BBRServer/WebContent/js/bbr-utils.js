@@ -4,7 +4,7 @@
 var locationSet = false;
 
 function getUrlParameter(sParam) {
-    var sPageURL = window.location.search.substring(1);
+    var sPageURL = unescape(decodeURIComponent(window.location.search.substring(1)));
     var sURLVariables = sPageURL.split('&');
     for (var i = 0; i < sURLVariables.length; i++) 
     {

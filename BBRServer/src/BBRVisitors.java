@@ -52,7 +52,7 @@ public class BBRVisitors extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 		String userN = userNC[0];
 		String userC = "";
 		
-		if (userNC.length > 2) {
+		if (userNC.length == 2) {
 			userC = userNC[1];
 		}
 		
