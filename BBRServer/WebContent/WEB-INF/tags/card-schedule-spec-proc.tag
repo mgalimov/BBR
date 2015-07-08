@@ -1,3 +1,4 @@
+<%@tag import="BBRAcc.BBRPoSManager"%>
 <%@tag import="java.util.*"%>
 <%@tag import="java.text.SimpleDateFormat"%>
 <%@tag import="BBRCust.BBRVisitManager"%>
@@ -5,6 +6,8 @@
 <%@tag import="BBRCust.BBRSpecialistManager"%>
 <%@tag import="BBRCust.BBRSpecialist"%>
 <%@tag import="BBR.BBRDataSet"%>
+
+<%@ attribute name="mode" %>
 
 <%@tag language="java" pageEncoding="UTF-8" description="Card Schedule-Spec-Proc" import="BBRClientApp.BBRContext"%>
 <%@tag import="BBRAcc.BBRPoS"%>
@@ -17,7 +20,18 @@
 	int datesPerPage = 7;
 
 	BBRContext context = BBRContext.getContext(request);
-	BBRPoS pos = context.planningVisit.getPos();
+	
+	BBRPoS pos = null;
+	
+	if (mode.isEmpty() || mode.equals("general-edit"))	
+		pos = context.planningVisit.getPos();
+	else 
+		if (mode.equals("manager-view") || mode.equals("manager-edit"))	{
+			pos = context.user.getPos();
+		}
+	
+	if (pos == null) return;
+	
 	Date dateSelected = new Date();
 	SimpleDateFormat df = new SimpleDateFormat("dd MMMM");
 	SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
@@ -102,11 +116,19 @@
 	
 	calendar.setTime(dateSelected);
 %>
-<div class="row">
-	<div class="panel col-md-10">
-		<t:card-item label="LBL_SELECT_PROCEDURE" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures"/>
+<% if (mode.isEmpty() || mode.equals("general-edit")) { %>	
+	<div class="row">
+		<div class="panel col-md-10">
+			<t:card-item label="LBL_SELECT_PROCEDURE" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures"/>
+		</div>
 	</div>
-</div>
+<% } else { %>
+	<div class="row">
+		<div class="panel col-md-10">
+			<t:card-item label="LBL_SELECT_POS" type="reference" field="pos" referenceFieldTitle="title" referenceMethod="BBRPoSes"></t:card-item>
+		</div>
+	</div>
+<% } %>
 
 <div class="row">
 	<div class="panel col-md-10">
@@ -157,8 +179,10 @@
 		});
 	
 	 	$("#procedureinput").on("change", select);
+
+<% if (mode.isEmpty() || mode.equals("general-edit")) { %>	
 	 	$("#scheduleTable td").on("click", function(e) {setTime($(e.target));});
-	 	
+<% } %>	 	
 	 	$("#nextDateBtn").click(function(e) { changeDatesOnButtons(<%=datesPerPage %>); });
 	 	$("#prevDateBtn").click(function(e) { changeDatesOnButtons(-<%=datesPerPage %>); });
 	 	$("#todayDateBtn").click(function(e) { changeDatesOnButtons(0); });
@@ -179,7 +203,7 @@
  		}); 
 		select();
 	}
-	
+
 	function select() {
  		dateSelected = $("button[id^='sd'].btn-info").attr('id').substring(2, 12);
  		procSelected = $("#procedureinput").val();
@@ -247,7 +271,7 @@
 				setTime(null);
 			});
 	}
-
+	
 	function setTime(obj) {
 		if (obj == null) {
 			if (specSelected >= 0)
