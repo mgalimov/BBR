@@ -5,6 +5,7 @@
 <%@tag import="BBRCust.BBRVisitManager.*"%>
 <%@tag import="BBRCust.BBRSpecialistManager"%>
 <%@tag import="BBRCust.BBRSpecialist"%>
+<%@tag import="BBRAcc.BBRUser.BBRUserRole"%>
 <%@tag import="BBR.BBRDataSet"%>
 
 <%@ attribute name="mode" %>
@@ -27,7 +28,19 @@
 		pos = context.planningVisit.getPos();
 	else 
 		if (mode.equals("manager-view") || mode.equals("manager-edit"))	{
-			pos = context.user.getPos();
+			if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN ||
+				context.user.getRole() == BBRUserRole.ROLE_POS_SPECIALIST)
+				pos = context.user.getPos();
+			else
+				if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN) {
+					BBRPoSManager pmgr = new BBRPoSManager();
+					pos = pmgr.list("", "title asc", pmgr.whereShop(context.user.getShop().getId())).data.get(0);
+				}
+				else
+					if (context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER) {
+						BBRPoSManager pmgr = new BBRPoSManager();
+						pos = pmgr.list("", "title asc", "").data.get(0);
+					}
 		}
 	
 	if (pos == null) return;
@@ -179,6 +192,16 @@
 		});
 	
 	 	$("#procedureinput").on("change", select);
+	 	el = $("#posinput");
+	 	if (el.length) {
+			els=el[0].selectize;
+			els.addOption({id: <%=pos.getId()%>, title: '<%=pos.getTitle()%>'});
+			els.addItem(<%=pos.getId()%>);
+			els.load(posLoadInitialData);
+			els.refreshOptions(false);
+			els.refreshItems();
+	 		el.on("change", select);
+	 	}
 
 <% if (mode.isEmpty() || mode.equals("general-edit")) { %>	
 	 	$("#scheduleTable td").on("click", function(e) {setTime($(e.target));});
@@ -207,12 +230,17 @@
 	function select() {
  		dateSelected = $("button[id^='sd'].btn-info").attr('id').substring(2, 12);
  		procSelected = $("#procedureinput").val();
+ 		if ($("#posinput").length) 
+ 			posSelected = $("#posinput").val();
+ 		else
+ 			posSelected = "";
  		
  		$("#timeScheduledinput").val(dateSelected + " ");
  		
 		$.get('BBRSchedule', {
 				date: dateSelected,
-				proc: procSelected
+				proc: procSelected,
+				pos: posSelected
 			}, 
 			function (responseText) {
 				obj = $.parseJSON(responseText);

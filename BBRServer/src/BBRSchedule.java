@@ -42,7 +42,14 @@ public class BBRSchedule extends HttpServlet {
 			}
 			
 			String procId = params.get("proc");
-			BBRScheduleList list = mgr.getSchedule(dateSelected, context.planningVisit.getPos().getId().toString(), procId);
+			String posId = params.get("pos");
+			
+			if (posId == null || posId.isEmpty()) {
+				if (context.planningVisit != null)
+					posId = context.planningVisit.getPos().getId().toString();
+			}
+			
+			BBRScheduleList list = mgr.getSchedule(dateSelected, posId, procId);
 
 			respText = BBRUtil.gson().toJson(list); 
 		} catch (Exception ex) {
