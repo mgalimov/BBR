@@ -23,6 +23,10 @@ function goBackOrTo(address) {
 		window.location.href = address;
 }
 
+function reloadWithNewParam(paramString) {
+	window.location.href = window.location.href.split("?")[0] + "?" + paramString;
+}
+
 function getAndPassGPS() {
 	if (!locationSet)
 		navigator.geolocation.getCurrentPosition(function(location) {

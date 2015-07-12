@@ -9,6 +9,7 @@
 <%@tag import="BBR.BBRDataSet"%>
 
 <%@ attribute name="mode" %>
+<%@ attribute name="posId" %>
 
 <%@tag language="java" pageEncoding="UTF-8" description="Card Schedule-Spec-Proc" import="BBRClientApp.BBRContext"%>
 <%@tag import="BBRAcc.BBRPoS"%>
@@ -23,26 +24,32 @@
 	BBRContext context = BBRContext.getContext(request);
 	
 	BBRPoS pos = null;
+	if (mode == null)
+		mode = "";
 	
 	if (mode.isEmpty() || mode.equals("general-edit"))	
 		pos = context.planningVisit.getPos();
-	else 
+	else
 		if (mode.equals("manager-view") || mode.equals("manager-edit"))	{
-			if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN ||
-				context.user.getRole() == BBRUserRole.ROLE_POS_SPECIALIST)
-				pos = context.user.getPos();
-			else
-				if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN) {
-					BBRPoSManager pmgr = new BBRPoSManager();
-					pos = pmgr.list("", "title asc", pmgr.whereShop(context.user.getShop().getId())).data.get(0);
-				}
-				else
-					if (context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER) {
-						BBRPoSManager pmgr = new BBRPoSManager();
-						pos = pmgr.list("", "title asc", "").data.get(0);
+			BBRPoSManager pmgr = new BBRPoSManager();
+			
+			if (posId != null && !posId.isEmpty())
+				pos = pmgr.findById(Long.parseLong(posId));
+					
+			if (pos == null) {
+				if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN ||
+					context.user.getRole() == BBRUserRole.ROLE_POS_SPECIALIST)
+					pos = context.user.getPos();
+				else  
+					if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN) {
+						pos = pmgr.list("", "title asc", pmgr.whereShop(context.user.getShop().getId())).data.get(0);
 					}
+					else
+						if (context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER) {
+							pos = pmgr.list("", "title asc", "").data.get(0);
+						}
+			}
 		}
-	
 	if (pos == null) return;
 	
 	Date dateSelected = new Date();
@@ -200,7 +207,9 @@
 			els.load(posLoadInitialData);
 			els.refreshOptions(false);
 			els.refreshItems();
-	 		el.on("change", select);
+	 		el.on("change", function() {
+	 			reloadWithNewParam("posId=" + $("#posinput").val());
+	 		});
 	 	}
 
 <% if (mode.isEmpty() || mode.equals("general-edit")) { %>	
@@ -281,8 +290,9 @@
 							e = $("#sp"+specs[j][0]+"_oc"+i+"_00");
 							if (e.length > 0) {
 								e.addClass('occupied');
-								if (sch[j][i*2] == 1)
+								if (sch[j][i*2] == 1) {
 									e.addClass('order');
+								}
 							}
 							
 						}
@@ -290,8 +300,9 @@
 							e = $("#sp"+specs[j][0]+"_oc"+i+"_30");
 							if (e.length > 0) {
 								e.addClass('occupied');
-								if (sch[j][i*2 + 1] == 1)
+								if (sch[j][i*2 + 1] == 1) {
 									e.addClass('order');
+								}
 							}
 						}
 					}
