@@ -129,11 +129,6 @@
 	
 	Map<String, Integer> months = calendar.getDisplayNames(Calendar.MONTH, Calendar.LONG, context.getLocale());
 	
-	String dtOut = "var months = {};\n";
-	for (String month : months.keySet()) {
-		dtOut += "months[" + months.get(month) + "] = '" + month + "';\n";
-	}
-	
 	calendar.setTime(dateSelected);
 %>
 <% if (mode.isEmpty() || mode.equals("general-edit")) { %>	
@@ -156,22 +151,31 @@
 	</div>
 </div>
 <div class="row">
+
+	<div class="panel col-sm-3">
+		<div class='input-group date' id='datepicker'>
+        	<input type='text' class="form-control" />
+   			<span class="input-group-addon">
+				<span class="glyphicon glyphicon-calendar"></span>
+			</span>
+       </div>
+	</div>
+</div>
+<div class="row">
 	<div class="panel col-sm-2">
 		<button class='btn btn-link' id='prevDateBtn' type="button"><span class="glyphicon glyphicon-chevron-left"></span></button>
 		<button class='btn btn-link' id='todayDateBtn' type="button"><span class="glyphicon glyphicon-time"></span></button>
 		<button class='btn btn-link' id='nextDateBtn' type="button"><span class="glyphicon glyphicon-chevron-right"></span></button>
+
 	</div>
 	<div class="panel col-md-8" >
 		<%
-			out.print("<button type='button' class='btn btn-info btn-sm' id='sd" + sf.format(calendar.getTime()) + "'>" + df.format(calendar.getTime()) + "</button>");
+			out.println("<button type='button' class='btn btn-info btn-sm' style='width:85px' id='sd" + sf.format(calendar.getTime()) + "'></button>");
 			for (int i = 1; i < datesPerPage; i++) {
 				calendar.add(Calendar.DATE, 1);
-				out.print("<button type='button' class='btn btn-link btn-sm' id='sd" + sf.format(calendar.getTime()) + "'>" + df.format(calendar.getTime()) + "</button>");
+				out.println("<button type='button' class='btn btn-link btn-sm' style='width:85px' id='sd" + sf.format(calendar.getTime()) + "'></button>");
 			}
 		%>
-	</div>
-	<div class="panel col-md-1">
-		
 	</div>
 </div>
 <div class="row">
@@ -189,13 +193,40 @@
 	var timeSelected = "12:00";
 	var specSelected = -1;
 	var procLength = 1;
-	<%=dtOut %>
+	var letChangeButtons = true;
 
 	$(document).ready(function() {
+		moment.locale('<%=context.getLocaleString()%>');
+		
+		$('#datepicker').datetimepicker({
+			format: 'YYYY-MM-DD',
+			locale: '<%=context.getLocaleString()%>'
+        });
+
+		changeDatesOnButtons(0);
+		
 		$("button[id^='sd']").click(function(e) {
 			$("button[id^='sd']").removeClass('btn-info').addClass('btn-link');
 			$(this).removeClass('btn-link').addClass('btn-info');
+			dt = $(this).attr('id').substring(2, 12);
+			letChangeButtons = false;
+			$('#datepicker').data('DateTimePicker').date(dt);
 			select();
+		});
+		
+		$('#datepicker').on("dp.change", function(e) { 
+			newDate = e.date;
+			if (letChangeButtons) {
+				$("button[id^='sd']").each(function (i) {
+					dt = new moment(newDate);
+	 				dt.add(i, "days");
+		 			$(this).attr("id", "sd" + dt.year() + "-" + (dt.month() + 1) + "-" + dt.date());
+		 			$(this).text(dt.date() + " " + moment.months()[dt.month()]);
+		 		}); 
+				$("button[id^='sd']").removeClass('btn-info').addClass('btn-link');
+				$("button[id^='sd']").first().removeClass('btn-link').addClass('btn-info');
+			}
+			letChangeButtons = true;
 		});
 	
 	 	$("#procedureinput").on("change", select);
@@ -231,13 +262,19 @@
  			} else
  				dt.setDate(dt.getDate() + i);
  			$(this).attr("id", "sd" + dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate());
- 			$(this).text(dt.getDate() + " " + months[dt.getMonth()]);
+ 			$(this).text(dt.getDate() + " " + moment.months()[dt.getMonth()]);
  		}); 
+		
+		letChangeButtons = false;
+		dt = $("button[id^='sd'].btn-info").attr('id').substring(2, 12);
+		$('#datepicker').data('DateTimePicker').date(dt);
+		
 		select();
+		letChangeButtons = true;
 	}
 
 	function select() {
- 		dateSelected = $("button[id^='sd'].btn-info").attr('id').substring(2, 12);
+		dateSelected = $("button[id^='sd'].btn-info").attr('id').substring(2, 12);
  		procSelected = $("#procedureinput").val();
  		if ($("#posinput").length) 
  			posSelected = $("#posinput").val();
@@ -279,9 +316,13 @@
 				}
 
 				for (i = 0; i < arr.length; i++) {
-					for (m = arr[i][0]; m < arr[i][0] + arr[i][2]; m++)
-						if (arr[i][1])
-							sch[spc[arr[i][1]]][m] = 1;
+					for (m = arr[i][0]; m < arr[i][0] + arr[i][2]; m++) {
+						specCode = arr[i][1];
+						if (specCode)
+							specIndex = spc[specCode];
+						if (specIndex)
+							sch[specIndex][m] = 1;
+					}
 				}
 				
 				for (i = 0; i <= 23; i++)

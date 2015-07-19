@@ -13,7 +13,6 @@
 	request.setAttribute("posId", params.get("posId"));
 %>
 
-<script src="//api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
 <script src="js/bbr-maps.js" type="text/javascript"></script>
 <t:general-wrapper title="LBL_SPEC_SCHEDULE_TITLE">
 	<jsp:body>

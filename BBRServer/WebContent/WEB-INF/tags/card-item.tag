@@ -89,9 +89,9 @@
 					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.val(\"').concat(defaultValue).concat('\");')}"/>
 				</c:if>
 				<script>
-					$("#${ft.concat('input')}").timepicker({
-						minuteStep: 30,
-						showMeridian: false
+					$("#${ft.concat('input')}").datetimepicker({
+						format: "HH:mm",
+						stepping: 30
 					});
 				</script>
 			</c:when>

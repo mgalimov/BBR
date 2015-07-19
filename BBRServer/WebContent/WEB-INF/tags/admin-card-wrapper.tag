@@ -32,9 +32,10 @@
 		<script type="text/javascript" src="js/selectize.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/selectize.css" />
 
-		<!-- Time Picker -->
-		<link rel="stylesheet" type="text/css" href="css/bootstrap-timepicker.min.css" />
-		<script type="text/javascript" src="js/bootstrap-timepicker.min.js" ></script>
+		<!-- DateTime Picker -->
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.min.css" />
+		<script type="text/javascript" src="js/moment-with-locales.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js" ></script>
 
   		<!-- BBR Utils -->
 	    <script src="js/bbr-utils.js"></script>
