@@ -98,12 +98,14 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         
         String select = "select visit.timeScheduled as timeScheduled, visit.spec.id as spec, visit.length as length, "+
         				"visit.userName as userName, case when trim(visit.userContacts) = '' then '–' else visit.userContacts end as userContacts, " + 
-        				"tas.id as taskId";
-        String from = " from BBRVisit visit join BBRTask task on task.objectId=visit.id";
-        String where = " where timeScheduled >= '" + df.format(startOfDay) + "' and "
-        			 + "timeScheduled <= '" + df.format(endOfDay) + "'";
+        				"task.id as taskId";
+        String from = " from BBRVisit visit, BBRTask task";
+        String where = " where visit.timeScheduled >= '" + df.format(startOfDay) + "' and "
+        			  + " visit.timeScheduled <= '" + df.format(endOfDay) + "'";
         where = where + " and visit.pos.id = " + posId;
         where = where + " and visit.spec.status = " + BBRSpecialistState.SPECSTATE_ACTIVE;
+        where = where + " and task.objectId=visit.id";
+        where = where + " and task.objectType = 'BBRCust.BBRVisit'";
         
         String orderBy = " order by visit.timeScheduled ASC";
         

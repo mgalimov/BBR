@@ -3,6 +3,7 @@
 <%@ attribute name="id" required="true" %>
 <%@ attribute name="icon" %>
 <%@ attribute name="accent" %>
+<%@ attribute name="condition" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 

@@ -26,7 +26,7 @@
 			<t:card-item label="LBL_PERFORMER" field="performer" type="reference" referenceFieldTitle="name" referenceMethod="BBRUsers" isDisabled="readonly"/>
 			<t:card-item label="LBL_TASK_TEXT" field="text" type="textarea" isDisabled="readonly"/>
 			<t:card-item label="LBL_DEADLINE" field="deadline" type="text" isDisabled="readonly"/>
-			<t:card-item label="LBL_TASK_STATE" field="state" type="select" options="OPT_TAST_STATE" isDisabled="readonly"/>
+			<t:card-item label="LBL_TASK_STATE" field="state" type="select" options="OPT_TASK_STATE" isDisabled="readonly"/>
 		</t:card>
 		
 		<script>
