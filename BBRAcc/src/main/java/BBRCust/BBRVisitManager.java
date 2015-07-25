@@ -96,8 +96,10 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         Date endOfDay = BBRUtil.getEndOfDay(date);
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         
-        String select = "select visit.timeScheduled as timeScheduled, visit.spec.id as spec, visit.length as length";
-        String from = " from BBRVisit visit";
+        String select = "select visit.timeScheduled as timeScheduled, visit.spec.id as spec, visit.length as length, "+
+        				"visit.userName as userName, case when trim(visit.userContacts) = '' then '–' else visit.userContacts end as userContacts, " + 
+        				"tas.id as taskId";
+        String from = " from BBRVisit visit join BBRTask task on task.objectId=visit.id";
         String where = " where timeScheduled >= '" + df.format(startOfDay) + "' and "
         			 + "timeScheduled <= '" + df.format(endOfDay) + "'";
         where = where + " and visit.pos.id = " + posId;

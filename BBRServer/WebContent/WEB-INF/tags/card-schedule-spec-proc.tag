@@ -151,7 +151,6 @@
 	</div>
 </div>
 <div class="row">
-
 	<div class="panel col-sm-3">
 		<div class='input-group date' id='datepicker'>
         	<input type='text' class="form-control" />
@@ -169,13 +168,15 @@
 
 	</div>
 	<div class="panel col-md-8" >
+		<div class="btn-group btn-group-justified" role="group">
 		<%
-			out.println("<button type='button' class='btn btn-info btn-sm' style='width:85px' id='sd" + sf.format(calendar.getTime()) + "'></button>");
+			out.println("<a href='#' role='button' class='btn btn-info btn-sm' id='sd" + sf.format(calendar.getTime()) + "'></a>");
 			for (int i = 1; i < datesPerPage; i++) {
 				calendar.add(Calendar.DATE, 1);
-				out.println("<button type='button' class='btn btn-link btn-sm' style='width:85px' id='sd" + sf.format(calendar.getTime()) + "'></button>");
+				out.println("<a href='#' role='button' class='btn btn-default btn-sm' id='sd" + sf.format(calendar.getTime()) + "'></a>");
 			}
 		%>
+		</div>
 	</div>
 </div>
 <div class="row">
@@ -205,9 +206,9 @@
 
 		changeDatesOnButtons(0);
 		
-		$("button[id^='sd']").click(function(e) {
-			$("button[id^='sd']").removeClass('btn-info').addClass('btn-link');
-			$(this).removeClass('btn-link').addClass('btn-info');
+		$("a[id^='sd']").click(function(e) {
+			$("a[id^='sd']").removeClass('btn-info').addClass('btn-default');
+			$(this).removeClass('btn-default').addClass('btn-info');
 			dt = $(this).attr('id').substring(2, 12);
 			letChangeButtons = false;
 			$('#datepicker').data('DateTimePicker').date(dt);
@@ -217,14 +218,14 @@
 		$('#datepicker').on("dp.change", function(e) { 
 			newDate = e.date;
 			if (letChangeButtons) {
-				$("button[id^='sd']").each(function (i) {
+				$("a[id^='sd']").each(function (i) {
 					dt = new moment(newDate);
 	 				dt.add(i, "days");
 		 			$(this).attr("id", "sd" + dt.year() + "-" + (dt.month() + 1) + "-" + dt.date());
 		 			$(this).text(dt.date() + " " + moment.months()[dt.month()]);
 		 		}); 
-				$("button[id^='sd']").removeClass('btn-info').addClass('btn-link');
-				$("button[id^='sd']").first().removeClass('btn-link').addClass('btn-info');
+				$("a[id^='sd']").removeClass('btn-info').addClass('btn-default');
+				$("a[id^='sd']").first().removeClass('btn-default').addClass('btn-info');
 			}
 			letChangeButtons = true;
 		});
@@ -254,7 +255,7 @@
 	 });
 	
 	function changeDatesOnButtons(modifier) {
-		$("button[id^='sd']").each(function (i) {
+		$("a[id^='sd']").each(function (i) {
 			dt = new Date();
  			if (modifier != 0) {
  				dt.setTime(Date.parse($(this).attr('id').substring(2, 12)));
@@ -264,9 +265,13 @@
  			$(this).attr("id", "sd" + dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate());
  			$(this).text(dt.getDate() + " " + moment.months()[dt.getMonth()]);
  		}); 
+		if (modifier == 0) {
+ 			$("a[id^='sd']").removeClass('btn-info').addClass('btn-default');
+			$("a[id^='sd']").first().removeClass('btn-default').addClass('btn-info');
+		}
 		
 		letChangeButtons = false;
-		dt = $("button[id^='sd'].btn-info").attr('id').substring(2, 12);
+		dt = $("a[id^='sd'].btn-info").attr('id').substring(2, 12);
 		$('#datepicker').data('DateTimePicker').date(dt);
 		
 		select();
@@ -274,7 +279,7 @@
 	}
 
 	function select() {
-		dateSelected = $("button[id^='sd'].btn-info").attr('id').substring(2, 12);
+		dateSelected = $("a[id^='sd'].btn-info").attr('id').substring(2, 12);
  		procSelected = $("#procedureinput").val();
  		if ($("#posinput").length) 
  			posSelected = $("#posinput").val();
@@ -290,15 +295,20 @@
 			}, 
 			function (responseText) {
 				obj = $.parseJSON(responseText);
+				
+				if (obj === undefined || obj == null) return;
+				
 				arr = obj.list;
 				specs = obj.specs;
 				procLength = obj.procLength;
 				
 				var spc = new Object();
-				
 				var sch = new Array(specs.length);
+				var schVis = new Array(specs.length);
+				
 				for (j = 0; j < specs.length; j++) {
 					sch[j] = new Array(47);
+					schVis[j] = new Array(47);
 					spc[specs[j][0]] = j;
 				}
 				
@@ -311,43 +321,51 @@
 
 				for (i = 0; i < specs.length; i++) {
 					if (specs[i][3] == true)
-						for (m = specs[i][1]; m < specs[i][2]; m++)
+						for (m = specs[i][1]; m < specs[i][2]; m++) {
 							sch[spc[specs[i][0]]][m] = 0;
+						}
 				}
 
 				for (i = 0; i < arr.length; i++) {
 					for (m = arr[i][0]; m < arr[i][0] + arr[i][2]; m++) {
 						specCode = arr[i][1];
-						if (specCode)
+						if (specCode !== undefined)
 							specIndex = spc[specCode];
-						if (specIndex)
+						if (specIndex !== undefined) {
 							sch[specIndex][m] = 1;
+							schVis[specIndex][m] = i;
+						}
 					}
 				}
 				
+				<% if (mode.equals("manager-view") || mode.equals("manager-edit")) { %>
+				$("td.clickable").off('click').tooltip('destroy').removeClass('clickable');
+				<% } %>
+				
 				for (i = 0; i <= 23; i++)
 					for (j = 0; j < specs.length; j++) {
-						if (sch[j][i*2] > 0) {
-							e = $("#sp"+specs[j][0]+"_oc"+i+"_00");
-							if (e.length > 0) {
-								e.addClass('occupied');
-								if (sch[j][i*2] == 1) {
-									e.addClass('order');
-								}
-							}
-							
-						}
-						if (sch[j][i*2 + 1] > 0) {
-							e = $("#sp"+specs[j][0]+"_oc"+i+"_30");
-							if (e.length > 0) {
-								e.addClass('occupied');
-								if (sch[j][i*2 + 1] == 1) {
-									e.addClass('order');
+						for (k = 0; k <= 1; k++) {
+							if (sch[j][i*2 + k] > 0) {
+								e = $("#sp"+specs[j][0]+"_oc"+i+"_"+(3*k)+"0");
+								if (e.length > 0) {
+									e.addClass('occupied');
+									if (sch[j][i*2 + k] == 1) {
+										e.addClass('order');
+										<% if (mode.equals("manager-view") || mode.equals("manager-edit")) { %>
+										e.addClass('clickable');
+										arrIndex = schVis[j][i*2 + k];
+										e.prop("title", arr[arrIndex][3] + ", " + arr[arrIndex][4]);
+										e.data("toggle", "tooltip");
+										e.tooltip({container: 'small'});
+										e.on('click', function() {
+											window.location.href = "manager-task-edit.jsp?id=" + arr[arrIndex][5];
+										})
+										<% } %>
+									}
 								}
 							}
 						}
 					}
-				
 				setTime(null);
 			});
 	}
@@ -380,7 +398,7 @@
  	 			obj = obj.next();
  	 		}
 		}
- 		dateSelected = $("button[id^='sd'].btn-info").attr('id').substring(2, 12);
+ 		dateSelected = $("a[id^='sd'].btn-info").attr('id').substring(2, 12);
  		dtString = dateSelected + " " + timeSelected;
  	 	$("#timeScheduledinput").val(dtString);
  	 	$("#specinput").val(specSelected);
