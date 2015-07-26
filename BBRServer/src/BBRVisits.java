@@ -87,6 +87,8 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			
 			context.planningVisit.setUserName(userName);
 			context.planningVisit.setUserContacts(userContacts);
+			
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd H:mm");
 
 			Long id = Long.parseLong(manager.createAndStoreVisit(
 					context.planningVisit.getPos(), 
@@ -96,7 +98,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 					context.planningVisit.getSpec(), 
 					context.planningVisit.getUserName(),
 					context.planningVisit.getUserContacts(),
-					context.gs("TXT_APPROVE_VISIT_TASK_TITLE", context.planningVisit.getId())));
+					context.gs("TXT_APPROVE_VISIT_TASK_TITLE", df.format(context.planningVisit.getTimeScheduled()))));
 			
 			context.planningVisit = manager.findById(id);
 		}
