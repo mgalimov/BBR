@@ -2388,7 +2388,7 @@ output {
 .form-control[readonly],
 fieldset[disabled] .form-control {
   background-color: #fafafa;
-  opacity: 0.5;
+  opacity: 0.65;
 }
 textarea.form-control {
   height: auto;

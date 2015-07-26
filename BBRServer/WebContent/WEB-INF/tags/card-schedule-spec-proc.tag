@@ -222,7 +222,7 @@
 					dt = new moment(newDate);
 	 				dt.add(i, "days");
 		 			$(this).attr("id", "sd" + dt.year() + "-" + (dt.month() + 1) + "-" + dt.date());
-		 			$(this).text(dt.date() + " " + moment.months()[dt.month()]);
+		 			$(this).text(dt.format('<%=context.gs("FMT_SCHEDULE_DATE")%>'));
 		 		}); 
 				$("a[id^='sd']").removeClass('btn-info').addClass('btn-default');
 				$("a[id^='sd']").first().removeClass('btn-default').addClass('btn-info');
@@ -263,7 +263,7 @@
  			} else
  				dt.setDate(dt.getDate() + i);
  			$(this).attr("id", "sd" + dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate());
- 			$(this).text(dt.getDate() + " " + moment.months()[dt.getMonth()]);
+ 			$(this).text(moment(dt).format('<%=context.gs("FMT_SCHEDULE_DATE")%>'));
  		}); 
 		if (modifier == 0) {
  			$("a[id^='sd']").removeClass('btn-info').addClass('btn-default');

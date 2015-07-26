@@ -31,7 +31,9 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		classTitle = "Visit";	
 	}
 
-	public String createAndStoreVisit(BBRPoS pos, BBRUser user, Date timeScheduled, BBRProcedure procedure, BBRSpecialist spec, String userName, String userContacts) {
+	public String createAndStoreVisit(BBRPoS pos, BBRUser user, Date timeScheduled, 
+									  BBRProcedure procedure, BBRSpecialist spec, String userName, 
+									  String userContacts, String taskTitle) {
         try {
 			boolean tr = BBRUtil.beginTran(sessionIndex);
 	        Session session = BBRUtil.getSession(sessionIndex);
@@ -53,7 +55,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 	        
 	        BBRTaskManager tmgr = new BBRTaskManager();
-	        tmgr.createAndStoreTask("Approve visit", null, pos, new Date(), new Date(), 
+	        tmgr.createAndStoreTask(taskTitle, null, pos, new Date(), new Date(), 
 	        						df.format(visit.getTimeScheduled()) + " --> " + visit.getPos().getTitle() + 
 	        						", " + visit.getUserName() + ", " + visit.getUserContacts(), 
 	        						BBRVisit.class.getName(), visit.getId());

@@ -95,7 +95,8 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 					context.planningVisit.getProcedure(), 
 					context.planningVisit.getSpec(), 
 					context.planningVisit.getUserName(),
-					context.planningVisit.getUserContacts()));
+					context.planningVisit.getUserContacts(),
+					context.gs("TXT_APPROVE_VISIT_TASK_TITLE", context.planningVisit.getId())));
 			
 			context.planningVisit = manager.findById(id);
 		}
