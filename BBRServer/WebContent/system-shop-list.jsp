@@ -2,7 +2,7 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <t:admin-grid-wrapper title="LBL_SHOPS_TITLE">
 	<jsp:body>
-		<t:grid method="BBRShops" editPage="admin-shop-edit.jsp" createPage="admin-shop-create.jsp" title="LBL_SHOPS_TITLE">
+		<t:grid method="BBRShops" editPage="system-shop-edit.jsp" createPage="system-shop-create.jsp" title="LBL_SHOPS_TITLE">
 			<t:grid-item label="LBL_TITLE" field="title" sort="asc"/>
 		</t:grid>
 	</jsp:body>

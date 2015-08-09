@@ -3,6 +3,7 @@ package BBRCust;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -192,7 +193,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	}
 	
 	@SuppressWarnings({ "unchecked", "unused" })
-	public BBRDataSet<BBRVisitor> listVisitors(int pageNumber, int pageSize, String orderBy, BBRPoS pos, BBRShop shop) {
+	public BBRDataSet<BBRVisitor> listVisitors(int pageNumber, int pageSize, String orderBy, BBRPoS pos, BBRShop shop, Integer days) {
 		boolean tr = BBRUtil.beginTran(sessionIndex);
         
 		Session session = BBRUtil.getSession(sessionIndex);
@@ -212,11 +213,22 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 			if (shop != null)
 				where += "where pos.shop.id = " + shop.getId() + " ";
 		
-		String groupBy = " group by userName, userContacts ";
-
-		int count = session.createQuery("select distinct userName, userContacts from BBRVisit " + where).list().size();
+		String having = "";
+		if (days != null && days > 0) {
+			Calendar c = Calendar.getInstance();
+			c.setTime(new Date());
+			c.add(Calendar.DATE, -days);
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+			having = " having max(timeScheduled) > '" + df.format(c.getTime()) + "' ";
+		}
 		
-		Query query = session.createQuery("select userName, userContacts, max(timeScheduled) as lastVisitDate from BBRVisit " + where + groupBy + orderBy);
+		String groupBy = " group by userName, userContacts ";
+		
+		String qry = "select userName, userContacts, max(timeScheduled) as lastVisitDate from BBRVisit " + 
+		             where + groupBy + having + orderBy;
+
+		int count = session.createQuery(qry).list().size();
+		Query query = session.createQuery(qry);
        
 		if (pageNumber >= 0) {
     	   query.setFirstResult(pageNumber * pageSize);

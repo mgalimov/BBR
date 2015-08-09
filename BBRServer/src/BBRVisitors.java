@@ -39,8 +39,10 @@ public class BBRVisitors extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
 				shop = context.user.getShop();
 		
+		Integer days = (Integer)context.get("VisitorsDays");
+		
 		if (context.user != null)
-			return manager.listVisitors(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns), pos, shop).toJson();
+			return manager.listVisitors(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns), pos, shop, days).toJson();
 		else
 			return "";
 	}
@@ -62,5 +64,26 @@ public class BBRVisitors extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			return obj.toJson();
 		else
 			return context.gs(BBRErrors.ERR_RECORD_NOTFOUND, manager.getClassTitle());
+	}
+	
+	@Override
+	protected String processOperation(String operation, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+		BBRContext context = BBRContext.getContext(request);
+		Integer days = -1;
+		if (operation.equals("toggle30Days")) {
+			days = 30;
+		} else
+			if (operation.equals("toggle120Days")) {
+				days = 120;
+			} else
+				if (operation.equals("toggle360Days")) {
+					days = 360;
+				} else
+					if (operation.equals("toggleAll")) {
+						days = 0;
+					}
+		if (days > -1)
+			context.set("VisitorsDays", days);
+		return "";
 	}
 }
