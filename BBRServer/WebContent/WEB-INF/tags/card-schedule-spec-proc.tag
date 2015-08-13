@@ -133,41 +133,56 @@
 %>
 <% if (mode.isEmpty() || mode.equals("general-edit")) { %>	
 	<div class="row">
-		<div class="panel col-md-10">
+		<div class="form-group col-md-10">
 			<t:card-item label="LBL_SELECT_PROCEDURE" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures"/>
 		</div>
 	</div>
 <% } else { %>
 	<div class="row">
-		<div class="panel col-md-10">
+		<div class="form-group col-md-10">
 			<t:card-item label="LBL_SELECT_POS" type="reference" field="pos" referenceFieldTitle="title" referenceMethod="BBRPoSes"></t:card-item>
 		</div>
 	</div>
 <% } %>
 
 <div class="row">
-	<div class="panel col-md-10">
+	<div class="form-group col-md-10">
 		<label>${context.gs('LBL_SET_DATE_TIME_TITLE')}</label>
 	</div>
-</div>
-<div class="row">
-	<div class="panel col-sm-3">
+
+	<div class="form-group col-sm-3">
 		<div class='input-group date' id='datepicker'>
         	<input type='text' class="form-control" />
    			<span class="input-group-addon">
 				<span class="glyphicon glyphicon-calendar"></span>
 			</span>
        </div>
+
 	</div>
+	<% if (mode.equals("manager-view") || mode.equals("manager-edit")) { %>
+		<button class='btn btn-default' id='openVisits' type="button"><span class="glyphicon glyphicon-list-alt"></span>
+		<%=context.gs("LBL_OPEN_VISITS") %>
+		</button>
+		<script>
+			$(document).ready(function() {
+				$("#openVisits").click(function(){
+					dt = $("a[id^='sd'].btn-info").attr('id').substring(2, 12);
+					pos = $("#posinput").val();
+					window.location.href = "manager-visit-list.jsp?t=datepos&query="+dt+"@@"+pos; 
+				});
+			});
+		</script>
+	<% } %>
 </div>
+
 <div class="row">
-	<div class="panel col-sm-2">
+	<div class="col-sm-2">
 		<button class='btn btn-link' id='prevDateBtn' type="button"><span class="glyphicon glyphicon-chevron-left"></span></button>
 		<button class='btn btn-link' id='todayDateBtn' type="button"><span class="glyphicon glyphicon-time"></span></button>
 		<button class='btn btn-link' id='nextDateBtn' type="button"><span class="glyphicon glyphicon-chevron-right"></span></button>
 
 	</div>
-	<div class="panel col-md-8" >
+	<div class="col-md-8" >
 		<div class="btn-group btn-group-justified" role="group">
 		<%
 			out.println("<a href='#' role='button' class='btn btn-info btn-sm' id='sd" + sf.format(calendar.getTime()) + "'></a>");
@@ -226,6 +241,8 @@
 		 		}); 
 				$("a[id^='sd']").removeClass('btn-info').addClass('btn-default');
 				$("a[id^='sd']").first().removeClass('btn-default').addClass('btn-info');
+				
+				select();
 			}
 			letChangeButtons = true;
 		});
@@ -358,7 +375,7 @@
 										e.data("toggle", "tooltip");
 										e.tooltip({container: 'small'});
 										e.on('click', function() {
-											window.location.href = "manager-task-edit.jsp?id=" + arr[arrIndex][5];
+											window.location.href = "manager-visit-edit.jsp?id=" + arr[arrIndex][5];
 										})
 										<% } %>
 									}

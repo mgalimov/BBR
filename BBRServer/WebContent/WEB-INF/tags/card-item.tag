@@ -24,7 +24,9 @@
 		      ').concat(ft).concat(':').concat(ft).concat('String,')}"/>
 		<c:set var="itemVal" scope="request" value="${itemVal.concat('
 	        ').concat(ft).concat('String = $(\"#').concat(ft).concat('input\").val();')}"/>
+		
 		<c:choose>
+		
 			<c:when test="${type.equals('info')}">
 				<p class="form-control-static" id="${ft.concat('input')}"/>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('
@@ -73,11 +75,24 @@
 				</c:if>
 			</c:when>
 			
-			<c:when test="${type.equals('time')}">
-		        <div class="input-group bootstrap-timepicker col-md-2">
+			<c:when test="${type.equals('time') || type.equals('datetime') || type.equals('datetime')}">
+				<c:if test="${type.equals('time')}">
+					<c:set var="glyphicon" value="glyphicon-time"></c:set>
+					<c:set var="format" value="HH:mm"></c:set>
+				</c:if>
+				<c:if test="${type.equals('date')}">
+					<c:set var="glyphicon" value="glyphicon-calendar"></c:set>
+					<c:set var="format" value="YYYY-MM-DD"></c:set>
+				</c:if>
+				<c:if test="${type.equals('datetime')}">
+					<c:set var="glyphicon" value="glyphicon-calendar"></c:set>
+					<c:set var="format" value="YYYY-MM-DD HH:mm"></c:set>
+				</c:if>
+
+		        <div class="input-group date col-md-3" id="${ft.concat('inputdiv')}" >
            			<input id="${ft.concat('input')}" type="text" class="form-control ${isHidden}" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled} />
 					<span class="input-group-addon ${isHidden}">
-						<i class="glyphicon glyphicon-time ${isHidden}"></i>
+						<span class="glyphicon ${glyphicon} ${isHidden}"></span>
 					</span>
 				</div>
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('
@@ -88,10 +103,12 @@
 					        $(\"#').concat(ft).concat('input\")')}"/>
 					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.val(\"').concat(defaultValue).concat('\");')}"/>
 				</c:if>
+
 				<script>
-					$("#${ft.concat('input')}").datetimepicker({
-						format: "HH:mm",
-						stepping: 30
+					$("#${ft.concat('inputdiv')}").datetimepicker({
+						format: "${format}",
+						stepping: 30,
+						locale: "${context.getLocaleString()}"
 					});
 				</script>
 			</c:when>

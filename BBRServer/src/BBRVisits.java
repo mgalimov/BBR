@@ -129,15 +129,28 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 								BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		BBRContext context = BBRContext.getContext(request);
 		String[] userNC = (String[])context.get("userNC"); 
-		
 		if (userNC != null) {
 			return manager.listVisitsByNameAndContacts(userNC[0], userNC[1], pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
 		}
-		else
-			if (context.user != null)
-				return manager.list(context.user.getId(), pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
-			else
+
+		String[] datePos = (String[])context.get("datePos");
+		if (datePos != null) {
+			try {
+				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+				Date dt = df.parse(datePos[0]);
+				
+				BBRPoSManager pmgr = new BBRPoSManager();
+				BBRPoS pos = pmgr.findById(Long.parseLong(datePos[1]));
+				return manager.listVisitsByDateAndPos(dt, pos, pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
+			} catch (Exception ex) {
 				return "";
+			}
+		}
+			
+		if (context.user != null)
+			return manager.list(context.user.getId(), pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
+		else
+			return "";
 	}
 	
 	@Override

@@ -289,4 +289,15 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		return list(pageNumber, pageSize, where, orderBy);
 	}
 
+	public BBRDataSet<BBRVisit> listVisitsByDateAndPos(Date date, BBRPoS pos, int pageNumber, int pageSize, String orderBy) {
+		if (date == null || pos == null)
+			return null;
+		
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		
+		String where = "pos.id = " + pos.getId() + 
+				" and timeScheduled >='" + df.format(BBRUtil.getStartOfDay(date)) + 
+				"' and timeScheduled <='" + df.format(BBRUtil.getEndOfDay(date)) + "'";
+		return list(pageNumber, pageSize, where, orderBy);
+	}
 }

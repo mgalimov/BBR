@@ -9,15 +9,20 @@
 	BBRContext context = BBRContext.getContext(request);
 	BBRParams params = new BBRParams(request.getQueryString());	
 	String t = params.get("t");
-	if (!t.isEmpty() && t.equals("q")) {
-		String[] userNC = params.get("userParams").split(BBRUtil.recordDivider);
+	if (!t.isEmpty() && t.equals("user")) {
+		String[] userNC = params.get("query").split(BBRUtil.recordDivider);
 		context.set("userNC", userNC);
+	}
+	
+	if (!t.isEmpty() && t.equals("datepos")) {
+		String[] datePos = params.get("query").split(BBRUtil.recordDivider);
+		context.set("datePos", datePos);
 	}
 %>
 
 <t:admin-grid-wrapper title="LBL_USER_VISITS_TITLE">
 	<jsp:body>
-		<t:grid method="BBRVisits" editPage="general-edit-visit.jsp" createPage="" title="LBL_USER_VISITS_TITLE">
+		<t:grid method="BBRVisits" editPage="manager-visit-edit.jsp" createPage="" title="LBL_USER_VISITS_TITLE">
 			<t:grid-item label="LBL_DATE_TIME" field="timeScheduled" />
 			<t:grid-item label="LBL_POS" field="pos.title"/>
 			<t:grid-item label="LBL_USER_NAME" field="userName"/>

@@ -315,6 +315,6 @@
   margin: 0 4px 0 -2px !important;
 }
 .selectize-control .selectize-input.disabled {
-  opacity: 0.5;
+  opacity: 0.9;
   background-color: #fafafa;
 }

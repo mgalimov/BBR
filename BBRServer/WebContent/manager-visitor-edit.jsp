@@ -13,7 +13,7 @@
 			$(document).ready(function() {
 				$("#showMoreButton").on("click", function() {
 					idParam = getUrlParameter('id');
-					window.location.href = 'manager-visit-list.jsp?t=q&userParams=' + idParam;
+					window.location.href = 'manager-visit-list.jsp?t=user&query=' + idParam;
 				});
 			});
 		</script>
