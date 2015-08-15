@@ -182,6 +182,13 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		}		
 	}
 
+	public void close(BBRVisit visit) {
+		if (visit != null) {
+			visit.setStatus(BBRVisitStatus.VISSTATUS_PERFORMED);
+			update(visit);
+		}		
+	}
+	
 	public class BBRVisitor extends BBRDataElement{
 		public String id;
 		public String userName;
@@ -300,4 +307,5 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 				"' and timeScheduled <='" + df.format(BBRUtil.getEndOfDay(date)) + "'";
 		return list(pageNumber, pageSize, where, orderBy);
 	}
+
 }

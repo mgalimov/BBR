@@ -36,9 +36,8 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 			if (!price.isEmpty())
 				priceFloat = Float.parseFloat(price);
 			
-			String currency = params.get("currency");
 			String status = params.get("status");
-			manager.createAndStoreProcedure(title, pos, lengthFloat, priceFloat, currency, (int) Long.parseLong(status));
+			manager.createAndStoreProcedure(title, pos, lengthFloat, priceFloat, (int) Long.parseLong(status));
 		}
 		return "";
 	}
@@ -59,14 +58,12 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 			float priceFloat = 0;
 			if (!price.isEmpty())
 				priceFloat = Float.parseFloat(price);
-			String currency = params.get("currency");
 			String status = params.get("status");
 			
 			proc.setTitle(title);
 	        proc.setPos(pos);
 	        proc.setLength(lengthFloat);
 	        proc.setPrice(priceFloat);
-	        proc.setCurrency(currency);
 	        proc.setStatus((int) Long.parseLong(status));
 	        return proc;
 		}

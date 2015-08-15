@@ -17,6 +17,7 @@
 <c:set var="itemPreload" scope="request" value="${''}"/>
 <c:set var="itemAfterLoad" scope="request" value="${''}"/>
 <c:set var="itemToolbar" scope="request" value="${''}"/>
+<c:set var="itemToolbarCondition" scope="request" value="${''}"/>
 
 <!-- http://www.onjava.com/pub/a/onjava/excerpt/jserverpages3_ch11/ -->
 
@@ -75,6 +76,7 @@
 
 <script>
 	var saved = false;
+	var obj;
 
  	$(document).ready(function () {
  		idParam = getUrlParameter('id');
@@ -87,6 +89,8 @@
 				obj = $.parseJSON(responseText);
 				if (obj) {
 					${itemSet}
+					
+		    		${itemToolbarCondition}
 				};
 			});
  		} else {
@@ -106,7 +110,7 @@
               operation: op}, 
               function(responseText) { 
 				saved = true; 
-	         	window.location.href = '${gridPage}'; 
+	         	window.location.href = '${gridPage}';
               }).fail(function(data) {
 				saved = false;
 				$('#welcomeText').text(data.responseText);
@@ -119,6 +123,7 @@
 			$.get('${method}', {id : idParam, operation : 'cancel'});
 			goBackOrTo('${gridPage}');
 		});
+		
  	});
  	
  	$(window).bind('beforeunload', function () {

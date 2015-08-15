@@ -177,4 +177,26 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 		else
 			return context.gs(BBRErrors.ERR_RECORD_NOTFOUND, manager.getClassTitle());
 	}
+	
+	@Override
+	protected String processOperation(String operation, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+		if (operation.equals("approve")) {
+			Long visitId = Long.parseLong(params.get("visitId"));
+			BBRVisit visit = manager.findById(visitId);
+			manager.approve(visit);
+		} else
+		if (operation.equals("disapprove")) {
+			Long visitId = Long.parseLong(params.get("visitId"));
+			BBRVisit visit = manager.findById(visitId);
+			manager.disapprove(visit);			
+		} else
+		if (operation.equals("close")) {
+			Long visitId = Long.parseLong(params.get("visitId"));
+			BBRVisit visit = manager.findById(visitId);
+			manager.close(visit);
+		}
+
+		return "";
+	};
+
 }

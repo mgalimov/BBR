@@ -7,7 +7,7 @@
 			<t:grid-item label="LBL_TITLE" field="title" sort="asc"/>
 			<t:grid-item label="LBL_PROC_LENGTH" field="length"/>
 			<t:grid-item label="LBL_PROC_PRICE" field="price"/>
-			<t:grid-item label="LBL_CURRENCY" field="currency"/>
+			<t:grid-item label="LBL_CURRENCY" field="pos.currency"/>
 			<t:grid-item label="LBL_PROC_STATUS" field="status" type="select" options="OPT_PROC_STATUS"/>
 		</t:grid>
 	</jsp:body>

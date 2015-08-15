@@ -20,7 +20,9 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 		classTitle = "Point of service";	
 	}
 	
-	public void createAndStorePoS(BBRShop shop, String title, String locationDescription, BBRGPS locationGPS, Date startWorkHour, Date endWorkHour) throws Exception {
+	public void createAndStorePoS(BBRShop shop, String title, String locationDescription, 
+								  BBRGPS locationGPS, Date startWorkHour, Date endWorkHour,
+								  String currency) throws Exception {
 		if (shop == null)
 			throw new Exception(BBRErrors.ERR_SHOP_MUST_BE_SPECIFIED);
 		
@@ -37,6 +39,7 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
         pos.setLocationGPS(locationGPS);
         pos.setStartWorkHour(startWorkHour);
         pos.setEndWorkHour(endWorkHour);
+        pos.setCurrency(currency);
         session.save(pos);
 
         BBRUtil.commitTran(sessionIndex, tr);

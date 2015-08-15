@@ -12,3 +12,11 @@
 </c:if>
 <c:set var="buttonDef" value="<button type='button' class='btn ${accent}' id='${id}'>\n<span class='glyphicon ${icon}' aria-hidden='true'></span>\n${context.gs(label)}\n</button>\n"/>
 <c:set var="itemToolbar" scope="request" value="${itemToolbar.concat(buttonDef)}"/>
+
+<c:if test="${condition != null}">
+	<c:set var="cond" value="       if (!("/>
+	<c:set var="cond" value="${cond.concat(condition).concat('))')}"/>
+	<c:set var="condPerf" value=" $('#${id}').attr('disabled', 'disabled');"/>
+	<c:set var="itemToolbarCondition" scope="request" value="${itemToolbarCondition.concat('
+').concat(cond).concat(condPerf)}"/>
+</c:if>

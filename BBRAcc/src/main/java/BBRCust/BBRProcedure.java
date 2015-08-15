@@ -25,9 +25,6 @@ public class BBRProcedure extends BBRDataElement {
 	@Column(name="PRICE")
 	private float price;
 	
-	@Column(name="CURRENCY")
-	private String currency;
-	
 	public class BBRProcedureStatus {
 		public static final int PROCSTATUS_INITIALIZED = 0;
 		public static final int PROCSTATUS_APPROVED = 1;
@@ -70,14 +67,6 @@ public class BBRProcedure extends BBRDataElement {
 
 	public void setPrice(float price) {
 		this.price = price;
-	}
-
-	public String getCurrency() {
-		return currency;
-	}
-
-	public void setCurrency(String currency) {
-		this.currency = currency;
 	}
 
 	public int getStatus() {

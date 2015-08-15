@@ -43,6 +43,9 @@ public class BBRPoS extends BBRDataElement {
 	@ManyToOne(fetch=FetchType.EAGER)
 	public BBRShop shop;
 	
+	@Column(name="CURRENCY")
+	private String currency;
+	
 	public BBRPoS() {}
 	
 	public void setId(Long id) {
@@ -106,5 +109,14 @@ public class BBRPoS extends BBRDataElement {
 			return "https://maps.yandex.ru/?ll=" + locationGPS.lng + "," + locationGPS.lat + "&z=16";
 		else
 			return "#";
+	}
+	
+	
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
 	}
 }

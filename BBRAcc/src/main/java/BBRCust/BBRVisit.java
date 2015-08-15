@@ -52,7 +52,10 @@ public class BBRVisit extends BBRDataElement {
 	
 	@Column(name="STATUS")
 	private int status = 0;
-	
+
+	@Column(name="FINAL_PRICE")
+	private float finalPrice = 0;
+
 	public BBRVisit() {}
 	
 	public void setId(Long id) {
@@ -143,4 +146,13 @@ public class BBRVisit extends BBRDataElement {
 	public void setLength(Float length) {
 		this.length = length;
 	}
+	
+	public Float getFinalPrice() {
+		return finalPrice;
+	}
+
+	public void setFinalPrice(Float finalPrice) {
+		this.finalPrice = finalPrice;
+	}
+
 }

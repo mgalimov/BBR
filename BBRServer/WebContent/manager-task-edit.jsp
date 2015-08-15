@@ -60,6 +60,7 @@
 				        });									
 					}					
 				});
+				
 				$("#openVisitButton").on("click", function() {
 					idParam = getUrlParameter('id');
 					if (idParam && idParam != 'new') {

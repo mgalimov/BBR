@@ -10,6 +10,7 @@
 			<t:card-item label="LBL_LOC_DESCRIPTION" field="locationDescription" type="text"/>
 			<t:card-item label="LBL_LOC_LAT" field="locationGPS.lat" type="text"/>
 			<t:card-item label="LBL_LOC_LONG" field="locationGPS.lng" type="text"/>
+			<t:card-item label="LBL_CURRENCY" field="currency" type="text"/>
 		</t:card>
 	</jsp:body>
 </t:admin-card-wrapper>
