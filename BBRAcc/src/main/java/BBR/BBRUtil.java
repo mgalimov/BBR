@@ -21,6 +21,11 @@ public class BBRUtil {
     public static final GsonBuilder gsonBuilder = createGsonBuilder();
 	public static final String recordDivider = "@@";
 
+	public static final String fullDateFormat = "yyyy-MM-dd";
+	public static final String fullTimeFormat = "HH:mm";
+	public static final String fullDateTimeFormat = "yyyy-MM-dd HH:mm";
+	public static final String fullDateTimeFormatWithSecs = "yyyy-MM-dd HH:mm:ss";
+
     public static int buildSessionFactory(Configuration configuration) {
         try {
         	StandardServiceRegistryBuilder regBuilder = new StandardServiceRegistryBuilder();

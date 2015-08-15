@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import BBR.BBRGPS;
+import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRPoSManager;
 import BBRAcc.BBRShop;
@@ -29,7 +30,7 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 		String locationLat = params.get("locationGPS_lat");
 		String locationLng = params.get("locationGPS_lng");
 		String currency = params.get("currency");
-		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullTimeFormat);
 		BBRShopManager shopMgr = new BBRShopManager();
 		BBRShop shop = shopMgr.findById(Long.parseLong(shopId));
 		if (shop != null) 
@@ -59,7 +60,7 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 			locationLat = "0";
 		if (locationLng.isEmpty())
 			locationLng = "0";
-		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullTimeFormat);
 		BBRShopManager shopMgr = new BBRShopManager();
 		BBRShop shop = shopMgr.findById(Long.parseLong(shopId));
 		if (shop != null) {

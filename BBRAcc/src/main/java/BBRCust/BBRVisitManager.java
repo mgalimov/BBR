@@ -51,7 +51,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        	visit.setLength(minimalLength);
 	        session.save(visit);
 	        
-	        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	        SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 	        
 	        BBRTaskManager tmgr = new BBRTaskManager();
 	        tmgr.createAndStoreTask("Approve visit", null, pos, new Date(), new Date(), 
@@ -95,7 +95,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         Session session = BBRUtil.getSession(sessionIndex);
         Date startOfDay = BBRUtil.getStartOfDay(date);
         Date endOfDay = BBRUtil.getEndOfDay(date);
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormatWithSecs);
         
         String select = "select visit.timeScheduled as timeScheduled, visit.spec.id as spec, visit.length as length, "+
         				"visit.userName as userName, case when trim(visit.userContacts) = '' then '–' else visit.userContacts end as userContacts, " + 
@@ -225,7 +225,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 			Calendar c = Calendar.getInstance();
 			c.setTime(new Date());
 			c.add(Calendar.DATE, -days);
-			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
 			having = " having max(timeScheduled) > '" + df.format(c.getTime()) + "' ";
 		}
 		
@@ -300,7 +300,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		if (date == null || pos == null)
 			return null;
 		
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 		
 		String where = "pos.id = " + pos.getId() + 
 				" and timeScheduled >='" + df.format(BBRUtil.getStartOfDay(date)) + 

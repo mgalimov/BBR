@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import BBR.BBRErrors;
+import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRPoSManager;
 import BBRAcc.BBRUser.BBRUserRole;
@@ -69,7 +70,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				context.planningVisit.setSpec(spec);
 			}
 			
-			DateFormat df = new SimpleDateFormat("yyyy-MM-dd H:mm");
+			DateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 			try {
 				Date timeScheduled = df.parse(params.get("timeScheduled"));
 				context.planningVisit.setTimeScheduled(timeScheduled);
@@ -105,10 +106,23 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 	}
 
 	@Override
-	protected BBRVisit beforeUpdate(BBRVisit visit, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
-		visit.setStatus(BBRVisitStatus.VISSTATUS_APPROVED);
-		manager.update(visit);
-		return null;		
+	protected BBRVisit beforeUpdate(BBRVisit visit, BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		float finalPrice = Float.parseFloat(params.get("finalPrice"));
+
+		BBRProcedureManager pmgr = new BBRProcedureManager();
+		BBRProcedure proc = pmgr.findById(Long.parseLong(params.get("procedure")));
+
+		BBRSpecialistManager smgr = new BBRSpecialistManager();
+		BBRSpecialist spec = smgr.findById(Long.parseLong(params.get("spec")));
+		
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
+		Date timeScheduled = df.parse(params.get("timeScheduled"));
+		
+		visit.setFinalPrice(finalPrice);
+		visit.setProcedure(proc);
+		visit.setSpec(spec);
+		visit.setTimeScheduled(timeScheduled);
+		return visit;		
 	}
 	
 	@Override
@@ -136,7 +150,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 		String[] datePos = (String[])context.get("datePos");
 		if (datePos != null) {
 			try {
-				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+				SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
 				Date dt = df.parse(datePos[0]);
 				
 				BBRPoSManager pmgr = new BBRPoSManager();

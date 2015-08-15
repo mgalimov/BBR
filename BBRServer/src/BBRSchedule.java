@@ -32,7 +32,7 @@ public class BBRSchedule extends HttpServlet {
 			BBRParams params = new BBRParams(request.getQueryString());
 
 			Date dateSelected;
-			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+			DateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
 			respText = "";
 			
 			try {

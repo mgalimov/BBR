@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import BBR.BBRErrors;
+import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRPoSManager;
 import BBRAcc.BBRShop;
@@ -37,7 +38,7 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 		String procs = params.get("procedures");
 		Date startWH = null;
 		Date endWH = null;
-		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullTimeFormat);
 		int status = Integer.parseInt(params.get("status"));
 		BBRPoSManager mgrPos = new BBRPoSManager();
 		BBRPoS pos = mgrPos.findById(Long.parseLong(posId));
@@ -72,7 +73,7 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 		String endWorkHour = params.get("endWorkHour");
 		String procs = params.get("procedures");
 		int status = Integer.parseInt(params.get("status"));
-		SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullTimeFormat);
 		BBRPoSManager mgrPos = new BBRPoSManager();
 		BBRPoS pos = mgrPos.findById(Long.parseLong(posId));
 		if (pos != null) {						

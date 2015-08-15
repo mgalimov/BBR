@@ -4,9 +4,10 @@
 
 <t:admin-card-wrapper title="LBL_EDIT_VISIT_TITLE">
 <jsp:body>
-		<t:modal cancelButtonLabel="LBL_CANCEL_CHANGES" processButtonLabel="LBL_SAVE_DATA" title="LBL_EDIT_FINAL_PRICE" id="enterFinalPrice">
-		</t:modal>
 		<t:card title="LBL_EDIT_VISIT_TITLE" gridPage="manager-visit-list.jsp" method="BBRVisits">
+			<t:modal cancelButtonLabel="LBL_CANCEL_CHANGES" processButtonLabel="LBL_SAVE_DATA" title="LBL_EDIT_FINAL_PRICE" id="enterFinalPrice">
+				<t:card-item label="LBL_FINAL_PRICE" type="text" field="finalPrice"/>
+			</t:modal>
 			<t:toolbar-item label="LBL_APPROVE_VISIT" id="approveButton" accent="btn-info" condition="obj.status==0"></t:toolbar-item>
 			<t:toolbar-item label="LBL_DISAPPROVE_VISIT" id="disapproveButton" condition="obj.status==0"></t:toolbar-item>
 			<t:toolbar-item label="LBL_CLOSE_VISIT" id="closeVisitButton" condition="obj.status<=1"></t:toolbar-item>
@@ -19,7 +20,6 @@
 			<t:card-item label="LBL_SPEC" type="reference" field="spec" referenceFieldTitle="name" referenceMethod="BBRSpecialists" />
 			<t:card-item label="LBL_POS_START_WORKHOUR" field="pos.startWorkHour" type="time" isDisabled="readonly"/>
 			<t:card-item label="LBL_POS_END_WORKHOUR" field="pos.endWorkHour" type="time" isDisabled="readonly"/>
-			<t:card-item label="LBL_FINAL_PRICE" type="text" field="finalPrice" isDisabled="readonly"/>
 		</t:card>
 </jsp:body>
 </t:admin-card-wrapper>
@@ -98,8 +98,8 @@
 		        		operation: 'close',
 		        		visitId: idParam
 		        	}
-		        });		
-				window.location.href = window.location.href; 
+		        });
+				$("#saveChanges").click();
 			}					
 		});
 

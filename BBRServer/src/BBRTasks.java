@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import BBR.BBRUtil;
 import BBRAcc.BBRUser;
 import BBRAcc.BBRUser.BBRUserRole;
 import BBRAcc.BBRUserManager;
@@ -32,7 +33,7 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 		BBRUserManager mgr = new BBRUserManager();
 		BBRUser performer = mgr.findById(Long.parseLong(performerId));
 		if (performer != null) {
-			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 			Date createdAt = new Date();
 			Date deadline;
 			try {
@@ -53,7 +54,7 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 		BBRUserManager mgr = new BBRUserManager();
 		BBRUser performer = mgr.findById(Long.parseLong(performerId));
 		if (performer != null) {
-			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 			Date createdAt = new Date();
 			Date deadline;
 			try {

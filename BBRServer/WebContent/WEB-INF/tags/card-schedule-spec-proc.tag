@@ -7,6 +7,7 @@
 <%@tag import="BBRCust.BBRSpecialist"%>
 <%@tag import="BBRAcc.BBRUser.BBRUserRole"%>
 <%@tag import="BBR.BBRDataSet"%>
+<%@tag import="BBR.BBRUtil"%>
 
 <%@ attribute name="mode" %>
 <%@ attribute name="posId" %>
@@ -54,7 +55,7 @@
 	
 	Date dateSelected = new Date();
 	SimpleDateFormat df = new SimpleDateFormat("dd MMMM");
-	SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+	SimpleDateFormat sf = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 	
 	BBRVisitManager vmgr = new BBRVisitManager();
 	
@@ -372,10 +373,11 @@
 										e.addClass('clickable');
 										arrIndex = schVis[j][i*2 + k];
 										e.prop("title", arr[arrIndex][3] + ", " + arr[arrIndex][4]);
+										e.data("visitId", arr[arrIndex][5]);
 										e.data("toggle", "tooltip");
 										e.tooltip({container: 'small'});
 										e.on('click', function() {
-											window.location.href = "manager-visit-edit.jsp?id=" + arr[arrIndex][5];
+											window.location.href = "manager-visit-edit.jsp?id=" + $(this).data("visitId");
 										})
 										<% } %>
 									}

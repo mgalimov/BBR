@@ -9,14 +9,16 @@
 	BBRContext context = BBRContext.getContext(request);
 	BBRParams params = new BBRParams(request.getQueryString());	
 	String t = params.get("t");
-	if (!t.isEmpty() && t.equals("user")) {
-		String[] userNC = params.get("query").split(BBRUtil.recordDivider);
-		context.set("userNC", userNC);
-	}
-	
-	if (!t.isEmpty() && t.equals("datepos")) {
-		String[] datePos = params.get("query").split(BBRUtil.recordDivider);
-		context.set("datePos", datePos);
+	if (t != null && !t.isEmpty()) {
+		if (t.equals("user")) {
+			String[] userNC = params.get("query").split(BBRUtil.recordDivider);
+			context.set("userNC", userNC);
+		}
+		
+		if (t.equals("datepos")) {
+			String[] datePos = params.get("query").split(BBRUtil.recordDivider);
+			context.set("datePos", datePos);
+		}
 	}
 %>
 
@@ -29,9 +31,7 @@
 			<t:grid-item label="LBL_CONTACT_INFO" field="userContacts"/>
 			<t:grid-item label="LBL_SPEC" field="spec.title"/>
 			<t:grid-item label="LBL_VISIT_STATUS" field="status" type="select" options="OPT_VISIT_STATUS"/>
-			<t:grid-item label="LBL_VISIT_LENGTH" field="length"/>
-			<t:grid-item label="LBL_POS_START_WORKHOUR" field="pos.startWorkHour" type="time"/>
-			<t:grid-item label="LBL_POS_END_WORKHOUR" field="pos.endWorkHour" type="time"/>
+			<t:grid-item label="LBL_FINAL_PRICE" field="finalPrice"/>
 		</t:grid>
 	</jsp:body>
 </t:admin-grid-wrapper>
