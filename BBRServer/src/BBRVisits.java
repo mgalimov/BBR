@@ -115,7 +115,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 		BBRSpecialistManager smgr = new BBRSpecialistManager();
 		BBRSpecialist spec = smgr.findById(Long.parseLong(params.get("spec")));
 		
-		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 		Date timeScheduled = df.parse(params.get("timeScheduled"));
 		
 		visit.setFinalPrice(finalPrice);
@@ -212,5 +212,26 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 
 		return "";
 	};
+
+
+	@Override
+	protected String getBadgeNumber(BBRParams params, HttpServletRequest request,
+			HttpServletResponse response) {
+		BBRContext context = BBRContext.getContext(request);
+		String where = "";
+		if (context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER)
+			return "0";
+		
+		if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
+			if (context.user.getPos() != null)
+				where = manager.wherePos(context.user.getPos().getId());
+		if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
+			if (context.user.getShop() != null)
+				where = manager.whereShop(context.user.getShop().getId());
+		if (!where.equals("")) 
+			where = "(" + where +") and";
+		where += "(state <> 2)";
+		return manager.count(where).toString();
+	}
 
 }

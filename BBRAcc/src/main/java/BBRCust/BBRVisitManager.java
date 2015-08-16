@@ -45,8 +45,10 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        visit.setUserName(userName);
 	        visit.setUserContacts(userContacts);
 	        visit.setStatus(BBRVisitStatus.VISSTATUS_INITIALIZED);
-	        if (procedure != null)
+	        if (procedure != null) {
 	        	visit.setLength(procedure.getLength());
+		        visit.setFinalPrice(procedure.getPrice());
+	        }
 	        if (visit.getLength() < minimalLength)
 	        	visit.setLength(minimalLength);
 	        session.save(visit);

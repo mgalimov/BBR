@@ -9,8 +9,8 @@
 				<t:card-item label="LBL_FINAL_PRICE" type="text" field="finalPrice"/>
 			</t:modal>
 			<t:toolbar-item label="LBL_APPROVE_VISIT" id="approveButton" accent="btn-info" condition="obj.status==0"></t:toolbar-item>
-			<t:toolbar-item label="LBL_DISAPPROVE_VISIT" id="disapproveButton" condition="obj.status==0"></t:toolbar-item>
-			<t:toolbar-item label="LBL_CLOSE_VISIT" id="closeVisitButton" condition="obj.status<=1"></t:toolbar-item>
+			<t:toolbar-item label="LBL_DISAPPROVE_VISIT" id="disapproveButton" accent="btn-warning" condition="obj.status==0"></t:toolbar-item>
+			<t:toolbar-item label="LBL_CLOSE_VISIT" id="closeVisitButton" accent="btn-success" condition="obj.status<=1"></t:toolbar-item>
 			<t:card-item label="LBL_POS" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes" isDisabled="readonly"/>
 			<t:card-item label="LBL_DATE_TIME" type="datetime" field="timeScheduled" />
 			<t:card-item label="LBL_VISIT_STATUS" field="status" type="select" options="OPT_VISIT_STATUS" isDisabled="readonly"/>
