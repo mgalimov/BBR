@@ -13,11 +13,21 @@
 		if (t.equals("user")) {
 			String[] userNC = params.get("query").split(BBRUtil.recordDivider);
 			context.set("userNC", userNC);
+			context.set("pos", null);
+			context.set("datePos", null);
 		}
 		
 		if (t.equals("datepos")) {
 			String[] datePos = params.get("query").split(BBRUtil.recordDivider);
 			context.set("datePos", datePos);
+			context.set("userNC", null);
+			context.set("pos", null);
+		}
+		
+		if (t.equals("unapproved")) {
+			context.set("pos", params.get("query"));
+			context.set("userNC", null);
+			context.set("datePos", null);
 		}
 	}
 %>

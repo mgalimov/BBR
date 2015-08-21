@@ -281,6 +281,10 @@ public class BBRContext {
 	}
 
 	public Object set(String param, Object value) {
+		if (value == null) {
+			data.remove(param);
+			return null;
+		}
 		return data.put(param, value);
 	}
 	

@@ -310,4 +310,13 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		return list(pageNumber, pageSize, where, orderBy);
 	}
 
+	public BBRDataSet<BBRVisit> listUnapprovedVisitsByPos(BBRPoS pos, int pageNumber, int pageSize, String orderBy) {
+		if (pos == null)
+			return null;
+		
+		String where = "pos.id = " + pos.getId() + " and status = " + BBRVisitStatus.VISSTATUS_INITIALIZED;
+		
+		return list(pageNumber, pageSize, where, orderBy);
+	}
+	
 }

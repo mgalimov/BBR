@@ -147,22 +147,23 @@
 <% } %>
 
 <div class="row">
-	<div class="form-group col-md-10">
+	<div class="form-group col-md-12 col-sm-12 col-xs-12">
 		<label>${context.gs('LBL_SET_DATE_TIME_TITLE')}</label>
 	</div>
 
-	<div class="form-group col-sm-3">
+	<div class="form-group col-md-2 col-sm-3">
 		<div class='input-group date' id='datepicker'>
         	<input type='text' class="form-control" />
    			<span class="input-group-addon">
 				<span class="glyphicon glyphicon-calendar"></span>
 			</span>
        </div>
-
 	</div>
+	
 	<% if (mode.equals("manager-view") || mode.equals("manager-edit")) { %>
+	<div class="form-group col-md-2">
 		<button class='btn btn-default' id='openVisits' type="button"><span class="glyphicon glyphicon-list-alt"></span>
-		<%=context.gs("LBL_OPEN_VISITS") %>
+		<%=context.gs("LBL_OPEN_VISITS_BTN") %>
 		</button>
 		<script>
 			$(document).ready(function() {
@@ -173,17 +174,33 @@
 				});
 			});
 		</script>
+	</div>
+	
+	<div class="form-group col-md-3">
+		<button class='btn btn-default' id='openAllUnapprovedVisits' type="button"><span class="glyphicon glyphicon-list-alt"></span>
+		<%=context.gs("LBL_OPEN_ALL_VISITS_BTN") %>
+		</button>
+		<script>
+			$(document).ready(function() {
+				$("#openAllUnapprovedVisits").click(function(){
+					dt = $("a[id^='sd'].btn-info").attr('id').substring(2, 12);
+					pos = $("#posinput").val();
+					window.location.href = "manager-visit-list.jsp?t=unapproved&query="+pos; 
+				});
+			});
+		</script>
+	</div>
 	<% } %>
 </div>
 
 <div class="row">
-	<div class="col-sm-2">
+	<div class="col-md-2 col-sm-2 col-xs-2 hidden-sm hidden-xs">
 		<button class='btn btn-link' id='prevDateBtn' type="button"><span class="glyphicon glyphicon-chevron-left"></span></button>
 		<button class='btn btn-link' id='todayDateBtn' type="button"><span class="glyphicon glyphicon-time"></span></button>
 		<button class='btn btn-link' id='nextDateBtn' type="button"><span class="glyphicon glyphicon-chevron-right"></span></button>
 
 	</div>
-	<div class="col-md-8" >
+	<div class="col-md-8 col-sm-8 col-xs-8 hidden-sm hidden-xs" >
 		<div class="btn-group btn-group-justified" role="group">
 		<%
 			out.println("<a href='#' role='button' class='btn btn-info btn-sm' id='sd" + sf.format(calendar.getTime()) + "'></a>");

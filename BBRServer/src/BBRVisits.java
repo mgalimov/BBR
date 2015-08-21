@@ -160,7 +160,17 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				return "";
 			}
 		}
-			
+
+		String poss = (String)context.get("pos");
+		if (poss != null) {
+			try {
+				BBRPoSManager pmgr = new BBRPoSManager();
+				BBRPoS pos = pmgr.findById(Long.parseLong(poss));
+				return manager.listUnapprovedVisitsByPos(pos, pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
+			} catch (Exception ex) {
+				return "";
+			}
+		}
 		if (context.user != null)
 			return manager.list(context.user.getId(), pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
 		else
@@ -213,7 +223,6 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 		return "";
 	};
 
-
 	@Override
 	protected String getBadgeNumber(BBRParams params, HttpServletRequest request,
 			HttpServletResponse response) {
@@ -230,8 +239,16 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				where = manager.whereShop(context.user.getShop().getId());
 		if (!where.equals("")) 
 			where = "(" + where +") and";
-		where += "(state <> 2)";
-		return manager.count(where).toString();
+		Date dt = new Date();
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+		where += "(status = " + BBRVisitStatus.VISSTATUS_INITIALIZED + ") and (timeScheduled >= '" + df.format(BBRUtil.getStartOfDay(dt)) + "')";
+
+		String count1 = manager.count(where).toString();
+		
+        where += " and (timeScheduled <= '" + df.format(BBRUtil.getEndOfDay(dt)) + "')";
+		String count2 = manager.count(where).toString();
+	
+		return count2 + " / " + count1;
 	}
 
 }
