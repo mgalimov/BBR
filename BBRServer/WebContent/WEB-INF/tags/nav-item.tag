@@ -32,8 +32,8 @@
 	$.ajax({url: "${badgeMethod}", 
 			data: {operation: "badge"}})
 	 	.done(function(data){
-	 		if (data == "0")
-	 			$("#${itemId}").addClass(" hidden");
+	 		if (data == "")
+	 			$("#${itemId}").addClass("hidden");
 	 		else
 	 			$("#${itemId}").text(data);
 	 	});

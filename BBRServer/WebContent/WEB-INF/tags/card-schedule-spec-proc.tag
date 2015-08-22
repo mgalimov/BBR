@@ -161,10 +161,15 @@
 	</div>
 	
 	<% if (mode.equals("manager-view") || mode.equals("manager-edit")) { %>
-	<div class="form-group col-md-2">
-		<button class='btn btn-default' id='openVisits' type="button"><span class="glyphicon glyphicon-list-alt"></span>
-		<%=context.gs("LBL_OPEN_VISITS_BTN") %>
+	<div class="btn-group" role="group" aria-label="...">
+		<button class='btn btn-default' id='openVisits' type="button">
+		<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> <%=context.gs("LBL_OPEN_VISITS_BTN") %>
 		</button>
+		<button class='btn btn-default' id='openAllUnapprovedVisits' type="button">
+		<span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> <%=context.gs("LBL_OPEN_ALL_VISITS_BTN") %>
+		</button>
+	</div>
+			
 		<script>
 			$(document).ready(function() {
 				$("#openVisits").click(function(){
@@ -173,14 +178,7 @@
 					window.location.href = "manager-visit-list.jsp?t=datepos&query="+dt+"@@"+pos; 
 				});
 			});
-		</script>
-	</div>
-	
-	<div class="form-group col-md-3">
-		<button class='btn btn-default' id='openAllUnapprovedVisits' type="button"><span class="glyphicon glyphicon-list-alt"></span>
-		<%=context.gs("LBL_OPEN_ALL_VISITS_BTN") %>
-		</button>
-		<script>
+
 			$(document).ready(function() {
 				$("#openAllUnapprovedVisits").click(function(){
 					dt = $("a[id^='sd'].btn-info").attr('id').substring(2, 12);
@@ -189,7 +187,6 @@
 				});
 			});
 		</script>
-	</div>
 	<% } %>
 </div>
 

@@ -41,7 +41,7 @@
         <mapping class="BBRCust.BBRProcedure"/>
         <mapping class="BBRCust.BBRVisit"/>
         <mapping class="BBRCust.BBRTask"/>
-
+		<mapping class="BBRCust.BBRTurn"/>
     </session-factory>
 
 </hibernate-configuration>
