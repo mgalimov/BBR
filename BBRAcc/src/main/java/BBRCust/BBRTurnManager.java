@@ -63,5 +63,15 @@ public class BBRTurnManager extends BBRDataManager<BBRTurn>{
 		BBRUtil.commitTran(sessionIndex, tr);
        
 		return (count > 0);
-  }	
+	}
+	
+	@Override
+    public String wherePos(Long posId) {
+    	return "specialist.pos.id = " + posId;
+    };
+    
+	@Override
+    public String whereShop(Long shopId) {
+    	return "specialist.pos.shop.id = " + shopId;
+    };
 }

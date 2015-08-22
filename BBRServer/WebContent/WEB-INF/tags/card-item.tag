@@ -210,7 +210,7 @@
 				</c:if>
 
 				<script>
-				var ${ft}SetConstrains = function () {};
+				var ${ft}SetConstrains = function () { return "";};
 				
 				var ${ft}LoadInitialData = function (callback) {
 			        $.ajax({
