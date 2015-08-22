@@ -14,7 +14,7 @@ public class BBRTurn extends BBRDataElement {
 	@Column(name="TURN_ID")
 	private Long id;
 	
-	@OneToOne(fetch=FetchType.EAGER)
+	@ManyToOne(fetch=FetchType.EAGER)
 	private BBRSpecialist specialist;
 
 	@Column(name="START_TIME")

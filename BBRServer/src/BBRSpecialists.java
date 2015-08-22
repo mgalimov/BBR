@@ -114,7 +114,7 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 		if (context.planningVisit != null)
 			pos = context.planningVisit.getPos();
 		else
-			if (!constrains.equals("")) {
+			if (constrains != null && !constrains.isEmpty()) {
 				BBRPoSManager pmgr = new BBRPoSManager();
 				pos = pmgr.findById(Long.parseLong(constrains));
 			}
