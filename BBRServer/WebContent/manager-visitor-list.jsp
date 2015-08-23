@@ -1,9 +1,23 @@
+<%@ page import="BBRClientApp.BBRContext"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
+
+<%
+	BBRContext context = BBRContext.getContext(request);
+
+	if ((Integer)context.get("VisitorsDays") == 0)
+		request.setAttribute("viewBtn", "#viewAll");
+	else
+		request.setAttribute("viewBtn", "#view" + context.get("VisitorsDays") + "Days");
+%>
+
+
 <t:admin-grid-wrapper title="LBL_VISITORS_TITLE">
 	<jsp:body>
 		<t:grid method="BBRVisitors" editPage="manager-visitor-edit.jsp" 
-				createPage="" title="LBL_TASKS_TITLE" 
+				createPage="" title="LBL_VISITORS_TITLE" 
 				customToolbar="true">
 			<t:toolbar-item label="LBL_OPEN_BTN" id="edit" accent="btn-info"></t:toolbar-item>
 			<t:toolbar-item label="LBL_LAST_30_DAYS" id="view30Days" icon="glyphicon-tasks"></t:toolbar-item>
@@ -17,58 +31,39 @@
 		
 		<script>
 		$(document).ready(function() {
+			$("${viewBtn}").addClass("active");	
+			
 			$("#view30Days").on("click", function() {
-				$.ajax({
-		        	url: 'BBRVisitors',
-		        	data: {
-		        		operation: 'toggle30Days'
-		        	}
-		        }).success(function(d) {
-		        	table = $("#grid").DataTable();
-		        	table.ajax.reload();
-		        	table.draw();
-		        });
+				clickHandler('toggle30Days', "#view30Days");
 			});
 
 			$("#view120Days").on("click", function() {
-				$.ajax({
-		        	url: 'BBRVisitors',
-		        	data: {
-		        		operation: 'toggle120Days'
-		        	}
-		        }).success(function(d) {
-		        	table = $("#grid").DataTable();
-		        	table.ajax.reload();
-		        	table.draw();
-		        });
+				clickHandler('toggle120Days', "#view120Days");
 			});
 
 			$("#view360Days").on("click", function() {
-				$.ajax({
-		        	url: 'BBRVisitors',
-		        	data: {
-		        		operation: 'toggle360Days'
-		        	}
-		        }).success(function(d) {
-		        	table = $("#grid").DataTable();
-		        	table.ajax.reload();
-		        	table.draw();
-		        });
+				clickHandler('toggle360Days', "#view360Days");
 			});
 
 			$("#viewAll").on("click", function() {
-				$.ajax({
-		        	url: 'BBRVisitors',
-		        	data: {
-		        		operation: 'toggleAll'
-		        	}
-		        }).success(function(d) {
-		        	table = $("#grid").DataTable();
-		        	table.ajax.reload();
-		        	table.draw();
-		        });
+				clickHandler('toggleAll', "#viewAll");
 			});
 		});
+		
+		function clickHandler(operation, btn) {
+			$.ajax({
+	        	url: 'BBRVisitors',
+	        	data: {
+	        		operation: operation
+	        	}
+	        }).success(function (d) {
+	        	table = $("#grid").DataTable();
+	        	table.ajax.reload();
+	        	table.draw();
+	        	$(".active").removeClass("active");
+	        	$(btn).addClass("active");			
+	        });			
+		}
 
 		</script>
 	</jsp:body>

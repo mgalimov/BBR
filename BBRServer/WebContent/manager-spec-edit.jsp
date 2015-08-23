@@ -3,6 +3,7 @@
 <t:admin-card-wrapper title="LBL_EDIT_SPEC_TITLE">
 	<jsp:body>
 		<t:card method="BBRSpecialists" gridPage="manager-spec-list.jsp" title="LBL_EDIT_SPEC_TITLE">
+			<t:toolbar-item label="LBL_OPEN_TURNS_BTN" id="openTurnsBtn" />
 			<t:card-item label="LBL_NAME" field="name" type="text" isRequired="required" />
 			<t:card-item label="LBL_POS" type="reference" field="pos" referenceFieldTitle="title" referenceMethod="BBRPoSes"/>
 			<t:card-item label="LBL_POSITION" field="position" type="text" isRequired="required" />
@@ -36,4 +37,12 @@
 	proceduresSetConstrains = function () {
 		return $("#posinput").val();
 	}
+	
+	$(document).ready(function() {
+		$("#openTurnsBtn").click(function () {
+			specId = getUrlParameter("id");
+			if (specId)
+				window.location.href = "manager-turn-list.jsp?t=spec&query=" + specId;
+		});
+	});
 </script>

@@ -75,7 +75,7 @@
 				</c:if>
 			</c:when>
 			
-			<c:when test="${type.equals('time') || type.equals('datetime') || type.equals('datetime')}">
+			<c:when test="${type.equals('time') || type.equals('datetime') || type.equals('date')}">
 				<c:if test="${type.equals('time')}">
 					<c:set var="glyphicon" value="glyphicon-time"></c:set>
 					<c:set var="format" value="HH:mm"></c:set>

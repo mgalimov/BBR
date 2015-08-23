@@ -2,6 +2,7 @@
 <%@ attribute name="title" required="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ attribute name="titleModifier" %>
 
 <!DOCTYPE html>
 <html>
@@ -11,6 +12,7 @@
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
 	    <title>
 	    	<c:out value="${context.gs(title)}"/>
+	    	<c:out value="${titleModifier}"/>
 	    </title>
 
 	    <!-- Bootstrap -->

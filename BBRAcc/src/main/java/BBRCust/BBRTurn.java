@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.*;
 
 import BBR.BBRDataElement;
+import BBR.JsonFormat;
 
 @Entity
 @Table(name="turns")
@@ -17,9 +18,15 @@ public class BBRTurn extends BBRDataElement {
 	@ManyToOne(fetch=FetchType.EAGER)
 	private BBRSpecialist specialist;
 
+	@JsonFormat(format="yyyy-MM-dd")
+	@Column(name="TURN_DATE")
+	private Date date;
+
+	@JsonFormat(format="HH:mm")
 	@Column(name="START_TIME")
 	private Date startTime;
 	
+	@JsonFormat(format="HH:mm")
 	@Column(name="END_TIME")
 	private Date endTime;
 	
@@ -51,6 +58,14 @@ public class BBRTurn extends BBRDataElement {
 
 	public void setSpecialist(BBRSpecialist specialist) {
 		this.specialist = specialist;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
 	public Date getStartTime() {

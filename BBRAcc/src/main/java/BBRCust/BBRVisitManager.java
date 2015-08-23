@@ -98,6 +98,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         Date startOfDay = BBRUtil.getStartOfDay(date);
         Date endOfDay = BBRUtil.getEndOfDay(date);
         DateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormatWithSecs);
+        DateFormat sdf = new SimpleDateFormat(BBRUtil.fullDateFormat);
         
         String select = "select visit.timeScheduled as timeScheduled, visit.spec.id as spec, visit.length as length, "+
         				"visit.userName as userName, case when trim(visit.userContacts) = '' then '–' else visit.userContacts end as userContacts, " + 
@@ -128,11 +129,21 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		} else
 			selProc = "1";
 		
-		query = session.createQuery("select spec.id, spec.startWorkHour, spec.endWorkHour, " + selProc + 
-								    "  from BBRSpecialist spec "+ 
+		query = session.createQuery("select spec.id, turn.startTime, turn.endTime, " + selProc + 
+								    "  from BBRTurn turn right join turn.specialist as spec"+ 
 								    " where spec.status = " + BBRSpecialistState.SPECSTATE_ACTIVE +  
-									"   and spec.pos.id = " + posId);
+									"   and spec.pos.id = " + posId +
+									"   and turn.date = '" + sdf.format(date) + "'");
 		List<Object[]> specs = query.list();
+		
+		query = session.createQuery("select spec.id, 0, 0, 0" + 
+								    "  from BBRSpecialist as spec"+ 
+								    " where spec.status = " + BBRSpecialistState.SPECSTATE_ACTIVE +  
+									"   and spec.pos.id = " + posId +
+									"   and spec.id not in (select turn.specialist.id from BBRTurn as turn where turn.date = '" + sdf.format(date) + "')");
+		List<Object[]> specsNoTurns = query.list();
+
+        BBRUtil.commitTran(sessionIndex, tr);
         
 		DateFormat hf = new SimpleDateFormat("HH");
 		DateFormat mf = new SimpleDateFormat("mm");
@@ -156,8 +167,9 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 					line[i] = (i == 1) ? 0L : 48L;
 			}
 		}
-		
-        BBRUtil.commitTran(sessionIndex, tr);
+
+		for(Object[] line: specsNoTurns)
+			specs.add(line);
 		
         Integer procLength = 1;
 		if (procedureId != null && !procedureId.equals("")) {

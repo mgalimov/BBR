@@ -1,5 +1,6 @@
 <%@ tag language="java" pageEncoding="UTF-8" description="Grid"%>
 <%@ attribute name="title" required="true"%>
+<%@ attribute name="titleModifier" %>
 <%@ attribute name="method" required="true"%>
 <%@ attribute name="editPage" required="true"%>
 <%@ attribute name="createPage" required="true"%>
@@ -16,7 +17,7 @@
 
 <!-- http://www.onjava.com/pub/a/onjava/excerpt/jserverpages3_ch11/ -->
 
-<h3>${context.gs(title)}</h3>
+<h3>${context.gs(title).concat(titleModifier)}</h3>
 		
 <!-- Modal -->
 <div class="modal fade" id="sureToDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

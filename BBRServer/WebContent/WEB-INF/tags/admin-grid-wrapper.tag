@@ -2,6 +2,7 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <%@ attribute name="title" %>
+<%@ attribute name="titleModifier" %>
 
 <!DOCTYPE html>
 <html>
@@ -11,6 +12,7 @@
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
 	    <title>
 	    	<c:out value="${context.gs(title)}"/>
+	    	<c:out value="${titleModifier}"/>
 	    </title>
 
 	    <!-- Bootstrap -->
@@ -38,7 +40,7 @@
 		<script type="text/javascript" src="js/dataTables.bootstrap.js"></script>
   	</head>
   	<body>
-		<t:top-menu title="${context.gs('LBL_CONTROL_PANEL').concat(' ').concat(context.gs(title))}" />
+		<t:top-menu title="${context.gs('LBL_CONTROL_PANEL').concat(' ').concat(context.gs(title)).concat(titleModifier)}" />
    		<div class="container-fluid">
   			<div class="row">
 		  		<t:side-menu />
