@@ -71,7 +71,7 @@
 				        		taskId: idParam
 				        	}
 				        }).success(function(d) {
-				        	if (d) window.location.href = 'general-edit-visit.jsp?id=' + d; 
+				        	if (d) window.location.href = 'manager-visit-edit.jsp?id=' + d; 
 				        });									
 					}					
 				});

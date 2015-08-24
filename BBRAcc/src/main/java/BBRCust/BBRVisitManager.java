@@ -282,7 +282,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         
 		Session session = BBRUtil.getSession(sessionIndex);
 		
-		if (userName == null || userName.isEmpty() || userContacts == null || userContacts.isEmpty())
+		if (userName == null || userName.isEmpty())
 			return null;
 
 		Query query = session.createQuery("select userName, userContacts, max(timeScheduled) as lastVisitDate"+ 

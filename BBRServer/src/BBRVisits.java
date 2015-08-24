@@ -144,7 +144,13 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 		BBRContext context = BBRContext.getContext(request);
 		String[] userNC = (String[])context.get("userNC"); 
 		if (userNC != null) {
-			return manager.listVisitsByNameAndContacts(userNC[0], userNC[1], pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
+			String userN = userNC[0];
+			String userC = "";
+			
+			if (userNC.length == 2)
+				userC = userNC[1];
+			
+			return manager.listVisitsByNameAndContacts(userN, userC, pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
 		}
 
 		String[] datePos = (String[])context.get("datePos");

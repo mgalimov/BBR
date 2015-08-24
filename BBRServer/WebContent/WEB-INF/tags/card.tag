@@ -51,6 +51,8 @@
 	<div class="panel panel-default">
 	  <c:if test="${showToolbar == true || showToolbar == null}">
 		  <div class="panel-heading" id="toolbar">
+		    <div class="btn-toolbar" role="toolbar" aria-label="..." id="toolbarpanel">
+		  	</div>
 		  </div>
 	  </c:if>
 	  <div class="panel-body">
@@ -69,7 +71,7 @@
 <c:if test="${showToolbar == true || showToolbar == null}">
 <script>
 	$(document).ready(function() {
-		$('#toolbar').html("${itemToolbar}");
+		$('#toolbarpanel').html("${itemToolbar}");
 	});
 </script>
 </c:if>

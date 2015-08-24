@@ -7,7 +7,7 @@
 <%
 	BBRContext context = BBRContext.getContext(request);
 
-	if ((Integer)context.get("VisitorsDays") == 0)
+	if (context.get("VisitorsDays") == null || (Integer)context.get("VisitorsDays") == 0)
 		request.setAttribute("viewBtn", "#viewAll");
 	else
 		request.setAttribute("viewBtn", "#view" + context.get("VisitorsDays") + "Days");
@@ -19,11 +19,15 @@
 		<t:grid method="BBRVisitors" editPage="manager-visitor-edit.jsp" 
 				createPage="" title="LBL_VISITORS_TITLE" 
 				customToolbar="true">
-			<t:toolbar-item label="LBL_OPEN_BTN" id="edit" accent="btn-info"></t:toolbar-item>
-			<t:toolbar-item label="LBL_LAST_30_DAYS" id="view30Days" icon="glyphicon-tasks"></t:toolbar-item>
-			<t:toolbar-item label="LBL_LAST_120_DAYS" id="view120Days" icon="glyphicon-tasks"></t:toolbar-item>
-			<t:toolbar-item label="LBL_LAST_360_DAYS" id="view360Days" icon="glyphicon-tasks"></t:toolbar-item>
-			<t:toolbar-item label="LBL_VIEW_ALL_VISITORS" id="viewAll" icon="glyphicon-tasks"></t:toolbar-item>
+			<t:toolbar-group>
+				<t:toolbar-item label="LBL_OPEN_BTN" id="edit" accent="btn-info"/>
+			</t:toolbar-group>
+			<t:toolbar-group>
+				<t:toolbar-item label="LBL_LAST_30_DAYS" id="view30Days" icon="glyphicon-tasks"/>
+				<t:toolbar-item label="LBL_LAST_120_DAYS" id="view120Days" icon="glyphicon-tasks"/>
+				<t:toolbar-item label="LBL_LAST_360_DAYS" id="view360Days" icon="glyphicon-tasks"/>
+				<t:toolbar-item label="LBL_VIEW_ALL_VISITORS" id="viewAll" icon="glyphicon-tasks"/>
+			</t:toolbar-group>
 			<t:grid-item label="LBL_USER_NAME" field="userName"/>
 			<t:grid-item label="LBL_CONTACT_INFO" field="userContacts"/>
 			<t:grid-item label="LBL_LAST_VISIT_DATE" field="lastVisitDate" sort="desc"/>

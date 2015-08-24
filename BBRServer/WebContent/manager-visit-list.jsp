@@ -1,5 +1,8 @@
+<%@page import="java.text.SimpleDateFormat"%>
 <%@ page import="BBRClientApp.BBRContext"%>
 <%@ page import="BBR.BBRUtil"%>
+<%@ page import="BBRAcc.BBRPoSManager"%>
+<%@ page import="BBRAcc.BBRPoS"%>
 <%@ page import="BBRClientApp.BBRParams"%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -7,7 +10,10 @@
 
 <%
 	BBRContext context = BBRContext.getContext(request);
-	BBRParams params = new BBRParams(request.getQueryString());	
+	BBRParams params = new BBRParams(request.getQueryString());
+	
+	String titleMod = "";
+	
 	String t = params.get("t");
 	if (t != null && !t.isEmpty()) {
 		if (t.equals("user")) {
@@ -15,6 +21,10 @@
 			context.set("userNC", userNC);
 			context.set("pos", null);
 			context.set("datePos", null);
+			
+			titleMod = " - " + userNC[0];
+			if (userNC.length == 2)
+				titleMod += ", " + userNC[1];
 		}
 		
 		if (t.equals("datepos")) {
@@ -22,19 +32,34 @@
 			context.set("datePos", datePos);
 			context.set("userNC", null);
 			context.set("pos", null);
+			
+			if (datePos.length > 0) {
+				SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
+				titleMod = " - " + df.format(datePos[0]);			
+				if (datePos.length == 2 && datePos[1] != null) {
+					BBRPoSManager pmgr = new BBRPoSManager();
+					BBRPoS pos = pmgr.findById(Long.parseLong(datePos[1]));
+					titleMod += " - " + pos.getTitle();
+				}
+			}
 		}
 		
 		if (t.equals("unapproved")) {
 			context.set("pos", params.get("query"));
 			context.set("userNC", null);
 			context.set("datePos", null);
+			titleMod += " - " + context.gs("LBL_UNAPPROVED_TITLE_MOD");
 		}
 	}
+	
+
+	request.setAttribute("titleMod", titleMod);
+
 %>
 
-<t:admin-grid-wrapper title="LBL_USER_VISITS_TITLE">
+<t:admin-grid-wrapper title="LBL_USER_VISITS_TITLE" titleModifier="${titleMod}">
 	<jsp:body>
-		<t:grid method="BBRVisits" editPage="manager-visit-edit.jsp" createPage="" title="LBL_USER_VISITS_TITLE">
+		<t:grid method="BBRVisits" editPage="manager-visit-edit.jsp" createPage="" title="LBL_USER_VISITS_TITLE" titleModifier="${titleMod}">
 			<t:grid-item label="LBL_DATE_TIME" field="timeScheduled" />
 			<t:grid-item label="LBL_POS" field="pos.title"/>
 			<t:grid-item label="LBL_USER_NAME" field="userName"/>

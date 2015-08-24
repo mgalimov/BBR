@@ -39,18 +39,23 @@
 </div>
 
 <div class="panel">
+
   <div class="panel-heading" id="toolbar">
+  	<div class="btn-toolbar" role="toolbar" aria-label="..." id="toolbarpanel">
   	  <c:if test="${customToolbar != true}">
-		<button type="button" class="btn btn-default" id="create">
-		  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ${context.gs('LBL_GRID_CREATE_RECORD_BTN')}
-		</button>
-		<button type="button" class="btn btn-info" id="edit">
-		  <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> ${context.gs('LBL_GRID_EDIT_RECORD_BTN')}
-		</button>
-		<button type="button" class="btn btn-warning" id="delete" data-toggle="modal" data-target="#sureToDelete">
-		  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> ${context.gs('LBL_GRID_DELETE_RECORD_BTN')}
-		</button>
+  	  	<div class='btn-group' role='group' aria-label='...'>
+			<button type="button" class="btn btn-default" id="create">
+			  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ${context.gs('LBL_GRID_CREATE_RECORD_BTN')}
+			</button>
+			<button type="button" class="btn btn-info" id="edit">
+			  <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> ${context.gs('LBL_GRID_EDIT_RECORD_BTN')}
+			</button>
+			<button type="button" class="btn btn-warning" id="delete" data-toggle="modal" data-target="#sureToDelete">
+			  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> ${context.gs('LBL_GRID_DELETE_RECORD_BTN')}
+			</button>
+		</div>
 	  </c:if>
+	 </div>
   </div>
   <div class="panel-body">
 	  <table id="grid" class="table table-stripped table-bordered no-footer noselection">
@@ -67,7 +72,7 @@
 <c:if test="${customToolbar == true}">
 <script>
 	$(document).ready(function() {
-		$('#toolbar').html("${itemToolbar}");
+		$('#toolbarpanel').html("${itemToolbar}");
 	});
 </script>
 </c:if>

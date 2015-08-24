@@ -8,8 +8,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 
 <c:if test="${accent == null}">
-	<c:set var="accent" value="btn-default"/>
+	<c:set var="accent" value="btn-default" scope="page"/>
 </c:if>
+
 <c:set var="buttonDef" value="<button type='button' class='btn ${accent}' id='${id}'>\n<span class='glyphicon ${icon}' aria-hidden='true'></span>\n${context.gs(label)}\n</button>\n"/>
 <c:set var="itemToolbar" scope="request" value="${itemToolbar.concat(buttonDef)}"/>
 

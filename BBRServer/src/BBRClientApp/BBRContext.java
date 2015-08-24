@@ -23,7 +23,6 @@ public class BBRContext {
 	private BBRGPS location = null;
 	private int lastVisitStep = 1;
 	public BBRVisit planningVisit = null;
-	public boolean viewAllTasks = false;
 	private Locale locale = null;
 	private ResourceBundle resourceBundle;
 	private Hashtable<String, Object> data = new Hashtable<String, Object>();

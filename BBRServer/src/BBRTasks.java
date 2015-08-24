@@ -96,7 +96,7 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 				where = " pos.shop.id = " + context.user.getShop().getId() + " or ";
 		where += " performer.id = " + context.user.getId();
 		
-		if (!context.viewAllTasks)
+		if ((String)context.get("viewtasks") == null)
 			where = "(" + where + ") and (state < " + BBRTaskState.TASKSTATE_COMPLETED + ")";
 				
 		return manager.list(pageNumber, pageSize, where, BBRContext.getOrderBy(sortingFields, fields)).toJson();
@@ -105,6 +105,7 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 	@Override
 	protected String processOperation(String operation, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		String res = "";
+		BBRContext context = BBRContext.getContext(request);
 		
 		if (operation.equals("approve")) {
 			Long taskId = Long.parseLong(params.get("taskId"));
@@ -155,9 +156,11 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 			}
 		} else
 		if (operation.equals("togglealltasks")) {
-			BBRContext context = BBRContext.getContext(request);
-			context.viewAllTasks = !context.viewAllTasks;
-		};	
+			context.set("viewtasks", "all");
+		} else 
+		if (operation.equals("toggleincompletetasks")) {
+			context.set("viewtasks", null);
+		}
 		
 		return res;
 	}
