@@ -54,6 +54,7 @@
 	if (pos == null) return;
 	
 	Date dateSelected = new Date();
+
 	SimpleDateFormat df = new SimpleDateFormat("dd MMMM");
 	SimpleDateFormat sf = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 	
@@ -242,11 +243,14 @@
 			dt = $(this).attr('id').substring(2, 12);
 			letChangeButtons = false;
 			$('#datepicker').data('DateTimePicker').date(dt);
+
 			select();
 		});
 		
-		$('#datepicker').on("dp.change", function(e) { 
+		$('#datepicker').on("dp.change", function(e) {
 			newDate = e.date;
+			$.cookie("dateSelected", newDate.year() + "-" + (newDate.month() + 1) + "-" + newDate.date());
+			
 			if (letChangeButtons) {
 				$("a[id^='sd']").each(function (i) {
 					dt = new moment(newDate);
@@ -284,6 +288,10 @@
 	 	$("#todayDateBtn").click(function(e) { changeDatesOnButtons(0); });
 	 	
 	 	select();
+	 	
+	 	ds = $.cookie("dateSelected");
+		if (ds != null && ds != "")
+			$('#datepicker').data("DateTimePicker").date(ds);
 	 });
 	
 	function changeDatesOnButtons(modifier) {
