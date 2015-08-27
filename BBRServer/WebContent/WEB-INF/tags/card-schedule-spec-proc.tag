@@ -390,7 +390,7 @@
 										e.data("visitId", arr[arrIndex][5]);
 										e.data("toggle", "tooltip");
 										e.tooltip({container: 'small'});
-										e.on('click', function() {
+										e.on('click', function(ev) {
 											window.location.href = "manager-visit-edit.jsp?id=" + $(this).data("visitId");
 										})
 										<% } %>
