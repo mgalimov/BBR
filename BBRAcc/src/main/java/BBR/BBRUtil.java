@@ -25,6 +25,8 @@ public class BBRUtil {
 	public static final String fullTimeFormat = "HH:mm";
 	public static final String fullDateTimeFormat = "yyyy-MM-dd HH:mm";
 	public static final String fullDateTimeFormatWithSecs = "yyyy-MM-dd HH:mm:ss";
+	
+	public static final String visualTitleDelimiter = " &#8212; ";
 
     public static int buildSessionFactory(Configuration configuration) {
         try {

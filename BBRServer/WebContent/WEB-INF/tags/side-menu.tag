@@ -16,6 +16,7 @@
 		<t:nav-item href="manager-task-list.jsp" title="LBL_TASKS_MENU" badge="true" badgeMethod="BBRTasks"/>
 		<t:nav-item href="manager-visitor-list.jsp" title="LBL_VISITORS_LIST_MENU"/>
 		<t:nav-item href="manager-spec-schedule-list.jsp" title="LBL_SPEC_SCHEDULE_MENU" badge="true" badgeMethod="BBRVisits"/>
+		<t:nav-item href="manager-visit-create.jsp" title="LBL_CREATE_VISIT_MENU"/>
 	</t:nav-group>
 	<t:nav-group title="LBL_USER_MENU" level="general">
 		<t:nav-item href="general-plan-visit.jsp" title="LBL_PLAN_YOUR_VISIT_MENU" />

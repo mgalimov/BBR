@@ -22,7 +22,7 @@
 			context.set("pos", null);
 			context.set("datePos", null);
 			
-			titleMod = " - " + userNC[0];
+			titleMod = BBRUtil.visualTitleDelimiter + userNC[0];
 			if (userNC.length == 2)
 				titleMod += ", " + userNC[1];
 		}
@@ -35,11 +35,11 @@
 			
 			if (datePos.length > 0) {
 				SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
-				titleMod = " - " + df.format(datePos[0]);			
+				titleMod = BBRUtil.visualTitleDelimiter + df.format(df.parse(datePos[0]));			
 				if (datePos.length == 2 && datePos[1] != null) {
 					BBRPoSManager pmgr = new BBRPoSManager();
 					BBRPoS pos = pmgr.findById(Long.parseLong(datePos[1]));
-					titleMod += " - " + pos.getTitle();
+					titleMod += BBRUtil.visualTitleDelimiter + pos.getTitle();
 				}
 			}
 		}
@@ -48,7 +48,7 @@
 			context.set("pos", params.get("query"));
 			context.set("userNC", null);
 			context.set("datePos", null);
-			titleMod += " - " + context.gs("LBL_UNAPPROVED_TITLE_MOD");
+			titleMod += BBRUtil.visualTitleDelimiter + context.gs("LBL_UNAPPROVED_TITLE_MOD");
 		}
 	}
 	

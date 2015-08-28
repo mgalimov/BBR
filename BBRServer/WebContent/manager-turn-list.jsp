@@ -24,7 +24,7 @@
 				BBRSpecialistManager smgr = new BBRSpecialistManager();
 				BBRSpecialist spec = smgr.findById(Long.parseLong(specId));
 				if (spec != null) {
-					titleMod = " - " + spec.getName();
+					titleMod = BBRUtil.visualTitleDelimiter + spec.getName();
 				}
 			}
 		}

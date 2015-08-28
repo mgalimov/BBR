@@ -133,16 +133,19 @@
 	
 	calendar.setTime(dateSelected);
 %>
-<% if (mode.isEmpty() || mode.equals("general-edit")) { %>	
-	<div class="row">
-		<div class="form-group col-md-10">
-			<t:card-item label="LBL_SELECT_PROCEDURE" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures"/>
-		</div>
-	</div>
-<% } else { %>
+
+<% if (mode.equals("manager-edit") || mode.equals("manager-view")) { %>
 	<div class="row">
 		<div class="form-group col-md-10">
 			<t:card-item label="LBL_SELECT_POS" type="reference" field="pos" referenceFieldTitle="title" referenceMethod="BBRPoSes"></t:card-item>
+		</div>
+	</div>
+<% } %>
+	
+<% if (mode.isEmpty() || mode.equals("general-edit") || mode.equals("manager-edit")) { %>	
+	<div class="row">
+		<div class="form-group col-md-10">
+			<t:card-item label="LBL_SELECT_PROCEDURE" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures"/>
 		</div>
 	</div>
 <% } %>
@@ -280,7 +283,7 @@
 	 		});
 	 	}
 
-<% if (mode.isEmpty() || mode.equals("general-edit")) { %>	
+<% if (mode.isEmpty() || mode.equals("general-edit") || mode.equals("manager-edit")) { %>	
 	 	$("#scheduleTable td").on("click", function(e) {setTime($(e.target));});
 <% } %>	 	
 	 	$("#nextDateBtn").click(function(e) { changeDatesOnButtons(<%=datesPerPage %>); });

@@ -98,8 +98,9 @@
 		        		operation: 'close',
 		        		visitId: idParam
 		        	}
+		        }).success(function () {
+					$("#saveChanges").click();
 		        });
-				$("#saveChanges").click();
 			}					
 		});
 
