@@ -102,7 +102,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         
         String select = "select visit.timeScheduled as timeScheduled, visit.spec.id as spec, visit.length as length, "+
         				"visit.userName as userName, case when trim(visit.userContacts) = '' then '–' else visit.userContacts end as userContacts, " + 
-        				"visit.id";
+        				"visit.id, visit.status";
         String from = " from BBRVisit visit";
         String where = " where visit.timeScheduled >= '" + df.format(startOfDay) + "' and "
         			  + " visit.timeScheduled <= '" + df.format(endOfDay) + "'";

@@ -367,7 +367,7 @@
 				
 				for (i = 0; i <= 47; i++)
 					for (j = 0; j < specs.length; j++)
-						sch[j][i] = 2; 
+						sch[j][i] = "o"; 
 
 				$("td.occupied").removeClass('occupied');
 				$("td.order").removeClass('order');
@@ -380,12 +380,22 @@
 				}
 
 				for (i = 0; i < arr.length; i++) {
-					for (m = arr[i][0]; m < arr[i][0] + arr[i][2]; m++) {
+					start = arr[i][0];
+					end = arr[i][0] + arr[i][2] - 1;
+					for (m = start; m <= end; m++) {
 						specCode = arr[i][1];
 						if (specCode !== undefined)
 							specIndex = spc[specCode];
 						if (specIndex !== undefined) {
-							sch[specIndex][m] = 1;
+							if (m == start && m == end)
+								sch[specIndex][m] = "single";
+							else if (m == start)
+								sch[specIndex][m] = "start";
+							else if (m == end)
+								sch[specIndex][m] = "end";
+							else 
+								sch[specIndex][m] = "middle";
+							
 							schVis[specIndex][m] = i;
 						}
 					}
@@ -398,16 +408,22 @@
 				for (i = 0; i <= 23; i++)
 					for (j = 0; j < specs.length; j++) {
 						for (k = 0; k <= 1; k++) {
-							if (sch[j][i*2 + k] > 0) {
+							schVal = sch[j][i*2 + k];
+							if (schVal.length > 0) {
 								e = $("#sp"+specs[j][0]+"_oc"+i+"_"+(3*k)+"0");
 								if (e.length > 0) {
 									e.addClass('occupied');
-									if (sch[j][i*2 + k] == 1) {
+									if (schVal != "o") {
 										e.addClass('order');
 									<% if (mode.equals("manager-view") || mode.equals("manager-edit")) { %>
 										e.addClass('clickable');
 										arrIndex = schVis[j][i*2 + k];
-										e.prop("title", arr[arrIndex][3] + ", " + arr[arrIndex][4]);
+										e.html("<span class='glyphicon glyphicon-stop' aria-hidden='true'></span>");
+										e.addClass(schVal + "-cell");
+										e.addClass("visit-status-" + arr[arrIndex][6]);
+										
+										title = arr[arrIndex][3] + ", " + arr[arrIndex][4];
+										e.prop("title", title);
 										e.data("visitId", arr[arrIndex][5]);
 										e.data("toggle", "tooltip");
 										e.tooltip({container: 'small'});

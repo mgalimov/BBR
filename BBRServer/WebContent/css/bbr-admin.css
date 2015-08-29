@@ -124,3 +124,47 @@ td.conflict {
 td.clickable {
 	cursor: pointer;
 }
+
+td.visit-status-0 {
+	color: yellow;
+}
+
+td.visit-status-1 {
+	color: green;
+}
+
+td.visit-status-2 {
+	color: grey;
+}
+
+td.visit-status-3 {
+	color: blue;
+}
+
+td.visit-status-4 {
+	color: red;
+}
+
+td.signle-cell {
+	text-align: center;
+	border-left: solid 1px black !important;
+	border-right: solid 1px black !important;
+}
+
+td.middle-cell {
+	text-align: center;
+	border-left: none !important;
+	border-right: none !important;
+}
+
+td.start-cell {
+	text-align: center;
+	border-left: solid 1px black !important;
+	border-right: none !important;
+}
+
+td.end-cell {
+	text-align: center;
+	border-left: none !important;
+	border-right: solid 1px black !important;
+}
