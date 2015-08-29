@@ -16,7 +16,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <c:set var="ft" scope="request" value="${fn:replace(field, '.', '_')}" />
-<div class="form-group">
+<div class="form-group ${isHidden}">
 	<label for="${ft.concat('input')}">${context.gs(label)}</label>
 		<c:set var="itemids" scope="request" value="${itemids.concat('
 		      ').concat(ft).concat('input,')}"/>

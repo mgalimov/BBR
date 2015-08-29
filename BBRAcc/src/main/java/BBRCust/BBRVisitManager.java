@@ -32,7 +32,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		classTitle = "Visit";	
 	}
 
-	public String createAndStoreVisit(BBRPoS pos, BBRUser user, Date timeScheduled, BBRProcedure procedure, BBRSpecialist spec, String userName, String userContacts) {
+	public BBRVisit createAndStoreVisit(BBRPoS pos, BBRUser user, Date timeScheduled, BBRProcedure procedure, BBRSpecialist spec, String userName, String userContacts) {
         try {
 			boolean tr = BBRUtil.beginTran(sessionIndex);
 	        Session session = BBRUtil.getSession(sessionIndex);
@@ -62,7 +62,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        						BBRVisit.class.getName(), visit.getId());
 
 	        BBRUtil.commitTran(sessionIndex, tr);
-	        return visit.getId().toString();
+	        return visit;
         } catch (Exception ex) {
         	return null;
         }

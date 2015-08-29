@@ -136,7 +136,7 @@
 
 <% if (mode.equals("manager-edit") || mode.equals("manager-view")) { %>
 	<div class="row">
-		<div class="form-group col-md-10">
+		<div class="col-md-10">
 			<t:card-item label="LBL_SELECT_POS" type="reference" field="pos" referenceFieldTitle="title" referenceMethod="BBRPoSes"></t:card-item>
 		</div>
 	</div>
@@ -144,7 +144,7 @@
 	
 <% if (mode.isEmpty() || mode.equals("general-edit") || mode.equals("manager-edit")) { %>	
 	<div class="row">
-		<div class="form-group col-md-10">
+		<div class="col-md-10">
 			<t:card-item label="LBL_SELECT_PROCEDURE" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures"/>
 		</div>
 	</div>
@@ -221,8 +221,18 @@
 	</div>
 </div>	
 	
+<% if (mode.equals("manager-edit")) { %>
+<div class="row">
+	<div class="col-md-10">
+		<t:card-item label="LBL_YOUR_NAME" type="text" field="userName" isRequired="required"/>
+		<t:card-item label="LBL_YOUR_PHONE" type="text" field="userContacts" isRequired="required" />
+	</div>
+</div>
+<% } %>
+
 <t:card-item label="" type="text" field="timeScheduled" isHidden="hidden"/>
 <t:card-item label="" type="text" field="spec" isHidden="hidden"/>
+<t:card-item label="" type="text" field="formMode" isHidden="hidden" defaultValue="<%=mode%>"/>
 
 <script>
 	var timeSelected = "12:00";
@@ -394,7 +404,7 @@
 									e.addClass('occupied');
 									if (sch[j][i*2 + k] == 1) {
 										e.addClass('order');
-										<% if (mode.equals("manager-view") || mode.equals("manager-edit")) { %>
+									<% if (mode.equals("manager-view") || mode.equals("manager-edit")) { %>
 										e.addClass('clickable');
 										arrIndex = schVis[j][i*2 + k];
 										e.prop("title", arr[arrIndex][3] + ", " + arr[arrIndex][4]);
@@ -404,7 +414,7 @@
 										e.on('click', function(ev) {
 											window.location.href = "manager-visit-edit.jsp?id=" + $(this).data("visitId");
 										})
-										<% } %>
+									<% } %>
 									}
 								}
 							}
