@@ -114,7 +114,7 @@ td.selected {
 }
 
 td.order {
-	background-color: #8080ff;
+	/*background-color: #8080ff;*/
 }
 
 td.conflict {
@@ -125,46 +125,74 @@ td.clickable {
 	cursor: pointer;
 }
 
-td.visit-status-0 {
-	color: yellow;
+div.visit-status-0 {
+	border-color: yellow !important;
 }
 
-td.visit-status-1 {
-	color: green;
+div.visit-status-1 {
+	border-color: green !important;
 }
 
-td.visit-status-2 {
-	color: grey;
+div..visit-status-2 {
+	border-color: grey !important;
 }
 
-td.visit-status-3 {
-	color: blue;
+div.visit-status-3 {
+	border-color: blue !important;
 }
 
-td.visit-status-4 {
-	color: red;
+div.visit-status-4 {
+	border-color: red !important;
 }
 
 td.signle-cell {
-	text-align: center;
-	border-left: solid 1px black !important;
-	border-right: solid 1px black !important;
+	padding: 10px 0px !important;
 }
 
 td.middle-cell {
-	text-align: center;
+	padding: 10px 0px 10px 0px !important;
 	border-left: none !important;
 	border-right: none !important;
 }
 
 td.start-cell {
-	text-align: center;
-	border-left: solid 1px black !important;
+	padding: 10px 0px 10px 6px !important;
 	border-right: none !important;
 }
 
 td.end-cell {
-	text-align: center;
+	padding: 10px 6px 10px 0px !important;
 	border-left: none !important;
-	border-right: solid 1px black !important;
+}
+
+div.signle-cell {
+	display: block;
+	border: 4px solid;
+	border-radius: 4px;
+	height: 100%;
+	width: 100%;
+}
+
+div.middle-cell {
+	display: block;
+	border: 4px solid;
+	border-radius: 0px;
+	height: 100%;
+	width: 100%;
+}
+
+div.start-cell {
+	display: block;
+	border: 4px solid;
+	border-radius: 4px 0px 0px 4px;
+	height: 100%;
+	width: 100%;
+}
+
+div.end-cell {
+	display: block;
+	border: 4px solid;
+	border-radius: 0px 4px 4px 0px;
+	height: 100%;
+	width: 100%;
 }

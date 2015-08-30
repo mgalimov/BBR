@@ -8,8 +8,9 @@
 			<t:modal cancelButtonLabel="LBL_CANCEL_CHANGES" processButtonLabel="LBL_SAVE_DATA" title="LBL_EDIT_FINAL_PRICE" id="enterFinalPrice">
 				<t:card-item label="LBL_FINAL_PRICE" type="text" field="finalPrice"/>
 			</t:modal>
-			<t:toolbar-item label="LBL_APPROVE_VISIT" id="approveButton" accent="btn-info" condition="obj.status==0"></t:toolbar-item>
-			<t:toolbar-item label="LBL_DISAPPROVE_VISIT" id="disapproveButton" accent="btn-warning" condition="obj.status==0"></t:toolbar-item>
+			<t:toolbar-item label="LBL_APPROVE_VISIT" id="approveButton" accent="btn-info" condition="obj.status==0 || obj.status==2"></t:toolbar-item>
+			<t:toolbar-item label="LBL_DISAPPROVE_VISIT" id="disapproveButton" accent="btn-warning" condition="obj.status==0 || obj.status==2"></t:toolbar-item>
+			<t:toolbar-item label="LBL_CANCEL_VISIT" id="cancelVisitButton" accent="btn-danger" condition="obj.status<=1"></t:toolbar-item>
 			<t:toolbar-item label="LBL_CLOSE_VISIT" id="closeVisitButton" accent="btn-success" condition="obj.status<=1"></t:toolbar-item>
 			<t:card-item label="LBL_POS" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes" isDisabled="readonly"/>
 			<t:card-item label="LBL_DATE_TIME" type="datetime" field="timeScheduled" />
@@ -55,33 +56,31 @@
 		}
 
 		$("#approveButton").click(function() {
-			idParam = getUrlParameter('id');
-			if (idParam && idParam != 'new') {
-				$.ajax({
-		        	url: 'BBRVisits',
-		        	data: {
-		        		operation: 'approve',
-		        		visitId: idParam
-		        	}
-		        });									
-				window.location.href = window.location.href; 
-			}					
+			performOperation('approve');
 		});
 		
 		$("#disapproveButton").click(function() {
+			performOperation('disapprove');
+		});
+		
+		$("#cancelVisitButton").click(function() {
+			performOperation('cancelVisit');
+		});
+		
+		function performOperation(operation) {
 			idParam = getUrlParameter('id');
 			if (idParam && idParam != 'new') {
 				$.ajax({
 		        	url: 'BBRVisits',
 		        	data: {
-		        		operation: 'disapprove',
+		        		operation: operation,
 		        		visitId: idParam
 		        	}
 		        });									
 				window.location.href = window.location.href; 
-			}					
-		});
-
+			}			
+		}
+		
 		$("#closeVisitButton").click(function() {
 			idParam = getUrlParameter('id');
 			if (idParam && idParam != 'new') {

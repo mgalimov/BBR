@@ -50,6 +50,8 @@
 <jsp:body>
 		<t:card title="LBL_EDIT_TURN_TITLE" gridPage="manager-turn-list.jsp" method="BBRTurns">
 			<t:toolbar-item label="LBL_GUESS_TURN_BTN" id="guessTurnBtn" />
+			<t:card-item label="LBL_POS" field="pos" type="reference" 
+						 referenceFieldTitle="title" referenceMethod="BBRPoSes"/>
 			<t:card-item label="LBL_SPECIALIST" field="specialist" type="reference" 
 						 referenceFieldTitle="name" referenceMethod="BBRSpecialists"
 						 defaultValue="${specId}" defaultDisplay="${specName}"/>
@@ -63,6 +65,10 @@
 
 <script>
 	$(document).ready(function () {
+		specialistSetConstrains = function () {
+			return $("#posinput").val();
+		}
+		
 		$("#guessTurnBtn").click(function () {
 			specId = $("#specialistinput").val();
 			$.get(
@@ -78,5 +84,26 @@
 				$("#endTimeinput").val(s[2]);
 			});
 		});
+		
+		posId = $("#posinput").val();
+		
+		$("#posinput")[0].selectize.on("load", function () {
+			var inp = $("#posinput")[0].selectize;
+			firstOptionIndex = Object.keys(inp.options)[0];
+			inp.setValue(inp.options[firstOptionIndex].id);
+		});
+		
+		$("#posinput").on("change", posChange);
+		
+		function posChange() {
+			newPosId = $("#posinput").val();
+			if (newPosId != posId) {
+				posId = newPosId;
+				inp = $("#specialistinput")[0].selectize;
+				inp.clear();
+				inp.clearOptions();
+				inp.load(specialistLoadInitialData);
+			}
+		}
 	});
 </script>

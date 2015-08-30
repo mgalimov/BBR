@@ -369,8 +369,18 @@
 					for (j = 0; j < specs.length; j++)
 						sch[j][i] = "o"; 
 
-				$("td.occupied").removeClass('occupied');
-				$("td.order").removeClass('order');
+				$("td.occupied").html("<small>&nbsp;</small>")
+					.removeClass('occupied')
+					.removeClass("start-cell")
+					.removeClass("end-cell")
+					.removeClass("middle-cell")
+					.removeClass("single-cell");
+				$("td.order").html("<small>&nbsp;</small>")
+					.removeClass('order')
+					.removeClass("start-cell")
+					.removeClass("end-cell")
+					.removeClass("middle-cell")
+					.removeClass("single-cell");
 
 				for (i = 0; i < specs.length; i++) {
 					if (specs[i][3] == true)
@@ -412,16 +422,14 @@
 							if (schVal.length > 0) {
 								e = $("#sp"+specs[j][0]+"_oc"+i+"_"+(3*k)+"0");
 								if (e.length > 0) {
-									e.addClass('occupied');
 									if (schVal != "o") {
+										//e.addClass('occupied');
 										e.addClass('order');
+										arrIndex = schVis[j][i*2 + k];
+										e.addClass(schVal + "-cell");
+										e.html("<div class='"+schVal+"-cell visit-status-"+arr[arrIndex][6]+"'></div>");
 									<% if (mode.equals("manager-view") || mode.equals("manager-edit")) { %>
 										e.addClass('clickable');
-										arrIndex = schVis[j][i*2 + k];
-										e.html("<span class='glyphicon glyphicon-stop' aria-hidden='true'></span>");
-										e.addClass(schVal + "-cell");
-										e.addClass("visit-status-" + arr[arrIndex][6]);
-										
 										title = arr[arrIndex][3] + ", " + arr[arrIndex][4];
 										e.prop("title", title);
 										e.data("visitId", arr[arrIndex][5]);
@@ -431,7 +439,8 @@
 											window.location.href = "manager-visit-edit.jsp?id=" + $(this).data("visitId");
 										})
 									<% } %>
-									}
+									} else
+										e.addClass('occupied');
 								}
 							}
 						}
@@ -473,5 +482,13 @@
  	 	$("#timeScheduledinput").val(dtString);
  	 	$("#specinput").val(specSelected);
 	}
- 	
+
+<% if (mode.equals("manager-edit")) { %>	
+	procedureSetConstrains = function () {
+		return $("#posinput").val();
+	}
+<%
+}
+%>	 	
+
 </script>

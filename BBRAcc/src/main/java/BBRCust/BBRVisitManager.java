@@ -200,7 +200,13 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 			update(visit);
 		}		
 	}
-	
+
+	public void cancel(BBRVisit visit) {
+		if (visit != null) {
+			visit.setStatus(BBRVisitStatus.VISSTATUS_CANCELLED);
+			update(visit);
+		}		
+	}
 	public class BBRVisitor extends BBRDataElement{
 		public String id;
 		public String userName;

@@ -35,7 +35,9 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 		BBRContext context = BBRContext.getContext(request);
 		int visitStep = context.getLastVisitStep();
 		
-		if (params.get("formMode").equals("manager-edit")) {
+		String formMode = params.get("formMode");
+		
+		if (formMode != null && formMode.equals("manager-edit")) {
 			try {
 				String userName = params.get("userName");
 				String userContacts = params.get("userContacts");
@@ -263,6 +265,11 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			Long visitId = Long.parseLong(params.get("visitId"));
 			BBRVisit visit = manager.findById(visitId);
 			manager.close(visit);
+		} else
+		if (operation.equals("cancelVisit")) {
+			Long visitId = Long.parseLong(params.get("visitId"));
+			BBRVisit visit = manager.findById(visitId);
+			manager.cancel(visit);
 		}
 
 		return "";

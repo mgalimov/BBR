@@ -124,12 +124,17 @@ public class BBRTurns extends BBRBasicServlet<BBRTurn, BBRTurnManager> {
 		}
 		
 		String specId = (String)context.get("spec");
-		if (specId != null && !specId.isEmpty())
-			where += " and specialist.id = " + specId;
-		
+		if (specId != null && !specId.isEmpty()) {
+			if (!where.isEmpty())
+				where += " and ";
+			where += "specialist.id = " + specId;
+		}
+			
 		if (context.get("turnsList") == null) {
 			SimpleDateFormat sdf = new SimpleDateFormat(BBRUtil.fullDateFormat);
-			where += " and date >= '" +  sdf.format(new Date()) + "'";
+			if (!where.isEmpty())
+				where += " and ";
+			where += "date >= '" +  sdf.format(new Date()) + "'";
 		}
 		
 		return manager.list(pageNumber, pageSize, where, BBRContext.getOrderBy(sortingFields, fields)).toJson();
