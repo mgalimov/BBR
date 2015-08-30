@@ -133,7 +133,7 @@ div.visit-status-1 {
 	border-color: green !important;
 }
 
-div..visit-status-2 {
+div.visit-status-2 {
 	border-color: grey !important;
 }
 
@@ -145,8 +145,8 @@ div.visit-status-4 {
 	border-color: red !important;
 }
 
-td.signle-cell {
-	padding: 10px 0px !important;
+td.single-cell {
+	padding: 10px 2px !important;
 }
 
 td.middle-cell {
@@ -165,7 +165,7 @@ td.end-cell {
 	border-left: none !important;
 }
 
-div.signle-cell {
+div.single-cell {
 	display: block;
 	border: 4px solid;
 	border-radius: 4px;
