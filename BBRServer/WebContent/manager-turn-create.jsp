@@ -89,20 +89,36 @@
 		
 		$("#posinput")[0].selectize.on("load", function () {
 			var inp = $("#posinput")[0].selectize;
+			var inp2 = $("#specialistinput")[0].selectize;
+
 			firstOptionIndex = Object.keys(inp.options)[0];
 			inp.setValue(inp.options[firstOptionIndex].id);
 		});
 		
-		$("#posinput").on("change", posChange);
+		firstTimeSpecLoad = true;
 		
-		function posChange() {
-			newPosId = $("#posinput").val();
-			if (newPosId != posId) {
-				posId = newPosId;
-				inp = $("#specialistinput")[0].selectize;
+		$("#specialistinput")[0].selectize.on("load", function () {
+			var inp = $("#specialistinput")[0].selectize;
+			
+			if (firstTimeSpecLoad) {
+				firstTimeSpecLoad = false;
 				inp.clear();
 				inp.clearOptions();
 				inp.load(specialistLoadInitialData);
+			}
+		});
+		
+		$("#posinput").on("change", posChange);
+		
+		function posChange(newPosId) {
+			if (newPosId != posId) {
+				posId = newPosId;
+				var inp = $("#specialistinput")[0].selectize;
+				if (inp.loading == 0) {
+					inp.clear();
+					inp.clearOptions();
+					inp.load(specialistLoadInitialData);
+				}
 			}
 		}
 	});
