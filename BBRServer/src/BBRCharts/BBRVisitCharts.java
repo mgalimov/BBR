@@ -13,14 +13,13 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 	protected String getChartData(String indicator, String type,
 			  BBRParams params, HttpServletRequest request, 
 			  HttpServletResponse response) {
-		return '['+
-				'["Employee Name", "Salary"],'+
-				'["Mike", {v:22500, f:"22,500"}],'+
-				'["Bob", 35000],'+
-				'["Alice", 44000],'+
-				'["Frank", 27000],'+
-				'["Floyd", 92000],'+
-				'["Fritz", 18500]'+
-			   ']';
+		return "[[\"Employee Name\", \"Salary\"],"+
+				"[\"Mike\", {\"v\":22500, \"f\":\"22,500\"}],"+
+				"[\"Bob\", 35000],"+
+				"[\"Alice\", 44000],"+
+				"[\"Frank\", 27000],"+
+				"[\"Floyd\", 92000],"+
+				"[\"Fritz\", 18500]"+
+			   "]";
 	}
 }

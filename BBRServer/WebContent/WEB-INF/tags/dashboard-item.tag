@@ -7,17 +7,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <% BBRContext context = BBRContext.getContext(request); %>
 
-<c:set var="items" scope="request" value="${indicator}${type}chart();
+<c:set var="items" scope="request" value="${items}${indicator}${type}chart();
 "/>
-
-<div class="panel panel-default">
-  <div class="panel-heading">
-  	<h3 class="panel-title">${context.gs(title)}</h3>
-  </div>
-  <div class="panel-body">
-  	<div id="${indicator}_${type}_chart"></div>
-  </div>
-</div>
+<div id="${indicator}_${type}_chart" class="dashboard"></div>
 	
 <script>
 	function ${indicator}${type}chart () {
@@ -31,7 +23,7 @@
 			var dt = $.parseJSON(data);
 			var gdt = google.visualization.arrayToDataTable(dt, false);
 			var chart = new google.visualization.PieChart(document.getElementById("${indicator}_${type}_chart"));
-	        chart.draw(gdt, options);
+	        chart.draw(gdt);
 		});
 	};
 </script>

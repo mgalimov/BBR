@@ -196,3 +196,10 @@ div.end-cell {
 	height: 100%;
 	width: 100%;
 }
+
+div.dashboard {
+	display: block;
+	width: 30%;
+	height: 300px;
+	border: solid 1px grey;
+}
