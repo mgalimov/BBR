@@ -133,8 +133,14 @@ public class BBRContext {
 			return getSignInPage();
 
 		if (user.getRole() == BBRUser.BBRUserRole.ROLE_BBR_OWNER)
-			return "admin-index.jsp";
-		
+			return "system-dashboard.jsp";
+
+		if (user.getRole() == BBRUser.BBRUserRole.ROLE_SHOP_ADMIN)
+			return "admin-dashboard.jsp";
+
+		if (user.getRole() == BBRUser.BBRUserRole.ROLE_POS_ADMIN)
+			return "manager-dashboard.jsp";
+
 		if (user.getApproved())
 			return getUserProfilePage();
 		else

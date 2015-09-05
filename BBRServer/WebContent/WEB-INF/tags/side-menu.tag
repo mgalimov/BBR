@@ -2,6 +2,15 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:nav>
+	<t:nav-group title="" level="system">
+		<t:nav-item href="system-dashboard.jsp" title="LBL_DASHBOARD_MENU" />
+	</t:nav-group>
+	<t:nav-group title="" level="admin">
+		<t:nav-item href="admin-dashboard.jsp" title="LBL_DASHBOARD_MENU" />
+	</t:nav-group>
+	<t:nav-group title="" level="manager">
+		<t:nav-item href="manager-dashboard.jsp" title="LBL_DASHBOARD_MENU" />
+	</t:nav-group>
 	<t:nav-group title="LBL_SYSTEM_ADMINISTRATION_MENU" level="system">
 		<t:nav-item href="system-user-list.jsp" title="LBL_USERS_MENU" />
 		<t:nav-item href="system-shop-list.jsp" title="LBL_SHOPS_MENU" />
