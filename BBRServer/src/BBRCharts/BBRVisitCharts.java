@@ -21,7 +21,7 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 		
 		if (indicator.equals("visitsByPeriod")) {
 			String[][] cols = {
-					{"Date", BBRChartDataTypes.BBR_CHART_DATE},
+					{"Date", BBRChartDataTypes.BBR_CHART_STRING},
 					{"Visits", BBRChartDataTypes.BBR_CHART_NUMBER}
 			};
 			
@@ -29,12 +29,12 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 			//mgr.getChartData();
 			
 			Object[][][] rows = {
-					{{"Mike"}, {22500, "22,500"}, {10000}},
-					{{"Bob"}, {35000, "35,000"}, {10000}},
-					{{"Alice"}, {44000}, {10000}},
-					{{"Frank"}, {27000}, {10000}},
-					{{"Floyd"}, {92000}, {10000}},
-					{{"Fritz"}, {18500}, {10000}}
+					{{"Mike"}, {22500, "22,500"}},
+					{{"Bob"}, {35000, "35,000"}},
+					{{"Alice"}, {44000}},
+					{{"Frank"}, {27000}},
+					{{"Floyd"}, {92000}},
+					{{"Fritz"}, {18500}}
 			};
 			BBRChartData data = new BBRChartData(cols, rows);
 			return data.toJson();
