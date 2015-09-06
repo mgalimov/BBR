@@ -5,7 +5,8 @@
 
 <% BBRContext context = BBRContext.getContext(request); %>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<c:set var="items" scope="request" value="${''}"/>
+<c:set var="items" scope="request" value=""/>
+<c:set var="chartpackages" scope="request" value=""/>
 
 <div class="row">
 	<h3>${context.gs(title).concat(titleModifier)}</h3>
@@ -13,7 +14,7 @@
 </div> 
 
 <script>
-	google.load('visualization', '1.0', {'packages':['corechart']});
+	google.load('visualization', '1.0', {'packages':[${chartpackages}]});
 	google.setOnLoadCallback(drawCharts);
 	function drawCharts() {
 		${items}

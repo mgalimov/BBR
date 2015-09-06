@@ -31,14 +31,18 @@ public class BBRDataElementSerializer implements JsonSerializer<BBRDataElement>{
 	    			else
 	    				fieldName = ann.fieldName(); 
 	    			try {
-	    				if (ann.format().equals(""))
-    						j.add(fieldName, gson.toJsonTree(field.get(src)));
+	    				if (ann.format().equals("")) {
+	    					Object val = field.get(src);
+	    					if (val != null)
+	    						j.add(fieldName, gson.toJsonTree(val));
+	    				}
     					else
 	    					if (java.util.Date.class.isAssignableFrom(field.getType())) {
 	    						String s = null;
-	    						if (field.get(src) != null) {
+	    						Object val = field.get(src);
+		    					if (val != null) {
 		    				 		SimpleDateFormat df = new SimpleDateFormat(ann.format());
-		    						s = df.format(field.get(src));
+		    						s = df.format(val);
 	    						}
 	    						j.addProperty(fieldName, s);
 	    					}

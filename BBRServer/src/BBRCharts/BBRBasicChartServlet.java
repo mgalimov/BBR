@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import BBR.BBRChartPeriods;
 import BBRClientApp.BBRContext;
 import BBRClientApp.BBRParams;
 
@@ -26,7 +27,9 @@ public abstract class BBRBasicChartServlet extends HttpServlet {
 			BBRParams params = new BBRParams(request.getQueryString());
 			String type = params.get("type");
 			String indicator = params.get("indicator");
-			respText = getChartData(indicator, type, params, request, response);
+			String options = params.get("options");
+			BBRChartPeriods periods = new BBRChartPeriods(params.get("periods"));
+			respText = getChartData(indicator, type, options, periods, params, request, response);
 		} catch (Exception ex) {
 			respText = ex.getMessage();
 			if (context != null)
@@ -39,7 +42,7 @@ public abstract class BBRBasicChartServlet extends HttpServlet {
 
 	}
 	
-	protected String getChartData(String indicator, String type,
+	protected String getChartData(String indicator, String type, String options, BBRChartPeriods periods,
 								  BBRParams params, HttpServletRequest request, 
 								  HttpServletResponse response) {
 		return "";

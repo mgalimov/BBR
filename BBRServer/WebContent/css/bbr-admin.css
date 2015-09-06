@@ -199,7 +199,9 @@ div.end-cell {
 
 div.dashboard {
 	display: block;
-	width: 30%;
 	height: 300px;
-	border: solid 1px grey;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    border-color: #ddd;
 }

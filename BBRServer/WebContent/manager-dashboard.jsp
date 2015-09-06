@@ -6,8 +6,8 @@
 	<jsp:body>
 		<t:dashboard title="LBL_DASHBOARD_TITLE">
 		  	<t:dashboard-group title="LBL_DASHBOARD_TITLE">
-		  		<t:dashboard-item type="pie" title="LBL_DASHBOARD_TASKS" method="BBRVisitCharts" indicator="xyz"/>
-		  		<t:dashboard-item type="pie" title="LBL_DASHBOARD_TASKS" method="BBRVisitCharts" indicator="xyz2"/>
+		  		<t:dashboard-item type="pie" title="LBL_DASHBOARD_TASKS" method="BBRVisitCharts" indicator="visitsByPeriod"/>
+		  		<t:dashboard-item type="bar" title="LBL_DASHBOARD_TASKS" method="BBRVisitCharts" indicator="visitsByPeriod"/>
 		  	</t:dashboard-group>
 		</t:dashboard>
 	</jsp:body>
