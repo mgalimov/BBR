@@ -50,22 +50,23 @@
 <script>
 	google.load('visualization', '1.0', {'packages':[${chartpackages}]});
 	google.setOnLoadCallback(drawCharts);
-	moment.locale('<%=context.getLocaleString()%>');
-
-	locale = {
-			"format": "YYYY-MM-DD",
-	        "separator": " - ",
-	        "applyLabel": "${context.gs('LBL_DATERANGE_APPLY_BTN')}",
-	        "cancelLabel": "${context.gs('LBL_DATERANGE_CANCEL_BTN')}",
-	        "fromLabel": "${context.gs('LBL_DATERANGE_FROM')}",
-	        "toLabel": "${context.gs('LBL_DATERANGE_TO')}",
-	        "customRangeLabel": "${context.gs('LBL_DATERANGE_CUSTOM')}",
-	        "daysOfWeek": moment.weekdaysShort(),
-	        "monthNames": moment.months(),
-	        "firstDay": 1
-	    };
 	
 	$(document).ready(function () {
+		moment.locale('<%=context.getLocaleString()%>');
+
+		locale = {
+				"format": "YYYY-MM-DD",
+		        "separator": " - ",
+		        "applyLabel": "${context.gs('LBL_DATERANGE_APPLY_BTN')}",
+		        "cancelLabel": "${context.gs('LBL_DATERANGE_CANCEL_BTN')}",
+		        "fromLabel": "${context.gs('LBL_DATERANGE_FROM')}",
+		        "toLabel": "${context.gs('LBL_DATERANGE_TO')}",
+		        "customRangeLabel": "${context.gs('LBL_DATERANGE_CUSTOM')}",
+		        "daysOfWeek": moment.weekdaysShort(),
+		        "monthNames": moment.months(),
+		        "firstDay": 1
+		    };
+		
 		$('#baseDatePicker').daterangepicker({
 			autoApply: true,
 			locale: locale
