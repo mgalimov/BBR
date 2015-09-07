@@ -35,7 +35,10 @@
 		<div class="form-group">
 	       	<input type='text' class="form-control" name="compareToDatePicker" id="compareToDatePicker" disabled="disabled" />
 	    </div>
-	    &nbsp;
+	    &nbsp;&nbsp;&nbsp;
+	    <div class="form-group">
+	       	<button type='button' class="btn btn-primary" name="compareToDatePicker" id="applyBtn">${context.gs("LBL_DATERANGE_APPLY_BTN")}</button>
+	    </div>
 	 </form>
 </div> 
 
@@ -50,13 +53,16 @@
 <script>
 	google.load('visualization', '1.0', {'packages':[${chartpackages}]});
 	google.setOnLoadCallback(drawCharts);
+	var periods = null;
 	
 	$(document).ready(function () {
+		
+		
 		moment.locale('<%=context.getLocaleString()%>');
 
 		locale = {
 				"format": "YYYY-MM-DD",
-		        "separator": " - ",
+		        "separator": " — ",
 		        "applyLabel": "${context.gs('LBL_DATERANGE_APPLY_BTN')}",
 		        "cancelLabel": "${context.gs('LBL_DATERANGE_CANCEL_BTN')}",
 		        "fromLabel": "${context.gs('LBL_DATERANGE_FROM')}",
@@ -71,14 +77,31 @@
 			autoApply: true,
 			locale: locale
 		});
+		
 		$('#compareToDatePicker').daterangepicker({
 			autoApply: true,
 			locale: locale
 		});
 		
 		$("#compareToCheckbox").change(function () {
-			if (this.checked)
-				$("#compareToDatePicker").removeAttr("disabled");
+			if (this.checked) {
+				var dtp = $("#baseDatePicker").data("daterangepicker");
+				var compEl = $("#compareToDatePicker");
+				
+				compEl.removeAttr("disabled");
+				range = dtp.endDate.diff(dtp.startDate, "days");
+				endDate = moment(dtp.startDate);
+				endDate.subtract(1, "days");
+				startDate = moment(endDate);
+				startDate.subtract(range, "days");
+				
+				compEl.daterangepicker({
+					autoApply: true,
+					locale: locale,
+					startDate: startDate,
+					endDate: endDate
+				})
+			}
 			else
 				$("#compareToDatePicker").attr("disabled", "disabled");
 		});
@@ -86,9 +109,41 @@
 		$("#detailSelect").selectize({
 		    openOnFocus: true
 		 });
+		
+		$("#applyBtn").click(function () {
+			setPeriods();
+			drawCharts();
+		});
+		
+		setPeriods();
 	});
 	
 	function drawCharts() {
 		${items}
+	}
+	
+	function setPeriods() {
+		var baseDtp = $("#baseDatePicker").data("daterangepicker");
+		
+		var compToStartDate = null;
+		var compToEndDate = null;
+		
+		if (document.getElementById("compareToCheckbox").checked) {
+			var compDtp = $("#compareToDatePicker").data("daterangepicker");
+			compToStartDate = compDtp.startDate.format("YYYY-MM-DD");
+			compToEndDate = compDtp.endDate.format("YYYY-MM-DD");
+		}
+		
+		var startDate = baseDtp.startDate.format("YYYY-MM-DD");
+		var endDate = baseDtp.endDate.format("YYYY-MM-DD");
+		var detail = $("#detailSelect").val();
+		
+		periods = {
+			startDate: startDate,
+			endDate: endDate,
+			detail: detail,
+			compareToStartDate: compToStartDate,
+			compareToEndDate: compToEndDate
+		};
 	}
 </script>

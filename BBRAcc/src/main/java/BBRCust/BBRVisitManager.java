@@ -10,6 +10,7 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import BBR.BBRChartPeriods;
 import BBR.BBRDataElement;
 import BBR.BBRDataManager;
 import BBR.BBRDataSet;
@@ -333,6 +334,32 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		String where = "pos.id = " + pos.getId() + " and status = " + BBRVisitStatus.VISSTATUS_INITIALIZED;
 		
 		return list(pageNumber, pageSize, where, orderBy);
+	}
+
+	// Charts
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getVisitsByPeriod(BBRChartPeriods period) {
+		boolean tr = BBRUtil.beginTran(sessionIndex);
+		Session session = BBRUtil.getSession(sessionIndex);
+		
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
+		
+		String[] functions = {"timeScheduled", 
+					"HOUR(timeScheduled), DAY(timeScheduled), MONTH(timeScheduled), YEAR(timeScheduled)", 
+					"'', DAY(timeScheduled), MONTH(timeScheduled), YEAR(timeScheduled)", 
+					"'', '', MONTH(timeScheduled), YEAR(timeScheduled)", 
+					"'', '', '', YEAR(timeScheduled)"};
+		
+		Query query = session.createQuery("select " + functions[(int)period.detail] + ", count(*) as visits" + 
+		                                  "  from BBRVisit " +  
+										  " where timeScheduled >= '"+df.format(period.startDate)+"'" + 
+		                                  "   and timeScheduled <= '"+df.format(period.endDate)+"'" +
+										  " group by " + functions[(int)period.detail]);
+       
+		List<Object[]> list = query.list();
+		BBRUtil.commitTran(sessionIndex, tr);
+		
+		return list;
 	}
 	
 }

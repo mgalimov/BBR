@@ -66,6 +66,20 @@ public class BBRChartData extends BBRDataElement {
 		
 		return r;
 	}
+
+	public BBRChartRow addRow(Object... cells) {
+		BBRChartRow r = new BBRChartRow();
+		
+		for(int i = 0; i < cells.length; i++){
+			BBRChartCell cell;
+			cell = new BBRChartCell(cells[i]);
+			r.c.add(cell);
+	    }
+		rows.add(r);
+		
+		return r;
+	}
+
 	
 	public void addRows(Object[][]... rows) {
 		for(int i = 0; i < rows.length; i++){

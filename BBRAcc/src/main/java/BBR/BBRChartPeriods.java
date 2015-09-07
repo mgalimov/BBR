@@ -3,20 +3,20 @@ package BBR;
 import java.util.Date;
 
 public class BBRChartPeriods {
-	Date startDate = null;
-	Date endDate = null;
-	int detail = 3; 
-	Date compareToStartDate = null;
-	Date compareToEndDate = null;
+	public Date startDate = null;
+	public Date endDate = null;
+	public Integer detail = 2; 
+	public Date compareToStartDate = null;
+	public Date compareToEndDate = null;
 	
 	public class BBRChartDetail {
-		final static int BBR_CHART_DETAIL_HOUR = 1;
-		final static int BBR_CHART_DETAIL_DAY = 2;
-		final static int BBR_CHART_DETAIL_MONTH = 3;
-		final static int BBR_CHART_DETAIL_YEAR = 4;
+		public final static int BBR_CHART_DETAIL_HOUR = 1;
+		public final static int BBR_CHART_DETAIL_DAY = 2;
+		public final static int BBR_CHART_DETAIL_MONTH = 3;
+		public final static int BBR_CHART_DETAIL_YEAR = 4;
 	}
 	
-	public BBRChartPeriods (Date startDate, Date endDate, int detail, Date compareToStartDate, Date compareToEndDate) {
+	public BBRChartPeriods (Date startDate, Date endDate, Integer detail, Date compareToStartDate, Date compareToEndDate) {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.detail = detail;
@@ -24,7 +24,7 @@ public class BBRChartPeriods {
 		this.compareToEndDate = compareToEndDate;
 	}
 	
-	public BBRChartPeriods (Date startDate, Date endDate, int detail) {
+	public BBRChartPeriods (Date startDate, Date endDate, Integer detail) {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.detail = detail;
@@ -33,17 +33,6 @@ public class BBRChartPeriods {
 	public BBRChartPeriods (Date startDate, Date endDate) {
 		this.startDate = startDate;
 		this.endDate = endDate;
-	}
-	
-	public BBRChartPeriods (String periods) {
-		if (periods == null) return;
-		
-		BBRChartPeriods p = BBRUtil.gson().fromJson(periods, BBRChartPeriods.class);
-		this.startDate = p.startDate;
-		this.endDate = p.endDate;
-		this.detail = p.detail;
-		this.compareToStartDate = p.compareToStartDate;
-		this.compareToEndDate = p.compareToEndDate;
 	}
 	
 	public BBRChartPeriods () {

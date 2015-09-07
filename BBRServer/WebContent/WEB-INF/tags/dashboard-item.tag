@@ -31,6 +31,7 @@
 			data: {
 				type: "${type}",
 				indicator: "${indicator}",
+				periods: periods,
 				options: "${options}"
 			}
 		}).done(function (data) {
