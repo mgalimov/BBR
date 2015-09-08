@@ -338,7 +338,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 
 	// Charts
 	@SuppressWarnings("unchecked")
-	public List<Object[]> getVisitsByPeriod(BBRChartPeriods period) {
+	public List<Object[]> getVisitsByPeriod(Date startDate, Date endDate, int detail) {
 		boolean tr = BBRUtil.beginTran(sessionIndex);
 		Session session = BBRUtil.getSession(sessionIndex);
 		
@@ -350,11 +350,11 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 					"'', '', MONTH(timeScheduled), YEAR(timeScheduled)", 
 					"'', '', '', YEAR(timeScheduled)"};
 		
-		Query query = session.createQuery("select " + functions[(int)period.detail] + ", count(*) as visits" + 
+		Query query = session.createQuery("select " + functions[detail] + ", count(*) as visits" + 
 		                                  "  from BBRVisit " +  
-										  " where timeScheduled >= '"+df.format(period.startDate)+"'" + 
-		                                  "   and timeScheduled <= '"+df.format(period.endDate)+"'" +
-										  " group by " + functions[(int)period.detail]);
+										  " where timeScheduled >= '"+df.format(startDate)+"'" + 
+		                                  "   and timeScheduled <= '"+df.format(endDate)+"'" +
+										  " group by " + functions[detail]);
        
 		List<Object[]> list = query.list();
 		BBRUtil.commitTran(sessionIndex, tr);

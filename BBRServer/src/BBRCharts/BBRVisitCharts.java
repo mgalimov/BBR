@@ -25,17 +25,6 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 			  	HttpServletResponse response) {
 		
 		if (indicator.equals("visitsByPeriod")) {
-			BBRChartData data = new BBRChartData();
-			
-			String[][] cols = {
-					{"Date", BBRChartDataTypes.BBR_CHART_STRING},
-					{"Visits", BBRChartDataTypes.BBR_CHART_NUMBER}
-			};
-			data.addCols(cols);
-			
-			BBRVisitManager mgr = new BBRVisitManager();
-			List<Object[]> list = mgr.getVisitsByPeriod(period);
-			
 			String[] delim = {"-", "-", "-"};
 			
 			if (period.detail == BBRChartDetail.BBR_CHART_DETAIL_DAY)
@@ -50,11 +39,36 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 				delim[2] = "";
 			}
 			
-			for(Object[] line: list) {
-				data.addRow(line[3].toString() + delim[2] + 
-							line[2].toString() + delim[1] +
-							line[1].toString() + delim[0] +
-							line[0].toString(), line[4]);
+			BBRChartData data = new BBRChartData();
+			
+			String[][] cols = {
+					{"Date", BBRChartDataTypes.BBR_CHART_STRING},
+					{"Visits", BBRChartDataTypes.BBR_CHART_NUMBER}
+			};
+			data.addCols(cols);
+			
+			BBRVisitManager mgr = new BBRVisitManager();
+			List<Object[]> list = mgr.getVisitsByPeriod(period.startDate, period.endDate, period.detail);
+			List<Object[]> listComp = null;
+
+			if (period.compareToEndDate != null) {
+				data.addCol("Visits to compare", BBRChartDataTypes.BBR_CHART_NUMBER);
+				listComp = mgr.getVisitsByPeriod(period.compareToStartDate, period.compareToEndDate, period.detail);
+			}
+			
+			for(int i = 0; i <= list.size(); i++) {
+				Object[] line = list.get(i);
+				String row1 = line[3].toString() + delim[2] + 
+						line[2].toString() + delim[1] +
+						line[1].toString() + delim[0] +
+						line[0].toString();
+				
+				if (period.compareToEndDate == null) {
+					data.addRow(row1, line[4]);
+				} else {
+					Object[] lineComp = listComp.get(i); 
+					data.addRow(row1, line[4], lineComp[4]);
+				}
 			}
 			
 			return data.toJson();
