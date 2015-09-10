@@ -56,7 +56,7 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 				listComp = mgr.getVisitsByPeriod(period.compareToStartDate, period.compareToEndDate, period.detail);
 			}
 			
-			for(int i = 0; i <= list.size(); i++) {
+			for(int i = 0; i < list.size(); i++) {
 				Object[] line = list.get(i);
 				String row1 = line[3].toString() + delim[2] + 
 						line[2].toString() + delim[1] +
