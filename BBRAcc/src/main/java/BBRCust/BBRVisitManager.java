@@ -343,19 +343,15 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		Session session = BBRUtil.getSession(sessionIndex);
 		
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
+		String pf = BBRChartPeriods.periodFunction("timeScheduled", detail);
 		
-		String[] functions = {"timeScheduled", 
-					"HOUR(timeScheduled), DAY(timeScheduled), MONTH(timeScheduled), YEAR(timeScheduled)", 
-					"'', DAY(timeScheduled), MONTH(timeScheduled), YEAR(timeScheduled)", 
-					"'', '', MONTH(timeScheduled), YEAR(timeScheduled)", 
-					"'', '', '', YEAR(timeScheduled)"};
-		
-		Query query = session.createQuery("select " + functions[detail] + ", count(*) as visits" + 
+		Query query = session.createQuery("select " + pf + ", count(*) as visits" + 
 		                                  "  from BBRVisit " +  
 										  " where timeScheduled >= '"+df.format(startDate)+"'" + 
 		                                  "   and timeScheduled <= '"+df.format(endDate)+"'" +
-										  " group by " + functions[detail]);
-       
+										  " group by " + pf + 
+										  " order by timeScheduled asc");
+
 		List<Object[]> list = query.list();
 		BBRUtil.commitTran(sessionIndex, tr);
 		

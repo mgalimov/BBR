@@ -1,6 +1,10 @@
 package BBR;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class BBRChartData extends BBRDataElement {
 	ArrayList<BBRChartCol> cols = new ArrayList<BBRChartCol>();
@@ -103,6 +107,92 @@ public class BBRChartData extends BBRDataElement {
 		public static final String BBR_CHART_DATE = "date";
 		public static final String BBR_CHART_TIME = "timeofday";
 		public static final String BBR_CHART_BOOLEAN = "boolean";
+	}
+	
+	public void importList(List<Object[]> list, List<Object[]> listComp, BBRChartPeriods period) {
+		for(int i = 0; i < list.size(); i++) {
+			Object[] line = list.get(i);
+			if (period.compareToEndDate == null) {
+				this.addRow(line);
+			} else {
+				Object[] lineCompD;
+				if (listComp != null && i < listComp.size()) {
+					Object[] lineComp = listComp.get(i);
+					line[0] = line[0] + "\n" + lineComp[0];
+					lineCompD = new Object[lineComp.length-1];
+					for (int j = 1; j < lineComp.length; j++)
+						lineCompD[j-1] = lineComp[j];
+				} else {
+					lineCompD = new Object[line.length-1];
+					for (int j = 1; j < line.length; j++)
+						lineCompD[j-1] = 0;					
+				}
+				
+				BBRChartCell[] cells = new BBRChartCell[(line.length-1)*2 + 1];
+				
+				for (int j = 0; j < line.length; j++)
+					cells[j] = new BBRChartCell(line[j]);
 
+				for (int j = 0; j < lineCompD.length; j++)					
+					cells[line.length + j] = new BBRChartCell(lineCompD[j]);
+				
+				this.addRow(cells);
+			}
+		}
+	}
+	
+	public static List<Object[]> enrichDateList(List<Object[]> list, Date startDate, Date endDate, int detail) throws Exception {
+		if (list == null) return null;
+		
+		String infmt = BBRChartPeriods.dateInFormat(detail);
+		String outfmt = BBRChartPeriods.dateOutFormat(detail);
+		int delta = BBRChartPeriods.getDelta(detail);
+       
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(startDate);
+		SimpleDateFormat idf = new SimpleDateFormat(infmt);
+		SimpleDateFormat odf = new SimpleDateFormat(outfmt);
+	
+		List<Object[]> rlist = new ArrayList<Object[]>();
+		
+		int i = 0;
+		while (calendar.getTime().before(endDate)) {
+			Date dt = null;
+
+			Calendar cdr = Calendar.getInstance();
+			if (i < list.size()) {
+				dt = idf.parse((list.get(i)[0]).toString());
+				cdr.setTime(dt);
+			}
+
+			if (dt == null || calendar.before(cdr)) {
+				Object[] line = null;
+				if (list.size() > 0)
+					line = list.get(0);
+				if (line != null) {
+					Object[] line2 = new Object[line.length];
+					line2[0] = odf.format(calendar.getTime());
+					for (int j = 1; j < line.length; j++)
+						line2[j] = 0;
+					rlist.add(line2);
+				} else {
+					Object[] line2 = {odf.format(calendar.getTime()), 0};
+					rlist.add(line2);
+				}
+				calendar.add(delta, 1);
+			} else {
+				Object[] line = list.get(i);
+				Object[] line2 = new Object[line.length];
+				line2[0] = odf.format(calendar.getTime());
+				for (int j = 1; j < line.length; j++)
+					line2[j] = line[j];
+				
+				rlist.add(line2);
+				calendar.add(delta, 1);
+				i++;
+			}
+		}
+		
+		return rlist;
 	}
 }
