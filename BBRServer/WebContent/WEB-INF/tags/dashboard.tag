@@ -20,8 +20,8 @@
 		<div class="form-group" style="width: 80px">
 	       	<select id="detailSelect" name="detailSelect" class="selectized" style="display: none">
 	       		<option value="1">${context.gs("OPT_DATE_DETAIL_HOUR")}</option>
-	       		<option value="2" selected="selected">${context.gs("OPT_DATE_DETAIL_DAY")}</option>
-	       		<option value="3">${context.gs("OPT_DATE_DETAIL_MONTH")}</option>
+	       		<option value="2">${context.gs("OPT_DATE_DETAIL_DAY")}</option>
+	       		<option value="3" selected="selected">${context.gs("OPT_DATE_DETAIL_MONTH")}</option>
 	       		<option value="4">${context.gs("OPT_DATE_DETAIL_YEAR")}</option>
 	       	</select>
 	    </div>
@@ -89,11 +89,23 @@
 				var compEl = $("#compareToDatePicker");
 				
 				compEl.removeAttr("disabled");
-				range = dtp.endDate.diff(dtp.startDate, "days");
-				endDate = moment(dtp.startDate);
-				endDate.subtract(1, "days");
-				startDate = moment(endDate);
-				startDate.subtract(range, "days");
+				var range = dtp.endDate.diff(dtp.startDate, "days");
+				var detail = $("#detailSelect").val();
+				
+				if (detail >= 3) {
+					range = Math.round(range / 30);
+					startDate = moment(dtp.startDate);
+					startDate.subtract(range, "months");
+					endDate = moment(dtp.endDate);
+					endDate.subtract(range, "months");
+				}
+				else {
+					endDate = moment(dtp.startDate);
+					endDate.subtract(1, "days");
+					startDate = moment(endDate);
+					startDate.subtract(range, "days");
+
+				}; 
 				
 				compEl.daterangepicker({
 					autoApply: true,
