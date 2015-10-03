@@ -338,17 +338,26 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 
 	// Charts
 	@SuppressWarnings("unchecked")
-	public List<Object[]> getVisitsByPeriod(Date startDate, Date endDate, int detail) {
+	public List<Object[]> getVisitsByPeriod(Date startDate, Date endDate, int detail, BBRPoS pos, BBRShop shop) {
 		boolean tr = BBRUtil.beginTran(sessionIndex);
 		Session session = BBRUtil.getSession(sessionIndex);
 		
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
 		String pf = BBRChartPeriods.periodFunction("timeScheduled", detail);
 		
+		String where = "";
+		if (pos != null)
+			where = " and pos.id = " + pos.getId();
+		else
+			if (shop != null)
+				where = "and pos.shop.id = " + shop.getId();
+		
 		Query query = session.createQuery("select " + pf + ", count(*) as visits" + 
 		                                  "  from BBRVisit " +  
 										  " where timeScheduled >= '"+df.format(startDate)+"'" + 
 		                                  "   and timeScheduled <= '"+df.format(endDate)+"'" +
+										  "   and status = " + BBRVisitStatus.VISSTATUS_PERFORMED + 
+										  where +
 										  " group by " + pf + 
 										  " order by timeScheduled asc");
 
@@ -357,5 +366,39 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		
 		return list;
 	}
-	
+
+    public String whereShop(Long shopId) {
+    	return "pos.shop.id = " + shopId;
+    }
+
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getIncomeByPeriod(Date startDate, Date endDate,
+			Integer detail, BBRPoS pos, BBRShop shop) {
+		boolean tr = BBRUtil.beginTran(sessionIndex);
+		Session session = BBRUtil.getSession(sessionIndex);
+		
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
+		String pf = BBRChartPeriods.periodFunction("timeScheduled", detail);
+		
+		String where = "";
+		if (pos != null)
+			where = " and pos.id = " + pos.getId();
+		else
+			if (shop != null)
+				where = "and pos.shop.id = " + shop.getId();
+		
+		Query query = session.createQuery("select " + pf + ", sum(finalPrice) as income" + 
+		                                  "  from BBRVisit " +  
+										  " where timeScheduled >= '"+df.format(startDate)+"'" + 
+		                                  "   and timeScheduled <= '"+df.format(endDate)+"'" +
+										  "   and status = " + BBRVisitStatus.VISSTATUS_PERFORMED + 
+										  where +
+										  " group by " + pf + 
+										  " order by timeScheduled asc");
+
+		List<Object[]> list = query.list();
+		BBRUtil.commitTran(sessionIndex, tr);
+		
+		return list;
+	};
 }

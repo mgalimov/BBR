@@ -1,17 +1,24 @@
 <%@ tag language="java" pageEncoding="UTF-8" description="Dashboard" import="BBRClientApp.BBRContext"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+
 <%@ attribute name="title" required="true" %>
 <%@ attribute name="titleModifier" %>
 
-<% BBRContext context = BBRContext.getContext(request); %>
+<% 
+	BBRContext context = BBRContext.getContext(request);
+%>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 <c:set var="items" scope="request" value=""/>
-<c:set var="chartpackages" scope="request" value=""/>
+<c:set var="chartpackages" scope="request" value="'corechart'"/>
 
 <div class="row">
 	<h3>${context.gs(title).concat(titleModifier)}</h3>
 	<form class="form-inline pull-right">
+		<span class="glyphicon glyphicon-globe"></span>&nbsp;
+		<t:select-shop-pos field="shoppos" />&nbsp;&nbsp;&nbsp;&nbsp;
+	
 		<div class="form-group">
 			<span class="glyphicon glyphicon-calendar"></span>&nbsp;
 	       	<input type='text' class="form-control" name="baseDatePicker" id="baseDatePicker"/>
@@ -56,8 +63,6 @@
 	var periods = null;
 	
 	$(document).ready(function () {
-		
-		
 		moment.locale('<%=context.getLocaleString()%>');
 
 		locale = {
@@ -72,10 +77,14 @@
 		        "monthNames": moment.months(),
 		        "firstDay": 1
 		    };
+
+		var startDate = moment();
+		startDate.subtract(3, "months");
 		
 		$('#baseDatePicker').daterangepicker({
 			autoApply: true,
-			locale: locale
+			locale: locale,
+			startDate: startDate
 		});
 		
 		$('#compareToDatePicker').daterangepicker({

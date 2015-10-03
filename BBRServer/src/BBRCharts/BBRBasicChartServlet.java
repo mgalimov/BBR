@@ -10,6 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import BBR.BBRChartPeriods;
 import BBR.BBRUtil;
+import BBRAcc.BBRPoS;
+import BBRAcc.BBRPoSManager;
+import BBRAcc.BBRShop;
+import BBRAcc.BBRShopManager;
+import BBRAcc.BBRUser.BBRUserRole;
 import BBRClientApp.BBRContext;
 import BBRClientApp.BBRParams;
 
@@ -30,6 +35,8 @@ public abstract class BBRBasicChartServlet extends HttpServlet {
 			String type = params.get("type");
 			String indicator = params.get("indicator");
 			String options = params.get("options");
+			String shopId = params.get("shopId");
+			String posId = params.get("posId");
 			
 			BBRChartPeriods periods = new BBRChartPeriods();
 			SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
@@ -44,7 +51,24 @@ public abstract class BBRBasicChartServlet extends HttpServlet {
 			if (!params.get("periods[compareToEndDate]").equals(""))
 				periods.compareToEndDate = df.parse(params.get("periods[compareToEndDate]"));
 		
-			respText = getChartData(indicator, type, options, periods, params, request, response);
+			BBRPoS pos = null;
+			BBRShop shop = null;
+
+			if (posId != null && !posId.isEmpty()) {
+				BBRPoSManager pmgr = new BBRPoSManager();
+				pos = pmgr.findById(Long.parseLong(posId));
+			} else
+				if (shopId != null && !shopId.isEmpty()) {
+					BBRShopManager smgr = new BBRShopManager();
+					shop = smgr.findById(Long.parseLong(shopId));
+				}
+
+			if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN && pos == null)
+				pos = context.user.getPos();
+			if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN && pos == null && shop == null)
+				shop = context.user.getShop();
+			
+			respText = getChartData(indicator, type, options, periods, shop, pos, params, request, response);
 		} catch (Exception ex) {
 			respText = ex.getMessage();
 			if (context != null)
@@ -58,6 +82,7 @@ public abstract class BBRBasicChartServlet extends HttpServlet {
 	}
 	
 	protected String getChartData(String indicator, String type, String options, BBRChartPeriods periods,
+								  BBRShop shop, BBRPoS pos,
 								  BBRParams params, HttpServletRequest request, 
 								  HttpServletResponse response) {
 		return "";

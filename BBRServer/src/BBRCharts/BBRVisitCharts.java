@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import BBR.BBRChartData;
 import BBR.BBRChartData.BBRChartDataTypes;
 import BBR.BBRChartPeriods;
+import BBRAcc.BBRPoS;
+import BBRAcc.BBRShop;
 import BBRClientApp.BBRParams;
 import BBRCust.BBRVisitManager;
 
@@ -17,39 +19,17 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected String getChartData(String indicator, String type, String options,
-				BBRChartPeriods period,
+				BBRChartPeriods period, BBRShop shop, BBRPoS pos,
 			  	BBRParams params, HttpServletRequest request, 
 			  	HttpServletResponse response) {
-		
 		if (indicator.equals("visitsByPeriod")) {
-			try {
-				BBRChartData data = new BBRChartData();
-				
-				String[][] cols = {
-						{"Date", BBRChartDataTypes.BBR_CHART_STRING},
-						{"Visits", BBRChartDataTypes.BBR_CHART_NUMBER}
-				};
-				data.addCols(cols);
-				
-				BBRVisitManager mgr = new BBRVisitManager();
-				List<Object[]> list = mgr.getVisitsByPeriod(period.startDate, period.endDate, period.detail);
-				list = BBRChartData.enrichDateList(list, period.startDate, period.endDate, period.detail);
-				
-				List<Object[]> listComp = null;
-				if (period.compareToEndDate != null) {
-					data.addCol("Visits to compare", BBRChartDataTypes.BBR_CHART_NUMBER);
-					listComp = mgr.getVisitsByPeriod(period.compareToStartDate, period.compareToEndDate, period.detail);
-					listComp = BBRChartData.enrichDateList(listComp, period.compareToStartDate, period.compareToEndDate, period.detail);
-				}
-				
-				data.importList(list, listComp, period);
-				
-				return data.toJson();
-			} catch (Exception ex) {
-				return "";
-			}
+			return visitsByPeriod(type, options, period, shop, pos);
 		}
-		
+
+		if (indicator.equals("incomeByPeriod")) {
+			return incomeByPeriod(type, options, period, shop, pos);
+		}
+
 		if (indicator.equals("test")) {
 			String[][] cols = {
 					{"Employee Name"},
@@ -69,4 +49,66 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 		}
 		return "";
 	}
+
+	protected String visitsByPeriod(String type, String options,
+			BBRChartPeriods period, BBRShop shop, BBRPoS pos) {
+		try {
+			BBRChartData data = new BBRChartData();
+			
+			String[][] cols = {
+					{"Date", BBRChartDataTypes.BBR_CHART_STRING},
+					{"Visits", BBRChartDataTypes.BBR_CHART_NUMBER}
+			};
+			data.addCols(cols);
+			
+			BBRVisitManager mgr = new BBRVisitManager();
+			List<Object[]> list = mgr.getVisitsByPeriod(period.startDate, period.endDate, period.detail, pos, shop);
+			list = BBRChartData.enrichDateList(list, period.startDate, period.endDate, period.detail);
+			
+			List<Object[]> listComp = null;
+			if (period.compareToEndDate != null) {
+				data.addCol("Visits to compare", BBRChartDataTypes.BBR_CHART_NUMBER);
+				listComp = mgr.getVisitsByPeriod(period.compareToStartDate, period.compareToEndDate, period.detail, pos, shop);
+				listComp = BBRChartData.enrichDateList(listComp, period.compareToStartDate, period.compareToEndDate, period.detail);
+			}
+			
+			data.importList(list, listComp, period);
+			
+			return data.toJson();
+		} catch (Exception ex) {
+			return "";
+		}
+	}
+
+	protected String incomeByPeriod(String type, String options,
+			BBRChartPeriods period, BBRShop shop, BBRPoS pos) {
+		try {
+			BBRChartData data = new BBRChartData();
+			
+			String[][] cols = {
+					{"Date", BBRChartDataTypes.BBR_CHART_STRING},
+					{"Income", BBRChartDataTypes.BBR_CHART_NUMBER}
+			};
+			data.addCols(cols);
+			
+			BBRVisitManager mgr = new BBRVisitManager();
+			List<Object[]> list = mgr.getIncomeByPeriod(period.startDate, period.endDate, period.detail, pos, shop);
+			list = BBRChartData.enrichDateList(list, period.startDate, period.endDate, period.detail);
+			
+			List<Object[]> listComp = null;
+			if (period.compareToEndDate != null) {
+				data.addCol("Income to compare", BBRChartDataTypes.BBR_CHART_NUMBER);
+				listComp = mgr.getVisitsByPeriod(period.compareToStartDate, period.compareToEndDate, period.detail, pos, shop);
+				listComp = BBRChartData.enrichDateList(listComp, period.compareToStartDate, period.compareToEndDate, period.detail);
+			}
+			
+			data.importList(list, listComp, period);
+			
+			return data.toJson();
+		} catch (Exception ex) {
+			return "";
+		}
+	}
+
 }
+

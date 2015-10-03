@@ -1,4 +1,5 @@
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +11,8 @@ import BBRAcc.BBRPoS;
 import BBRAcc.BBRPoSManager;
 import BBRAcc.BBRShop;
 import BBRAcc.BBRShopManager;
+import BBRAcc.BBRUser.BBRUserRole;
+import BBRClientApp.BBRContext;
 import BBRClientApp.BBRParams;
 
 @WebServlet("/BBRPoSes")
@@ -75,5 +78,43 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 		}
 		return null;		
 	}
+	
+	@Override
+	protected String processOperation(String operation, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+		if (operation.equals("specialList")) {
+			BBRContext context = BBRContext.getContext(request);
+			BBRShop shop = null;
+			BBRPoS pos = null;
+			
+			if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
+				shop = context.user.getShop();
+			else if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
+				pos = context.user.getPos();
+			
+			BBRPoSManager mgr = new BBRPoSManager();
+			List<Object[]> list = mgr.listSpecialWithShops(shop, pos);
 
+			Long currentShopId = -1L;
+			String res = "[";
+			for (Object[] line : list) {
+				if (context.user.getRole() >= BBRUserRole.ROLE_SHOP_ADMIN)
+					if (currentShopId != line[0]) {
+						res += "{";
+						res += "\"id\": \"s" + line[0] + "\", ";
+						res += "\"title\": \"" + line[1] + "\"";
+						res += "}, ";
+						currentShopId = (Long)line[0];
+					}
+				res += "{";
+				res += "\"id\": \"" + line[2] + "\", ";
+				res += "\"title\": \"" + line[3] + "\"";
+				res += "}, ";
+			}
+			res = res.substring(0, res.length() - 2);
+			res += "]";
+			
+			return res;
+		} else
+			return "";
+	};
 }

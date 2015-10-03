@@ -92,4 +92,28 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
     public String whereShop(Long shopId) {
     	return "shop.id = " + shopId;
     };
+        
+	@SuppressWarnings("unchecked")
+	public List<Object[]> listSpecialWithShops(BBRShop shop, BBRPoS pos) {
+        boolean tr = BBRUtil.beginTran(sessionIndex);
+        Session session = BBRUtil.getSession(sessionIndex);
+        
+		String where = "";
+		if (pos != null)
+			where = " where pos.id = " + pos.getId();
+		else
+			if (shop != null)
+				where = " where pos.shop.id = " + shop.getId();
+		
+		Query query = session.createQuery("select pos.shop.id, pos.shop.title, pos.id, pos.title" + 
+										  "  from BBRPoS pos" +  
+										  	where + 
+										  " order by pos.shop.title, pos.title asc");
+
+		List<Object[]> list = query.list();
+		
+		BBRUtil.commitTran(sessionIndex, tr);
+
+        return list;
+	}
 }
