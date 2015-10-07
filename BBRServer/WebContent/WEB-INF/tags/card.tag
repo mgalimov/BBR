@@ -19,9 +19,6 @@
 <c:set var="itemToolbar" scope="request" value="${''}"/>
 <c:set var="itemToolbarCondition" scope="request" value="${''}"/>
 
-<!-- http://www.onjava.com/pub/a/onjava/excerpt/jserverpages3_ch11/ -->
-
-<!-- Modal -->
 <div class="modal fade" id="sureToCancelChanges" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -34,7 +31,7 @@
   	  </div>
 	  <div class="modal-footer">
 	      <button type="button" class="btn btn-default" data-dismiss="modal">${context.gs('LBL_CANCEL_CHANGES_KEEP_EDITING_BTN')}</button>
-	      <button type="button" class="btn btn-warning" id="cancelChanges">${context.gs('LBL_CANCEL_CHANGES_CANCEL_BTN')}</button>
+	      <button type="button" class="btn btn-warning" id="reallyCancelChanges">${context.gs('LBL_CANCEL_CHANGES_CANCEL_BTN')}</button>
 	  </div>
     </div>
   </div>
@@ -60,7 +57,7 @@
 	  </div>
 	  <c:if test="${showFooter == true || showFooter == null}">
 		  <div class="panel-footer">
-		  		<button type="button" class="btn btn-default" data-toggle="modal" data-target="#sureToCancelChanges"><c:if test="${buttonCancel == null}">${context.gs('LBL_CANCEL_CHANGES_CANCEL_BTN')}</c:if><c:if test="${buttonCancel != null}">${context.gs(buttonCancel)}</c:if></button>
+		  		<button type="button" class="btn btn-default" id="cancelChanges"><c:if test="${buttonCancel == null}">${context.gs('LBL_CANCEL_CHANGES_CANCEL_BTN')}</c:if><c:if test="${buttonCancel != null}">${context.gs(buttonCancel)}</c:if></button>
 		  		<button type="button" class="btn btn-primary" id="saveChanges"><c:if test="${buttonSave == null}">${context.gs('LBL_CANCEL_CHANGES_SAVE_BTN')}</c:if><c:if test="${buttonSave != null}">${context.gs(buttonSave)}</c:if></button>
 		  </div>
 	  </c:if>

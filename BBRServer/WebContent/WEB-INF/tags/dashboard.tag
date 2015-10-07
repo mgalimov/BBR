@@ -136,7 +136,27 @@
 			drawCharts();
 		});
 		
-		setPeriods();
+		$shopposfirstLoad = true;
+		var el = $("#shopposinput")[0].selectize;
+		el.load(shopposLoadData);
+		el.on("load", function () {
+			if ($shopposfirstLoad) {
+				var el = $("#shopposinput")[0].selectize;
+				var firstOptionIndex = Object.keys(el.options)[0];
+				for (i = 0; i < Object.keys(el.options).length; i++) {
+					var s = Object.keys(el.options)[i];
+					if (s.charAt(0) == "s") {
+						firstOptionIndex = Object.keys(el.options)[i];
+						break;
+					}
+				}
+				
+	    		el.addItem(el.options[firstOptionIndex].id);
+	    		el.refreshItems();
+	    		$("#applyBtn").click();
+	    		${ft}firstLoad = false;
+			}
+		});
 	});
 	
 	function drawCharts() {
