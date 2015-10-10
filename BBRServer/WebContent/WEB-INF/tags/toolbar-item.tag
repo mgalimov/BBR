@@ -1,11 +1,13 @@
-<%@ tag language="java" pageEncoding="UTF-8" description="Toolbar Item"%>
+<%@ tag language="java" pageEncoding="UTF-8" description="Toolbar Item" import="BBRClientApp.BBRContext" %>
 <%@ attribute name="label" required="true" %>
 <%@ attribute name="id" required="true" %>
 <%@ attribute name="icon" %>
 <%@ attribute name="accent" %>
 <%@ attribute name="condition" %>
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+ 
+<% BBRContext context = BBRContext.getContext(request); %>
 
 <c:if test="${accent == null}">
 	<c:set var="accent" value="btn-default" scope="page"/>

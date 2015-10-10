@@ -27,7 +27,7 @@
 				titleMod += ", " + userNC[1];
 		}
 		
-		if (t.equals("datepos")) {
+		if (t.equals("datepos") || t.equals("all")) {
 			String[] datePos = params.get("query").split(BBRUtil.recordDivider);
 			context.set("datePos", datePos);
 			context.set("userNC", null);
@@ -51,15 +51,13 @@
 			titleMod += BBRUtil.visualTitleDelimiter + context.gs("LBL_UNAPPROVED_TITLE_MOD");
 		}
 	}
-	
 
 	request.setAttribute("titleMod", titleMod);
-
 %>
 
 <t:admin-grid-wrapper title="LBL_USER_VISITS_TITLE" titleModifier="${titleMod}">
 	<jsp:body>
-		<t:grid method="BBRVisits" editPage="manager-visit-edit.jsp" createPage="" title="LBL_USER_VISITS_TITLE" titleModifier="${titleMod}">
+		<t:grid method="BBRVisits" editPage="manager-visit-edit.jsp" createPage="" title="LBL_USER_VISITS_TITLE" titleModifier="${titleMod}" customToolbar="true">
 			<t:grid-item label="LBL_DATE_TIME" field="timeScheduled" />
 			<t:grid-item label="LBL_POS" field="pos.title"/>
 			<t:grid-item label="LBL_USER_NAME" field="userName"/>

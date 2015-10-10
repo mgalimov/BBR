@@ -167,10 +167,13 @@
 	<% if (mode.equals("manager-view") || mode.equals("manager-edit")) { %>
 	<div class="btn-group" role="group" aria-label="...">
 		<button class='btn btn-default' id='openVisits' type="button">
-		<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> <%=context.gs("LBL_OPEN_VISITS_BTN") %>
+			<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> <%=context.gs("LBL_OPEN_VISITS_BTN") %>
 		</button>
 		<button class='btn btn-default' id='openAllUnapprovedVisits' type="button">
-		<span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> <%=context.gs("LBL_OPEN_ALL_VISITS_BTN") %>
+			<span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> <%=context.gs("LBL_OPEN_ALL_UNAPPROVED_VISITS_BTN") %>
+		</button>
+		<button class='btn btn-default' id='openAllVisits' type="button">
+			<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> <%=context.gs("LBL_OPEN_ALL_VISITS_BTN") %>
 		</button>
 	</div>
 			
@@ -181,14 +184,18 @@
 					pos = $("#posinput").val();
 					window.location.href = "manager-visit-list.jsp?t=datepos&query="+dt+"@@"+pos; 
 				});
-			});
 
-			$(document).ready(function() {
 				$("#openAllUnapprovedVisits").click(function(){
-					dt = $("a[id^='sd'].btn-info").attr('id').substring(2, 12);
 					pos = $("#posinput").val();
 					window.location.href = "manager-visit-list.jsp?t=unapproved&query="+pos; 
 				});
+
+				$("#openAllVisits").click(function(){
+					dt = $("a[id^='sd'].btn-info").attr('id').substring(2, 12);
+					pos = $("#posinput").val();
+					window.location.href = "manager-visit-list.jsp?t=all&query="+dt+"@@"+pos; 
+				});
+
 			});
 		</script>
 	<% } %>
@@ -230,6 +237,21 @@
 </div>
 <% } %>
 
+<% if (mode.equals("manager-edit") || mode.equals("manager-view")) { %>
+<div class="row">
+	<div class="col-md-10" >
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<span class="visit-status-0"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></span> <%=context.gs("LBL_VISIT_INITIALIZED")%><br/>
+				<span class="visit-status-1"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></span> <%=context.gs("LBL_VISIT_APPROVED")%><br/>
+				<span class="visit-status-2"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></span> <%=context.gs("LBL_VISIT_CANCELLED")%><br/>
+				<span class="visit-status-3"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></span> <%=context.gs("LBL_VISIT_PERFORMED")%><br/>
+				<span class="visit-status-4"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></span> <%=context.gs("LBL_VISIT_DISAPPROVED")%><br/>
+			</div>
+		</div>
+	</div>
+</div>
+<% } %>
 <t:card-item label="" type="text" field="timeScheduled" isHidden="hidden"/>
 <t:card-item label="" type="text" field="spec" isHidden="hidden"/>
 <t:card-item label="" type="text" field="formMode" isHidden="hidden" defaultValue="<%=mode%>"/>

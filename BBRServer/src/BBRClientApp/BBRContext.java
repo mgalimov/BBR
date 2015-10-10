@@ -1,6 +1,7 @@
 package BBRClientApp;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.Formatter;
 import java.util.Hashtable;
 import java.util.List;
@@ -26,6 +27,10 @@ public class BBRContext {
 	private Locale locale = null;
 	private ResourceBundle resourceBundle;
 	private Hashtable<String, Object> data = new Hashtable<String, Object>();
+	public Date filterStartDate;
+	public Date filterEndDate;
+	public BBRShop filterShop;
+	public BBRPoS filterPoS;
 	
 	public BBRContext() {
 	}

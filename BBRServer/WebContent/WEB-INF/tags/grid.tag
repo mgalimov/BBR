@@ -5,6 +5,7 @@
 <%@ attribute name="editPage" required="true"%>
 <%@ attribute name="createPage" required="true"%>
 <%@ attribute name="customToolbar" %>
+<%@ attribute name="standardFilters" %>
 
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
@@ -39,23 +40,37 @@
 </div>
 
 <div class="panel">
-
   <div class="panel-heading" id="toolbar">
-  	<div class="btn-toolbar" role="toolbar" aria-label="..." id="toolbarpanel">
-  	  <c:if test="${customToolbar != true}">
-  	  	<div class='btn-group' role='group' aria-label='...'>
-			<button type="button" class="btn btn-default" id="create">
-			  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ${context.gs('LBL_GRID_CREATE_RECORD_BTN')}
-			</button>
-			<button type="button" class="btn btn-info" id="edit">
-			  <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> ${context.gs('LBL_GRID_EDIT_RECORD_BTN')}
-			</button>
-			<button type="button" class="btn btn-warning" id="delete" data-toggle="modal" data-target="#sureToDelete">
-			  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> ${context.gs('LBL_GRID_DELETE_RECORD_BTN')}
-			</button>
-		</div>
-	  </c:if>
-	 </div>
+  	<div class="btn-toolbar" role="toolbar">
+  		  <span id="toolbarpanel">
+		  	  <c:if test="${customToolbar != true}">
+		  	  	<div class='btn-group' role='group'>
+					<button type="button" class="btn btn-default" id="create">
+					  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ${context.gs('LBL_GRID_CREATE_RECORD_BTN')}
+					</button>
+					<button type="button" class="btn btn-info" id="edit">
+					  <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> ${context.gs('LBL_GRID_EDIT_RECORD_BTN')}
+					</button>
+					<button type="button" class="btn btn-warning" id="delete" data-toggle="modal" data-target="#sureToDelete">
+					  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> ${context.gs('LBL_GRID_DELETE_RECORD_BTN')}
+					</button>
+				</div>
+			  </c:if>
+		  </span>&nbsp;
+		  
+		  <c:if test="${standardFilters != false}">
+			  <div class='pull-right'>
+			  	<form class="form-inline">
+			  		<t:select-shop-pos field="shoppos" />&nbsp;
+			  		<span class='glyphicon glyphicon-calendar'></span>
+			  		<input type='text' class='form-control' id='periodPicker'/>
+			  		<button type="button" class="btn btn-primary" id="applyFilters">
+					  	${context.gs('LBL_DATERANGE_APPLY_BTN')}
+					</button>
+			  	</form>
+			  </div>
+		 </c:if>
+	  </div>
   </div>
   <div class="panel-body">
 	  <table id="grid" class="table table-stripped table-bordered no-footer noselection">
@@ -126,5 +141,81 @@
 	    	$("#edit").click();
 	    	e.stopPropagation();
 	    } );
+	    
+<c:if test="${standardFilters != false}">	    
+		moment.locale('${context.getLocaleString()}');
+
+		locale = {
+				"format": "YYYY-MM-DD",
+		        "separator": " — ",
+		        "applyLabel": "${context.gs('LBL_DATERANGE_APPLY_BTN')}",
+		        "cancelLabel": "${context.gs('LBL_DATERANGE_CANCEL_BTN')}",
+		        "fromLabel": "${context.gs('LBL_DATERANGE_FROM')}",
+		        "toLabel": "${context.gs('LBL_DATERANGE_TO')}",
+		        "customRangeLabel": "${context.gs('LBL_DATERANGE_CUSTOM')}",
+		        "daysOfWeek": moment.weekdaysShort(),
+		        "monthNames": moment.months(),
+		        "firstDay": 1
+		    };
+
+		var startDate = moment(${context.filterStartDate});
+		var endDate = moment(${context.filterEndDate});
+		
+		$("#periodPicker").daterangepicker({
+				autoApply: true,
+				locale: locale,
+				startDate: startDate,
+				endDate: endDate
+		});
+		
+		$shopposfirstLoad = true;
+		var el = $("#shopposinput")[0].selectize;
+		el.load(shopposLoadData);
+		el.on("load", function () {
+			if ($shopposfirstLoad) {
+				var el = $("#shopposinput")[0].selectize;
+				var firstOptionIndex = Object.keys(el.options)[0];
+				for (i = 0; i < Object.keys(el.options).length; i++) {
+					var s = Object.keys(el.options)[i];
+					if (s.charAt(0) == "s") {
+						firstOptionIndex = Object.keys(el.options)[i];
+						break;
+					}
+				}
+				
+	    		el.addItem(el.options[firstOptionIndex].id);
+	    		el.refreshItems();
+	    		$shopposfirstLoad = false;
+			}
+		});
+		
+		$("#applyFilters").click(function() {
+			var dtp = $("#periodPicker").data("daterangepicker");
+			var spId = $("#shopposinput").val();
+			var shopId = null;
+			var posId = null;
+			if (spId.charAt(0) == "s")
+				shopId = spId.substr(1);
+			else
+				posId = spId;
+			var startDate = dtp.startDate.format("YYYY-MM-DD");
+			var endDate = dtp.endDate.format("YYYY-MM-DD");
+			
+			$.ajax({
+				url: 'BBRBase',
+	        	data: {
+	        		operation: 'setFilters',
+	        		filterStartDate: startDate,
+	        		filterEndDate: endDate,
+	        		filterShop: shopId,
+	        		filterPoS: posId 
+	        	}
+			}).success(function (d) {
+				table.draw();
+			}).error(function () {
+			});
+		});
+</c:if>
 	});
-	</script>
+</script>
+

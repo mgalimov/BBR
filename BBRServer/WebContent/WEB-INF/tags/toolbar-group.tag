@@ -3,7 +3,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 
-<c:set var="groupDef" value="<div class='btn-group' role='group' aria-label='...'>\n"/>
+<c:set var="groupDef" value="<div class='btn-group' role='group'>&nbsp;\n"/>
 <c:set var="itemToolbar" scope="request" value="${itemToolbar.concat(groupDef)}"/>
 
 <jsp:doBody/>

@@ -29,6 +29,19 @@
 	    <script src="js/jquery-1.11.2.min.js"></script>
 	    <script src="js/jquery.cookie.js"></script>
 	    <script src="js/bootstrap.min.js"></script>
+
+		<!-- SELECTIZE -->
+		<script type="text/javascript" src="js/selectize.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/selectize.css" />
+
+		<!-- DateTime Picker -->
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.min.css" />
+		<script type="text/javascript" src="js/moment-with-locales.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js" ></script>
+
+		<!--  DateRage Picker -->
+		<script type="text/javascript" src="js/daterangepicker.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/daterangepicker.css" />
 	  
 		<!-- BBR Utils -->
 	    <script src="js/bbr-utils.js"></script>

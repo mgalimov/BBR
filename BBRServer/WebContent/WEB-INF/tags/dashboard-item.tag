@@ -11,7 +11,11 @@
 
 <c:set var="items" scope="request" value="${items}${indicator}${type}chart();
         "/>
-<div id="${indicator}_${type}_chart" class="dashboard col-md-6"></div>
+
+<div class="dashboard col-md-6">
+	<h4>${context.gs(title)}</h4>
+	<div id="${indicator}_${type}_chart"></div>
+</div>
 <c:set var="chartoptions" scope="page" value=""/>
 <c:set var="chartpackage" scope="page" value=""/>
 
@@ -19,6 +23,7 @@
 	<c:when test="${type.equals('pie')}">
 		<c:set var="chartpackage" scope="page" value=""/>
 		<c:set var="typefunc" scope="page" value="PieChart"/>
+		<c:set var="chartoptions" scope="page" value="is3D: true"/>
 	</c:when>
 	<c:when test="${type.equals('bar')}">
 		<c:set var="chartpackage" scope="page" value="'bar'"/>
@@ -63,7 +68,7 @@
 			var gdt = new google.visualization.DataTable(dt);
 			var chart = new google.visualization.${typefunc}(document.getElementById("${indicator}_${type}_chart"));
 			var options = {
-					title: '${context.gs(title)}',
+					legend: "none",
 					${chartoptions}
 			};
 	        chart.draw(gdt, options);

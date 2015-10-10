@@ -77,7 +77,7 @@ body {
 
 
 /*
- * Placeholder dashboard ideas
+ * Placeholder dashboard
  */
 
 .placeholders {
@@ -125,24 +125,29 @@ td.clickable {
 	cursor: pointer;
 }
 
-div.visit-status-0 {
-	border-color: yellow !important;
+.visit-status-0 {
+	border-color: #FFCC68 !important;
+	color: #FFCC68 !important;
 }
 
-div.visit-status-1 {
+.visit-status-1 {
 	border-color: green !important;
+	color: green !important;
 }
 
-div.visit-status-2 {
+.visit-status-2 {
 	border-color: grey !important;
+	color: grey !important;
 }
 
-div.visit-status-3 {
+.visit-status-3 {
 	border-color: blue !important;
+	color: blue !important;
 }
 
-div.visit-status-4 {
+.visit-status-4 {
 	border-color: red !important;
+	color: red !important;
 }
 
 td.single-cell {
@@ -200,8 +205,11 @@ div.end-cell {
 div.dashboard {
 	display: block;
 	height: 300px;
+	width: 46%;
+	min-width: 400px;
     border: 1px solid transparent;
-    border-radius: 4px;
+    border-radius: 10px;
     box-shadow: 0 1px 1px rgba(0,0,0,.05);
     border-color: #ddd;
+    margin: 2%;
 }

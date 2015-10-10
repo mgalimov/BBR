@@ -98,7 +98,7 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 			List<Object[]> listComp = null;
 			if (period.compareToEndDate != null) {
 				data.addCol("Income to compare", BBRChartDataTypes.BBR_CHART_NUMBER);
-				listComp = mgr.getVisitsByPeriod(period.compareToStartDate, period.compareToEndDate, period.detail, pos, shop);
+				listComp = mgr.getIncomeByPeriod(period.compareToStartDate, period.compareToEndDate, period.detail, pos, shop);
 				listComp = BBRChartData.enrichDateList(listComp, period.compareToStartDate, period.compareToEndDate, period.detail);
 			}
 			

@@ -8,10 +8,10 @@
 			<t:modal cancelButtonLabel="LBL_CANCEL_CHANGES" processButtonLabel="LBL_SAVE_DATA" title="LBL_EDIT_FINAL_PRICE" id="enterFinalPrice">
 				<t:card-item label="LBL_FINAL_PRICE" type="text" field="finalPrice"/>
 			</t:modal>
-			<t:toolbar-item label="LBL_APPROVE_VISIT" id="approveButton" accent="btn-info" condition="obj.status==0 || obj.status==2"></t:toolbar-item>
-			<t:toolbar-item label="LBL_DISAPPROVE_VISIT" id="disapproveButton" accent="btn-warning" condition="obj.status==0 || obj.status==2"></t:toolbar-item>
-			<t:toolbar-item label="LBL_CANCEL_VISIT" id="cancelVisitButton" accent="btn-danger" condition="obj.status<=1"></t:toolbar-item>
-			<t:toolbar-item label="LBL_CLOSE_VISIT" id="closeVisitButton" accent="btn-success" condition="obj.status<=1"></t:toolbar-item>
+			<t:toolbar-item label="LBL_APPROVE_VISIT" id="approveButton" accent="btn-success" condition="obj.status==0 || obj.status==2"></t:toolbar-item>
+			<t:toolbar-item label="LBL_DISAPPROVE_VISIT" id="disapproveButton" accent="btn-danger" condition="obj.status==0 || obj.status==2"></t:toolbar-item>
+			<t:toolbar-item label="LBL_CANCEL_VISIT" id="cancelVisitButton" accent="btn-default" condition="obj.status<=1"></t:toolbar-item>
+			<t:toolbar-item label="LBL_CLOSE_VISIT" id="closeVisitButton" accent="btn-primary" condition="obj.status<=1"></t:toolbar-item>
 			<t:card-item label="LBL_POS" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes" isDisabled="readonly"/>
 			<t:card-item label="LBL_DATE_TIME" type="datetime" field="timeScheduled" />
 			<t:card-item label="LBL_VISIT_STATUS" field="status" type="select" options="OPT_VISIT_STATUS" isDisabled="readonly"/>
@@ -21,6 +21,7 @@
 			<t:card-item label="LBL_SPEC" type="reference" field="spec" referenceFieldTitle="name" referenceMethod="BBRSpecialists" />
 			<t:card-item label="LBL_POS_START_WORKHOUR" field="pos.startWorkHour" type="time" isDisabled="readonly"/>
 			<t:card-item label="LBL_POS_END_WORKHOUR" field="pos.endWorkHour" type="time" isDisabled="readonly"/>
+			<t:card-item label="LBL_FINAL_PRICE" field="finalPrice" type="text" isDisabled="readonly" modifier="view"/>
 		</t:card>
 </jsp:body>
 </t:admin-card-wrapper>

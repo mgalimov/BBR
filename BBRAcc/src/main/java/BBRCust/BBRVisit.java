@@ -43,11 +43,11 @@ public class BBRVisit extends BBRDataElement {
 	private BBRProcedure procedure;
 	
 	public class BBRVisitStatus {
-		public static final int VISSTATUS_INITIALIZED = 0;
-		public static final int VISSTATUS_APPROVED = 1;
-		public static final int VISSTATUS_CANCELLED = 2;
-		public static final int VISSTATUS_PERFORMED = 3;
-		public static final int VISSTATUS_DISAPPROVED = 4;
+		public static final int VISSTATUS_INITIALIZED = 0; // yellow
+		public static final int VISSTATUS_APPROVED = 1;    // green
+		public static final int VISSTATUS_CANCELLED = 2;   // gray
+		public static final int VISSTATUS_PERFORMED = 3;   // blue
+		public static final int VISSTATUS_DISAPPROVED = 4; // red
 	}
 	
 	@Column(name="STATUS")

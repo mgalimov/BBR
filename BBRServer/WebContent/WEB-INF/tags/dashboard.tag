@@ -44,7 +44,7 @@
 	    </div>
 	    &nbsp;&nbsp;&nbsp;
 	    <div class="form-group">
-	       	<button type='button' class="btn btn-primary" name="compareToDatePicker" id="applyBtn">${context.gs("LBL_DATERANGE_APPLY_BTN")}</button>
+	       	<button type='button' class="btn btn-primary" id="applyBtn">${context.gs("LBL_DATERANGE_APPLY_BTN")}</button>
 	    </div>
 	 </form>
 </div> 
@@ -154,7 +154,7 @@
 	    		el.addItem(el.options[firstOptionIndex].id);
 	    		el.refreshItems();
 	    		$("#applyBtn").click();
-	    		${ft}firstLoad = false;
+	    		$shopposfirstLoad = false;
 			}
 		});
 	});
