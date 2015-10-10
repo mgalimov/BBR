@@ -15,6 +15,8 @@
 <c:set var="sorting" scope="request" value=""/>
 <c:set var="index" scope="request" value="1"/>
 <c:set var="itemToolbar" scope="request" value="${''}"/>
+<c:set var="filterStartDate" scope="request" value="${context.getFilterStartDate()}" />
+<c:set var="filterEndDate" scope="request" value="${context.getFilterEndDate()}" />
 
 <!-- http://www.onjava.com/pub/a/onjava/excerpt/jserverpages3_ch11/ -->
 
@@ -158,8 +160,8 @@
 		        "firstDay": 1
 		    };
 
-		var startDate = moment(${context.filterStartDate});
-		var endDate = moment(${context.filterEndDate});
+		var startDate = moment('${filterStartDate}');
+		var endDate = moment('${filterEndDate}');
 		
 		$("#periodPicker").daterangepicker({
 				autoApply: true,
@@ -174,16 +176,19 @@
 		el.on("load", function () {
 			if ($shopposfirstLoad) {
 				var el = $("#shopposinput")[0].selectize;
-				var firstOptionIndex = Object.keys(el.options)[0];
-				for (i = 0; i < Object.keys(el.options).length; i++) {
-					var s = Object.keys(el.options)[i];
-					if (s.charAt(0) == "s") {
-						firstOptionIndex = Object.keys(el.options)[i];
-						break;
+				var defaultId = "${context.getFilterShopPosId()}";
+				if (defaultId != "") {
+					var firstOptionIndex = Object.keys(el.options)[0];
+					for (i = 0; i < Object.keys(el.options).length; i++) {
+						var s = Object.keys(el.options)[i];
+						if (s.charAt(0) == "s") {
+							firstOptionIndex = Object.keys(el.options)[i];
+							break;
+						}
 					}
-				}
-				
-	    		el.addItem(el.options[firstOptionIndex].id);
+		    		el.addItem(el.options[firstOptionIndex].id);
+				} else
+					el.addItem(defaultId);
 	    		el.refreshItems();
 	    		$shopposfirstLoad = false;
 			}

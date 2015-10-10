@@ -336,6 +336,31 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		return list(pageNumber, pageSize, where, orderBy);
 	}
 
+	public BBRDataSet<BBRVisit> listAllVisitsByFilter(BBRShop shop, BBRPoS pos, Date startDate, Date endDate, int pageNumber, int pageSize, String orderBy) {
+		String where = "";
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
+		
+		if (shop != null)
+			where += " pos.shop.id = " + shop.getId();
+		else
+			if (pos != null)
+				where += " pos.id = " + pos.getId();
+		
+		if (!where.equals(""))
+			where += " and ";
+		
+		if (startDate != null)
+			where += " timeScheduled >= '" + df.format(startDate) + "'";
+
+		if (!where.equals(""))
+			where += " and ";
+		
+		if (endDate != null)
+			where += " timeScheduled <= '" + df.format(endDate) + "'";
+
+		return list(pageNumber, pageSize, where, orderBy);
+	}
+
 	// Charts
 	@SuppressWarnings("unchecked")
 	public List<Object[]> getVisitsByPeriod(Date startDate, Date endDate, int detail, BBRPoS pos, BBRShop shop) {

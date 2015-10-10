@@ -218,6 +218,17 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				return "";
 			}
 		}
+		
+		String all = (String)context.get("all");
+		if (all != null) {
+			try {
+				return manager.listAllVisitsByFilter(context.filterShop, context.filterPoS, context.filterStartDate, context.filterEndDate, 
+													 pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
+			} catch (Exception ex) {
+				return "";
+			}
+		}
+		
 		if (context.user != null)
 			return manager.list(context.user.getId(), pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
 		else

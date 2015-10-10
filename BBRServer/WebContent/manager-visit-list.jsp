@@ -21,17 +21,19 @@
 			context.set("userNC", userNC);
 			context.set("pos", null);
 			context.set("datePos", null);
+			context.set("all", null);
 			
 			titleMod = BBRUtil.visualTitleDelimiter + userNC[0];
 			if (userNC.length == 2)
 				titleMod += ", " + userNC[1];
 		}
 		
-		if (t.equals("datepos") || t.equals("all")) {
+		if (t.equals("datepos")) {
 			String[] datePos = params.get("query").split(BBRUtil.recordDivider);
 			context.set("datePos", datePos);
 			context.set("userNC", null);
 			context.set("pos", null);
+			context.set("all", null);
 			
 			if (datePos.length > 0) {
 				SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
@@ -48,8 +50,17 @@
 			context.set("pos", params.get("query"));
 			context.set("userNC", null);
 			context.set("datePos", null);
+			context.set("all", null);
 			titleMod += BBRUtil.visualTitleDelimiter + context.gs("LBL_UNAPPROVED_TITLE_MOD");
 		}
+		
+		if (t.equals("all")) {
+			context.set("datePos", null);
+			context.set("userNC", null);
+			context.set("pos", null);
+			context.set("all", "all");
+		}
+
 	}
 
 	request.setAttribute("titleMod", titleMod);

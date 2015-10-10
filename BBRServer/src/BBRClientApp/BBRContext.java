@@ -1,5 +1,6 @@
 package BBRClientApp;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Formatter;
@@ -20,17 +21,19 @@ import BBRCust.BBRVisit;
 
 public class BBRContext {
 	public BBRAcc.BBRUser user = null;
+	public BBRVisit planningVisit = null;
+	public Date filterStartDate = null;
+	public Date filterEndDate = null;
+	public BBRShop filterShop = null;
+	public BBRPoS filterPoS = null;
+	
 	private String lastSignInError = "";
 	private BBRGPS location = null;
 	private int lastVisitStep = 1;
-	public BBRVisit planningVisit = null;
 	private Locale locale = null;
 	private ResourceBundle resourceBundle;
 	private Hashtable<String, Object> data = new Hashtable<String, Object>();
-	public Date filterStartDate;
-	public Date filterEndDate;
-	public BBRShop filterShop;
-	public BBRPoS filterPoS;
+	
 	
 	public BBRContext() {
 	}
@@ -304,5 +307,34 @@ public class BBRContext {
 	
 	public Object clear(String param) {
 		return data.remove(param);
+	}
+	
+	public String getStringDate(Date date) {
+		return getStringDate(date, BBRUtil.fullDateFormat);
+	}
+	
+	public String getStringDate(Date date, String format) {
+		if (date == null) date = new Date();
+		
+		SimpleDateFormat df = new SimpleDateFormat(format);
+		return df.format(date);
+	}
+
+	public String getFilterStartDate() {
+		return getStringDate(filterStartDate);
+	}
+	
+	public String getFilterEndDate() {
+		return getStringDate(filterEndDate);
+	}
+	
+	public String getFilterShopPosId() {
+		if (filterShop != null)
+			return "s"+filterShop.getId().toString();
+		else
+			if (filterPoS != null)
+				return filterPoS.getId().toString();
+			else 
+				return "";
 	}
 }
