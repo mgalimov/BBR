@@ -44,7 +44,7 @@
 <div class="panel">
   <div class="panel-heading" id="toolbar">
   	<div class="btn-toolbar" role="toolbar">
-  		  <span id="toolbarpanel">
+		  <span id="toolbarpanel">
 		  	  <c:if test="${customToolbar != true}">
 		  	  	<div class='btn-group' role='group'>
 					<button type="button" class="btn btn-default" id="create">
@@ -58,29 +58,31 @@
 					</button>
 				</div>
 			  </c:if>
-		  </span>&nbsp;
-		  
-		  <c:if test="${standardFilters != false}">
-			  <div class='pull-right'>
-			  	<div class='dropdown'>
-				  	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					    <span class="glyphicon glyphicon-filter" aria-hidden="true"></span> <span class="caret"></span>
-	  				</button>
-	  				<div class="dropdown-menu dropdown-menu-right" style="width: 540px; padding: 10px 20px 10px 20px;">
-				  	<form class="form-inline">
-				  		<t:select-shop-pos field="shoppos" />&nbsp;
-				  		<span class='glyphicon glyphicon-calendar'></span>
-				  		<input type='text' class='form-control' id='periodPicker'/>
-				  		<button type="button" class="btn btn-primary" id="applyFilters">
-						  	${context.gs('LBL_DATERANGE_APPLY_BTN')}
-						</button>
-				  	</form>
-				  	</div>
-			  	</div>
-			  </div>
-		 </c:if>
+		  </span>
+    	  <c:if test="${standardFilters != false}">
+    	  <span class="pull-right">
+			   	<button type="button" class="btn btn-default" data-toggle="collapse" data-target="#filterPanel" aria-collapsed="true">
+				    <span class="glyphicon glyphicon-filter" aria-hidden="true"></span> <span class="caret"></span>
+	  			</button>
+		  </span>
+		  </c:if>
+
 	  </div>
   </div>
+  
+ <c:if test="${standardFilters != false}">
+  <div class="col-md-6 collapse" id="filterPanel">
+	  	<form class="form-inline">
+	  		<t:select-shop-pos field="shoppos" />&nbsp;
+	  		<span class='glyphicon glyphicon-calendar'></span>
+	  		<input type='text' class='form-control' id='periodPicker'/>
+	  		<button type="button" class="btn btn-primary" id="applyFilters">
+			  	${context.gs('LBL_DATERANGE_APPLY_BTN')}
+			</button>
+	  	</form>
+  	</div>
+ </c:if>
+  
   <div class="panel-body">
 	  <table id="grid" class="table table-stripped table-bordered no-footer noselection">
 			<jsp:doBody/>
