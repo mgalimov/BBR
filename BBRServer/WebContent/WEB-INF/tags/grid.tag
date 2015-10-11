@@ -62,14 +62,21 @@
 		  
 		  <c:if test="${standardFilters != false}">
 			  <div class='pull-right'>
-			  	<form class="form-inline">
-			  		<t:select-shop-pos field="shoppos" />&nbsp;
-			  		<span class='glyphicon glyphicon-calendar'></span>
-			  		<input type='text' class='form-control' id='periodPicker'/>
-			  		<button type="button" class="btn btn-primary" id="applyFilters">
-					  	${context.gs('LBL_DATERANGE_APPLY_BTN')}
-					</button>
-			  	</form>
+			  	<div class='dropdown'>
+				  	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					    <span class="glyphicon glyphicon-filter" aria-hidden="true"></span> <span class="caret"></span>
+	  				</button>
+	  				<div class="dropdown-menu dropdown-menu-right" style="width: 540px; padding: 10px 20px 10px 20px;">
+				  	<form class="form-inline">
+				  		<t:select-shop-pos field="shoppos" />&nbsp;
+				  		<span class='glyphicon glyphicon-calendar'></span>
+				  		<input type='text' class='form-control' id='periodPicker'/>
+				  		<button type="button" class="btn btn-primary" id="applyFilters">
+						  	${context.gs('LBL_DATERANGE_APPLY_BTN')}
+						</button>
+				  	</form>
+				  	</div>
+			  	</div>
 			  </div>
 		 </c:if>
 	  </div>
