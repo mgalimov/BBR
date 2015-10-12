@@ -1,8 +1,10 @@
-<%@page import="java.text.SimpleDateFormat"%>
+<%@ page import="java.text.SimpleDateFormat"%>
+<%@ page import="java.util.*"%>
 <%@ page import="BBRClientApp.BBRContext"%>
 <%@ page import="BBR.BBRUtil"%>
 <%@ page import="BBRAcc.BBRPoSManager"%>
 <%@ page import="BBRAcc.BBRPoS"%>
+<%@ page import="BBRAcc.BBRUser.*"%>
 <%@ page import="BBRClientApp.BBRParams"%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -37,10 +39,13 @@
 			
 			if (datePos.length > 0) {
 				SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
-				titleMod = BBRUtil.visualTitleDelimiter + df.format(df.parse(datePos[0]));			
+				context.filterStartDate = df.parse(datePos[0]);
+				context.filterEndDate = context.filterStartDate;
+				titleMod = BBRUtil.visualTitleDelimiter + df.format(context.filterStartDate);
 				if (datePos.length == 2 && datePos[1] != null) {
 					BBRPoSManager pmgr = new BBRPoSManager();
 					BBRPoS pos = pmgr.findById(Long.parseLong(datePos[1]));
+					context.filterPoS = pos;
 					titleMod += BBRUtil.visualTitleDelimiter + pos.getTitle();
 				}
 			}
@@ -59,6 +64,16 @@
 			context.set("userNC", null);
 			context.set("pos", null);
 			context.set("all", "all");
+			Calendar c = Calendar.getInstance();
+			c.setTime(new Date());
+			context.filterEndDate = c.getTime();
+			c.add(Calendar.MONTH, -3);
+			context.filterStartDate = c.getTime();
+			if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
+				context.filterShop = context.user.getShop();
+			else
+				if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
+					context.filterPoS = context.user.getPos();
 		}
 
 	}

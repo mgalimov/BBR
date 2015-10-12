@@ -222,8 +222,19 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 		String all = (String)context.get("all");
 		if (all != null) {
 			try {
-				return manager.listAllVisitsByFilter(context.filterShop, context.filterPoS, context.filterStartDate, context.filterEndDate, 
+				if (context.filterPoS == null && context.filterShop == null) {
+					if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
+						context.filterShop = context.user.getShop();
+					else
+						if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
+							context.filterPoS = context.user.getPos();
+				}
+					
+				if (context.filterPoS != null || context.filterShop != null)
+					return manager.listAllVisitsByFilter(context.filterShop, context.filterPoS, context.filterStartDate, context.filterEndDate, 
 													 pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
+				else
+					return null;
 			} catch (Exception ex) {
 				return "";
 			}

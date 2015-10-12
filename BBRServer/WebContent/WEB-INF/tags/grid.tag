@@ -71,7 +71,8 @@
   </div>
   
  <c:if test="${standardFilters != false}">
-  <div class="col-md-6 collapse" id="filterPanel">
+  <div class="col-md-12 collapse" id="filterPanel">
+  	<div class="pull-right">
 	  	<form class="form-inline">
 	  		<t:select-shop-pos field="shoppos" />&nbsp;
 	  		<span class='glyphicon glyphicon-calendar'></span>
@@ -80,7 +81,8 @@
 			  	${context.gs('LBL_DATERANGE_APPLY_BTN')}
 			</button>
 	  	</form>
-  	</div>
+	 </div>
+  </div>
  </c:if>
   
   <div class="panel-body">
@@ -175,6 +177,7 @@
 		$("#periodPicker").daterangepicker({
 				autoApply: true,
 				locale: locale,
+				opens: 'left',
 				startDate: startDate,
 				endDate: endDate
 		});
