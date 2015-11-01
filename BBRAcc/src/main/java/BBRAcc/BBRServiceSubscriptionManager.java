@@ -19,8 +19,7 @@ public class BBRServiceSubscriptionManager extends BBRDataManager<BBRServiceSubs
 		classTitle = "service subscription";	
 	}
 
-	public BBRServiceSubscription createAndStoreServiceSubscription(BBRService service, BBRShop shop, String currency,
-																	Date startDate, Date endDate) throws Exception {
+	public BBRServiceSubscription createAndStoreServiceSubscription(BBRService service, BBRShop shop, Date startDate) throws Exception {
 		if (shop == null) return null;
 		
 		boolean tr = BBRUtil.beginTran(sessionIndex);
@@ -28,17 +27,16 @@ public class BBRServiceSubscriptionManager extends BBRDataManager<BBRServiceSubs
         
         SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
         String sd = df.format(startDate);
-        String ed = df.format(endDate);
         
-		if (count("startDate <= '" + sd + "' and endDate >= '" + ed + "' and status=" + BBRServiceSbscriptionStatuses.SUBSCRIPTION_ACTIVE) > 0)
+		if (count("startDate <= '" + sd + "' and endDate >= '" + sd + "' and status=" + BBRServiceSbscriptionStatuses.SUBSCRIPTION_ACTIVE) > 0)
 			throw new Exception(BBRErrors.ERR_CANT_CREATE_DUPLICATE_SERVICE);
 		
         BBRServiceSubscription ss = new BBRServiceSubscription();
         ss.setService(service);
         ss.setShop(shop);
-        ss.setCurrency(currency);
+        ss.setCurrency(service.getCurrency());
         ss.setStartDate(startDate);
-        ss.setEndDate(endDate);
+        ss.setEndDate(null);
         ss.setCreditLimit(service.getCreditLimit());
         ss.setBalance(0F);
         ss.setStatus(BBRServiceSbscriptionStatuses.SUBSCRIPTION_REQUESTED);

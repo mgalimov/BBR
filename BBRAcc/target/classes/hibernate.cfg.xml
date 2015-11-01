@@ -37,6 +37,9 @@
         <mapping class="BBRAcc.BBRPoS"/>
         <mapping class="BBRAcc.BBRShop"/>
         <mapping class="BBRAcc.BBRUser"/>
+        <mapping class="BBRAcc.BBRService"/>
+        <mapping class="BBRAcc.BBRServiceSubscription"/>
+        <mapping class="BBRAcc.BBRTransaction"/>
         <mapping class="BBRCust.BBRSpecialist"/>
         <mapping class="BBRCust.BBRProcedure"/>
         <mapping class="BBRCust.BBRVisit"/>

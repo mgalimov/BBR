@@ -123,6 +123,8 @@
 			goBackOrTo('${gridPage}');
 		});
 		
+ 	});
+ 	
  	$(window).bind('beforeunload', function () {
  		return;
  		//if (saved) return;

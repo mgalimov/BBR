@@ -44,19 +44,25 @@ public class BBRDataManager<T extends BBRDataElement> {
        if (!where.equals("") && !where.trim().startsWith("where"))
     	   where = " where " + where;
        
+       List<T> list;
        Long count = (Long)session.createQuery("Select count(*) from " + typeName + " " + where).uniqueResult();
        
-       Query query = session.createQuery( " from " + typeName + " " + where + " " + orderBy);
-       
-       if (pageNumber >= 0) {
-    	   query.setFirstResult(pageNumber * pageSize);
-       
-    	   if (pageSize > maxRowsToReturn && maxRowsToReturn > 0)
-    		   pageSize = maxRowsToReturn;
-           query.setMaxResults(pageSize);
+       if (count == null) {
+    	   list = null;
+    	   count = 0L;
+       }  else { 
+	       Query query = session.createQuery( " from " + typeName + " " + where + " " + orderBy);
+	       
+	       if (pageNumber >= 0) {
+	    	   query.setFirstResult(pageNumber * pageSize);
+	       
+	    	   if (pageSize > maxRowsToReturn && maxRowsToReturn > 0)
+	    		   pageSize = maxRowsToReturn;
+	           query.setMaxResults(pageSize);
+	       }
+	       
+	       list = query.list();
        }
-       
-       List<T> list = query.list();
        BBRDataSet<T> ds = new BBRDataSet<T>(list, count);
        BBRUtil.commitTran(sessionIndex, tr);
 	

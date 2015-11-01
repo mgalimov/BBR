@@ -19,6 +19,7 @@
 	</t:nav-group>
 	<t:nav-group title="LBL_GENERAL_ADMINISTRATION_MENU" level="admin">
 		<t:nav-item href="admin-pos-list.jsp" title="LBL_POSES_MENU" />
+		<t:nav-item href="admin-subscription-list.jsp" title="LBL_SUBSCR_MENU" />
 	</t:nav-group>
 	<t:nav-group title="LBL_POS_MANAGEMENT_MENU" level="manager">
 		<t:nav-item href="manager-spec-list.jsp" title="LBL_SPECS_MENU" />
