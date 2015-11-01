@@ -28,6 +28,12 @@ public class BBRService extends BBRDataElement {
 	@Column(name="CREDIT_LIMIT")
 	private Float creditLimit;
 
+	@Column(name="PRICE")
+	private Float price;
+
+	@Column(name="CURRENCY")
+	private String currency;
+
 	public class BBRServiceStatus {
 		public static final int SERVICE_INITIALIZED = 0;
 		public static final int SERVICE_ACTIVE = 1;
@@ -65,4 +71,21 @@ public class BBRService extends BBRDataElement {
 	public void setCreditLimit(Float creditLimit) {
 		this.creditLimit = creditLimit;
 	}
+	
+	public Float getPrice() {
+		return price;
+	}
+
+	public void setPrice(Float price) {
+		this.price = price;
+	}
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+
 }

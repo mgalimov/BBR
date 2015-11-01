@@ -48,7 +48,18 @@ public class BBRServiceSubscriptionManager extends BBRDataManager<BBRServiceSubs
         return ss;
     }
 	
-	public Float getBalance(Date) {
-		
+	public Float getBalance(Date date) {
+        boolean tr = BBRUtil.beginTran(sessionIndex);
+        Session session = BBRUtil.getSession(sessionIndex);
+        
+        SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
+        String d = df.format(date);
+        
+     	String where = " where date <= '" + d + "' and status=" + BBRServiceSbscriptionStatuses.SUBSCRIPTION_ACTIVE;
+        
+        Float sum = (Float)session.createQuery("Select sum(isNull(amount, 0)) from BBRTransaction " + where).uniqueResult();
+        BBRUtil.commitTran(sessionIndex, tr);
+ 	
+        return sum;
 	}
   }

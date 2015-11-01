@@ -22,4 +22,5 @@ public class BBRErrors {
 	public static final String ERR_TURN_CROSSES = "ERR_TURN_CROSSES";
 	public static final String ERR_CURRENCIES_DONT_MATCH = "ERR_CURRENCIES_DONT_MATCH";
 	public static final String ERR_CANT_CREATE_DUPLICATE_SERVICE = "ERR_CANT_CREATE_DUPLICATE_SERVICE";
+	public static final String ERR_WRONG_INPUT_FORMAT = "ERR_WRONG_INPUT_FORMAT";
 }
