@@ -19,27 +19,15 @@
 <c:set var="itemToolbar" scope="request" value="${''}"/>
 <c:set var="itemToolbarCondition" scope="request" value="${''}"/>
 
-<div class="modal fade" id="sureToCancelChanges" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">${context.gs('LBL_CANCEL_CHANGES_TITLE')}</h4>
-      </div>
-      <div class="modal-body">
-     	 ${context.gs('LBL_CANCEL_CHANGES_TITLE')} 
-  	  </div>
-	  <div class="modal-footer">
-	      <button type="button" class="btn btn-default" data-dismiss="modal">${context.gs('LBL_CANCEL_CHANGES_KEEP_EDITING_BTN')}</button>
-	      <button type="button" class="btn btn-warning" id="reallyCancelChanges">${context.gs('LBL_CANCEL_CHANGES_CANCEL_BTN')}</button>
-	  </div>
-    </div>
-  </div>
-</div>
+<t:modal  cancelButtonLabel="LBL_CANCEL_CHANGES_KEEP_EDITING_BTN" 
+		  processButtonLabel="LBL_CANCEL_CHANGES_CANCEL_BTN" 
+		  title="LBL_CANCEL_CHANGES_TITLE" 
+		  id="sureToCancelChanges">
+</t:modal>
 
 <div class="alert alert-warning alert-dismissable hide" id="alertMessage">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <div id="welcomeText"></div>
+    <div id="alertText"></div>
 </div>
 
 <div class="container-fluid"  id="editForm">
@@ -112,8 +100,11 @@
 	         	window.location.href = '${gridPage}';
               }).fail(function(data) {
 				saved = false;
-				$('#welcomeText').text(data.responseText);
+				$('#alertText').text(data.responseText);
 				$('#alertMessage').removeClass('hide');
+			    $('html body').animate({
+			        scrollTop: 0 
+			    }, 200);
               });
            });			 		
 

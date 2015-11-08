@@ -19,14 +19,17 @@ public class BBRShops extends BBRBasicServlet<BBRShop, BBRShopManager> {
 	@Override
 	protected String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String title = params.get("title");
-		manager.createAndStoreShop(title);
+		String country = params.get("country");
+		manager.createAndStoreShop(title, country);
 		return "";
 	}
 
 	@Override
 	protected BBRShop beforeUpdate(BBRShop shop, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		String title = params.get("title");
+		String country = params.get("country");
 		shop.setTitle(title);
+		shop.setCountry(country);
 		return shop;		
 	}
 

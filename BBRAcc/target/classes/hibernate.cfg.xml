@@ -38,6 +38,7 @@
         <mapping class="BBRAcc.BBRShop"/>
         <mapping class="BBRAcc.BBRUser"/>
         <mapping class="BBRAcc.BBRService"/>
+        <mapping class="BBRAcc.BBRServicePrice"/>
         <mapping class="BBRAcc.BBRServiceSubscription"/>
         <mapping class="BBRAcc.BBRTransaction"/>
         <mapping class="BBRCust.BBRSpecialist"/>

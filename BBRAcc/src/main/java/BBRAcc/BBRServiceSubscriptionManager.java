@@ -28,16 +28,21 @@ public class BBRServiceSubscriptionManager extends BBRDataManager<BBRServiceSubs
         SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
         String sd = df.format(startDate);
         
-		if (count("startDate <= '" + sd + "' and endDate >= '" + sd + "' and status=" + BBRServiceSbscriptionStatuses.SUBSCRIPTION_ACTIVE) > 0)
+		if (count("shop.id = " + shop.getId().toString() + " and startDate <= '" + sd + "' and ((endDate is null) or (endDate >= '" + sd + "')) and status=" + BBRServiceSbscriptionStatuses.SUBSCRIPTION_ACTIVE) > 0)
 			throw new Exception(BBRErrors.ERR_CANT_CREATE_DUPLICATE_SERVICE);
+		
+		BBRServicePriceManager spmgr = new BBRServicePriceManager(); 
+		BBRServicePrice price = spmgr.getCurrentPrice(service, shop.getCountry(), startDate);
 		
         BBRServiceSubscription ss = new BBRServiceSubscription();
         ss.setService(service);
         ss.setShop(shop);
-        ss.setCurrency(service.getCurrency());
+        if (price != null) {
+        	ss.setCurrency(price.getCurrency());
+    		ss.setCreditLimit(price.getCreditLimit());
+        }
         ss.setStartDate(startDate);
         ss.setEndDate(null);
-        ss.setCreditLimit(service.getCreditLimit());
         ss.setBalance(0F);
         ss.setStatus(BBRServiceSbscriptionStatuses.SUBSCRIPTION_REQUESTED);
         session.save(ss);

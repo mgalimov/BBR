@@ -24,15 +24,12 @@ public class BBRService extends BBRDataElement {
 	
 	@Column(name="STATUS")
 	private int status;
+	
+	@Column(name="DEMO")
+	private Boolean demo;
 
-	@Column(name="CREDIT_LIMIT")
-	private Float creditLimit;
-
-	@Column(name="PRICE")
-	private Float price;
-
-	@Column(name="CURRENCY")
-	private String currency;
+	@Column(name="BASIC")
+	private Boolean basic;
 
 	public class BBRServiceStatus {
 		public static final int SERVICE_INITIALIZED = 0;
@@ -64,28 +61,20 @@ public class BBRService extends BBRDataElement {
 		this.status = status;
 	}
 
-	public Float getCreditLimit() {
-		return creditLimit;
+	public Boolean isDemo() {
+		return demo;
 	}
 
-	public void setCreditLimit(Float creditLimit) {
-		this.creditLimit = creditLimit;
-	}
-	
-	public Float getPrice() {
-		return price;
+	public void setDemo(Boolean demo) {
+		this.demo = demo;
 	}
 
-	public void setPrice(Float price) {
-		this.price = price;
+	public Boolean isBasic() {
+		return basic;
 	}
 
-	public String getCurrency() {
-		return currency;
-	}
-
-	public void setCurrency(String currency) {
-		this.currency = currency;
+	public void setBasic(Boolean basic) {
+		this.basic = basic;
 	}
 
 }

@@ -15,6 +15,9 @@ public class BBRShop extends BBRDataElement {
 	@Column(name="TITLE")
 	private String title;
 	
+	@Column(name="COUNTRY")
+	private String country;
+	
 	public BBRShop() {}
 	
 	public void setId(Long id) {
@@ -31,5 +34,13 @@ public class BBRShop extends BBRDataElement {
 	
 	public String getTitle() {
 		return title;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
 	}
 }

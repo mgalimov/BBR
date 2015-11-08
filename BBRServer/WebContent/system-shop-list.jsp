@@ -4,6 +4,7 @@
 	<jsp:body>
 		<t:grid method="BBRShops" editPage="system-shop-edit.jsp" createPage="system-shop-create.jsp" title="LBL_SHOPS_TITLE">
 			<t:grid-item label="LBL_TITLE" field="title" sort="asc"/>
+			<t:grid-item label="LBL_COUNTRY" field="country" />
 		</t:grid>
 	</jsp:body>
 </t:admin-grid-wrapper>
