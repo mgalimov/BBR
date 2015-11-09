@@ -16,8 +16,8 @@
 	$(document).ready(function() {
 		$("#openPricesBtn").click(function () {
 			serviceId = getUrlParameter("id");
-			if (specId)
-				window.location.href = "system-serviceprice-list.jsp?query=" + serviceId;
+			if (serviceId)
+				window.location.href = "system-serviceprice-list.jsp?serviceId=" + serviceId;
 		});
 	});
 </script>

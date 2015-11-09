@@ -10,19 +10,14 @@
 	BBRContext context = BBRContext.getContext(request);
 	BBRParams params = new BBRParams(request.getQueryString());	
 	String titleMod = "";
-	String query = params.get("query");
-
 	context.set("service", null);
-	if (query != null && !query.isEmpty()) {
-  		String serviceId = params.get("query");
-			
-		if (serviceId != null && !serviceId.isEmpty()) {
-			BBRServiceManager smgr = new BBRServiceManager();
-			BBRService service = smgr.findById(Long.parseLong(serviceId));
-			if (service != null) {
-				context.set("service", service);
-				titleMod = BBRUtil.visualTitleDelimiter + service.getTitle();
-			}
+	String serviceId = params.get("serviceId");
+	if (serviceId != null && !serviceId.isEmpty()) {
+		BBRServiceManager smgr = new BBRServiceManager();
+		BBRService service = smgr.findById(Long.parseLong(serviceId));
+		if (service != null) {
+			context.set("service", service);
+			titleMod = BBRUtil.visualTitleDelimiter + service.getTitle();
 		}
 	}
 	
@@ -36,8 +31,8 @@
 
 <t:admin-grid-wrapper title="LBL_SERVICE_PRICE_TITLE">
 	<jsp:body>
-		<t:grid method="BBRServicePrices" editPage="system-serviceprice-edit.jsp" createPage="system-serviceprice-edit.jsp" 
-				title="LBL_SPRICE_TITLE" standardFilters="false">
+		<t:grid method="BBRServicePrices" editPage="system-serviceprice-edit.jsp" createPage="system-serviceprice-create.jsp" 
+				title="LBL_SPRICE_TITLE" standardFilters="false" titleModifier="${titleMod}">
 			<t:grid-item label="LBL_SERVICE" field="service.title" />
 			<t:grid-item label="LBL_COUNTRY" field="country" />
 			<t:grid-item label="LBL_SPRICE_START_DATE" field="startDate" />

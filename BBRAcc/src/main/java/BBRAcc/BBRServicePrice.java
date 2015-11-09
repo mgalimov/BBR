@@ -12,7 +12,7 @@ import BBR.BBRDataSet;
 
 @SuppressWarnings("unused")
 @Entity
-@Table(name="services")
+@Table(name="serviceprices")
 public class BBRServicePrice extends BBRDataElement {
 	@Id
 	@GeneratedValue
