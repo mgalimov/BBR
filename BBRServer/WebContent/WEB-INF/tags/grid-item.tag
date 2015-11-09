@@ -36,6 +36,18 @@
 	')}"/>
 </c:if>
 
+<c:if test="${type.equals('boolean')}">
+	<c:set var="items" scope="request" value="${items}, render: 
+		function(data, type, row, meta)	{
+			if (data == true)
+				return '${context.gs('OPT_BOOLEAN_TRUE_YES')}';
+			else
+				return '${context.gs('OPT_BOOLEAN_FALSE_NO')}';
+		}
+	"/>
+</c:if>
+
+
 <c:set var="items" scope="request" value="${items.concat('}')}"/>
 
 <c:set var="index" scope="request" value="${index+1}"/>

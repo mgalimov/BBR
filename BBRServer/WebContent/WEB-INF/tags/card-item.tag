@@ -141,12 +141,41 @@
 				
 				<c:set var="itemSet" scope="request" value="${itemSet.concat('
 		            $(\"#').concat(ft).concat('input\")')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize.setValue([obj.').concat(field).concat(']);')}"/>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize.addItem([obj.').concat(field).concat(']);')}"/>
 				
 				<script>
 				$("#${field.concat('input')}").selectize({
 				    openOnFocus: true,
 				    maxItems: ${mult}
+				 });
+				</script>
+			</c:when>
+
+			<c:when test="${type.equals('boolean')}">
+				<c:set var="isDis" value="${isDisabled}" />
+				<c:if test="${isDisabled.equals('readonly')}">
+					<c:set var="isDis" value="disabled" />
+				</c:if>
+
+				<c:set var="opts" scope="request" value="true:${context.gs('OPT_BOOLEAN_TRUE_YES')},false:${context.gs('OPT_BOOLEAN_FALSE_NO')}" />
+
+				<select class="selectized" style="display: none" id="${ft.concat('input')}" ${isRequired}  ${isDis}>
+					<c:forTokens items="${opts}" delims="," var="option">
+						<c:set var="selected" value="" />
+						<c:if test="${defaultValue != null && defaultValue.equals(option.split(':')[0])}">
+							<c:set var="selected" value="selected" />
+						</c:if>
+						<option value="${option.split(':')[0]}" ${selected}>${option.split(':')[1]}</option>
+					</c:forTokens>
+				</select>
+				
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('
+		            $(\"#').concat(ft).concat('input\")')}"/>
+				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize.addItem([obj.').concat(field).concat(']);')}"/>
+				
+				<script>
+				$("#${field.concat('input')}").selectize({
+				    openOnFocus: true
 				 });
 				</script>
 			</c:when>

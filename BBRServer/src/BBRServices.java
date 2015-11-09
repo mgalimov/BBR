@@ -52,7 +52,7 @@ public class BBRServices extends BBRBasicServlet<BBRService, BBRServiceManager> 
 		
 		if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN || 
 			context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER)
-			return manager.list(query, manager.getTitleField(), "and status=" + BBRServiceStatus.SERVICE_ACTIVE).toJson();
+			return manager.list(query, manager.getTitleField(), "status=" + BBRServiceStatus.SERVICE_ACTIVE).toJson();
 		else
 			return null;
 	}

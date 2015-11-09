@@ -32,7 +32,7 @@
 <t:admin-grid-wrapper title="LBL_SERVICE_PRICE_TITLE">
 	<jsp:body>
 		<t:grid method="BBRServicePrices" editPage="system-serviceprice-edit.jsp" createPage="system-serviceprice-create.jsp" 
-				title="LBL_SPRICE_TITLE" standardFilters="false" titleModifier="${titleMod}">
+				title="LBL_SERVICE_PRICE_TITLE" standardFilters="false" titleModifier="${titleMod}">
 			<t:grid-item label="LBL_SERVICE" field="service.title" />
 			<t:grid-item label="LBL_COUNTRY" field="country" />
 			<t:grid-item label="LBL_SPRICE_START_DATE" field="startDate" />
