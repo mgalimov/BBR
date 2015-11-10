@@ -37,6 +37,7 @@
 			<t:grid-item label="LBL_COUNTRY" field="country" />
 			<t:grid-item label="LBL_SPRICE_START_DATE" field="startDate" />
 			<t:grid-item label="LBL_SPRICE_END_DATE" field="endDate" />
+			<t:grid-item label="LBL_SPRICE_PRICE" field="price" />
 			<t:grid-item label="LBL_SPRICE_CURRENCY" field="currency" />
 			<t:grid-item label="LBL_SPRICE_LIMIT" field="creditLimit" />
 		</t:grid>
