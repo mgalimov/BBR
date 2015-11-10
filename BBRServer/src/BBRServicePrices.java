@@ -30,14 +30,14 @@ public class BBRServicePrices extends BBRBasicServlet<BBRServicePrice, BBRServic
 			BBRService service = smgr.findById(serviceId);
 
 			String sd = params.get("startDate");
-			Date startDate = new Date();
+			Date startDate = null;
 			if (!sd.isEmpty()) {
 				SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
 				startDate = df.parse(sd);
 			}
 
 			String ed = params.get("endDate");
-			Date endDate = new Date();
+			Date endDate = null;
 			if (!ed.isEmpty()) {
 				SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
 				endDate = df.parse(ed);
