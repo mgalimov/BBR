@@ -77,6 +77,12 @@ public class BBRUtil {
         	session.getTransaction().commit();
     }
 
+    public static void rollbackTran(int index, boolean transactionStarted) {
+        Session session = getSession(index);
+        if (transactionStarted)
+        	session.getTransaction().rollback();
+    }
+    
     @SuppressWarnings("rawtypes")
 	public static Class getGenericParameterClass(Class actualClass, int parameterIndex) {
     //	http://habrahabr.ru/post/66593/

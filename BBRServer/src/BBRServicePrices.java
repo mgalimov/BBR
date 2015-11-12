@@ -1,5 +1,6 @@
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Hashtable;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import BBRAcc.BBRService;
 import BBRAcc.BBRServiceManager;
 import BBRAcc.BBRServicePrice;
 import BBRAcc.BBRServicePriceManager;
+import BBRAcc.BBRUser.BBRUserRole;
 import BBRClientApp.BBRContext;
 import BBRClientApp.BBRParams;
 
@@ -72,6 +74,25 @@ public class BBRServicePrices extends BBRBasicServlet<BBRServicePrice, BBRServic
 	}
 
 	@Override
+	protected String getData(int pageNumber, int pageSize, 
+			Hashtable<Integer, Hashtable<String, String>> fields,
+			Hashtable<Integer, Hashtable<String, String>> sortingFields,
+			BBRParams params, HttpServletRequest request, 
+			HttpServletResponse response) {
+		BBRContext context = BBRContext.getContext(request);
+		String where = "";
+		
+		if (context.user == null || context.user.getRole() != BBRUserRole.ROLE_BBR_OWNER)
+			return null;
+
+		BBRService service = (BBRService)context.get("service");
+		if (service != null)
+			where += " service.id = " + service.getId(); 
+
+		return manager.list(pageNumber, pageSize, where, BBRContext.getOrderBy(sortingFields, fields)).toJson();
+	}
+
+	@Override
 	protected String getReferenceData(String query, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
 		String d = df.format(new Date());
@@ -84,4 +105,6 @@ public class BBRServicePrices extends BBRBasicServlet<BBRServicePrice, BBRServic
 		
 		return manager.list(query, manager.getTitleField(), where).toJson();
 	}
+	
+	
 }

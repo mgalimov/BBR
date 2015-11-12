@@ -24,19 +24,28 @@ public class BBRServicePriceManager extends BBRDataManager<BBRServicePrice> {
 														Float price, String currency, Float creditLimit) throws Exception {
 		if (service == null) return null;
         if (startDate == null) return null;
-
+        if (endDate != null && startDate.after(endDate))
+        	throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
+        
+        if (country == null) country = "";
+        if (currency == null) currency = "";
+        if (price == null) price = 0F;
+        if (creditLimit == null) creditLimit = 0F;
 		
 		boolean tr = BBRUtil.beginTran(sessionIndex);
         Session session = BBRUtil.getSession(sessionIndex);
         
         SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
         String sd = df.format(startDate);
-        String ed = "";
+        String wed = "";
         if (endDate != null)
-        	ed = df.format(endDate);
+        	wed = " and (startDate <= '" + df.format(endDate) + "'))";  
         
-		if (count("service.id = " + service.getId().toString() + " and country='" + country + "' and startDate <= '" + sd + "' and ((endDate is null) or (endDate >= '" + ed + "'))") > 0)
+        
+		if (count("service.id = " + service.getId().toString() + " and country='" + country + "' and ((endDate is null) or (endDate >= '" + sd + "'))" + wed) > 0) {
+			BBRUtil.rollbackTran(sessionIndex, tr);
 			throw new Exception(BBRErrors.ERR_CANT_CREATE_DUPLICATE_PRICE);
+		}
 		
         BBRServicePrice sp = new BBRServicePrice();
         sp.setService(service);
