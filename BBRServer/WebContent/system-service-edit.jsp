@@ -8,6 +8,7 @@
 			<t:card-item label="LBL_SERVICE_STATUS" field="status" type="select" options="OPT_SERVICE_STATUS"/>
 			<t:card-item label="LBL_SERVICE_DEMO" field="demo" type="boolean"/>
 			<t:card-item label="LBL_SERVICE_BASIC" field="basic" type="boolean" />
+			<t:card-item label="LBL_SERVICE_PRICE" field="currentPrice" type="text" isDisabled="readonly" />
 		</t:card>
 	</jsp:body>
 </t:admin-card-wrapper>
