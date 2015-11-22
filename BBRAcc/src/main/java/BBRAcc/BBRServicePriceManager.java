@@ -68,7 +68,7 @@ public class BBRServicePriceManager extends BBRDataManager<BBRServicePrice> {
         SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
         String d = df.format(date);
 
-        Query query = session.createQuery("from " + typeName + " where country = '" + country + "' and startDate <= '" + d + "' and (endDate is null or endDate >='" + d + "'");
+        Query query = session.createQuery("from " + typeName + " where country = '" + country + "' and startDate <= '" + d + "' and ((endDate is null) or endDate >='" + d + "')");
         BBRServicePrice price = (BBRServicePrice)query.uniqueResult();
         
         BBRUtil.commitTran(sessionIndex, tr);

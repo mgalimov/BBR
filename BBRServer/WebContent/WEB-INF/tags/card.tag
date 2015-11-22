@@ -97,7 +97,7 @@
               operation: op}, 
               function(responseText) { 
 				saved = true; 
-	         	window.location.href = '${gridPage}';
+				goToGrid('${gridPage}');
               }).fail(function(data) {
 				saved = false;
 				$('#alertText').text(data.responseText);
@@ -111,7 +111,7 @@
 		$('#cancelChanges').click(function(event) {
 			saved = true;
 			$.get('${method}', {id : idParam, operation : 'cancel'});
-			goBackOrTo('${gridPage}');
+			goToGrid('${gridPage}');
 		});
 		
  	});

@@ -24,23 +24,28 @@ public class BBRLoginFilter implements Filter {
      */
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-    	HttpServletRequest request = (HttpServletRequest) req;
-    	HttpServletResponse response = (HttpServletResponse) res;
-    	BBRContext context = BBRContext.getContext(request);
-
-    	String path = request.getRequestURI();
-    	String page = path;
-    	
-    	if (path.startsWith(request.getContextPath() + "/"))
-    		 page = path.substring(request.getContextPath().length() + 1, path.length());
-    	
-    	if (page.startsWith(context.getSignInPage())) {
-    		chain.doFilter(request, response);
-    	} else
-        if (!context.isPageAllowed(page)){
-       		response.sendRedirect(context.getWelcomePage());
-        } else
-        	chain.doFilter(request, response);
+    	try {
+	    	HttpServletRequest request = (HttpServletRequest) req;
+	    	HttpServletResponse response = (HttpServletResponse) res;
+	    	BBRContext context = BBRContext.getContext(request);
+	
+	    	String path = request.getRequestURI();
+	    	String page = path;
+	    	
+	    	if (path.startsWith(request.getContextPath() + "/"))
+	    		 page = path.substring(request.getContextPath().length() + 1, path.length());
+	    	
+	    	if (page.startsWith(context.getSignInPage())) {
+	    		chain.doFilter(request, response);
+	    	} else
+	        if (!context.isPageAllowed(page)){
+	       		response.sendRedirect(context.getWelcomePage());
+	        } else
+	        	chain.doFilter(request, response);
+    	} catch (Exception ex) {
+    		HttpServletResponse response = (HttpServletResponse) res;
+    		response.sendRedirect("general-error.jsp");    		
+    	}
     }
 
 

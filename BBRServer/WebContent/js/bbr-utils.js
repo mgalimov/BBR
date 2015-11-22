@@ -14,7 +14,14 @@ function getUrlParameter(sParam) {
             return sParameterName[1];
         }
     }
-}  
+}
+
+function goToGrid(address) {
+	if (document.referrer)
+		window.location.href = document.referrer; 
+	else
+		goBackOrTo(address);
+}
 
 function goBackOrTo(address) {
 	if (window.history.length > 0)

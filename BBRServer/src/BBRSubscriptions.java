@@ -43,7 +43,9 @@ public class BBRSubscriptions extends BBRBasicServlet<BBRServiceSubscription, BB
 				startDate = df.parse(sd);
 			}
 			
-			manager.createAndStoreServiceSubscription(service, shop, startDate);
+			BBRServiceSubscription ss = manager.createAndStoreServiceSubscription(service, shop, startDate);
+			if (ss == null)
+				throw new Exception();
 		} catch (Exception ex) {
 			throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
 		}

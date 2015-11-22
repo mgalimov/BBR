@@ -34,18 +34,20 @@ public class BBRServiceSubscriptionManager extends BBRDataManager<BBRServiceSubs
 		BBRServicePriceManager spmgr = new BBRServicePriceManager(); 
 		BBRServicePrice price = spmgr.getCurrentPrice(service, shop.getCountry(), startDate);
 		
-        BBRServiceSubscription ss = new BBRServiceSubscription();
-        ss.setService(service);
-        ss.setShop(shop);
-        if (price != null) {
+		BBRServiceSubscription ss = null;
+		
+		if (price != null) {
+	        ss = new BBRServiceSubscription();
+	        ss.setService(service);
+	        ss.setShop(shop);
         	ss.setCurrency(price.getCurrency());
     		ss.setCreditLimit(price.getCreditLimit());
-        }
-        ss.setStartDate(startDate);
-        ss.setEndDate(null);
-        ss.setBalance(0F);
-        ss.setStatus(BBRServiceSbscriptionStatuses.SUBSCRIPTION_REQUESTED);
-        session.save(ss);
+	        ss.setStartDate(startDate);
+	        ss.setEndDate(null);
+	        ss.setBalance(0F);
+	        ss.setStatus(BBRServiceSbscriptionStatuses.SUBSCRIPTION_REQUESTED);
+	        session.save(ss);
+		}
 
         BBRUtil.commitTran(sessionIndex, tr);
         return ss;
