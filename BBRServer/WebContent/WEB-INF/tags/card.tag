@@ -32,7 +32,7 @@
 
 <div class="container-fluid"  id="editForm">
 <h3>${context.gs(title)}</h3>
-<form role="form">
+<form role="form" class="form-horizontal">
 	<div class="panel panel-default">
 	  <c:if test="${showToolbar == true || showToolbar == null}">
 		  <div class="panel-heading" id="toolbar">

@@ -21,7 +21,7 @@
 <c:set var="ft" scope="request" value="${ft}${modifier}" />
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<div class="form-group ${isHidden}">
+<div class="form-group ${isHidden} col-md-8">
 	<label for="${ft}input">${context.gs(label)}</label>
 	<c:set var="itemids" scope="request" value="${itemids}
 				${ft}input,"/>
@@ -108,8 +108,12 @@
 			</c:when>
 
 			<c:when test="${type.equals('money')}">
-			 <div class="form-inline">
+				<div class="col-md-6">
+					&nbsp;
+				</div>
+				<div class="col-md-6">
 				<input type="text" class="form-control ${isHidden}" style="display: inline-block !important" id="${ft}input" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}/>
+				</div>
 				<c:set var="itemSet" scope="request" value="${itemSet}
 		            $('#${ft}input').val(obj.${field});"/>
 				<c:if test="${defaultValue != null}">
@@ -127,16 +131,17 @@
 
 				<c:set var="opts" scope="request" value="${context.gs('OPT_CURRENCIES')}" />
 
-				<select class="selectized" style="display: inline-block !important" id="${ftc}input" ${isRequired}  ${isDis}>
-					<c:forTokens items="${opts}" delims="," var="option">
-						<c:set var="selected" value="" />
-						<c:if test="${defaultValue != null && defaultValue.equals(option.split(':')[0])}">
-							<c:set var="selected" value="selected" />
-						</c:if>
-						<option value="${option.split(':')[0]}" ${selected}>${option.split(':')[1]}</option>
-					</c:forTokens>
-				</select>
-			 </div>
+				<div class="col-md-6">
+					<select class="selectized" style="display: none" id="${ftc}input" ${isRequired}  ${isDis}>
+						<c:forTokens items="${opts}" delims="," var="option">
+							<c:set var="selected" value="" />
+							<c:if test="${defaultValue != null && defaultValue.equals(option.split(':')[0])}">
+								<c:set var="selected" value="selected" />
+							</c:if>
+							<option value="${option.split(':')[0]}" ${selected}>${option.split(':')[1]}</option>
+						</c:forTokens>
+					</select>
+				</div>
 				
 				<c:set var="itemSet" scope="request" value="${itemSet}
 		            $('#${ftc}input')[0].selectize.addItem([obj.${currencyField}]);"/>
