@@ -9,8 +9,7 @@
 			<t:card-item label="LBL_COUNTRY" field="country" type="text" isDisabled="readonly" />
 			<t:card-item label="LBL_SPRICE_START_DATE" field="startDate" type="date" isDisabled="readonly"/>
 			<t:card-item label="LBL_SPRICE_END_DATE" field="endDate" type="date" />
-			<t:card-item label="LBL_SPRICE_PRICE" field="price" type="text" isDisabled="readonly"/>
-			<t:card-item label="LBL_SPRICE_CURRENCY" field="currency" type="text" isDisabled="readonly"/>
+			<t:card-item label="LBL_SPRICE_PRICE" field="price" type="money" currencyField="currency"/>
 			<t:card-item label="LBL_SPRICE_LIMIT" field="creditLimit" type="text" isDisabled="readonly"/>
 		</t:card>
 	</jsp:body>

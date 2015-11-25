@@ -12,69 +12,62 @@
 <%@ attribute name="defaultDisplay" %>
 <%@ attribute name="multiple" %>
 <%@ attribute name="modifier" %>
+<%@ attribute name="currencyField" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <c:set var="ft" scope="request" value="${fn:replace(field, '.', '_')}" />
 <c:set var="ft" scope="request" value="${ft}${modifier}" />
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <div class="form-group ${isHidden}">
-	<label for="${ft.concat('input')}">${context.gs(label)}</label>
-		<c:set var="itemids" scope="request" value="${itemids.concat('
-		      ').concat(ft).concat('input,')}"/>
-		<c:set var="itemReq" scope="request" value="${itemReq.concat('
-		      ').concat(ft).concat(':').concat(ft).concat('String,')}"/>
-		<c:set var="itemVal" scope="request" value="${itemVal.concat('
-	        ').concat(ft).concat('String = $(\"#').concat(ft).concat('input\").val();')}"/>
+	<label for="${ft}input">${context.gs(label)}</label>
+	<c:set var="itemids" scope="request" value="${itemids}
+				${ft}input,"/>
+	<c:set var="itemReq" scope="request" value="${itemReq}
+				${ft}:${ft}String,"/>
+	<c:set var="itemVal" scope="request" value="${itemVal}
+				${ft}String = $('#${ft}input').val();"/>
 		
 		<c:choose>
-		
 			<c:when test="${type.equals('info')}">
-				<p class="form-control-static" id="${ft.concat('input')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('
-		            $(\"#').concat(ft).concat('input\")')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('.text(obj.').concat(field).concat(');')}"/>
+				<p class="form-control-static" id="${ft}input"/>
+				<c:set var="itemSet" scope="request" value="${itemSet}
+					$('#${ft}').text(obj.${field});"/>
 				<c:if test="${defaultValue != null}">
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
-					        $(\"#').concat(ft).concat('input\")')}"/>
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.text(\"').concat(defaultValue).concat('\");')}"/>
+					<c:set var="itemPreload" scope="request" value="${itemPreload}
+						$('#${ft}input').text('${defaultValue}');}"/>
 				</c:if>
 			</c:when>
 			
 			<c:when test="${type.equals('text')}">
-				<input type="text" class="form-control ${isHidden}" id="${ft.concat('input')}" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('
-		            $(\"#').concat(ft).concat('input\")')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
+				<input type="text" class="form-control ${isHidden}" id="${ft}input" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}/>
+				<c:set var="itemSet" scope="request" value="${itemSet}
+		            $('#${ft}input').val(obj.${field});"/>
 				<c:if test="${defaultValue != null}">
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
-					        $(\"#').concat(ft).concat('input\")')}"/>
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.val(\"').concat(defaultValue).concat('\");')}"/>
+					<c:set var="itemPreload" scope="request" value="${itemPreload}
+   					  $('#${ft}input').val(obj.${defaultValue});}"/>
 				</c:if>
 			</c:when>
 			
 			<c:when test="${type.equals('textarea')}">
-				<textarea class="form-control ${isHidden}" rows="3" id="${ft.concat('input')}" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}></textarea>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('
-		            $(\"#').concat(ft).concat('input\")')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
+				<textarea class="form-control ${isHidden}" rows="3" id="${ft}input" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}></textarea>
+				<c:set var="itemSet" scope="request" value="${itemSet}
+		            $('#${ft}input').val(obj.${field});"/>
 				<c:if test="${defaultValue != null}">
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
-					        $(\"#').concat(ft).concat('input\")')}"/>
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.val(\"').concat(defaultValue).concat('\");')}"/>
+					<c:set var="itemPreload" scope="request" value="${itemPreload}
+   					  $('#${ft}input').val(obj.${defaultValue});}"/>
 				</c:if>
-			</c:when>			
+			</c:when>	
 			
 			<c:when test="${type.equals('password')}">
-				<input type="password" class="form-control ${isHidden}" id="${ft.concat('input')}" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('
-		            $(\"#').concat(ft).concat('input\")')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
+				<input type="password" class="form-control ${isHidden}" id="${ft}input" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}/>
+				<c:set var="itemSet" scope="request" value="${itemSet}
+		            $('#${ft}input').val(obj.${field});"/>
 				<c:if test="${defaultValue != null}">
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
-					        $(\"#').concat(ft).concat('input\")')}"/>
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.val(\"').concat(defaultValue).concat('\");')}"/>
+					<c:set var="itemPreload" scope="request" value="${itemPreload}
+   					  $('#${ft}input').val(obj.${defaultValue});}"/>
 				</c:if>
 			</c:when>
 			
@@ -92,27 +85,66 @@
 					<c:set var="format" value="YYYY-MM-DD HH:mm"></c:set>
 				</c:if>
 
-		        <div class="input-group date col-md-3" id="${ft.concat('inputdiv')}" >
-           			<input id="${ft.concat('input')}" type="text" class="form-control ${isHidden}" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled} />
+		        <div class="input-group date col-md-3" id="${ft}inputdiv" >
+           			<input id="${ft}input" type="text" class="form-control ${isHidden}" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled} />
 					<span class="input-group-addon ${isHidden}">
 						<span class="glyphicon ${glyphicon} ${isHidden}"></span>
 					</span>
 				</div>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('
-		            $(\"#').concat(ft).concat('input\")')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('.val(obj.').concat(field).concat(');')}"/>
+				<c:set var="itemSet" scope="request" value="${itemSet}
+		            $('#${ft}input').val(obj.${field});"/>
 				<c:if test="${defaultValue != null}">
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
-					        $(\"#').concat(ft).concat('input\")')}"/>
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('.val(\"').concat(defaultValue).concat('\");')}"/>
+					<c:set var="itemPreload" scope="request" value="${itemPreload}
+   					  $('#${ft}input').val(obj.${defaultValue});}"/>
 				</c:if>
 
 				<script>
-					$("#${ft.concat('inputdiv')}").datetimepicker({
+					$("#${ft}inputdiv").datetimepicker({
 						format: "${format}",
 						stepping: 30,
 						locale: "${context.getLocaleString()}"
 					});
+				</script>
+			</c:when>
+
+			<c:when test="${type.equals('money')}">
+			 <div class="form-inline">
+				<input type="text" class="form-control ${isHidden}" style="display: inline-block !important" id="${ft}input" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}/>
+				<c:set var="itemSet" scope="request" value="${itemSet}
+		            $('#${ft}input').val(obj.${field});"/>
+				<c:if test="${defaultValue != null}">
+					<c:set var="itemPreload" scope="request" value="${itemPreload}
+   					  $('#${ft}input').val(obj.${defaultValue});}"/>
+				</c:if>
+
+				<c:set var="ftc" scope="request" value="${fn:replace(currencyField, '.', '_')}" />
+				<c:set var="ftc" scope="request" value="${ftc}${modifier}" />
+				
+				<c:set var="isDis" value="${isDisabled}" />
+				<c:if test="${isDisabled.equals('readonly')}">
+					<c:set var="isDis" value="disabled" />
+				</c:if>
+
+				<c:set var="opts" scope="request" value="${context.gs('OPT_CURRENCIES')}" />
+
+				<select class="selectized" style="display: inline-block !important" id="${ftc}input" ${isRequired}  ${isDis}>
+					<c:forTokens items="${opts}" delims="," var="option">
+						<c:set var="selected" value="" />
+						<c:if test="${defaultValue != null && defaultValue.equals(option.split(':')[0])}">
+							<c:set var="selected" value="selected" />
+						</c:if>
+						<option value="${option.split(':')[0]}" ${selected}>${option.split(':')[1]}</option>
+					</c:forTokens>
+				</select>
+			 </div>
+				
+				<c:set var="itemSet" scope="request" value="${itemSet}
+		            $('#${ftc}input')[0].selectize.addItem([obj.${currencyField}]);"/>
+				
+				<script>
+				$("#${ftc}input").selectize({
+				    openOnFocus: true
+				 });
 				</script>
 			</c:when>
 			
@@ -129,7 +161,7 @@
 				
 				<c:set var="opts" scope="request" value="${context.gs(options)}" />
 
-				<select class="selectized" style="display: none" id="${ft.concat('input')}" ${isRequired}  ${isDis}>
+				<select class="selectized" style="display: none" id="${ft}input" ${isRequired}  ${isDis}>
 					<c:forTokens items="${opts}" delims="," var="option">
 						<c:set var="selected" value="" />
 						<c:if test="${defaultValue != null && defaultValue.equals(option.split(':')[0])}">
@@ -139,12 +171,11 @@
 					</c:forTokens>
 				</select>
 				
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('
-		            $(\"#').concat(ft).concat('input\")')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize.addItem([obj.').concat(field).concat(']);')}"/>
+				<c:set var="itemSet" scope="request" value="${itemSet}
+		            $('#${ft}input')[0].selectize.addItem([obj.${field}]);"/>
 				
 				<script>
-				$("#${field.concat('input')}").selectize({
+				$("#${ft}input").selectize({
 				    openOnFocus: true,
 				    maxItems: ${mult}
 				 });
@@ -159,7 +190,7 @@
 
 				<c:set var="opts" scope="request" value="true:${context.gs('OPT_BOOLEAN_TRUE_YES')},false:${context.gs('OPT_BOOLEAN_FALSE_NO')}" />
 
-				<select class="selectized" style="display: none" id="${ft.concat('input')}" ${isRequired}  ${isDis}>
+				<select class="selectized" style="display: none" id="${ft}input" ${isRequired}  ${isDis}>
 					<c:forTokens items="${opts}" delims="," var="option">
 						<c:set var="selected" value="" />
 						<c:if test="${defaultValue != null && defaultValue.equals(option.split(':')[0])}">
@@ -169,12 +200,11 @@
 					</c:forTokens>
 				</select>
 				
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('
-		            $(\"#').concat(ft).concat('input\")')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('[0].selectize.addItem([obj.').concat(field).concat(']);')}"/>
+				<c:set var="itemSet" scope="request" value="${itemSet}
+		            $('#${ft}input')[0].selectize.addItem([obj.${field}]);"/>
 				
 				<script>
-				$("#${field.concat('input')}").selectize({
+				$("#${ft}input").selectize({
 				    openOnFocus: true
 				 });
 				</script>
@@ -190,55 +220,43 @@
 				<c:if test="${multiple.equals('true')}">
 					<c:set var="mult" value="50" />
 				</c:if>
-				<select class="selectized" style="display: none" id="${ft.concat('input')}" ${isRequired}  ${isDis}>
+				<select class="selectized" style="display: none" id="${ft}input" ${isRequired}  ${isDis}>
 				</select>
 
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('
-				    el = $(\"#').concat(ft).concat('input\")[0].selectize;')}"/>
+				<c:set var="itemSet" scope="request" value="${itemSet}
+				    el = $('#${ft}input')[0].selectize;"/>
 				<c:if test="${multiple.equals('true')}">
-					<c:set var="itemSet" scope="request" value="${itemSet.concat('
-					obj.').concat(field).concat('.forEach(function (objItem) {')}"/>
+					<c:set var="itemSet" scope="request" value="${itemSet}
+					obj.${field}.forEach(function (objItem) {')}"/>
 				</c:if>
 				<c:if test="${!multiple.equals('true')}">
-					<c:set var="itemSet" scope="request" value="${itemSet.concat('
-					objItem = obj.').concat(field).concat(';')}"/>
+					<c:set var="itemSet" scope="request" value="${itemSet}
+					objItem = obj.${field};"/>
 				</c:if>
-					<c:set var="itemSet" scope="request" value="${itemSet.concat('
-						el.addOption(objItem?{id: objItem.id, ')}"/>
-					<c:set var="itemSet" scope="request" value="${itemSet.concat(referenceFieldTitle).concat(': objItem.').concat(referenceFieldTitle).concat('}:{});
-					')}"/>
-					<c:set var="itemSet" scope="request" value="${itemSet.concat('	el.addItem(objItem?objItem.id:null);')}"/>
+					<c:set var="itemSet" scope="request" value="${itemSet}
+						el.addOption(objItem?{id: objItem.id, ${referenceFieldTitle}: objItem.${referenceFieldTitle}}:{});"/>
+					<c:set var="itemSet" scope="request" value="${itemSet}
+						el.addItem(objItem?objItem.id:null);"/>
 				<c:if test="${multiple.equals('true')}">
-					<c:set var="itemSet" scope="request" value="${itemSet.concat('
-					});
-					')}"/>
+					<c:set var="itemSet" scope="request" value="${itemSet}
+					});"/>
 				</c:if>
 
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('el.load(').concat(ft).concat('LoadInitialData);
-				')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('	el.refreshOptions(false);
-				')}"/>
-				<c:set var="itemSet" scope="request" value="${itemSet.concat('	el.refreshItems();')}"/>
+				<c:set var="itemSet" scope="request" value="${itemSet}
+				    el.load(${ft}LoadInitialData);
+				    el.refreshOptions(false);
+				    el.refreshItems();"/>
 
-
-				<c:set var="itemAfterLoad" scope="request" value="${itemAfterLoad.concat('
-		$(\"#').concat(ft).concat('input\")')}"/>
-				<c:set var="itemAfterLoad" scope="request" value="${itemAfterLoad.concat('[0].selectize')}"/>
-				<c:set var="itemAfterLoad" scope="request" value="${itemAfterLoad.concat('.load(').concat(ft).concat('LoadInitialData);')}"/>
+				<c:set var="itemAfterLoad" scope="request" value="${itemAfterLoad}
+					$('#${ft}input')[0].selectize.load(${ft}LoadInitialData);"/>
 
 				<c:if test="${defaultValue != null}">
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('
-				    	el = $(\"#').concat(ft).concat('input\")[0].selectize;
-				    	')}"/>
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('el.addOption({id: \"').concat(defaultValue).concat('\", ')}"/>
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat(referenceFieldTitle).concat(': \"').concat(defaultDisplay).concat('\"});
-					')}"/>
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('el.addItem(\"').concat(defaultValue).concat('\");
-					')}"/>
-   					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('el.refreshOptions(false);
-   					')}"/>
-					<c:set var="itemPreload" scope="request" value="${itemPreload.concat('el.refreshItems();
-					')}"/>
+					<c:set var="itemPreload" scope="request" value="${itemPreload}
+				    	el = $('#${ft}input')[0].selectize;
+						el.addOption({id: '${defaultValue}', ${referenceFieldTitle}: '${defaultDisplay}'});
+						el.addItem(${defaultValue});
+						el.refreshOptions(false);
+						el.refreshItems();"/>
 				</c:if>
 
 				<script>
