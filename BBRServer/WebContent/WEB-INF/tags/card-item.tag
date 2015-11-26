@@ -110,7 +110,7 @@
 			<c:when test="${type.equals('number')}">
 				<div class="row">
 					<span class="col-md-6 col-lg-5 col-sm-6">
-						<input type="text" class="form-control ${isHidden}" style="display: inline-block !important" id="${ft}input" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}/>
+						<input type="number" class="form-control ${isHidden}" style="display: inline-block !important" id="${ft}input" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}/>
 					</span>
 					<c:set var="itemSet" scope="request" value="${itemSet}
 			            $('#${ft}input').val(obj.${field});"/>
@@ -124,7 +124,7 @@
 			<c:when test="${type.equals('money')}">
 				<div class="row">
 					<span class="col-md-6 col-lg-5 col-sm-6">
-						<input type="text" class="form-control ${isHidden}" style="display: inline-block !important" id="${ft}input" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}/>
+						<input type="number" class="form-control ${isHidden}" style="display: inline-block !important" id="${ft}input" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}/>
 					</span>
 					<c:set var="itemSet" scope="request" value="${itemSet}
 			            $('#${ft}input').val(obj.${field});"/>
