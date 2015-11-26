@@ -21,7 +21,7 @@
 <c:set var="ft" scope="request" value="${ft}${modifier}" />
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<div class="form-group ${isHidden} col-md-8">
+<div class="form-group ${isHidden}">
 	<label for="${ft}input">${context.gs(label)}</label>
 	<c:set var="itemids" scope="request" value="${itemids}
 				${ft}input,"/>
@@ -107,40 +107,59 @@
 				</script>
 			</c:when>
 
+			<c:when test="${type.equals('number')}">
+				<div class="row">
+					<span class="col-md-6 col-lg-5 col-sm-6">
+						<input type="text" class="form-control ${isHidden}" style="display: inline-block !important" id="${ft}input" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}/>
+					</span>
+					<c:set var="itemSet" scope="request" value="${itemSet}
+			            $('#${ft}input').val(obj.${field});"/>
+					<c:if test="${defaultValue != null}">
+						<c:set var="itemPreload" scope="request" value="${itemPreload}
+	   					  $('#${ft}input').val(obj.${defaultValue});}"/>
+					</c:if>
+				</div>
+			</c:when>
+			
 			<c:when test="${type.equals('money')}">
-				<div class="col-md-6">
-					&nbsp;
-				</div>
-				<div class="col-md-6">
-				<input type="text" class="form-control ${isHidden}" style="display: inline-block !important" id="${ft}input" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}/>
-				</div>
-				<c:set var="itemSet" scope="request" value="${itemSet}
-		            $('#${ft}input').val(obj.${field});"/>
-				<c:if test="${defaultValue != null}">
-					<c:set var="itemPreload" scope="request" value="${itemPreload}
-   					  $('#${ft}input').val(obj.${defaultValue});}"/>
-				</c:if>
-
-				<c:set var="ftc" scope="request" value="${fn:replace(currencyField, '.', '_')}" />
-				<c:set var="ftc" scope="request" value="${ftc}${modifier}" />
-				
-				<c:set var="isDis" value="${isDisabled}" />
-				<c:if test="${isDisabled.equals('readonly')}">
-					<c:set var="isDis" value="disabled" />
-				</c:if>
-
-				<c:set var="opts" scope="request" value="${context.gs('OPT_CURRENCIES')}" />
-
-				<div class="col-md-6">
-					<select class="selectized" style="display: none" id="${ftc}input" ${isRequired}  ${isDis}>
-						<c:forTokens items="${opts}" delims="," var="option">
-							<c:set var="selected" value="" />
-							<c:if test="${defaultValue != null && defaultValue.equals(option.split(':')[0])}">
-								<c:set var="selected" value="selected" />
-							</c:if>
-							<option value="${option.split(':')[0]}" ${selected}>${option.split(':')[1]}</option>
-						</c:forTokens>
-					</select>
+				<div class="row">
+					<span class="col-md-6 col-lg-5 col-sm-6">
+						<input type="text" class="form-control ${isHidden}" style="display: inline-block !important" id="${ft}input" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}/>
+					</span>
+					<c:set var="itemSet" scope="request" value="${itemSet}
+			            $('#${ft}input').val(obj.${field});"/>
+					<c:if test="${defaultValue != null}">
+						<c:set var="itemPreload" scope="request" value="${itemPreload}
+	   					  $('#${ft}input').val(obj.${defaultValue});}"/>
+					</c:if>
+	
+					<c:set var="ftc" scope="request" value="${fn:replace(currencyField, '.', '_')}" />
+					<c:set var="ftc" scope="request" value="${ftc}${modifier}" />
+					
+					<c:set var="itemids" scope="request" value="${itemids}
+						${ftc}input,"/>
+					<c:set var="itemReq" scope="request" value="${itemReq}
+						${ftc}:${ftc}String,"/>
+					<c:set var="itemVal" scope="request" value="${itemVal}
+						${ftc}String = $('#${ftc}input').val();"/>
+					
+					<c:set var="isDis" value="${isDisabled}" />
+					<c:if test="${isDisabled.equals('readonly')}">
+						<c:set var="isDis" value="disabled" />
+					</c:if>
+	
+					<c:set var="opts" scope="request" value="${context.gs('OPT_CURRENCIES')}" />
+					<span class="col-md-4 col-lg-3 col-sm-4" style="padding: 0 !important; margin: 0 !important; top: -4px; position: relative">
+						<select class="selectize" style="display:none" id="${ftc}input" ${isRequired}  ${isDis}>
+							<c:forTokens items="${opts}" delims="," var="option">
+								<c:set var="selected" value="" />
+								<c:if test="${defaultValue != null && defaultValue.equals(option.split(':')[0])}">
+									<c:set var="selected" value="selected" />
+								</c:if>
+								<option value="${option.split(':')[0]}" ${selected}>${option.split(':')[1]}</option>
+							</c:forTokens>
+						</select>
+					</span>
 				</div>
 				
 				<c:set var="itemSet" scope="request" value="${itemSet}

@@ -27,9 +27,8 @@
 			<t:card-item label="LBL_COUNTRY" field="country" type="text" />
 			<t:card-item label="LBL_SPRICE_START_DATE" field="startDate" type="date" isRequired="required"/>
 			<t:card-item label="LBL_SPRICE_END_DATE" field="endDate" type="date" />
-			<t:card-item label="LBL_SPRICE_PRICE" field="price" type="text" isRequired="required"/>
-			<t:card-item label="LBL_SPRICE_CURRENCY" field="currency" type="text" isRequired="required"/>
-			<t:card-item label="LBL_SPRICE_LIMIT" field="creditLimit" type="text" />
+			<t:card-item label="LBL_SPRICE_PRICE" field="price" type="money" currencyField="currency" isRequired="required"/>
+			<t:card-item label="LBL_SPRICE_LIMIT" field="creditLimit" type="number" />
 		</t:card>
 	</jsp:body>
 </t:admin-card-wrapper>

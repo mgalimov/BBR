@@ -24,7 +24,7 @@ public class BBRLoginFilter implements Filter {
      */
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-//    	try {
+    	try {
 	    	HttpServletRequest request = (HttpServletRequest) req;
 	    	HttpServletResponse response = (HttpServletResponse) res;
 	    	BBRContext context = BBRContext.getContext(request);
@@ -42,10 +42,10 @@ public class BBRLoginFilter implements Filter {
 	       		response.sendRedirect(context.getWelcomePage());
 	        } else
 	        	chain.doFilter(request, response);
-//    	} catch (Exception ex) {
-//    		HttpServletResponse response = (HttpServletResponse) res;
-//    		response.sendRedirect("general-error.jsp");    		
-//    	}
+    	} catch (Exception ex) {
+    		HttpServletResponse response = (HttpServletResponse) res;
+    		response.sendRedirect("general-error.jsp");    		
+    	}
     }
 
 

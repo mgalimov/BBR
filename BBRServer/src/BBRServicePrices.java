@@ -46,7 +46,7 @@ public class BBRServicePrices extends BBRBasicServlet<BBRServicePrice, BBRServic
 			}
 
 			String country = params.get("country");
-			String currency = params.get("country");
+			String currency = params.get("currency");
 			Float price = Float.parseFloat(params.get("price"));
 			Float creditLimit = Float.parseFloat(params.get("creditLimit"));
 			

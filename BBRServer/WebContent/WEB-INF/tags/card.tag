@@ -32,7 +32,7 @@
 
 <div class="container-fluid"  id="editForm">
 <h3>${context.gs(title)}</h3>
-<form role="form" class="form-horizontal">
+<form role="form">
 	<div class="panel panel-default">
 	  <c:if test="${showToolbar == true || showToolbar == null}">
 		  <div class="panel-heading" id="toolbar">
@@ -41,7 +41,9 @@
 		  </div>
 	  </c:if>
 	  <div class="panel-body">
-	  	<jsp:doBody/>
+	  	<div class="col-md-10 col-sm-10 col-lg-8">
+	  		<jsp:doBody/>
+	  	</div>
 	  </div>
 	  <c:if test="${showFooter == true || showFooter == null}">
 		  <div class="panel-footer">
