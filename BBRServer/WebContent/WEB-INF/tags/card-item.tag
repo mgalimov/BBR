@@ -37,7 +37,7 @@
 					$('#${ft}').text(obj.${field});"/>
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload}
-						$('#${ft}input').text('${defaultValue}');}"/>
+						$('#${ft}input').text('${defaultValue}');"/>
 				</c:if>
 			</c:when>
 			
@@ -47,7 +47,7 @@
 		            $('#${ft}input').val(obj.${field});"/>
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload}
-   					  $('#${ft}input').val(obj.${defaultValue});}"/>
+   					  $('#${ft}input').val('${defaultValue}');"/>
 				</c:if>
 			</c:when>
 			
@@ -57,7 +57,7 @@
 		            $('#${ft}input').val(obj.${field});"/>
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload}
-   					  $('#${ft}input').val(obj.${defaultValue});}"/>
+   					  $('#${ft}input').val('${defaultValue}');"/>
 				</c:if>
 			</c:when>	
 			
@@ -67,7 +67,7 @@
 		            $('#${ft}input').val(obj.${field});"/>
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload}
-   					  $('#${ft}input').val(obj.${defaultValue});}"/>
+   					  $('#${ft}input').val('${defaultValue}');"/>
 				</c:if>
 			</c:when>
 			
@@ -95,7 +95,7 @@
 		            $('#${ft}input').val(obj.${field});"/>
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload}
-   					  $('#${ft}input').val(obj.${defaultValue});}"/>
+   					  $('#${ft}input').val('${defaultValue}');"/>
 				</c:if>
 
 				<script>
@@ -116,7 +116,7 @@
 			            $('#${ft}input').val(obj.${field});"/>
 					<c:if test="${defaultValue != null}">
 						<c:set var="itemPreload" scope="request" value="${itemPreload}
-	   					  $('#${ft}input').val(obj.${defaultValue});}"/>
+	   					  $('#${ft}input').val('${defaultValue}');"/>
 					</c:if>
 				</div>
 			</c:when>
@@ -130,7 +130,7 @@
 			            $('#${ft}input').val(obj.${field});"/>
 					<c:if test="${defaultValue != null}">
 						<c:set var="itemPreload" scope="request" value="${itemPreload}
-	   					  $('#${ft}input').val(obj.${defaultValue});}"/>
+	   					  $('#${ft}input').val('${defaultValue}');"/>
 					</c:if>
 	
 					<c:set var="ftc" scope="request" value="${fn:replace(currencyField, '.', '_')}" />

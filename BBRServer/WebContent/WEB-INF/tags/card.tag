@@ -41,7 +41,7 @@
 		  </div>
 	  </c:if>
 	  <div class="panel-body">
-	  	<div class="col-md-10 col-sm-10 col-lg-8">
+	  	<div>
 	  		<jsp:doBody/>
 	  	</div>
 	  </div>

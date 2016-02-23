@@ -18,12 +18,14 @@
    request.setAttribute("itemId", this.hashCode());%>
 
 <c:if test="${allowed}">
-	<a href="${href}" class="list-group-item ${aclass}">
-		<c:if test="${badge.equals('true')}">
-			<span class="badge pull-right" id="${itemId}"></span>
-		</c:if>
-		<c:out value="${context.gs(title)}"/>
-	</a>
+	<li role="presentation" class="${aclass}">
+		<a href="${href}">
+			<c:if test="${badge.equals('true')}">
+				<span class="badge pull-right" id="${itemId}"></span>
+			</c:if>
+			<c:out value="${context.gs(title)}"/>
+		</a>
+	</li>
 </c:if>
 
 <c:if test="${badge.equals('true')}">
