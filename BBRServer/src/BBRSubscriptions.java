@@ -78,4 +78,19 @@ public class BBRSubscriptions extends BBRBasicServlet<BBRServiceSubscription, BB
 		
 		return manager.list(query, manager.getTitleField(), where).toJson();
 	}
+	
+	@Override
+	protected String processOperation(String operation, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+		if (operation.equals("cancelSubscriptionByShopAdmin")) {
+			BBRContext context = BBRContext.getContext(request);
+			if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN) {
+				Long subscrId = Long.parseLong(params.get("subscrId"));
+				BBRServiceSubscriptionManager smgr = new BBRServiceSubscriptionManager();
+				BBRServiceSubscription subscr = smgr.findById(subscrId);
+				if (subscr != null)
+					smgr.cancelSubscriptionByShopAdmin(context.user, subscr);
+			}
+		}
+		return "";
+	};
 }

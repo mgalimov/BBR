@@ -8,6 +8,8 @@ import BBR.BBRDataManager;
 import BBR.BBRDataSet;
 import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
+import BBRAcc.BBRServiceSubscription;
+import BBRAcc.BBRServiceSubscriptionManager;
 import BBRAcc.BBRUser;
 import BBRCust.BBRCustReg;
 import BBRCust.BBRTask.BBRTaskState;
@@ -73,6 +75,17 @@ public class BBRTaskManager extends BBRDataManager<BBRTask>{
     	
     	if (task.getObjectType().equals("BBRCust.BBRVisit")) {
     		BBRVisitManager mgr = new BBRVisitManager();
+    		return mgr.findById(task.getObjectId());
+    	} else
+    		return null;
+    }
+    
+    public BBRServiceSubscription getSubscription(BBRTask task) {
+    	if (task == null)
+    		return null;
+    	
+    	if (task.getObjectType().equals("BBRAcc.BBRServiceSubscription")) {
+    		BBRServiceSubscriptionManager mgr = new BBRServiceSubscriptionManager();
     		return mgr.findById(task.getObjectId());
     	} else
     		return null;

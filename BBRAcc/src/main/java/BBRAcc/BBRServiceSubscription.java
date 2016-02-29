@@ -107,7 +107,7 @@ public class BBRServiceSubscription extends BBRDataElement {
 		this.currency = currency;
 	}
 	
-	public class BBRServiceSbscriptionStatuses {
+	public class BBRServiceSubscriptionStatuses {
 		public static final int SUBSCRIPTION_REQUESTED = 0;
 		public static final int SUBSCRIPTION_ACTIVE = 1;
 		public static final int SUBSCRIPTION_CANCELLED = 2;

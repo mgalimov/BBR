@@ -32,7 +32,7 @@ public class BBRTransaction extends BBRDataElement {
 	private char type;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-	private BBRServiceSubscription service;
+	private BBRServiceSubscription subscription;
 	
 	public Long getId() {
 		return id;
@@ -75,11 +75,11 @@ public class BBRTransaction extends BBRDataElement {
 	}
 
 	public BBRServiceSubscription getServiceSubscription() {
-		return service;
+		return subscription;
 	}
 
 	public void setServiceSubscription(BBRServiceSubscription service) {
-		this.service = service;
+		this.subscription = service;
 	}
 	
 

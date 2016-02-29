@@ -20,7 +20,8 @@
 		<t:card method="BBRTasks" gridPage="manager-task-list.jsp" title="LBL_TASK_TITLE" showFooter="false" showToolbar="true">
 			<t:toolbar-item label="LBL_APPROVE_BTN" id="approveButton" accent="btn-info"/> 
 			<t:toolbar-item label="LBL_DISAPPROVE_BTN" id="disapproveButton" accent="btn-warning"/> 
-			<t:toolbar-item label="LBL_OPEN_VISIT_BTN" id="openVisitButton" /> 
+			<t:toolbar-item label="LBL_OPEN_VISIT_BTN" id="openVisitButton"  condition="obj.objectType=='BBRCust.BBRVisit'"/> 
+			<t:toolbar-item label="LBL_OPEN_SUBSCR_BTN" id="openSubscriptionButton" condition="obj.objectType=='BBRAcc.BBRServiceSubscription'"/> 
 			<t:card-item label="LBL_TITLE" field="title" type="text" isDisabled="readonly"/>
 			<t:card-item label="LBL_POS" field="pos" type="reference" referenceFieldTitle="title" referenceMethod="BBRPoSes" isDisabled="readonly"/>
 			<t:card-item label="LBL_PERFORMER" field="performer" type="reference" referenceFieldTitle="name" referenceMethod="BBRUsers" isDisabled="readonly"/>
@@ -72,6 +73,21 @@
 				        	}
 				        }).success(function(d) {
 				        	if (d) window.location.href = 'manager-visit-edit.jsp?id=' + d; 
+				        });									
+					}					
+				});
+				
+				$("#openSubscriptionButton").on("click", function() {
+					idParam = getUrlParameter('id');
+					if (idParam && idParam != 'new') {
+						$.ajax({
+				        	url: 'BBRTasks',
+				        	data: {
+				        		operation: 'getsubscription',
+				        		taskId: idParam
+				        	}
+				        }).success(function(d) {
+				        	if (d) window.location.href = 'admin-subscription-edit.jsp?id=' + d; 
 				        });									
 					}					
 				});

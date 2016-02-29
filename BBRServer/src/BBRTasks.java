@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import BBR.BBRUtil;
+import BBRAcc.BBRServiceSubscription;
 import BBRAcc.BBRUser;
 import BBRAcc.BBRUser.BBRUserRole;
 import BBRAcc.BBRUserManager;
@@ -90,11 +91,12 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 		String where = "";
 		if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
 			if (context.user.getPos() != null)
-				where = " pos.id = " + context.user.getPos().getId() + " or ";
+				where = " pos.id = " + context.user.getPos().getId() + " or performer.id = " + context.user.getId();
 		if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
 			if (context.user.getShop() != null)
-				where = " pos.shop.id = " + context.user.getShop().getId() + " or ";
-		where += " performer.id = " + context.user.getId();
+				where = " pos.shop.id = " + context.user.getShop().getId() + " or performer.id = " + context.user.getId();
+		if (context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER)
+				where = " pos.id is null and performer.id is null";
 		
 		if ((String)context.get("viewtasks") == null)
 			where = "(" + where + ") and (state < " + BBRTaskState.TASKSTATE_COMPLETED + ")";
@@ -155,6 +157,15 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 					res = visit.getId().toString();
 			}
 		} else
+		if (operation.equals("getsubscription")) {
+			Long taskId = Long.parseLong(params.get("taskId"));
+			BBRTask task = manager.findById(taskId);
+			if (task != null) {
+				BBRServiceSubscription subscr = manager.getSubscription(task);
+				if (subscr != null)
+					res = subscr.getId().toString();
+			}
+		} else
 		if (operation.equals("togglealltasks")) {
 			context.set("viewtasks", "all");
 		} else 
@@ -170,17 +181,21 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 			HttpServletResponse response) {
 		BBRContext context = BBRContext.getContext(request);
 		String where = "";
-		if (context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER)
-			return "0";
 		
 		if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
 			if (context.user.getPos() != null)
 				where = manager.wherePos(context.user.getPos().getId());
+
 		if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
 			if (context.user.getShop() != null)
 				where = manager.whereShop(context.user.getShop().getId());
+
+		if (context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER)
+				where = "pos.id is null and performer.id is null";
+
 		if (!where.equals("")) 
 			where = "(" + where +") and";
+
 		where += "(state <> 2)";
 		return manager.count(where).toString();
 	}
