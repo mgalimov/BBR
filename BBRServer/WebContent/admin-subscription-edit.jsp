@@ -1,9 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
+<%@ page import="BBRClientApp.BBRContext"%>
+<%
+	BBRContext context = BBRContext.getContext(request);
+%>
 <t:admin-card-wrapper title="LBL_SUBSCR_EDIT">
 	<jsp:body>
 		<t:modal cancelButtonLabel="BTN_RETURN" processButtonLabel="BTN_CANCEL_SUBSCRIPTION" title="LBL_CANCEL_SUBSCRIPTION" id="modalCancel">
-			LBL_REALLY_WANT_TO_CANCEL_SUBSCRIPTION
+			${context.gs("LBL_REALLY_WANT_TO_CANCEL_SUBSCRIPTION")}
 		</t:modal>
 		<t:card method="BBRSubscriptions" gridPage="admin-subscription-list.jsp" title="LBL_SUBSCR_EDIT">
 			<t:toolbar-item label="LBL_CANCEL_SUBSCR" id="cancelSubscrByManagerBtn" />

@@ -84,4 +84,11 @@ public class BBRServiceSubscriptionManager extends BBRDataManager<BBRServiceSubs
 			update(subscr);
 		}
 	}
+
+	public void approve(BBRServiceSubscription subscr) {
+		if (subscr != null) {
+			subscr.setStatus(BBRServiceSubscriptionStatuses.SUBSCRIPTION_ACTIVE);
+			update(subscr);
+		}
+	}
   }

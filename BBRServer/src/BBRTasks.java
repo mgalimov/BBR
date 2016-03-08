@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import BBR.BBRUtil;
 import BBRAcc.BBRServiceSubscription;
+import BBRAcc.BBRServiceSubscriptionManager;
 import BBRAcc.BBRUser;
 import BBRAcc.BBRUser.BBRUserRole;
 import BBRAcc.BBRUserManager;
@@ -119,6 +120,11 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 					BBRVisitManager mgr = new BBRVisitManager();
 					mgr.approve(visit);
 				}
+				BBRServiceSubscription subscr = manager.getSubscription(task);
+				if (subscr != null) {
+					BBRServiceSubscriptionManager mgr = new BBRServiceSubscriptionManager();
+					mgr.approve(subscr);
+				}
 				manager.update(task);
 			}
 			res = "";
@@ -196,7 +202,7 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 		if (!where.equals("")) 
 			where = "(" + where +") and";
 
-		where += "(state <> 2)";
+		where += "(state <> " + BBRTaskState.TASKSTATE_COMPLETED + ")";
 		return manager.count(where).toString();
 	}
 }
