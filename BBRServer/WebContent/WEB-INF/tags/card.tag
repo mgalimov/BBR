@@ -93,7 +93,9 @@
     			op = 'create';
     		else
     			op = 'update';
-    			
+    		
+    		$("#saveChanges").attr("disabled", "disabled");
+    		$("#cancelChanges").attr("disabled", "disabled");
             $.get('${method}',
              {id:idParam,${itemReq}
               operation: op}, 
