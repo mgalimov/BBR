@@ -2,8 +2,13 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <t:admin-grid-wrapper title="LBL_JOBS_TITLE">
 	<jsp:body>
-		<t:grid method="BBRJobs" editPage="system-job-edit.jsp" createPage="system-job-create.jsp" title="LBL_JOBS_TITLE">
-			<t:grid-item label="LBL_TITLE" field="title" sort="asc"/>
+		<t:grid method="BBRJobs" editPage="system-job-edit.jsp" createPage="system-job-create.jsp" 
+				title="LBL_JOBS_TITLE" standardFilters="false">
+			<t:grid-item label="LBL_TITLE" field="title" />
+			<t:grid-item label="LBL_LAST_RUN" field="lastRun" sort="desc"/>
+			<t:grid-item label="LBL_NEXT_RUN" field="nextRun"/>
+			<t:grid-item label="LBL_RUN_CONDITIONS" field="runConditions"/>
+			<t:grid-item label="LBL_RUN_METHOD" field="runMethod"/>
 		</t:grid>
 	</jsp:body>
 </t:admin-grid-wrapper>

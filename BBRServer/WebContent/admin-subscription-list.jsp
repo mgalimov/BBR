@@ -17,7 +17,7 @@
 <t:admin-grid-wrapper title="LBL_SUBSCRIPTIONS_TITLE">
 	<jsp:body>
 		<t:grid method="BBRSubscriptions" editPage="admin-subscription-edit.jsp" createPage="admin-subscription-create.jsp" 
-				title="LBL_SUBSCRIPTIONS_TITLE" standardFilters="false" customToolbar="True">
+				title="LBL_SUBSCRIPTIONS_TITLE" standardFilters="true" standardFiltersShopsOnly="true" customToolbar="True">
 			<t:toolbar-group>
 				<t:toolbar-item label="LBL_GRID_CREATE_RECORD_BTN" id="create" accent="btn-default" icon="glyphicon-plus"/>
 				<t:toolbar-item label="LBL_GRID_EDIT_RECORD_BTN" id="edit" accent="btn-info" icon="glyphicon-pencil"/>

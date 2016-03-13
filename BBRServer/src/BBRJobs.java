@@ -1,9 +1,12 @@
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Hashtable;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import BBR.BBRUtil;
 import BBRAcc.BBRJob;
 import BBRAcc.BBRJobManager;
 import BBRAcc.BBRUser.BBRUserRole;
@@ -22,7 +25,19 @@ public class BBRJobs extends BBRBasicServlet<BBRJob, BBRJobManager> {
 	protected String create(BBRParams params, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		String title = params.get("title");
-		manager.createAndStoreJob(title);
+		String nextRunString = params.get("nextRun");
+		String runConditions = params.get("runConditions");
+		String runMethod = params.get("runMethod");
+		
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
+		Date nextRun;
+		try {
+			nextRun = df.parse(nextRunString);
+		} catch (Exception ex) {
+			nextRun = null;
+		}
+		
+		manager.createAndStoreJob(title, nextRun, runConditions, runMethod);
 		return "";
 	}
 
@@ -30,7 +45,22 @@ public class BBRJobs extends BBRBasicServlet<BBRJob, BBRJobManager> {
 	protected BBRJob beforeUpdate(BBRJob job, BBRParams params,
 			HttpServletRequest request, HttpServletResponse response) {
 		String title = params.get("title");
+		String nextRunString = params.get("nextRun");
+		String runConditions = params.get("runConditions");
+		String runMethod = params.get("runMethod");
+		
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
+		Date nextRun;
+		try {
+			nextRun = df.parse(nextRunString);
+		} catch (Exception ex) {
+			nextRun = null;
+		}
+		
 		job.setTitle(title);
+		job.setNextRun(nextRun);
+		job.setRunConditions(runConditions);
+		job.setRunMethod(runMethod);
 		return job;
 	}
 

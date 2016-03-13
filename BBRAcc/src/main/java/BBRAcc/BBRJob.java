@@ -1,6 +1,7 @@
 package BBRAcc;
 
 import javax.persistence.*;
+import java.util.Date;
 
 import BBR.BBRDataElement;
 
@@ -14,7 +15,19 @@ public class BBRJob extends BBRDataElement {
 	
 	@Column(name="TITLE")
 	private String title;
-	
+
+	@Column(name="LAST_RUN")
+	private Date lastRun;
+
+	@Column(name="NEXT_RUN")
+	private Date nextRun;
+
+	@Column(name="RUN_CONDITIONS")
+	private String runConditions;
+
+	@Column(name="RUN_METHOD")
+	private String runMethod;
+
 	public BBRJob() {}
 	
 	public void setId(Long id) {
@@ -31,6 +44,38 @@ public class BBRJob extends BBRDataElement {
 	
 	public String getTitle() {
 		return title;
+	}
+
+	public Date getLastRun() {
+		return lastRun;
+	}
+
+	public void setLastRun(Date lastRun) {
+		this.lastRun = lastRun;
+	}
+
+	public Date getNextRun() {
+		return nextRun;
+	}
+
+	public void setNextRun(Date nextRun) {
+		this.nextRun = nextRun;
+	}
+
+	public String getRunConditions() {
+		return runConditions;
+	}
+
+	public void setRunConditions(String runConditions) {
+		this.runConditions = runConditions;
+	}
+
+	public String getRunMethod() {
+		return runMethod;
+	}
+
+	public void setRunMethod(String runMethod) {
+		this.runMethod = runMethod;
 	}
 
 }

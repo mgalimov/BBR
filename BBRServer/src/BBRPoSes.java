@@ -85,6 +85,7 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 			BBRContext context = BBRContext.getContext(request);
 			BBRShop shop = null;
 			BBRPoS pos = null;
+			String shopsOnly = params.get("shopsonly");
 			
 			if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
 				shop = context.user.getShop();
@@ -105,10 +106,12 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 						res += "}, ";
 						currentShopId = (Long)line[0];
 					}
-				res += "{";
-				res += "\"id\": \"" + line[2] + "\", ";
-				res += "\"title\": \"" + line[3] + "\"";
-				res += "}, ";
+				if (!shopsOnly.equalsIgnoreCase("true")) {
+					res += "{";
+					res += "\"id\": \"" + line[2] + "\", ";
+					res += "\"title\": \"" + line[3] + "\"";
+					res += "}, ";
+				}
 			}
 			res = res.substring(0, res.length() - 2);
 			res += "]";

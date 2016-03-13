@@ -5,6 +5,7 @@
 <%@ attribute name="isRequired" %>
 <%@ attribute name="isDisabled" %>
 <%@ attribute name="isHidden" %>
+<%@ attribute name="isShopsOnly" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -44,7 +45,8 @@
             type: 'GET',
             dataType: 'json',
             data: {
-                operation: 'specialList'
+                operation: 'specialList',
+        		shopsonly: '${isShopsOnly}'
             },
             error: function() {
             	callback();

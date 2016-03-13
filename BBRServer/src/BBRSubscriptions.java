@@ -131,6 +131,12 @@ public class BBRSubscriptions extends
 			where += "(status = " + BBRServiceSubscriptionStatuses.SUBSCRIPTION_ACTIVE + ")";
 		}
 		
+		if (context.filterShop != null) {
+			if (!where.equals(""))
+				where += " and ";
+			where += "(shop = " + context.filterShop.getId() + ")";
+		}
+		
 		return manager.list(pageNumber, pageSize, where,
 				BBRContext.getOrderBy(sortingFields, fields)).toJson();
 	}

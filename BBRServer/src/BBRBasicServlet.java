@@ -119,13 +119,21 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 		BBRContext context = BBRContext.getContext(request);
 		String where = "";
 		if (context.user != null) {
-			if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN || context.user.getRole() == BBRUserRole.ROLE_POS_SPECIALIST)
+			if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN || 
+			    context.user.getRole() == BBRUserRole.ROLE_POS_SPECIALIST)
 				if (context.user.getPos() != null)
 					where = manager.wherePos(context.user.getPos().getId());
 			if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
 				if (context.user.getShop() != null)
 					where = manager.whereShop(context.user.getShop().getId());
+			if (context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER)
+				if (context.filterPoS != null)
+					where = manager.wherePos(context.filterPoS.getId());
+				else
+					if (context.filterShop != null)
+						where = manager.whereShop(context.filterShop.getId());
 		}
+		
 		return manager.list(pageNumber, pageSize, where, BBRContext.getOrderBy(sortingFields, fields)).toJson();
 	}
 

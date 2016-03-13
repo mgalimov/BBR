@@ -2,7 +2,8 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <t:admin-grid-wrapper title="LBL_POSES_TITLE">
 	<jsp:body>
-		<t:grid method="BBRPoSes" editPage="admin-pos-edit.jsp" createPage="admin-pos-create.jsp" title="LBL_POSES_TITLE">
+		<t:grid method="BBRPoSes" editPage="admin-pos-edit.jsp" createPage="admin-pos-create.jsp" 
+		 		title="LBL_POSES_TITLE" standardFiltersShopsOnly="true">
 			<t:grid-item label="LBL_TITLE" field="title" sort="asc"/>
 			<t:grid-item label="LBL_LOC_DESCRIPTION" field="locationDescription" sort="asc"/>
 			<t:grid-item label="LBL_SHOP" field="shop.title"/>
