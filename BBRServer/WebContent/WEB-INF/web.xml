@@ -11,4 +11,9 @@
   <welcome-file-list>
     <welcome-file>general-signin.jsp</welcome-file>
   </welcome-file-list>
+  <listener>
+    <listener-class>
+        BBRClientApp.BBRListener
+    </listener-class>
+  </listener>
 </web-app>
