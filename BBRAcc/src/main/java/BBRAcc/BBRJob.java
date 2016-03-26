@@ -28,6 +28,9 @@ public class BBRJob extends BBRDataElement {
 	@Column(name="RUN_METHOD")
 	private String runMethod;
 
+	@Column(name="LAST_RUN_STATUS")
+	private String lastRunStatus;
+	
 	public BBRJob() {}
 	
 	public void setId(Long id) {
@@ -76,6 +79,14 @@ public class BBRJob extends BBRDataElement {
 
 	public void setRunMethod(String runMethod) {
 		this.runMethod = runMethod;
+	}
+
+	public String getLastRunStatus() {
+		return lastRunStatus;
+	}
+
+	public void setLastRunStatus(String lastRunStatus) {
+		this.lastRunStatus = lastRunStatus;
 	}
 
 }

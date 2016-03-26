@@ -9,6 +9,7 @@
 			<t:grid-item label="LBL_NEXT_RUN" field="nextRun"/>
 			<t:grid-item label="LBL_RUN_CONDITIONS" field="runConditions"/>
 			<t:grid-item label="LBL_RUN_METHOD" field="runMethod"/>
+			<t:grid-item label="LBL_LAST_RUN_STATUS" field="lastRunStatus"/>
 		</t:grid>
 	</jsp:body>
 </t:admin-grid-wrapper>

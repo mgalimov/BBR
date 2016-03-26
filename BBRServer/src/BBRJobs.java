@@ -11,6 +11,7 @@ import BBRAcc.BBRJob;
 import BBRAcc.BBRJobManager;
 import BBRAcc.BBRUser.BBRUserRole;
 import BBRClientApp.BBRContext;
+import BBRClientApp.BBRListener;
 import BBRClientApp.BBRParams;
 
 @WebServlet("/BBRJobs")
@@ -38,6 +39,7 @@ public class BBRJobs extends BBRBasicServlet<BBRJob, BBRJobManager> {
 		}
 		
 		manager.createAndStoreJob(title, nextRun, runConditions, runMethod);
+		BBRListener.reschedule();
 		return "";
 	}
 
@@ -61,7 +63,10 @@ public class BBRJobs extends BBRBasicServlet<BBRJob, BBRJobManager> {
 		job.setNextRun(nextRun);
 		job.setRunConditions(runConditions);
 		job.setRunMethod(runMethod);
-		return job;
+		manager.update(job);
+		BBRListener.reschedule();
+
+		return null;
 	}
 
 	@Override

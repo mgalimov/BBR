@@ -22,6 +22,7 @@ public class BBRJobManager extends BBRDataManager<BBRJob>{
         job.setNextRun(nextRun);
         job.setRunConditions(runConditions);
         job.setRunMethod(runMethod);
+        job.setLastRunStatus("NEVER STARTED");
         session.save(job);
 
         BBRUtil.commitTran(sessionIndex, tr);

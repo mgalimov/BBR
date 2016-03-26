@@ -20,7 +20,7 @@ import BBRAcc.BBRJob;
 import BBRAcc.BBRJobManager;
 
 public class BBRListener implements ServletContextListener {
-	Scheduler sched;
+	private static Scheduler sched;
 	
     @Override
     public void contextDestroyed(ServletContextEvent arg0) {
@@ -32,11 +32,19 @@ public class BBRListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent arg0) {
+    	SchedulerFactory sf = new StdSchedulerFactory();   
+    	try {
+			sched = sf.getScheduler();
+	    	reschedule();
+    	} catch (Exception ex) {
+    	}
+    }
+    
+    public static void reschedule() {
     	Thread thread = new Thread(){
     		public void run() {
-    	    	SchedulerFactory sf = new StdSchedulerFactory();   
     	    	try {
-    				sched = sf.getScheduler();
+    				sched.clear();
     				
     				BBRJobManager jm = new BBRJobManager();
     				BBRDataSet<BBRJob> jl = jm.list("", "runConditions", "substring(runConditions,1,1)<>'-' and  runConditions<>''");
