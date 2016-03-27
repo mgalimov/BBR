@@ -45,7 +45,7 @@ public class BBRListener implements ServletContextListener {
     		public void run() {
     	    	try {
     				sched.clear();
-    				
+
     				BBRJobManager jm = new BBRJobManager();
     				BBRDataSet<BBRJob> jl = jm.list("", "runConditions", "substring(runConditions,1,1)<>'-' and  runConditions<>''");
     				for (BBRJob j : jl.data) {
