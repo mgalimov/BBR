@@ -251,7 +251,7 @@
 				    el = $('#${ft}input')[0].selectize;"/>
 				<c:if test="${multiple.equals('true')}">
 					<c:set var="itemSet" scope="request" value="${itemSet}
-					obj.${field}.forEach(function (objItem) {')}"/>
+					obj.${field}.forEach(function (objItem) {"/>
 				</c:if>
 				<c:if test="${!multiple.equals('true')}">
 					<c:set var="itemSet" scope="request" value="${itemSet}

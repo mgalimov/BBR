@@ -4,6 +4,8 @@ import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
 
+import java.util.TimeZone;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -32,8 +34,10 @@ public class BBRListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent arg0) {
-    	SchedulerFactory sf = new StdSchedulerFactory();   
+    	SchedulerFactory sf;
     	try {
+    		//TimeZone.setDefault(TimeZone.getTimeZone("GMT+4"));
+			sf = new StdSchedulerFactory();
 			sched = sf.getScheduler();
 	    	reschedule();
     	} catch (Exception ex) {
@@ -61,6 +65,7 @@ public class BBRListener implements ServletContextListener {
     								.withSchedule(cronSchedule(j.getRunConditions()))
     								.startAt(j.getNextRun())
     								.build();
+    					
     						sched.scheduleJob(job, trigger);
     					} catch (Exception e) {
     						

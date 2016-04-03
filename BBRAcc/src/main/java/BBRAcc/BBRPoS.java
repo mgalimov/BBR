@@ -46,6 +46,9 @@ public class BBRPoS extends BBRDataElement {
 	@Column(name="CURRENCY")
 	private String currency;
 	
+	@Column(name="TIMEZONE")
+	private String timeZone;
+	
 	public BBRPoS() {}
 	
 	public void setId(Long id) {
@@ -118,5 +121,13 @@ public class BBRPoS extends BBRDataElement {
 
 	public void setCurrency(String currency) {
 		this.currency = currency;
+	}
+
+	public String getTimeZone() {
+		return timeZone;
+	}
+
+	public void setTimeZone(String timeZone) {
+		this.timeZone = timeZone;
 	}
 }
