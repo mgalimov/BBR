@@ -8,7 +8,7 @@
 			<t:card-item label="LBL_LAST_NAME" field="lastName" type="text" isRequired="required" />
 			<t:card-item label="LBL_SHOP" field="shop" type="reference" referenceFieldTitle="title" referenceMethod="BBRShops" isRequired="required" />
 			<t:card-item label="LBL_POS" field="pos" type="reference" referenceFieldTitle="title" referenceMethod="BBRPoSes" isRequired="required" />
-			<t:card-item label="LBL_APPROVED" field="approved" type="select" options="true:Approved,false:Not approved yet" isRequired="required" />
+			<t:card-item label="LBL_APPROVED" field="approved" type="select" options="OPT_USER_APPROVED" isRequired="required" />
 			<t:card-item label="LBL_ROLE" field="role" type="select" options="OPT_ROLES" isRequired="required" />
 		</t:card>
 	</jsp:body>

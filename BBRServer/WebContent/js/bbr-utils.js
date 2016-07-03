@@ -17,10 +17,11 @@ function getUrlParameter(sParam) {
 }
 
 function goToGrid(address) {
-	if (document.referrer)
+/*	if (document.referrer)
 		window.location.href = document.referrer; 
 	else
-		goBackOrTo(address);
+		goBackOrTo(address);*/
+	window.location.href = address;
 }
 
 function goBackOrTo(address) {

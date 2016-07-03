@@ -1,0 +1,11 @@
+MySQL 5.5 database added.  Please make note of these credentials:
+
+       Root User: admindwR2suB
+   Root Password: 6DkywrmrrfI6
+   Database Name: jb
+
+Connection URL: mysql://$OPENSHIFT_MYSQL_DB_HOST:$OPENSHIFT_MYSQL_DB_PORT/
+
+
+mysql://localhost:3306/bbrdb
+roo

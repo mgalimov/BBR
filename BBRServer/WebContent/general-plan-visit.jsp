@@ -1,8 +1,11 @@
 <%@page import="BBR.BBRGPS"%>
 <%@page import="BBRAcc.BBRPoSManager"%>
 <%@page import="BBRAcc.BBRPoS"%>
+<%@page import="BBRCust.BBRVisit"%>
 <%@page import="BBR.BBRDataSet"%>
 <%@page import="BBRClientApp.BBRContext"%>
+<%@ page import="BBRClientApp.BBRParams"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
@@ -12,10 +15,30 @@
 
 <%
 	BBRContext context = BBRContext.getContext(request);
-	
+	BBRParams params = new BBRParams(request.getQueryString());
+
+	String titleMod = "";
+
+	String posid = params.get("pos");
 	int visitStep = context.getLastVisitStep();
 	if (visitStep > 3 || visitStep < 1)
 		context.setLastVisitStep(1);
+
+	if (visitStep == 1 && posid != null && !posid.isEmpty()) {
+		BBRPoSManager pmgr = new BBRPoSManager();
+		BBRPoS pos = pmgr.findById(Long.parseLong(posid));
+		context.set("pos", pos);
+	    if (pos != null) {
+	    	context.planningVisit = new BBRVisit();
+	    	context.planningVisit.setPos(pos);
+	    	String country = pos.getShop().getCountry();
+	    	if (context.user == null && country != null && country.equals("RU"))
+	    		context.setLocale("ru_RU");
+	    	visitStep++;
+	    }
+	} else
+		context.set("pos", null);
+
 	request.setAttribute("visitStep", visitStep);
 	
 	Long visitId = Long.parseLong("0");
