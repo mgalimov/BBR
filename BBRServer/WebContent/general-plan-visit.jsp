@@ -35,6 +35,7 @@
 	    	if (context.user == null && country != null && country.equals("RU"))
 	    		context.setLocale("ru_RU");
 	    	visitStep++;
+	    	context.setLastVisitStep(visitStep);
 	    }
 	} else
 		context.set("pos", null);
