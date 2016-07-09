@@ -13,7 +13,6 @@ public class BBRTransactionManager extends BBRDataManager<BBRTransaction> {
 
 	public BBRTransactionManager() {
 		super();
-		sessionIndex = BBRAccReg.sessionIndex;
 		titleField = "id";
 		classTitle = "transaction";	
 	}
@@ -26,8 +25,8 @@ public class BBRTransactionManager extends BBRDataManager<BBRTransaction> {
 		if (!currency.equals(serviceSubscription.getCurrency()))
 			throw new Exception(BBRErrors.ERR_CURRENCIES_DONT_MATCH);
 		
-		boolean tr = BBRUtil.beginTran(sessionIndex);
-        Session session = BBRUtil.getSession(sessionIndex);
+		boolean tr = BBRUtil.beginTran();
+        Session session = BBRUtil.getSession();
         
         BBRTransaction tran = new BBRTransaction();
         tran.setServiceSubscription(serviceSubscription);
@@ -37,7 +36,7 @@ public class BBRTransactionManager extends BBRDataManager<BBRTransaction> {
         tran.setAmount(amount);
         session.save(tran);
 
-        BBRUtil.commitTran(sessionIndex, tr);
+        BBRUtil.commitTran(tr);
         return tran;
     }
     

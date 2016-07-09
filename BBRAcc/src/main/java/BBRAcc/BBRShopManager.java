@@ -13,27 +13,26 @@ public class BBRShopManager extends BBRDataManager<BBRShop>{
 	
 	public BBRShopManager() {
 		super();
-		sessionIndex = BBRAccReg.sessionIndex;
 		classTitle = "Shop";	
 	}
 	
 	public void createAndStoreShop(String title, String country) {
-        boolean tr = BBRUtil.beginTran(sessionIndex);
-        Session session = BBRUtil.getSession(sessionIndex);
+        boolean tr = BBRUtil.beginTran();
+        Session session = BBRUtil.getSession();
 
         BBRShop shop = new BBRShop();
         shop.setTitle(title);
         shop.setCountry(country);
         session.save(shop);
 
-        BBRUtil.commitTran(sessionIndex, tr);
+        BBRUtil.commitTran(tr);
     }
 	
     @SuppressWarnings("unchecked")
 	public BBRDataSet<BBRShop> list(BBRUser user, String queryTerm, String sortBy, BBRShop shop) {
-        boolean tr = BBRUtil.beginTran(sessionIndex);
+        boolean tr = BBRUtil.beginTran();
         
-        Session session = BBRUtil.getSession(sessionIndex);
+        Session session = BBRUtil.getSession();
    		String orderBy = " order by " + sortBy;
    		String where = "";
    		
@@ -54,7 +53,7 @@ public class BBRShopManager extends BBRDataManager<BBRShop>{
         query.setMaxResults(maxRowsToReturn);
         
         List<BBRShop> list = query.list();
-        BBRUtil.commitTran(sessionIndex, tr);
+        BBRUtil.commitTran(tr);
 
         return new BBRDataSet<BBRShop>(list, count);
     }

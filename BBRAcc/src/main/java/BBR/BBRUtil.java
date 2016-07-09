@@ -1,10 +1,8 @@
 package BBR;
 
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -16,8 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class BBRUtil {
-    private static final List<SessionFactory> sessionFactory = new ArrayList<SessionFactory>();
-    private static int lastIndex = 0;
+    private static SessionFactory sessionFactory = buildSessionFactory();
     public static final GsonBuilder gsonBuilder = createGsonBuilder();
 	public static final String recordDivider = "@@";
 
@@ -28,13 +25,29 @@ public class BBRUtil {
 	
 	public static final String visualTitleDelimiter = " &#8212; ";
 
-    public static int buildSessionFactory(Configuration configuration) {
+    public static SessionFactory buildSessionFactory() {
         try {
+    		Configuration config = new Configuration();
+    		config.configure("hibernate.cfg.xml");
+    		String host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
+    		if (host != null && !host.equals("")) {
+    			String port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
+    			if (port != null && !port.equals(""))
+    				port = ":" + port;
+    			else
+    				port = "";
+    			String user = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
+    			String pass = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
+    			config.setProperty("hibernate.connection.url", "jdbc:mysql://" + host + port + "/jb");
+    			config.setProperty("hibernate.connection.username", user);
+    			config.setProperty("hibernate.connection.password", pass);
+    		}
+    		
         	StandardServiceRegistryBuilder regBuilder = new StandardServiceRegistryBuilder();
-        	ServiceRegistry serviceRegistry = regBuilder.applySettings(configuration.getProperties()).build();
+        	ServiceRegistry serviceRegistry = regBuilder.applySettings(config.getProperties()).build();
         	
-        	sessionFactory.add(lastIndex, configuration.buildSessionFactory(serviceRegistry));
-    		return lastIndex++;
+        	SessionFactory sessionFactory = config.buildSessionFactory(serviceRegistry);
+        	return sessionFactory;
         }
         catch (Throwable ex) {
             throw new ExceptionInInitializerError(ex);
@@ -54,16 +67,16 @@ public class BBRUtil {
 		return gsonBuilder.create();
 	}
 
-	public static SessionFactory getSessionFactory(int index) {
-        return sessionFactory.get(index);
+	public static SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
     
-    public static Session getSession (int index) {
-    	return sessionFactory.get(index).getCurrentSession();
+    public static Session getSession() {
+    	return sessionFactory.getCurrentSession();
     }
     
-    public static boolean beginTran(int index) {
-        Session session = getSession(index);
+    public static boolean beginTran() {
+        Session session = getSession();
         if (!session.getTransaction().isActive()) {
         	session.beginTransaction();
         	return true;
@@ -71,14 +84,14 @@ public class BBRUtil {
         	return false;
     }
 
-    public static void commitTran(int index, boolean transactionStarted) {
-        Session session = getSession(index);
+    public static void commitTran(boolean transactionStarted) {
+        Session session = getSession();
         if (transactionStarted)
         	session.getTransaction().commit();
     }
 
-    public static void rollbackTran(int index, boolean transactionStarted) {
-        Session session = getSession(index);
+    public static void rollbackTran(boolean transactionStarted) {
+        Session session = getSession();
         if (transactionStarted)
         	session.getTransaction().rollback();
     }

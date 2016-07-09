@@ -18,7 +18,6 @@ import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRShop;
 import BBRAcc.BBRUser;
-import BBRCust.BBRCustReg;
 import BBRCust.BBRSpecialist.BBRSpecialistState;
 import BBRCust.BBRVisit.BBRVisitStatus;
 import BBRCust.BBRVisit;
@@ -28,15 +27,14 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	
 	public BBRVisitManager() {
 		super();
-		sessionIndex = BBRCustReg.sessionIndex;
 		titleField = "timeScheduled";
 		classTitle = "Visit";	
 	}
 
 	public BBRVisit createAndStoreVisit(BBRPoS pos, BBRUser user, Date timeScheduled, BBRProcedure procedure, BBRSpecialist spec, String userName, String userContacts) {
         try {
-			boolean tr = BBRUtil.beginTran(sessionIndex);
-	        Session session = BBRUtil.getSession(sessionIndex);
+			boolean tr = BBRUtil.beginTran();
+	        Session session = BBRUtil.getSession();
 	        BBRVisit visit = new BBRVisit();
 	        visit.setPos(pos);
 	        visit.setUser(user);
@@ -62,7 +60,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        						", " + visit.getUserName() + ", " + visit.getUserContacts(), 
 	        						BBRVisit.class.getName(), visit.getId());
 
-	        BBRUtil.commitTran(sessionIndex, tr);
+	        BBRUtil.commitTran(tr);
 	        return visit;
         } catch (Exception ex) {
         	return null;
@@ -94,8 +92,8 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		if (posId == null) return null;
 		if (posId == "") return null;
 		
-		boolean tr = BBRUtil.beginTran(sessionIndex);
-        Session session = BBRUtil.getSession(sessionIndex);
+		boolean tr = BBRUtil.beginTran();
+        Session session = BBRUtil.getSession();
         Date startOfDay = BBRUtil.getStartOfDay(date);
         Date endOfDay = BBRUtil.getEndOfDay(date);
         DateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormatWithSecs);
@@ -142,7 +140,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 									"   and spec.id not in (select turn.specialist.id from BBRTurn as turn where turn.date = '" + sdf.format(date) + "')");
 		List<Object[]> specsNoTurns = query.list();
 
-        BBRUtil.commitTran(sessionIndex, tr);
+        BBRUtil.commitTran(tr);
         
 		DateFormat hf = new SimpleDateFormat("HH");
 		DateFormat mf = new SimpleDateFormat("mm");
@@ -220,9 +218,9 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	
 	@SuppressWarnings({ "unchecked", "unused" })
 	public BBRDataSet<BBRVisitor> listVisitors(int pageNumber, int pageSize, String orderBy, BBRPoS pos, BBRShop shop, Integer days) {
-		boolean tr = BBRUtil.beginTran(sessionIndex);
+		boolean tr = BBRUtil.beginTran();
         
-		Session session = BBRUtil.getSession(sessionIndex);
+		Session session = BBRUtil.getSession();
 		if (orderBy == null)
     	   orderBy = "";
 		if (orderBy.length() > 0) {
@@ -265,7 +263,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		}
        
         List<Object[]> list = query.list();
-		BBRUtil.commitTran(sessionIndex, tr);
+		BBRUtil.commitTran(tr);
        
        List<BBRVisitor> listVisitors = new ArrayList<BBRVisitor>();
        
@@ -283,9 +281,9 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
   }
 
 	public BBRVisitor findVisitor(String userName, String userContacts) {
-		boolean tr = BBRUtil.beginTran(sessionIndex);
+		boolean tr = BBRUtil.beginTran();
         
-		Session session = BBRUtil.getSession(sessionIndex);
+		Session session = BBRUtil.getSession();
 		
 		if (userName == null || userName.isEmpty())
 			return null;
@@ -299,7 +297,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		                                  setParameter("userContacts", userContacts);
        
         Object[] line = (Object[])query.uniqueResult();
-		BBRUtil.commitTran(sessionIndex, tr);
+		BBRUtil.commitTran(tr);
        
   	    BBRVisitor visitor = new BBRVisitor();
 		visitor.userName = (String) line[0];
@@ -364,8 +362,8 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	// Charts
 	@SuppressWarnings("unchecked")
 	public List<Object[]> getVisitsByPeriod(Date startDate, Date endDate, int detail, BBRPoS pos, BBRShop shop) {
-		boolean tr = BBRUtil.beginTran(sessionIndex);
-		Session session = BBRUtil.getSession(sessionIndex);
+		boolean tr = BBRUtil.beginTran();
+		Session session = BBRUtil.getSession();
 		
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
 		String pf = BBRChartPeriods.periodFunction("timeScheduled", detail);
@@ -387,7 +385,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 										  " order by timeScheduled asc");
 
 		List<Object[]> list = query.list();
-		BBRUtil.commitTran(sessionIndex, tr);
+		BBRUtil.commitTran(tr);
 		
 		return list;
 	}
@@ -399,8 +397,8 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	@SuppressWarnings("unchecked")
 	public List<Object[]> getIncomeByPeriod(Date startDate, Date endDate,
 			Integer detail, BBRPoS pos, BBRShop shop) {
-		boolean tr = BBRUtil.beginTran(sessionIndex);
-		Session session = BBRUtil.getSession(sessionIndex);
+		boolean tr = BBRUtil.beginTran();
+		Session session = BBRUtil.getSession();
 		
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
 		String pf = BBRChartPeriods.periodFunction("timeScheduled", detail);
@@ -422,7 +420,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 										  " order by timeScheduled asc");
 
 		List<Object[]> list = query.list();
-		BBRUtil.commitTran(sessionIndex, tr);
+		BBRUtil.commitTran(tr);
 		
 		return list;
 	};

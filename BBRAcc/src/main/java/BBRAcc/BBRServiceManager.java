@@ -11,14 +11,13 @@ public class BBRServiceManager extends BBRDataManager<BBRService> {
 
 	public BBRServiceManager() {
 		super();
-		sessionIndex = BBRAccReg.sessionIndex;
 		titleField = "title";
 		classTitle = "service";	
 	}
 
 	public BBRService createAndStoreService(String title, int status, Boolean demo, Boolean basic) throws Exception {
-		boolean tr = BBRUtil.beginTran(sessionIndex);
-        Session session = BBRUtil.getSession(sessionIndex);
+		boolean tr = BBRUtil.beginTran();
+        Session session = BBRUtil.getSession();
 
 		if (count("demo=true and status=" + BBRServiceStatus.SERVICE_ACTIVE) > 0)
 			throw new Exception(BBRErrors.ERR_CANT_CREATE_DUPLICATE_BASIC_OR_DEMO_SERVICE);
@@ -33,7 +32,7 @@ public class BBRServiceManager extends BBRDataManager<BBRService> {
         service.setBasic(basic);
         session.save(service);
 
-        BBRUtil.commitTran(sessionIndex, tr);
+        BBRUtil.commitTran(tr);
         return service;
     }
 	

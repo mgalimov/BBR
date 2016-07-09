@@ -15,7 +15,6 @@ public class BBRServicePriceManager extends BBRDataManager<BBRServicePrice> {
 
 	public BBRServicePriceManager() {
 		super();
-		sessionIndex = BBRAccReg.sessionIndex;
 		titleField = "id";
 		classTitle = "service subscription";	
 	}
@@ -32,8 +31,8 @@ public class BBRServicePriceManager extends BBRDataManager<BBRServicePrice> {
         if (price == null) price = 0F;
         if (creditLimit == null) creditLimit = 0F;
 		
-		boolean tr = BBRUtil.beginTran(sessionIndex);
-        Session session = BBRUtil.getSession(sessionIndex);
+		boolean tr = BBRUtil.beginTran();
+        Session session = BBRUtil.getSession();
         
         SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
         String sd = df.format(startDate);
@@ -43,7 +42,7 @@ public class BBRServicePriceManager extends BBRDataManager<BBRServicePrice> {
         
         
 		if (count("service.id = " + service.getId().toString() + " and country='" + country + "' and ((endDate is null) or (endDate >= '" + sd + "'))" + wed) > 0) {
-			BBRUtil.rollbackTran(sessionIndex, tr);
+			BBRUtil.rollbackTran(tr);
 			throw new Exception(BBRErrors.ERR_CANT_CREATE_DUPLICATE_PRICE);
 		}
 		
@@ -57,13 +56,13 @@ public class BBRServicePriceManager extends BBRDataManager<BBRServicePrice> {
         sp.setPrice(price);
         session.save(sp);
 
-        BBRUtil.commitTran(sessionIndex, tr);
+        BBRUtil.commitTran(tr);
         return sp;
     }
 	
 	public BBRServicePrice getCurrentPrice(BBRService service, String country, Date date) {
-		boolean tr = BBRUtil.beginTran(sessionIndex);
-        Session session = BBRUtil.getSession(sessionIndex);
+		boolean tr = BBRUtil.beginTran();
+        Session session = BBRUtil.getSession();
 
         SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
         String d = df.format(date);
@@ -71,7 +70,7 @@ public class BBRServicePriceManager extends BBRDataManager<BBRServicePrice> {
         Query query = session.createQuery("from " + typeName + " where country = '" + country + "' and startDate <= '" + d + "' and ((endDate is null) or endDate >='" + d + "')");
         BBRServicePrice price = (BBRServicePrice)query.uniqueResult();
         
-        BBRUtil.commitTran(sessionIndex, tr);
+        BBRUtil.commitTran(tr);
 		return price;
 	}
 

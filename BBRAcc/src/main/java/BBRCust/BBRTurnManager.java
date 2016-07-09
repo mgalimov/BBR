@@ -8,12 +8,10 @@ import org.hibernate.Session;
 
 import BBR.BBRDataManager;
 import BBR.BBRUtil;
-import BBRCust.BBRCustReg;
 
 public class BBRTurnManager extends BBRDataManager<BBRTurn>{
 	public BBRTurnManager() {
 		super();
-		sessionIndex = BBRCustReg.sessionIndex;
 		titleField = "title";
 		classTitle = "Turn";	
 	}
@@ -24,10 +22,10 @@ public class BBRTurnManager extends BBRDataManager<BBRTurn>{
         	turn.setId(null);
         	turn = setTurnFields(turn, specialist, date, startTime, endTime);
 	        if (turn != null) {
-				boolean tr = BBRUtil.beginTran(sessionIndex);
-		        Session session = BBRUtil.getSession(sessionIndex);
+				boolean tr = BBRUtil.beginTran();
+		        Session session = BBRUtil.getSession();
 		        session.save(turn);
-		        BBRUtil.commitTran(sessionIndex, tr);
+		        BBRUtil.commitTran(tr);
 		        return turn.getId().toString();
 	        } else 
 	        	return null;
@@ -75,8 +73,8 @@ public class BBRTurnManager extends BBRDataManager<BBRTurn>{
 		
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat); 
 		
-		boolean tr = BBRUtil.beginTran(sessionIndex);
-		Session session = BBRUtil.getSession(sessionIndex);
+		boolean tr = BBRUtil.beginTran();
+		Session session = BBRUtil.getSession();
 		String where = " where specialist.id = " + spec.getId() + 
 						" and startTime <= '" + df.format(endTime) + "'" + 
 						" and endTime >= '" + df.format(startTime) + "'" ;
@@ -87,7 +85,7 @@ public class BBRTurnManager extends BBRDataManager<BBRTurn>{
 		String qry = "select count(*) from BBRTurn" + where;
 
 		Long count = (Long)session.createQuery(qry).uniqueResult();
-		BBRUtil.commitTran(sessionIndex, tr);
+		BBRUtil.commitTran(tr);
        
 		return (count == 0);
 	}
@@ -109,13 +107,13 @@ public class BBRTurnManager extends BBRDataManager<BBRTurn>{
     	
     	BBRTurn turn = new BBRTurn(); 
     			
-		boolean tr = BBRUtil.beginTran(sessionIndex);
-		Session session = BBRUtil.getSession(sessionIndex);
+		boolean tr = BBRUtil.beginTran();
+		Session session = BBRUtil.getSession();
 		String where = " where specialist.id = " + spec.getId() + 
 						" and date >= '" + df.format(new Date()) + "'" ;
 		String qry = "select max(date) from BBRTurn" + where;
 		Date dt = (Date)session.createQuery(qry).uniqueResult();
-		BBRUtil.commitTran(sessionIndex, tr);
+		BBRUtil.commitTran(tr);
 		
 		if (dt == null)
 			dt = new Date();

@@ -16,7 +16,6 @@ public class BBRServiceSubscriptionManager extends BBRDataManager<BBRServiceSubs
 
 	public BBRServiceSubscriptionManager() {
 		super();
-		sessionIndex = BBRAccReg.sessionIndex;
 		titleField = "id";
 		classTitle = "service subscription";	
 	}
@@ -24,8 +23,8 @@ public class BBRServiceSubscriptionManager extends BBRDataManager<BBRServiceSubs
 	public BBRServiceSubscription createAndStoreServiceSubscription(BBRService service, BBRShop shop, Date startDate) throws Exception {
 		if (shop == null) return null;
 		
-		boolean tr = BBRUtil.beginTran(sessionIndex);
-        Session session = BBRUtil.getSession(sessionIndex);
+		boolean tr = BBRUtil.beginTran();
+        Session session = BBRUtil.getSession();
         
         SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
         String sd = df.format(startDate);
@@ -54,17 +53,17 @@ public class BBRServiceSubscriptionManager extends BBRDataManager<BBRServiceSubs
 	        tmgr.createAndStoreTask("Approve new subscription", null, null, new Date(), new Date(), 
 	        		"Approve new subscription", BBRServiceSubscription.class.getName(), ss.getId());	
 		} else {
-	        BBRUtil.commitTran(sessionIndex, tr);
+	        BBRUtil.commitTran(tr);
 			throw new Exception(BBRErrors.ERR_NO_PRICE_SPECIFIED);
 		}
 
-        BBRUtil.commitTran(sessionIndex, tr);
+        BBRUtil.commitTran(tr);
         return ss;
     }
 	
 	public Float getBalance(Date date) {
-        boolean tr = BBRUtil.beginTran(sessionIndex);
-        Session session = BBRUtil.getSession(sessionIndex);
+        boolean tr = BBRUtil.beginTran();
+        Session session = BBRUtil.getSession();
         
         SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
         String d = df.format(date);
@@ -72,7 +71,7 @@ public class BBRServiceSubscriptionManager extends BBRDataManager<BBRServiceSubs
      	String where = " where date <= '" + d + "' and status=" + BBRServiceSubscriptionStatuses.SUBSCRIPTION_ACTIVE;
         
         Float sum = (Float)session.createQuery("Select sum(isNull(amount, 0)) from BBRTransaction " + where).uniqueResult();
-        BBRUtil.commitTran(sessionIndex, tr);
+        BBRUtil.commitTran(tr);
  	
         return sum;
 	}

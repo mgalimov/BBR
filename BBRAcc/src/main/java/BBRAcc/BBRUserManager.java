@@ -15,15 +15,14 @@ public class BBRUserManager extends BBRDataManager<BBRUser> {
 
 	public BBRUserManager() {
 		super();
-		sessionIndex = BBRAccReg.sessionIndex;
 		titleField = "lastName";
 		classTitle = "User";	
 	}
 
 	public BBRUser createAndStoreUser(String email, String firstName, String lastName, 
 									  String password, int role, BBRShop shop, BBRPoS pos) throws Exception {
-        boolean tr = BBRUtil.beginTran(sessionIndex);
-        Session session = BBRUtil.getSession(sessionIndex);
+        boolean tr = BBRUtil.beginTran();
+        Session session = BBRUtil.getSession();
         
         if (findUserByEmail(email) != null) {
         	throw new Exception(BBRErrors.ERR_DUPLICATE_EMAIL);
@@ -41,15 +40,15 @@ public class BBRUserManager extends BBRDataManager<BBRUser> {
         user.setLanguage(BBRAccReg.defaultLanguage);
         session.save(user);
 
-        BBRUtil.commitTran(sessionIndex, tr);
+        BBRUtil.commitTran(tr);
         return user;
     }
     
 
 	public BBRUser findUserByEmail(String email) {
-        boolean tr = BBRUtil.beginTran(sessionIndex);
-        BBRUser result = (BBRUser) BBRUtil.getSession(sessionIndex).createQuery("from BBRUser as user where user.email = '" + email + "'").uniqueResult();
-        BBRUtil.commitTran(sessionIndex, tr);
+        boolean tr = BBRUtil.beginTran();
+        BBRUser result = (BBRUser) BBRUtil.getSession().createQuery("from BBRUser as user where user.email = '" + email + "'").uniqueResult();
+        BBRUtil.commitTran(tr);
         return result;
     }
 

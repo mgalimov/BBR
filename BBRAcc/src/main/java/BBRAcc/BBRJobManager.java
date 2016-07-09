@@ -9,13 +9,12 @@ public class BBRJobManager extends BBRDataManager<BBRJob>{
 	
 	public BBRJobManager() {
 		super();
-		sessionIndex = BBRAccReg.sessionIndex;
 		classTitle = "Job";	
 	}
 	
 	public void createAndStoreJob(String title, Date nextRun, String runConditions, String runMethod) {
-        boolean tr = BBRUtil.beginTran(sessionIndex);
-        Session session = BBRUtil.getSession(sessionIndex);
+        boolean tr = BBRUtil.beginTran();
+        Session session = BBRUtil.getSession();
 
         BBRJob job = new BBRJob();
         job.setTitle(title);
@@ -25,6 +24,6 @@ public class BBRJobManager extends BBRDataManager<BBRJob>{
         job.setLastRunStatus("NEVER STARTED");
         session.save(job);
 
-        BBRUtil.commitTran(sessionIndex, tr);
+        BBRUtil.commitTran(tr);
     }    
 }

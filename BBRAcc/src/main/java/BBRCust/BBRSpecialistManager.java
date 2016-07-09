@@ -13,22 +13,20 @@ import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRShop;
 import BBRAcc.BBRUser;
-import BBRCust.BBRCustReg;
 import BBRCust.BBRSpecialist.BBRSpecialistState;
 
 public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
 	
 	public BBRSpecialistManager() {
 		super();
-		sessionIndex = BBRCustReg.sessionIndex;
 		titleField = "name";
 		classTitle = "Specialist";	
 	}
 
 	public void createAndStoreSpecialist(String name, String position, BBRUser user, BBRPoS pos, int status,
 										 Date startWorkHour, Date endWorkHour, Set<BBRProcedure> procedures) {
-        boolean tr = BBRUtil.beginTran(sessionIndex);
-        Session session = BBRUtil.getSession(sessionIndex);
+        boolean tr = BBRUtil.beginTran();
+        Session session = BBRUtil.getSession();
 
         BBRSpecialist spec = new BBRSpecialist();
         spec.setName(name);
@@ -41,14 +39,14 @@ public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
         spec.setProcedures(procedures);
         session.save(spec);
 
-        BBRUtil.commitTran(sessionIndex, tr);
+        BBRUtil.commitTran(tr);
     }
 	
     @SuppressWarnings({ "unchecked", "unused" })
 	public BBRDataSet<BBRSpecialist> list(String queryTerm, String sortBy, BBRPoS pos, BBRShop shop) {
-        boolean tr = BBRUtil.beginTran(sessionIndex);
+        boolean tr = BBRUtil.beginTran();
         
-        Session session = BBRUtil.getSession(sessionIndex);
+        Session session = BBRUtil.getSession();
    		String orderBy = " order by " + sortBy;
    		String where = "";
    		
@@ -80,16 +78,16 @@ public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
         	query.setMaxResults(maxRowsToReturn);
         
         List<BBRSpecialist> list = query.list();
-        BBRUtil.commitTran(sessionIndex, tr);
+        BBRUtil.commitTran(tr);
 
         return new BBRDataSet<BBRSpecialist>(list, count);
     }
     
     @SuppressWarnings({ "unchecked", "unused" })
 	public BBRDataSet<BBRSpecialist> list(String queryTerm, String sortBy) {
-        boolean tr = BBRUtil.beginTran(sessionIndex);
+        boolean tr = BBRUtil.beginTran();
         
-        Session session = BBRUtil.getSession(sessionIndex);
+        Session session = BBRUtil.getSession();
    		String orderBy = " order by " + sortBy;
    		String where = "";
    		
@@ -105,7 +103,7 @@ public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
         	query.setMaxResults(maxRowsToReturn);
         
         List<BBRSpecialist> list = query.list();
-        BBRUtil.commitTran(sessionIndex, tr);
+        BBRUtil.commitTran(tr);
 
         return new BBRDataSet<BBRSpecialist>(list, count);
     }

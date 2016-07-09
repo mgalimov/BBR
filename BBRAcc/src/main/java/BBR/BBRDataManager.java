@@ -9,7 +9,6 @@ import org.hibernate.Session;
 public class BBRDataManager<T extends BBRDataElement> {
 	protected final String typeName;
 	protected final Class<?> type;
-	protected int sessionIndex = -1;
 	protected final int maxRowsToReturn = -100;
 	protected String titleField = "title";
 	protected String classTitle = "abstract Data Element";
@@ -21,18 +20,18 @@ public class BBRDataManager<T extends BBRDataElement> {
 	 
     @SuppressWarnings("unchecked")
 	public BBRDataSet<T> list() {
-        boolean tr = BBRUtil.beginTran(sessionIndex);
-        List<T> list = BBRUtil.getSession(sessionIndex).createQuery("from " + typeName).list();
-        BBRUtil.commitTran(sessionIndex, tr);
+        boolean tr = BBRUtil.beginTran();
+        List<T> list = BBRUtil.getSession().createQuery("from " + typeName).list();
+        BBRUtil.commitTran(tr);
         return new BBRDataSet<T>(list);
     }
 
     
     @SuppressWarnings({ "unchecked", "unused" })
    	public BBRDataSet<T> list(int pageNumber, int pageSize, String where, String orderBy) {
-        boolean tr = BBRUtil.beginTran(sessionIndex);
+        boolean tr = BBRUtil.beginTran();
            
-       Session session = BBRUtil.getSession(sessionIndex);
+       Session session = BBRUtil.getSession();
        if (orderBy == null)
        	orderBy = "";
        if (orderBy.length() > 0) {
@@ -64,21 +63,21 @@ public class BBRDataManager<T extends BBRDataElement> {
 	       list = query.list();
        }
        BBRDataSet<T> ds = new BBRDataSet<T>(list, count);
-       BBRUtil.commitTran(sessionIndex, tr);
+       BBRUtil.commitTran(tr);
 	
        return ds;
     }
 
    	public Long count(String where) {
-       boolean tr = BBRUtil.beginTran(sessionIndex);
+       boolean tr = BBRUtil.beginTran();
            
-       Session session = BBRUtil.getSession(sessionIndex);
+       Session session = BBRUtil.getSession();
        
        if (!where.equals("") && !where.trim().startsWith("where"))
     	   where = " where " + where;
        
        Long count = (Long)session.createQuery("Select count(*) from " + typeName + " " + where).uniqueResult();
-       BBRUtil.commitTran(sessionIndex, tr);
+       BBRUtil.commitTran(tr);
 	
        return count;
     }
@@ -88,35 +87,31 @@ public class BBRDataManager<T extends BBRDataElement> {
     }
    	
 	public void delete(T record){
-        boolean tr = BBRUtil.beginTran(sessionIndex);
-        BBRUtil.getSession(sessionIndex).delete(record);
-        BBRUtil.commitTran(sessionIndex, tr);
+        boolean tr = BBRUtil.beginTran();
+        BBRUtil.getSession().delete(record);
+        BBRUtil.commitTran(tr);
     }
 
 	public void update(T record) {
-        boolean tr = BBRUtil.beginTran(sessionIndex);
-        BBRUtil.getSession(sessionIndex).update(record);
-        BBRUtil.commitTran(sessionIndex, tr);	
+        boolean tr = BBRUtil.beginTran();
+        BBRUtil.getSession().update(record);
+        BBRUtil.commitTran(tr);	
 	}
 
     @SuppressWarnings("unchecked")
 	public T findById(Long id) {
-    	boolean tr = BBRUtil.beginTran(sessionIndex);
-       		
-        T result = (T) BBRUtil.getSession(sessionIndex).createQuery("from " + typeName + " as t where t.id = '" + id.toString() + "'").uniqueResult();
-        BBRUtil.commitTran(sessionIndex, tr);
+    	boolean tr = BBRUtil.beginTran();
+       	Session session = BBRUtil.getSession(); 	
+        T result = (T) session.createQuery("from " + typeName + " as t where t.id = '" + id.toString() + "'").uniqueResult();
+        BBRUtil.commitTran(tr);
         return result;
-    }
-    
-    public int getSessionIndex() {
-    	return sessionIndex;
     }
     
     @SuppressWarnings({ "unchecked", "unused" })
 	public BBRDataSet<T> list(String queryTerm, String sortBy, String where) {
-        boolean tr = BBRUtil.beginTran(sessionIndex);
+        boolean tr = BBRUtil.beginTran();
         
-        Session session = BBRUtil.getSession(sessionIndex);
+        Session session = BBRUtil.getSession();
    		String orderBy = " order by " + sortBy;
    		
    		if (queryTerm != null && !queryTerm.equals("")) {
@@ -134,7 +129,7 @@ public class BBRDataManager<T extends BBRDataElement> {
         	query.setMaxResults(maxRowsToReturn);
         
         List<T> list = query.list();
-        BBRUtil.commitTran(sessionIndex, tr);
+        BBRUtil.commitTran(tr);
 
         return new BBRDataSet<T>(list, count);
     }

@@ -16,7 +16,6 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 	
 	public BBRPoSManager() {
 		super();
-		sessionIndex = BBRAccReg.sessionIndex;
 		classTitle = "Point of service";	
 	}
 	
@@ -29,8 +28,8 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 		if (findByTitle(title, shop) != null)
 			throw new Exception(BBRErrors.ERR_TITLE_MUST_BE_UNIQUE);
 		
-		boolean tr = BBRUtil.beginTran(sessionIndex);
-        Session session = BBRUtil.getSession(sessionIndex);
+		boolean tr = BBRUtil.beginTran();
+        Session session = BBRUtil.getSession();
 
         BBRPoS pos = new BBRPoS();
         pos.setShop(shop);
@@ -43,13 +42,13 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
         pos.setTimeZone(timeZone);
         session.save(pos);
 
-        BBRUtil.commitTran(sessionIndex, tr);
+        BBRUtil.commitTran(tr);
     }
 	
 	public BBRPoS findByTitle(String title, BBRShop shop) {
-        boolean tr = BBRUtil.beginTran(sessionIndex);
-        BBRPoS result = (BBRPoS) BBRUtil.getSession(sessionIndex).createQuery("from BBRPoS as pos where pos.title = '" + title + "' and pos.shop = " + shop.getId()).uniqueResult();
-        BBRUtil.commitTran(sessionIndex, tr);
+        boolean tr = BBRUtil.beginTran();
+        BBRPoS result = (BBRPoS) BBRUtil.getSession().createQuery("from BBRPoS as pos where pos.title = '" + title + "' and pos.shop = " + shop.getId()).uniqueResult();
+        BBRUtil.commitTran(tr);
         return result;
     }
 
@@ -63,9 +62,9 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 			radius = 10000.0;
 		}
 			
-        boolean tr = BBRUtil.beginTran(sessionIndex);
+        boolean tr = BBRUtil.beginTran();
         
-        Session session = BBRUtil.getSession(sessionIndex);
+        Session session = BBRUtil.getSession();
  		String where = " where (" 
  							+ "(locationGPS.lat - " + locationGPS.lat + ")*(locationGPS.lat - " + locationGPS.lat + ")"
  							+ "+"
@@ -79,7 +78,7 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
         	query.setMaxResults(maxRowsToReturn);
         
         List<BBRPoS> list = query.list();
-        BBRUtil.commitTran(sessionIndex, tr);
+        BBRUtil.commitTran(tr);
 
         return new BBRDataSet<BBRPoS>(list, count);
 	}
@@ -96,8 +95,8 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
         
 	@SuppressWarnings("unchecked")
 	public List<Object[]> listSpecialWithShops(BBRShop shop, BBRPoS pos) {
-        boolean tr = BBRUtil.beginTran(sessionIndex);
-        Session session = BBRUtil.getSession(sessionIndex);
+        boolean tr = BBRUtil.beginTran();
+        Session session = BBRUtil.getSession();
         
 		String where = "";
 		if (pos != null)
@@ -113,7 +112,7 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 
 		List<Object[]> list = query.list();
 		
-		BBRUtil.commitTran(sessionIndex, tr);
+		BBRUtil.commitTran(tr);
 
         return list;
 	}

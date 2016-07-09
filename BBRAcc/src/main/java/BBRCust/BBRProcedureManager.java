@@ -7,19 +7,17 @@ import BBR.BBRDataSet;
 import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRShop;
-import BBRCust.BBRCustReg;
 
 public class BBRProcedureManager extends BBRDataManager<BBRProcedure>{
 	
 	public BBRProcedureManager() {
 		super();
-		sessionIndex = BBRCustReg.sessionIndex;
 		classTitle = "Procedure";	
 	}
 
 	public void createAndStoreProcedure(String title, BBRPoS pos, float length, float price, int status) {
-        boolean tr = BBRUtil.beginTran(sessionIndex);
-        Session session = BBRUtil.getSession(sessionIndex);
+        boolean tr = BBRUtil.beginTran();
+        Session session = BBRUtil.getSession();
 
         BBRProcedure proc = new BBRProcedure();
         proc.setTitle(title);
@@ -29,7 +27,7 @@ public class BBRProcedureManager extends BBRDataManager<BBRProcedure>{
         proc.setStatus(status);
         session.save(proc);
 
-        BBRUtil.commitTran(sessionIndex, tr);
+        BBRUtil.commitTran(tr);
     }
 
 	public BBRDataSet<BBRProcedure> list(String query, String titleField, BBRPoS pos, BBRShop shop) {

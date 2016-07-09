@@ -105,6 +105,8 @@
               }).fail(function(data) {
 				saved = false;
 				$('#alertText').text(data.responseText);
+				$("#saveChanges").prop("disabled", false);
+	    		$("#cancelChanges").prop("disabled", false);
 				$('#alertMessage').removeClass('hide');
 			    $('html body').animate({
 			        scrollTop: 0 

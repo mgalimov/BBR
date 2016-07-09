@@ -11,22 +11,20 @@ import BBRAcc.BBRPoS;
 import BBRAcc.BBRServiceSubscription;
 import BBRAcc.BBRServiceSubscriptionManager;
 import BBRAcc.BBRUser;
-import BBRCust.BBRCustReg;
 import BBRCust.BBRTask.BBRTaskState;
 
 public class BBRTaskManager extends BBRDataManager<BBRTask>{
 	
 	public BBRTaskManager() {
 		super();
-		sessionIndex = BBRCustReg.sessionIndex;
 		titleField = "title";
 		classTitle = "Task";	
 	}
 
 	public void createAndStoreTask(String title, BBRUser performer, BBRPoS pos, Date createdAt, Date deadline,
 								   String text, String objectType, Long objectId) {
-        boolean tr = BBRUtil.beginTran(sessionIndex);
-        Session session = BBRUtil.getSession(sessionIndex);
+        boolean tr = BBRUtil.beginTran();
+        Session session = BBRUtil.getSession();
 
         BBRTask task = new BBRTask();
     	task.setTitle(title);
@@ -44,7 +42,7 @@ public class BBRTaskManager extends BBRDataManager<BBRTask>{
 
     	session.save(task);
 
-        BBRUtil.commitTran(sessionIndex, tr);
+        BBRUtil.commitTran(tr);
     }
 	
 	public BBRDataSet<BBRTask> list(String queryTerm, String sortBy, BBRUser performer) {
