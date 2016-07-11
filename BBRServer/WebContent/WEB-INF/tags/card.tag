@@ -93,25 +93,47 @@
     			op = 'create';
     		else
     			op = 'update';
-    		
+
+    		$("div.form-group.has-error").each(function (i) {
+   				$(this).removeClass("has-error");
+    		});
+
     		$("#saveChanges").attr("disabled", "disabled");
     		$("#cancelChanges").attr("disabled", "disabled");
-            $.get('${method}',
-             {id:idParam,${itemReq}
-              operation: op}, 
-              function(responseText) { 
-				saved = true; 
-				goToGrid('${gridPage}');
-              }).fail(function(data) {
-				saved = false;
-				$('#alertText').text(data.responseText);
+    		
+    		var hasErrors = false; 
+    		$("input[required]").each(function (i) {
+    			if ($(this).val() == "") {
+    				$(this).parents("div.form-group").addClass("has-error");
+    				hasErrors = true;
+    			}
+    		});
+    		
+    		if (hasErrors) {
 				$("#saveChanges").prop("disabled", false);
 	    		$("#cancelChanges").prop("disabled", false);
+	    		$('#alertMessage').text("Fill required fields");
 				$('#alertMessage').removeClass('hide');
 			    $('html body').animate({
 			        scrollTop: 0 
-			    }, 200);
-              });
+			    }, 200);    			
+    		} else
+	            $.get('${method}',
+	             {id:idParam,${itemReq}
+	              operation: op}, 
+	              function(responseText) { 
+					saved = true; 
+					goToGrid('${gridPage}');
+	              }).fail(function(data) {
+					saved = false;
+					$('#alertText').text(data.responseText);
+					$("#saveChanges").prop("disabled", false);
+		    		$("#cancelChanges").prop("disabled", false);
+					$('#alertMessage').removeClass('hide');
+				    $('html body').animate({
+				        scrollTop: 0 
+				    }, 200);
+	              });
            });			 		
 
 		$('#cancelChanges').click(function(event) {
