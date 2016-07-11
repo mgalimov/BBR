@@ -112,7 +112,7 @@
     		if (hasErrors) {
 				$("#saveChanges").prop("disabled", false);
 	    		$("#cancelChanges").prop("disabled", false);
-	    		$('#alertMessage').text("Fill required fields");
+	    		$('#alertMessage').text('${context.gs("ERR_FILL_REQUIRED_FIELDS")}');
 				$('#alertMessage').removeClass('hide');
 			    $('html body').animate({
 			        scrollTop: 0 
