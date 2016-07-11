@@ -284,9 +284,10 @@
 				</c:if>
 
 				<script>
-				var ${ft}SetConstrains = function () { return "";};
+				 ${ft}SetConstrains = function () { 
+					  return "";};
 				
-				var ${ft}LoadInitialData = function (callback) {
+				 ${ft}LoadInitialData = function (callback) {
 			        $.ajax({
 			            url: '${referenceMethod}',
 			            type: 'GET',

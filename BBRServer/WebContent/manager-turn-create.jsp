@@ -110,7 +110,8 @@
 		
 		$("#posinput").on("change", posChange);
 		
-		function posChange(newPosId) {
+		function posChange() {
+			newPosId = $("#posinput").val();
 			if (newPosId != posId) {
 				posId = newPosId;
 				var inp = $("#specialistinput")[0].selectize;

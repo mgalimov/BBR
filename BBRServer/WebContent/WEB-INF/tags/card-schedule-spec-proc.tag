@@ -484,7 +484,10 @@
 		if (!objId) return;
 		
  		timeSelected = objId.substring(objId.length - 5, objId.length).replace('_', ':');
+ 		timeSelected = timeSelected.replace('c', '0');
  		specSelected = objId.substring(2, objId.length - 8);
+ 		if (specSelected == "")
+ 			specSelected = objId.substring(2, objId.length - 7);
 
  		if (!obj.hasClass('occupied')) {
  	 		$("td.selected").removeClass('selected');
