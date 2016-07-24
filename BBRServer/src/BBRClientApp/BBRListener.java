@@ -4,8 +4,6 @@ import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
 
-import java.util.TimeZone;
-
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
