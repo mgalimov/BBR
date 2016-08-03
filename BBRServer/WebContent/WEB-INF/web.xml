@@ -4,6 +4,14 @@
     <filter-name>Login Filter</filter-name>
     <filter-class>BBRClientApp.BBRLoginFilter</filter-class>
   </filter>
+  <filter>
+    <filter-name>Path Filter</filter-name>
+    <filter-class>BBRClientApp.BBRPathFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>Path Filter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>  
   <filter-mapping>
     <filter-name>Login Filter</filter-name>
     <url-pattern>*.jsp</url-pattern>
