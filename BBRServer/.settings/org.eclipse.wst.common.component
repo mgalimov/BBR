@@ -7,7 +7,7 @@
         <dependent-module archiveName="BBRData-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/BBRData/BBRData">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <property name="context-root" value="BBRServer"/>
         <property name="java-output-path" value="/BBRServer/build/classes"/>
+        <property name="context-root" value="b"/>
     </wb-module>
 </project-modules>
