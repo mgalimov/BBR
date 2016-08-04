@@ -11,6 +11,7 @@ import BBR.BBRDataSet;
 import BBR.BBRErrors;
 import BBR.BBRGPS;
 import BBR.BBRUtil;
+import BBRAcc.BBRPoS;
 
 public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 	
@@ -21,13 +22,7 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 	
 	public void createAndStorePoS(BBRShop shop, String title, String locationDescription, 
 								  BBRGPS locationGPS, Date startWorkHour, Date endWorkHour,
-								  String currency, String timeZone) throws Exception {
-		if (shop == null)
-			throw new Exception(BBRErrors.ERR_SHOP_MUST_BE_SPECIFIED);
-		
-		if (findByTitle(title, shop) != null)
-			throw new Exception(BBRErrors.ERR_TITLE_MUST_BE_UNIQUE);
-		
+								  String currency, String timeZone, String urlID) throws Exception {
 		boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();
 
@@ -40,10 +35,29 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
         pos.setEndWorkHour(endWorkHour);
         pos.setCurrency(currency);
         pos.setTimeZone(timeZone);
+        pos.setUrlID(urlID);
+
+        checkBeforeUpdate(pos);
         session.save(pos);
 
         BBRUtil.commitTran(tr);
     }
+	
+	@Override
+	public boolean checkBeforeUpdate(BBRPoS pos) throws Exception {
+		if (pos.getShop() == null)
+			throw new Exception(BBRErrors.ERR_SHOP_MUST_BE_SPECIFIED);
+		
+		BBRPoS foundPoS = findByTitle(pos.getTitle(), pos.getShop()); 
+		if (foundPoS != null && foundPoS.getId() != pos.getId())
+			throw new Exception(BBRErrors.ERR_TITLE_MUST_BE_UNIQUE);
+
+		foundPoS = findByUrlId(pos.getUrlID());
+		if (foundPoS != null && foundPoS.getId() != pos.getId())
+			throw new Exception(BBRErrors.ERR_URLID_MUST_BE_UNIQUE);
+
+		return true;
+	}
 	
 	public BBRPoS findByTitle(String title, BBRShop shop) {
         boolean tr = BBRUtil.beginTran();
@@ -115,5 +129,12 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 		BBRUtil.commitTran(tr);
 
         return list;
+	}
+
+	public BBRPoS findByUrlId(String posUrlID) {
+        boolean tr = BBRUtil.beginTran();
+        BBRPoS result = (BBRPoS) BBRUtil.getSession().createQuery("from BBRPoS as pos where pos.urlID = '" + posUrlID + "'").uniqueResult();
+        BBRUtil.commitTran(tr);
+        return result;
 	}
 }

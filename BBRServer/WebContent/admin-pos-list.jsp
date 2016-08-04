@@ -11,6 +11,7 @@
 			<t:grid-item label="LBL_END_WORKHOUR" field="endWorkHour" type="time"/>
 			<t:grid-item label="LBL_CURRENCY" field="currency" type="text"/>
 			<t:grid-item label="LBL_TIMEZONE" field="timeZone" type="text"/>
+			<t:grid-item label="LBL_URLID" field="urlID" type="text"/>
 		</t:grid>
 	</jsp:body>
 </t:admin-grid-wrapper>

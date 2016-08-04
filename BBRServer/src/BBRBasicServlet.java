@@ -190,7 +190,7 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 		return obj;
 	};
 	
-	protected String processOperation(String operation, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+	protected String processOperation(String operation, BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		return "";
 	};
 

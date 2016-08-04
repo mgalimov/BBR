@@ -12,6 +12,7 @@
 			<t:card-item label="LBL_LOC_LONG" field="locationGPS.lng" type="text"/>
 			<t:card-item label="LBL_CURRENCY" field="currency" type="text"/>
 			<t:card-item label="LBL_TIMEZONE" field="timeZone" type="select" options="OPT_TIMEZONES"/>
+			<t:card-item label="LBL_URLID" field="urlID" type="text"/>
 		</t:card>
 	</jsp:body>
 </t:admin-card-wrapper>

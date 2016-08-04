@@ -45,7 +45,7 @@ public class BBRJobs extends BBRBasicServlet<BBRJob, BBRJobManager> {
 
 	@Override
 	protected BBRJob beforeUpdate(BBRJob job, BBRParams params,
-			HttpServletRequest request, HttpServletResponse response) {
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String title = params.get("title");
 		String nextRunString = params.get("nextRun");
 		String runConditions = params.get("runConditions");

@@ -182,28 +182,40 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	public void approve(BBRVisit visit) {
 		if (visit != null) {
 			visit.setStatus(BBRVisitStatus.VISSTATUS_APPROVED);
-			update(visit);
+			try {
+				update(visit);
+			} catch (Exception e) {
+			}
 		}
 	}
 
 	public void disapprove(BBRVisit visit) {
 		if (visit != null) {
 			visit.setStatus(BBRVisitStatus.VISSTATUS_DISAPPROVED);
-			update(visit);
+			try {
+				update(visit);
+			} catch (Exception e) {
+			}
 		}		
 	}
 
 	public void close(BBRVisit visit) {
 		if (visit != null) {
 			visit.setStatus(BBRVisitStatus.VISSTATUS_PERFORMED);
-			update(visit);
+			try {
+				update(visit);
+			} catch (Exception e) {
+			}
 		}		
 	}
 
 	public void cancel(BBRVisit visit) {
 		if (visit != null) {
 			visit.setStatus(BBRVisitStatus.VISSTATUS_CANCELLED);
-			update(visit);
+			try {
+				update(visit);
+			} catch (Exception e) {
+			}
 		}		
 	}
 	public class BBRVisitor extends BBRDataElement{

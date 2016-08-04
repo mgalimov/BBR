@@ -106,7 +106,7 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 	}
 
 	@Override
-	protected String processOperation(String operation, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+	protected String processOperation(String operation, BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String res = "";
 		BBRContext context = BBRContext.getContext(request);
 		

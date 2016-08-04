@@ -48,7 +48,10 @@ public class BBRPoS extends BBRDataElement {
 	
 	@Column(name="TIMEZONE")
 	private String timeZone;
-	
+
+	@Column(name="URL_ID")
+	private String urlID;
+
 	public BBRPoS() {}
 	
 	public void setId(Long id) {
@@ -129,5 +132,13 @@ public class BBRPoS extends BBRDataElement {
 
 	public void setTimeZone(String timeZone) {
 		this.timeZone = timeZone;
+	}
+
+	public String getUrlID() {
+		return urlID;
+	}
+
+	public void setUrlID(String urlID) {
+		this.urlID = urlID;
 	}
 }

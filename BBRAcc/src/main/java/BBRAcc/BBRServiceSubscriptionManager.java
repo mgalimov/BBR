@@ -80,14 +80,20 @@ public class BBRServiceSubscriptionManager extends BBRDataManager<BBRServiceSubs
 		if (user != null && user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN && subscr != null) {
 			subscr.setStatus(BBRServiceSubscriptionStatuses.SUBSCRIPTION_CANCELLED);
 			subscr.setEndDate(new Date());
-			update(subscr);
+			try {
+				update(subscr);
+			} catch (Exception e) {
+			}
 		}
 	}
 
 	public void approve(BBRServiceSubscription subscr) {
 		if (subscr != null) {
 			subscr.setStatus(BBRServiceSubscriptionStatuses.SUBSCRIPTION_ACTIVE);
-			update(subscr);
+			try {
+				update(subscr);
+			} catch (Exception e) {
+			}
 		}
 	}
   }

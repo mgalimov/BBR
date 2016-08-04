@@ -92,12 +92,18 @@ public class BBRDataManager<T extends BBRDataElement> {
         BBRUtil.commitTran(tr);
     }
 
-	public void update(T record) {
+	public void update(T record) throws Exception {
+		checkBeforeUpdate(record);
+		
         boolean tr = BBRUtil.beginTran();
         BBRUtil.getSession().update(record);
         BBRUtil.commitTran(tr);	
 	}
 
+	public boolean checkBeforeUpdate(T record) throws Exception {
+		return true;
+	}
+	
     @SuppressWarnings("unchecked")
 	public T findById(Long id) {
     	boolean tr = BBRUtil.beginTran();

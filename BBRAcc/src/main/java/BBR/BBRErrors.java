@@ -9,6 +9,7 @@ public class BBRErrors {
 	public static final String ERR_INCORRECT_PASSWORD = "ERR_INCORRECT_PASSWORD";
 	public static final String ERR_SHOP_MUST_BE_SPECIFIED = "ERR_SHOP_MUST_BE_SPECIFIED";
 	public static final String ERR_TITLE_MUST_BE_UNIQUE = "ERR_TITLE_MUST_BE_UNIQUE";
+	public static final String ERR_URLID_MUST_BE_UNIQUE = "ERR_URLID_MUST_BE_UNIQUE";
 	public static final String ERR_SHOP_NOTFOUND = "ERR_SHOP_NOTFOUND";
 	public static final String ERR_POS_NOTFOUND = "ERR_POS_NOTFOUND";
 	public static final String ERR_VISIT_NOTFOUND = "ERR_VISIT_NOTFOUND";

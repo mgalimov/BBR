@@ -27,7 +27,11 @@ public class BBRBasicJob implements Job {
 		j.setLastRun(arg0.getFireTime());
 		j.setNextRun(arg0.getNextFireTime());
 		j.setLastRunStatus(status);
-		jm.update(j);
+		try {
+			jm.update(j);
+		} catch (Exception e) {
+			throw new JobExecutionException("Can't execute job");
+		}
 	}
 	
 	public String run(JobExecutionContext arg0) {

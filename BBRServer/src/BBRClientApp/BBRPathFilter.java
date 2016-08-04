@@ -1,6 +1,7 @@
 package BBRClientApp;
 
 import java.io.IOException;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -9,6 +10,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import BBRAcc.BBRPoS;
+import BBRAcc.BBRPoSManager;
 
 public class BBRPathFilter implements Filter {
 
@@ -23,20 +27,39 @@ public class BBRPathFilter implements Filter {
      */
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-    	/*try*/ {
 	    	HttpServletRequest request = (HttpServletRequest) req;
 	    	HttpServletResponse response = (HttpServletResponse) res;
 	
-	    	String path = request.getPathInfo(); //request.getRequestURI();
+	    	String path = request.getRequestURI();
+	    	String cont = request.getContextPath();
 	    	
-	    	if (path.startsWith("/book")) {
-	    		response.sendRedirect("general-plan-visit.jsp");
+	    	if (path == null)
+	    		path = "";
+	    	
+	    	if (cont == null)
+	    		cont = "";
+	    	
+	    	if (!cont.isEmpty() && !path.isEmpty() && path.startsWith(cont)) {
+	    		path = path.substring(cont.length());
+	    	}
+	    	
+	    	String book = "/book";
+	    	String planVisitPage = cont + "/general-plan-visit.jsp";
+	    	
+	    	if (path.startsWith(book)) {
+	    		path = path.substring(book.length());
+	    		if (path.startsWith("/")) {
+	    			String posUrlID = path.substring(1);
+	    			BBRPoSManager mgr = new BBRPoSManager();
+	    			BBRPoS pos = mgr.findByUrlId(posUrlID);
+	    			if (pos == null)
+	    				response.sendRedirect(planVisitPage);
+	    			else
+	    				response.sendRedirect(planVisitPage + "?pos=" + pos.getId());
+	    		} else
+	    			response.sendRedirect(planVisitPage);
 	    	} else
 	        	chain.doFilter(request, response);
-    	} /*catch (Exception ex) {
-    		HttpServletResponse response = (HttpServletResponse) res;
-    		response.sendRedirect("general-error.jsp");    		
-    	}*/
     }
 
 
