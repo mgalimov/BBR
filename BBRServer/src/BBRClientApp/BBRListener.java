@@ -72,6 +72,8 @@ public class BBRListener implements ServletContextListener {
     				sched.start();
     			} catch (SchedulerException e) {
 
+    			} catch (ExceptionInInitializerError e) {
+    				
     			}
     		}
     	};

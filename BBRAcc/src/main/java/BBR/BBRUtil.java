@@ -26,32 +26,41 @@ public class BBRUtil {
 	public static final String visualTitleDelimiter = " &#8212; ";
 
     public static SessionFactory buildSessionFactory() {
-        try {
-    		Configuration config = new Configuration();
-    		config.configure("hibernate.cfg.xml");
-    		String host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
-    		if (host != null && !host.equals("")) {
-    			String port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
-    			if (port != null && !port.equals(""))
-    				port = ":" + port;
-    			else
-    				port = "";
-    			String user = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
-    			String pass = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
-    			config.setProperty("hibernate.connection.url", "jdbc:mysql://" + host + port + "/jb");
-    			config.setProperty("hibernate.connection.username", user);
-    			config.setProperty("hibernate.connection.password", pass);
-    		}
-    		
-        	StandardServiceRegistryBuilder regBuilder = new StandardServiceRegistryBuilder();
-        	ServiceRegistry serviceRegistry = regBuilder.applySettings(config.getProperties()).build();
-        	
-        	SessionFactory sessionFactory = config.buildSessionFactory(serviceRegistry);
-        	return sessionFactory;
+    	SessionFactory sessionFactory = null;
+    	
+        for (int i = 0; i <= 5 && sessionFactory == null; i++) {
+        	try {
+        		Configuration config = new Configuration();
+        		config.configure("hibernate.cfg.xml");
+        		String host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
+        		if (host != null && !host.equals("")) {
+        			String port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
+        			if (port != null && !port.equals(""))
+        				port = ":" + port;
+        			else
+        				port = "";
+        			String user = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
+        			String pass = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
+        			config.setProperty("hibernate.connection.url", "jdbc:mysql://" + host + port + "/jb");
+        			config.setProperty("hibernate.connection.username", user);
+        			config.setProperty("hibernate.connection.password", pass);
+        		}
+        		
+            	StandardServiceRegistryBuilder regBuilder = new StandardServiceRegistryBuilder();
+            	ServiceRegistry serviceRegistry = regBuilder.applySettings(config.getProperties()).build();
+            	
+            	sessionFactory = config.buildSessionFactory(serviceRegistry);
+            }
+            catch (Throwable ex) {
+            	try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+					throw new ExceptionInInitializerError(ex);
+				}
+            }
         }
-        catch (Throwable ex) {
-            throw new ExceptionInInitializerError(ex);
-        }
+    	return sessionFactory;
+
     }
 
     private static GsonBuilder createGsonBuilder() {

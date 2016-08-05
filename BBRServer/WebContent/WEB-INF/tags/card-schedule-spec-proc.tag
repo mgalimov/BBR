@@ -110,7 +110,7 @@
 	for (BBRSpecialist spec : slist.data) {
 		hh = startWorkHour;
 		schOut += "<tr>";
-		schOut += "<td><small>" + spec.getName() + "</small></td>";
+		schOut += "<td><small>" + spec.getName() + ", " + spec.getPosition() + "</small></td>";
 		String sid = spec.getId().toString(); 
 		if (startWorkMin > 0) {
 			schOut += "<td id='sp"+ sid + "_oc" + hh + "_30'><small>&nbsp;</small></td>";
@@ -318,8 +318,8 @@
 <% if (mode.isEmpty() || mode.equals("general-edit") || mode.equals("manager-edit")) { %>	
 	 	$("#scheduleTable td").on("click", function(e) {setTime($(e.target));});
 <% } %>	 	
-	 	$("#nextDateBtn").click(function(e) { changeDatesOnButtons(<%=datesPerPage %>); });
-	 	$("#prevDateBtn").click(function(e) { changeDatesOnButtons(-<%=datesPerPage %>); });
+	 	$("#nextDateBtn").click(function(e) { changeDatesOnButtons(<%=datesPerPage-datesPerPage+1 %>); });
+	 	$("#prevDateBtn").click(function(e) { changeDatesOnButtons(-<%=datesPerPage-datesPerPage+1 %>); });
 	 	$("#todayDateBtn").click(function(e) { changeDatesOnButtons(0); });
 	 	
 	 	select();

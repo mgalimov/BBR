@@ -1,3 +1,5 @@
+<%@page import="BBR.BBRUtil"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="BBR.BBRGPS"%>
 <%@page import="BBRAcc.BBRPoSManager"%>
 <%@page import="BBRAcc.BBRPoS"%>
@@ -43,8 +45,21 @@
 	request.setAttribute("visitStep", visitStep);
 	
 	Long visitId = Long.parseLong("0");
-	if (context.planningVisit != null)
+	if (context.planningVisit != null) {
 		visitId = context.planningVisit.getId();
+		if (context.planningVisit.getPos() != null)
+			request.setAttribute("posTitle", context.planningVisit.getPos().getTitle() + ", " + context.planningVisit.getPos().getLocationDescription());
+		if (context.planningVisit.getSpec() != null)
+			request.setAttribute("specName", context.planningVisit.getSpec().getName());
+		if (context.planningVisit.getProcedure() != null)
+			request.setAttribute("procTitle", context.planningVisit.getProcedure().getTitle());
+		if (context.planningVisit.getTimeScheduled() != null) {
+			SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+			request.setAttribute("visitTime", df.format(context.planningVisit.getTimeScheduled()));
+		}
+		request.setAttribute("visitorName", context.planningVisit.getUserName());
+		request.setAttribute("visitorContacts", context.planningVisit.getUserContacts());
+	}
 	
 	if (context.user != null)
 		request.setAttribute("userName", context.user.getFirstName() + " " + context.user.getLastName());
@@ -117,12 +132,21 @@
 	</c:when>
 
 	<c:when test="${visitStep == 2}">
+		<div class="container-fluid">
+			<h4>${context.gs("LBL_PLAN_VISIT_STEP_1")} <i>${posTitle}</i></h4>
+		</div>
+		
 		<t:card title="LBL_PLAN_VISIT_STEP_2" gridPage="general-plan-visit.jsp" method="BBRVisits" buttonSave="LBL_GOTO_STEP3_BTN" buttonCancel="LBL_CANCEL_VISIT_BTN">
 			<t:card-schedule-spec-proc/>
 		</t:card>
 	</c:when>
 
 	<c:when test="${visitStep == 3}">
+		<div class="container-fluid">
+			<h4>${context.gs("LBL_PLAN_VISIT_STEP_1")} <i>${posTitle}</i></h4>
+			<h4>${context.gs("LBL_PLAN_VISIT_STEP_2")} <i>${specName}, ${procTitle}, ${visitTime}</i></h4>
+		</div>
+
 		<t:card title="LBL_PLAN_VISIT_STEP_3" gridPage="general-plan-visit.jsp" method="BBRVisits" buttonSave="LBL_GET_IT_DONE_BTN" buttonCancel="LBL_CANCEL_VISIT_BTN">
 			<t:card-item label="LBL_YOUR_NAME" type="text" field="userName" isRequired="required" defaultValue="${userName}"/>
 			<t:card-item label="LBL_YOUR_PHONE" type="text" field="userContacts" isRequired="required" />
@@ -130,11 +154,14 @@
 	</c:when>
 	
 	<c:when test="${visitStep == 4}">
-		<div>
+		<div class="container-fluid">
 			<h1>${context.gs('LBL_VISIT_CREATED')}</h1>
-			<p>${context.gs('LBL_YOULL_GET_APPROVED_SOON')}</p>
-			<c:out value="${outString}" escapeXml="false"/>
+			<h4>${context.gs("LBL_PLAN_VISIT_STEP_1")} <i>${posTitle}</i></h4>
+			<h4>${context.gs("LBL_PLAN_VISIT_STEP_2")} <i>${specName}, ${procTitle}, ${visitTime}</i></h4>
+			<h4>${context.gs("LBL_PLAN_VISIT_STEP_3")} <i>${visitorName}, ${visitorContacts}</i></h4>
 		</div>
+		<!-- p>${context.gs('LBL_YOULL_GET_APPROVED_SOON')}</p-->
+		<!-- c:out value="${outString}" escapeXml="false"/-->
 	</c:when>
 </c:choose>
 </jsp:body>
