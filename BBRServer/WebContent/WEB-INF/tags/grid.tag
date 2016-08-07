@@ -23,23 +23,16 @@
 
 <h3>${context.gs(title).concat(titleModifier)}</h3>
 		
-<!-- Modal -->
-<div class="modal fade" id="sureToDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">${context.gs('LBL_GRID_CONFIRM_DELETION_TITLE')}</h4>
-      </div>
-      <div class="modal-body">
-      	 ${context.gs('MSG_GRID_CONFIRM_DELETION')} 
-	  </div>
-	  <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">${context.gs('LBL_GRID_CONFIRM_DELETION_CANCEL_BTN')}</button>
-        <button type="button" class="btn btn-warning" id="deletionConfirmed">${context.gs('LBL_GRID_CONFIRM_DELETION_CONFIRM_BTN')}</button>
-      </div>
-    </div>
-  </div>
+<t:modal  cancelButtonLabel="LBL_GRID_CONFIRM_DELETION_CANCEL_BTN" 
+		  processButtonLabel="LBL_GRID_CONFIRM_DELETION_CONFIRM_BTN" 
+		  title="LBL_GRID_CONFIRM_DELETION_TITLE" 
+		  id="sureToDelete">
+	${context.gs('MSG_GRID_CONFIRM_DELETION')} 
+</t:modal>
+
+<div class="alert alert-warning alert-dismissable hide" id="alertMessage">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <div id="alertText"></div>
 </div>
 
 <div class="panel">
@@ -120,14 +113,31 @@
 						window.location.href = '${editPage}?id=' + row.data().id;
 				});
 		
-		$('#deletionConfirmed').click(
+		$('#sureToDeleteprocess').click(
 				function(event) {
+					$('#sureToDeleteprocess').prop('disabled', true);
+					$('#sureToDeletecancel').prop('disabled', true);
 					var row = table.row('.success');
 					if (row.length > 0) {
-						$.get('${method}', {id:row.data().id,operation:'delete'}, function(responseText) {
-							$('#sureToDelete').modal('hide');
-							table.draw();
-						});
+						$.get('${method}', 
+								{id:row.data().id,
+							     operation:'delete'})
+					     .done(function(data) {
+								$('#sureToDelete').modal('hide');
+								$('#sureToDeleteprocess').prop('disabled', false);
+								$('#sureToDeletecancel').prop('disabled', false);
+								table.draw();
+						  		 })
+						 .fail(function(data) {
+								$('#sureToDelete').modal('hide');
+								$('#sureToDeleteprocess').prop('disabled', false);
+								$('#sureToDeletecancel').prop('disabled', false);
+								$('#alertText').text(data.responseText);
+								$('#alertMessage').removeClass('hide');
+							    $('html body').animate({
+							        scrollTop: 0 
+							    }, 200);
+							   });
 					}
 				});
 		

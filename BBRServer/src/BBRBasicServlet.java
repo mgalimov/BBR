@@ -38,6 +38,8 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 			BBRParams params = new BBRParams(request.getQueryString());
 			String id = params.get("id");
 			String operation = params.get("operation");
+			if (operation == null)
+				operation = "";
 			
 			if (operation.equals("getdata")) {
 				respText = getRecordData(id, params, request, response);
@@ -180,9 +182,13 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 	
 	@SuppressWarnings("unchecked")
 	protected String delete(Cls obj, BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		obj = beforeDelete(obj, params, request, response);
-		if (obj != null)
+		try {
+			obj = beforeDelete(obj, params, request, response);
+			if (obj != null)
 			manager.delete(obj);
+		} catch (Exception ex) {
+			throw new Exception(BBRErrors.ERR_CANT_DELETE_RECORD);
+		}
 		return "";
 	}
 
