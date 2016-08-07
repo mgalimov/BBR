@@ -47,7 +47,7 @@
 					<button type="button" class="btn btn-info" id="edit">
 					  <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> ${context.gs('LBL_GRID_EDIT_RECORD_BTN')}
 					</button>
-					<button type="button" class="btn btn-warning" id="delete" data-toggle="modal" data-target="#sureToDelete">
+					<button type="button" class="btn btn-warning" id="delete">
 					  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> ${context.gs('LBL_GRID_DELETE_RECORD_BTN')}
 					</button>
 				</div>
@@ -112,7 +112,14 @@
 					if (row.length > 0)
 						window.location.href = '${editPage}?id=' + row.data().id;
 				});
-		
+
+		$('#delete').click(
+				function(event) {
+					var row = table.row('.success');
+					if (row.length > 0)
+						$('#sureToDelete').modal();
+				});
+
 		$('#sureToDeleteprocess').click(
 				function(event) {
 					$('#sureToDeleteprocess').prop('disabled', true);

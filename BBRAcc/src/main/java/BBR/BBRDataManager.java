@@ -86,18 +86,27 @@ public class BBRDataManager<T extends BBRDataElement> {
        return list(pageNumber, pageSize, "", orderBy);
     }
    	
-	public void delete(T record){
+	public void delete(T record) throws Exception {
         boolean tr = BBRUtil.beginTran();
-        BBRUtil.getSession().delete(record);
-        BBRUtil.commitTran(tr);
+        try {
+        	BBRUtil.getSession().delete(record);
+            BBRUtil.commitTran(tr);
+        } catch (Exception ex) {
+        	BBRUtil.rollbackTran(tr);
+        	throw ex;
+        }
     }
 
 	public void update(T record) throws Exception {
 		checkBeforeUpdate(record);
-		
         boolean tr = BBRUtil.beginTran();
-        BBRUtil.getSession().update(record);
-        BBRUtil.commitTran(tr);	
+        try {
+        	BBRUtil.getSession().update(record);
+        	BBRUtil.commitTran(tr);	
+        } catch (Exception ex) {
+        	BBRUtil.rollbackTran(tr);
+        	throw ex;
+        }
 	}
 
 	public boolean checkBeforeUpdate(T record) throws Exception {

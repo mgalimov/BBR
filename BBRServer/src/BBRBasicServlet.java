@@ -41,6 +41,9 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 			if (operation == null)
 				operation = "";
 			
+			if (operation.equals("")) {
+				doPost(request, response);
+			} else
 			if (operation.equals("getdata")) {
 				respText = getRecordData(id, params, request, response);
 			} else
