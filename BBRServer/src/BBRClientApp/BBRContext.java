@@ -337,4 +337,39 @@ public class BBRContext {
 			else 
 				return "";
 	}
+	
+	public String getDurationString (float duration) {
+		long hour = Math.round(Math.floor(duration));
+		long minutes = Math.round((duration - hour) * 60);
+		
+		String hrs;
+		String mins = "";
+		
+		if (minutes == 1)
+			mins = minutes + " " + gs("SYS_MINUTE");
+		else
+			if (minutes > 0)
+				mins = minutes + " " + gs("SYS_MINUTES");
+			else
+				mins = "";
+		
+		if (hour == 1)
+			hrs = hour + " " + gs("SYS_HOUR");
+		else
+			if (hour > 0)
+				hrs = hour + " " + gs("SYS_HOURS");
+			else
+				hrs = "";
+				
+		if (hrs.isEmpty() && mins.isEmpty())
+			return "--";
+		else
+			if (hrs.isEmpty())
+				return mins;
+			else
+				if (mins.isEmpty())
+					return hrs;
+				else
+					return hrs + " " + mins;
+	}
 }

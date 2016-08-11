@@ -60,7 +60,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				DateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 				Date timeScheduled = df.parse(params.get("timeScheduled"));
 				
-				context.planningVisit = manager.createAndStoreVisit(
+				context.planningVisit = manager.scheduleVisit(
 													pos, 
 													null, 
 													timeScheduled, 
@@ -75,73 +75,119 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			} catch (Throwable ex) {
 				throw new Exception(BBRErrors.ERR_RECORD_NOTFOUND);
 			}
-		} else
-		{
-			if (visitStep == 1) {
-				context.planningVisit = new BBRVisit();
-				
-				Long posId = Long.parseLong(params.get("pos"));
-
-				BBRPoSManager mgrPoS = new BBRPoSManager();
-				BBRPoS pos = mgrPoS.findById(posId);
-				if (pos == null) {
-					throw new Exception(BBRErrors.ERR_POS_NOTFOUND);
+		} else 
+			if (formMode.equals("general-edit")) 
+			{
+				if (visitStep == 1) {
+					context.planningVisit = new BBRVisit();
+					
+					Long posId = Long.parseLong(params.get("pos"));
+	
+					BBRPoSManager mgrPoS = new BBRPoSManager();
+					BBRPoS pos = mgrPoS.findById(posId);
+					if (pos == null) {
+						throw new Exception(BBRErrors.ERR_POS_NOTFOUND);
+					}
+					
+					context.planningVisit.setPos(pos);
+				}
+					
+				if (visitStep == 2) {
+					if (context.planningVisit == null)
+						throw new Exception(BBRErrors.ERR_VISIT_NOTFOUND);
+					
+					if (!params.get("procedure").isEmpty()) {
+						Long procedureId = Long.parseLong(params.get("procedure"));
+	
+						BBRProcedureManager mgrProc = new BBRProcedureManager();
+						BBRProcedure proc = mgrProc.findById(procedureId);						
+						context.planningVisit.setProcedure(proc);
+					}
+					
+					if (!params.get("spec").isEmpty()) {
+						Long specId = Long.parseLong(params.get("spec"));
+	
+						BBRSpecialistManager mgrSpec = new BBRSpecialistManager();
+						BBRSpecialist spec = mgrSpec.findById(specId);						
+						context.planningVisit.setSpec(spec);
+					}
+					
+					DateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+					try {
+						Date timeScheduled = df.parse(params.get("timeScheduled"));
+						context.planningVisit.setTimeScheduled(timeScheduled);
+					} catch (Throwable ex) {
+						throw new Exception(BBRErrors.ERR_DATE_INCORRECT);
+					}
 				}
 				
-				context.planningVisit.setPos(pos);
+				if (visitStep == 3) {
+					if (context.planningVisit == null)
+						throw new Exception(BBRErrors.ERR_VISIT_NOTFOUND);
+					
+					String userName = params.get("userName");
+					String userContacts = params.get("userContacts");
+					
+					context.planningVisit.setUserName(userName);
+					context.planningVisit.setUserContacts(userContacts);
+	
+					context.planningVisit = manager.scheduleVisit(
+							context.planningVisit.getPos(), 
+							context.user, 
+							context.planningVisit.getTimeScheduled(), 
+							context.planningVisit.getProcedure(), 
+							context.planningVisit.getSpec(), 
+							context.planningVisit.getUserName(),
+							context.planningVisit.getUserContacts());
+				}
+	
+				context.setLastVisitStep(++visitStep);
 			}
-				
-			if (visitStep == 2) {
-				if (context.planningVisit == null)
-					throw new Exception(BBRErrors.ERR_VISIT_NOTFOUND);
-				
-				if (!params.get("procedure").isEmpty()) {
-					Long procedureId = Long.parseLong(params.get("procedure"));
-
-					BBRProcedureManager mgrProc = new BBRProcedureManager();
-					BBRProcedure proc = mgrProc.findById(procedureId);						
-					context.planningVisit.setProcedure(proc);
-				}
-				
-				if (!params.get("spec").isEmpty()) {
-					Long specId = Long.parseLong(params.get("spec"));
-
-					BBRSpecialistManager mgrSpec = new BBRSpecialistManager();
-					BBRSpecialist spec = mgrSpec.findById(specId);						
-					context.planningVisit.setSpec(spec);
-				}
-				
-				DateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
-				try {
-					Date timeScheduled = df.parse(params.get("timeScheduled"));
-					context.planningVisit.setTimeScheduled(timeScheduled);
-				} catch (Throwable ex) {
-					throw new Exception(BBRErrors.ERR_DATE_INCORRECT);
-				}
-			}
-			
-			if (visitStep == 3) {
-				if (context.planningVisit == null)
-					throw new Exception(BBRErrors.ERR_VISIT_NOTFOUND);
-				
+			else {
 				String userName = params.get("userName");
 				String userContacts = params.get("userContacts");
 				
-				context.planningVisit.setUserName(userName);
-				context.planningVisit.setUserContacts(userContacts);
+				Long posId = Long.parseLong(params.get("pos"));
+				BBRPoSManager mgrPoS = new BBRPoSManager();
+				BBRPoS pos = mgrPoS.findById(posId);
+				
+				Long procedureId = Long.parseLong(params.get("procedure"));
+				BBRProcedureManager mgrProc = new BBRProcedureManager();
+				BBRProcedure proc = mgrProc.findById(procedureId);						
+	
+				Long specId = Long.parseLong(params.get("spec"));
+				BBRSpecialistManager mgrSpec = new BBRSpecialistManager();
+				BBRSpecialist spec = mgrSpec.findById(specId);						
+	
+				if (pos == null || proc == null || spec == null)
+					throw new Exception(BBRErrors.ERR_RECORD_NOTFOUND);
+				
+				DateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+				
+				Date realTime = df.parse(params.get("realTime"));
+				float discountPercent = Float.parseFloat(params.get("discountPercent"));
+				float discountAmount = Float.parseFloat(params.get("discountAmount"));
+				float pricePaid = Float.parseFloat(params.get("pricePaid"));
+				float amountToSpecialist = Float.parseFloat(params.get("amountToSpecialist"));
+				float amountToMaterials = Float.parseFloat(params.get("amountToMaterials"));
+				String comment = params.get("comment");
 
-				context.planningVisit = manager.createAndStoreVisit(
-						context.planningVisit.getPos(), 
-						context.user, 
-						context.planningVisit.getTimeScheduled(), 
-						context.planningVisit.getProcedure(), 
-						context.planningVisit.getSpec(), 
-						context.planningVisit.getUserName(),
-						context.planningVisit.getUserContacts());
+				context.planningVisit = manager.createAndStoreVisit(pos, 
+																	null, 
+																	realTime, 
+																	proc, 
+																	spec, 
+																	userName, 
+																	userContacts, 
+																	discountPercent, 
+																	discountAmount, 
+																	pricePaid, 
+																	amountToSpecialist, 
+																	amountToMaterials, 
+																	comment);
+				
 			}
-
-			context.setLastVisitStep(++visitStep);
-		}
+				
 		
 		return "";
 	}
@@ -158,11 +204,26 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 		
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 		Date timeScheduled = df.parse(params.get("timeScheduled"));
-		
+
+		Date realTime = df.parse(params.get("realTime"));
+		float discountPercent = Float.parseFloat(params.get("discountPercent"));
+		float discountAmount = Float.parseFloat(params.get("discountAmount"));
+		float pricePaid = Float.parseFloat(params.get("pricePaid"));
+		float amountToSpecialist = Float.parseFloat(params.get("amountToSpecialist"));
+		float amountToMaterials = Float.parseFloat(params.get("amountToMaterials"));
+		String comment = params.get("comment");
+
 		visit.setFinalPrice(finalPrice);
 		visit.setProcedure(proc);
 		visit.setSpec(spec);
 		visit.setTimeScheduled(timeScheduled);
+		visit.setRealTime(realTime);
+		visit.setDiscountPercent(discountPercent);
+		visit.setDiscountAmount(discountAmount);
+		visit.setPricePaid(pricePaid);
+		visit.setAmountToSpecialist(amountToSpecialist);
+		visit.setAmountToMaterials(amountToMaterials);
+		visit.setComment(comment);
 		return visit;		
 	}
 	

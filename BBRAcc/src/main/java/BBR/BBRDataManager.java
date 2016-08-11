@@ -29,43 +29,47 @@ public class BBRDataManager<T extends BBRDataElement> {
     
     @SuppressWarnings({ "unchecked", "unused" })
    	public BBRDataSet<T> list(int pageNumber, int pageSize, String where, String orderBy) {
-        boolean tr = BBRUtil.beginTran();
-           
-       Session session = BBRUtil.getSession();
-       if (orderBy == null)
-       	orderBy = "";
-       if (orderBy.length() > 0) {
-       	orderBy = orderBy.trim();
-       	if (!orderBy.startsWith("order by"))
-       		orderBy = "order by " + orderBy.trim();
-       }
+       boolean tr = BBRUtil.beginTran();
        
-       if (!where.equals("") && !where.trim().startsWith("where"))
-    	   where = " where " + where;
-       
-       List<T> list;
-       Long count = (Long)session.createQuery("Select count(*) from " + typeName + " " + where).uniqueResult();
-       
-       if (count == null) {
-    	   list = null;
-    	   count = 0L;
-       }  else { 
-	       Query query = session.createQuery( " from " + typeName + " " + where + " " + orderBy);
-	       
-	       if (pageNumber >= 0) {
-	    	   query.setFirstResult(pageNumber * pageSize);
-	       
-	    	   if (pageSize > maxRowsToReturn && maxRowsToReturn > 0)
-	    		   pageSize = maxRowsToReturn;
-	           query.setMaxResults(pageSize);
+       try {
+	       Session session = BBRUtil.getSession();
+	       if (orderBy == null)
+	       	orderBy = "";
+	       if (orderBy.length() > 0) {
+	       	orderBy = orderBy.trim();
+	       	if (!orderBy.startsWith("order by"))
+	       		orderBy = "order by " + orderBy.trim();
 	       }
 	       
-	       list = query.list();
+	       if (!where.equals("") && !where.trim().startsWith("where"))
+	    	   where = " where " + where;
+	       
+	       List<T> list;
+	       Long count = (Long)session.createQuery("Select count(*) from " + typeName + " " + where).uniqueResult();
+	       
+	       if (count == null) {
+	    	   list = null;
+	    	   count = 0L;
+	       }  else { 
+		       Query query = session.createQuery( " from " + typeName + " " + where + " " + orderBy);
+		       
+		       if (pageNumber >= 0) {
+		    	   query.setFirstResult(pageNumber * pageSize);
+		       
+		    	   if (pageSize > maxRowsToReturn && maxRowsToReturn > 0)
+		    		   pageSize = maxRowsToReturn;
+		           query.setMaxResults(pageSize);
+		       }
+		       
+		       list = query.list();
+	       }
+	       BBRDataSet<T> ds = new BBRDataSet<T>(list, count);
+	       BBRUtil.commitTran(tr);
+	       return ds;
+       } catch (Exception ex) {
+    	   BBRUtil.rollbackTran(tr);
+    	   return null;
        }
-       BBRDataSet<T> ds = new BBRDataSet<T>(list, count);
-       BBRUtil.commitTran(tr);
-	
-       return ds;
     }
 
    	public Long count(String where) {
@@ -82,7 +86,7 @@ public class BBRDataManager<T extends BBRDataElement> {
        return count;
     }
    	
-   	public BBRDataSet<T> list(int pageNumber, int pageSize, String orderBy) {
+   	public BBRDataSet<T> list(int pageNumber, int pageSize, String orderBy) throws Exception {
        return list(pageNumber, pageSize, "", orderBy);
     }
    	
@@ -116,37 +120,46 @@ public class BBRDataManager<T extends BBRDataElement> {
     @SuppressWarnings("unchecked")
 	public T findById(Long id) {
     	boolean tr = BBRUtil.beginTran();
-       	Session session = BBRUtil.getSession(); 	
-        T result = (T) session.createQuery("from " + typeName + " as t where t.id = '" + id.toString() + "'").uniqueResult();
-        BBRUtil.commitTran(tr);
-        return result;
+    	try {
+    		Session session = BBRUtil.getSession(); 	
+    		T result = (T) session.createQuery("from " + typeName + " as t where t.id = '" + id.toString() + "'").uniqueResult();
+    		BBRUtil.commitTran(tr);
+    		return result;
+    	} catch (Exception ex) {
+    		BBRUtil.rollbackTran(tr);
+    		return null;
+    	}
     }
     
     @SuppressWarnings({ "unchecked", "unused" })
 	public BBRDataSet<T> list(String queryTerm, String sortBy, String where) {
         boolean tr = BBRUtil.beginTran();
-        
-        Session session = BBRUtil.getSession();
-   		String orderBy = " order by " + sortBy;
-   		
-   		if (queryTerm != null && !queryTerm.equals("")) {
-   			queryTerm.replaceAll("\\s", "%");
-   			where = titleField + "like '%" + queryTerm + "%' " + where;
-   		}
-   		
-        if (!where.equals("") && !where.trim().startsWith("where"))
-     	   where = " where " + where;
-   		
-        Long count = (Long)session.createQuery("Select count(*) from " + typeName + where).uniqueResult();
-        Query query = session.createQuery("from " + typeName + where + orderBy);
-        
-        if (maxRowsToReturn > 0)
-        	query.setMaxResults(maxRowsToReturn);
-        
-        List<T> list = query.list();
-        BBRUtil.commitTran(tr);
-
-        return new BBRDataSet<T>(list, count);
+        try {
+	        Session session = BBRUtil.getSession();
+	   		String orderBy = " order by " + sortBy;
+	   		
+	   		if (queryTerm != null && !queryTerm.equals("")) {
+	   			queryTerm.replaceAll("\\s", "%");
+	   			where = titleField + "like '%" + queryTerm + "%' " + where;
+	   		}
+	   		
+	        if (!where.equals("") && !where.trim().startsWith("where"))
+	     	   where = " where " + where;
+	   		
+	        Long count = (Long)session.createQuery("Select count(*) from " + typeName + where).uniqueResult();
+	        Query query = session.createQuery("from " + typeName + where + orderBy);
+	        
+	        if (maxRowsToReturn > 0)
+	        	query.setMaxResults(maxRowsToReturn);
+	        
+	        List<T> list = query.list();
+	        BBRUtil.commitTran(tr);
+	
+	        return new BBRDataSet<T>(list, count);
+        } catch (Exception ex) {
+        	BBRUtil.rollbackTran(tr);
+        	return null;
+        }
     }
 
 	public BBRDataSet<T> list(String queryTerm, String sortBy) {

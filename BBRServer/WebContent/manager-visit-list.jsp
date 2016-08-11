@@ -83,7 +83,7 @@
 
 <t:admin-grid-wrapper title="LBL_USER_VISITS_TITLE" titleModifier="${titleMod}">
 	<jsp:body>
-		<t:grid method="BBRVisits" editPage="manager-visit-edit.jsp" createPage="" title="LBL_USER_VISITS_TITLE" titleModifier="${titleMod}" customToolbar="true">
+		<t:grid method="BBRVisits" editPage="manager-visit-edit.jsp" createPage="manager-visit-edit.jsp" title="LBL_USER_VISITS_TITLE" titleModifier="${titleMod}">
 			<t:grid-item label="LBL_DATE_TIME" field="timeScheduled" />
 			<t:grid-item label="LBL_POS" field="pos.title"/>
 			<t:grid-item label="LBL_USER_NAME" field="userName"/>
@@ -91,6 +91,13 @@
 			<t:grid-item label="LBL_SPEC" field="spec.title"/>
 			<t:grid-item label="LBL_VISIT_STATUS" field="status" type="select" options="OPT_VISIT_STATUS"/>
 			<t:grid-item label="LBL_FINAL_PRICE" field="finalPrice"/>
+			<t:grid-item label="LBL_REAL_TIME" field="realTime" />
+			<t:grid-item label="LBL_FINAL_PRICE" field="finalPrice"/>
+			<t:grid-item label="LBL_DISCOUNT_PERCENT" field="discountPercent"/>
+			<t:grid-item label="LBL_DISCOUNT_AMOUNT" field="discountAmount"/>
+			<t:grid-item label="LBL_PRICE_PAID" field="pricePaid"/>
+			<t:grid-item label="LBL_AMOUNT_TO_SPECIALIST" field="amountToSpecialist"/>
+			<t:grid-item label="LBL_AMOUNT_TO_MATERIALS" field="amountToMaterials"/>
 		</t:grid>
 	</jsp:body>
 </t:admin-grid-wrapper>

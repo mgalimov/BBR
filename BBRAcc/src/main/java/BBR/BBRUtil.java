@@ -131,5 +131,4 @@ public class BBRUtil {
         calendar.set(Calendar.MILLISECOND, 999);
         return calendar.getTime();
     }
-
  }

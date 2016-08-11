@@ -51,8 +51,10 @@
 			request.setAttribute("posTitle", context.planningVisit.getPos().getTitle() + ", " + context.planningVisit.getPos().getLocationDescription());
 		if (context.planningVisit.getSpec() != null)
 			request.setAttribute("specName", context.planningVisit.getSpec().getName());
-		if (context.planningVisit.getProcedure() != null)
+		if (context.planningVisit.getProcedure() != null) {
 			request.setAttribute("procTitle", context.planningVisit.getProcedure().getTitle());
+			request.setAttribute("procDuration", context.getDurationString(context.planningVisit.getProcedure().getLength()));
+		}
 		if (context.planningVisit.getTimeScheduled() != null) {
 			SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 			request.setAttribute("visitTime", df.format(context.planningVisit.getTimeScheduled()));
@@ -137,7 +139,7 @@
 		</div>
 		
 		<t:card title="LBL_PLAN_VISIT_STEP_2" gridPage="general-plan-visit.jsp" method="BBRVisits" buttonSave="LBL_GOTO_STEP3_BTN" buttonCancel="LBL_CANCEL_VISIT_BTN">
-			<t:card-schedule-spec-proc/>
+			<t:card-schedule-spec-proc mode="general-edit"/>
 		</t:card>
 	</c:when>
 
@@ -157,7 +159,7 @@
 		<div class="container-fluid">
 			<h1>${context.gs('LBL_VISIT_CREATED')}</h1>
 			<h4>${context.gs("LBL_PLAN_VISIT_STEP_1")} <i>${posTitle}</i></h4>
-			<h4>${context.gs("LBL_PLAN_VISIT_STEP_2")} <i>${specName}, ${procTitle}, ${visitTime}</i></h4>
+			<h4>${context.gs("LBL_PLAN_VISIT_STEP_2")} <i>${specName}, ${procTitle}, ${visitTime}, ${procDuration}</i></h4>
 			<h4>${context.gs("LBL_PLAN_VISIT_STEP_3")} <i>${visitorName}, ${visitorContacts}</i></h4>
 		</div>
 		<!-- p>${context.gs('LBL_YOULL_GET_APPROVED_SOON')}</p-->

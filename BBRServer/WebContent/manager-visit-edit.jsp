@@ -4,24 +4,33 @@
 
 <t:admin-card-wrapper title="LBL_EDIT_VISIT_TITLE">
 <jsp:body>
-		<t:card title="LBL_EDIT_VISIT_TITLE" gridPage="manager-visit-list.jsp" method="BBRVisits">
-			<t:modal cancelButtonLabel="LBL_CANCEL_CHANGES" processButtonLabel="LBL_SAVE_DATA" title="LBL_EDIT_FINAL_PRICE" id="enterFinalPrice">
+		<t:card title="LBL_EDIT_VISIT_TITLE" gridPage="manager-visit-list.jsp" method="BBRVisits" showTabs="true">
+			<t:card-tab label="LBL_MAIN_VISIT_TAB" id="mainTab" isActive="true">
+				<t:toolbar-item label="LBL_APPROVE_VISIT" id="approveButton" accent="btn-success" condition="obj.status==0 || obj.status==2"></t:toolbar-item>
+				<t:toolbar-item label="LBL_DISAPPROVE_VISIT" id="disapproveButton" accent="btn-danger" condition="obj.status==0 || obj.status==2"></t:toolbar-item>
+				<t:toolbar-item label="LBL_CANCEL_VISIT" id="cancelVisitButton" accent="btn-default" condition="obj.status<=1"></t:toolbar-item>
+				<t:toolbar-item label="LBL_CLOSE_VISIT" id="closeVisitButton" accent="btn-primary" condition="obj.status<=1"></t:toolbar-item>
+				<t:card-item label="LBL_POS" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes" isDisabled="readonly"/>
+				<t:card-item label="LBL_DATE_TIME" type="datetime" field="timeScheduled" />
+				<t:card-item label="LBL_VISIT_STATUS" field="status" type="select" options="OPT_VISIT_STATUS" isDisabled="readonly"/>
+				<t:card-item label="LBL_USER_NAME" type="text" field="userName" isDisabled="readonly"/>
+				<t:card-item label="LBL_PHONE" type="text" field="userContacts" />
+				<t:card-item label="LBL_PROCEDURE" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures" />
+				<t:card-item label="LBL_SPEC" type="reference" field="spec" referenceFieldTitle="name" referenceMethod="BBRSpecialists" />
+				<t:card-item label="LBL_POS_START_WORKHOUR" field="pos.startWorkHour" type="time" isDisabled="readonly"/>
+				<t:card-item label="LBL_POS_END_WORKHOUR" field="pos.endWorkHour" type="time" isDisabled="readonly"/>
+				<t:card-item label="LBL_FINAL_PRICE" field="finalPrice" type="text" isDisabled="readonly" modifier="view"/>
+			</t:card-tab>
+			<t:card-tab label="LBL_MONEY_TAB" id="moneyTab">
+				<t:card-item label="LBL_REAL_TIME" type="datetime" field="realTime" />
 				<t:card-item label="LBL_FINAL_PRICE" type="text" field="finalPrice"/>
-			</t:modal>
-			<t:toolbar-item label="LBL_APPROVE_VISIT" id="approveButton" accent="btn-success" condition="obj.status==0 || obj.status==2"></t:toolbar-item>
-			<t:toolbar-item label="LBL_DISAPPROVE_VISIT" id="disapproveButton" accent="btn-danger" condition="obj.status==0 || obj.status==2"></t:toolbar-item>
-			<t:toolbar-item label="LBL_CANCEL_VISIT" id="cancelVisitButton" accent="btn-default" condition="obj.status<=1"></t:toolbar-item>
-			<t:toolbar-item label="LBL_CLOSE_VISIT" id="closeVisitButton" accent="btn-primary" condition="obj.status<=1"></t:toolbar-item>
-			<t:card-item label="LBL_POS" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes" isDisabled="readonly"/>
-			<t:card-item label="LBL_DATE_TIME" type="datetime" field="timeScheduled" />
-			<t:card-item label="LBL_VISIT_STATUS" field="status" type="select" options="OPT_VISIT_STATUS" isDisabled="readonly"/>
-			<t:card-item label="LBL_USER_NAME" type="text" field="userName" isDisabled="readonly"/>
-			<t:card-item label="LBL_PHONE" type="text" field="userContacts" />
-			<t:card-item label="LBL_PROCEDURE" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures" />
-			<t:card-item label="LBL_SPEC" type="reference" field="spec" referenceFieldTitle="name" referenceMethod="BBRSpecialists" />
-			<t:card-item label="LBL_POS_START_WORKHOUR" field="pos.startWorkHour" type="time" isDisabled="readonly"/>
-			<t:card-item label="LBL_POS_END_WORKHOUR" field="pos.endWorkHour" type="time" isDisabled="readonly"/>
-			<t:card-item label="LBL_FINAL_PRICE" field="finalPrice" type="text" isDisabled="readonly" modifier="view"/>
+				<t:card-item label="LBL_DISCOUNT_PERCENT" type="text" field="discountPercent"/>
+				<t:card-item label="LBL_DISCOUNT_AMOUNT" type="text" field="discountAmount"/>
+				<t:card-item label="LBL_PRICE_PAID" type="text" field="pricePaid"/>
+				<t:card-item label="LBL_AMOUNT_TO_SPECIALIST" type="text" field="amountToSpecialist"/>
+				<t:card-item label="LBL_AMOUNT_TO_MATERIALS" type="text" field="amountToMaterials"/>
+				<t:card-item label="LBL_COMMENT" type="text" field="comment"/>
+			</t:card-tab>
 		</t:card>
 </jsp:body>
 </t:admin-card-wrapper>
@@ -68,6 +77,11 @@
 			performOperation('cancelVisit');
 		});
 		
+		$("#closeVisitButton").click(function() {
+			$("#saveChanges").click();
+			performOperation('close');
+		});
+
 		function performOperation(operation) {
 			idParam = getUrlParameter('id');
 			if (idParam && idParam != 'new') {
@@ -82,28 +96,17 @@
 			}			
 		}
 		
-		$("#closeVisitButton").click(function() {
-			idParam = getUrlParameter('id');
-			if (idParam && idParam != 'new') {
-				$('#enterFinalPrice').modal();
-			}					
-		});
+		$("#discountPercentinput").change(function () {
+			var v = $("#discountPercentinput").val();
+			var vf = parseFloat(v);
+			var da = $("#discountAmountinput").val();
+			var daf = parseFloat(da);
+			var fp = $("#finalPriceinput").val();
+			var fpf = parseFloat(fp);
 
-		$("#enterFinalPriceprocess").click(function() {
-			idParam = getUrlParameter('id');
-			if (idParam && idParam != 'new') {
-				$.ajax({
-		        	url: 'BBRVisits',
-		        	data: {
-		        		operation: 'close',
-		        		visitId: idParam
-		        	}
-		        }).success(function () {
-					$("#saveChanges").click();
-		        });
-			}					
-		});
-
+			$("#discountAmountinput").val(Math.round(fpf * vf / 100));
+			$("#pricePaidinput").val(Math.round(fpf - Math.round(fpf * vf / 100)));
+		})
 	});
 	
 </script>

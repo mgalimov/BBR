@@ -4,6 +4,7 @@
 
 <t:nav>
 	<t:actions>
+		<t:action-item href="manager-visit-edit.jsp" title="LBL_CREATE_ADHOCVISIT_ACTION"></t:action-item>
 		<t:action-item href="manager-visit-create.jsp" title="LBL_CREATE_VISIT_ACTION"></t:action-item>
 		<t:action-item href="manager-turn-create.jsp" title="LBL_CREATE_TURN_ACTION"></t:action-item>
 	</t:actions>

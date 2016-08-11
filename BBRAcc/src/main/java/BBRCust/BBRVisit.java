@@ -18,7 +18,10 @@ public class BBRVisit extends BBRDataElement {
 	
 	@Column(name="TIME_SCHEDULED")
 	private Date timeScheduled;
-	
+
+	@Column(name="REAL_TIME")
+	private Date realTime;
+
 	@ManyToOne(fetch=FetchType.EAGER)
 	private BBRPoS pos;
 	
@@ -56,6 +59,24 @@ public class BBRVisit extends BBRDataElement {
 	@Column(name="FINAL_PRICE")
 	private float finalPrice = 0;
 
+	@Column(name="DISCOUNT_PERCENT")
+	private float discountPercent = 0;
+
+	@Column(name="DISCOUNT_AMOUNT")
+	private float discountAmount = 0;
+
+	@Column(name="PRICE_PAID")
+	private float pricePaid = 0;
+
+	@Column(name="AMOUNT_TO_SPEC")
+	private float amountToSpecialist = 0;
+
+	@Column(name="AMOUNT_TO_MATERIALS")
+	private float amountToMaterials = 0;
+
+	@Column(name="COMMENT")
+	private String comment = "";
+	
 	public BBRVisit() {}
 	
 	public void setId(Long id) {
@@ -153,6 +174,66 @@ public class BBRVisit extends BBRDataElement {
 
 	public void setFinalPrice(Float finalPrice) {
 		this.finalPrice = finalPrice;
+	}
+
+	public Date getRealTime() {
+		return realTime;
+	}
+
+	public void setRealTime(Date realTime) {
+		this.realTime = realTime;
+	}
+
+	public float getDiscountPercent() {
+		return discountPercent;
+	}
+
+	public void setDiscountPercent(float discountPercent) {
+		this.discountPercent = discountPercent;
+	}
+
+	public float getDiscountAmount() {
+		return discountAmount;
+	}
+
+	public void setDiscountAmount(float discountAmount) {
+		this.discountAmount = discountAmount;
+	}
+
+	public float getPricePaid() {
+		return pricePaid;
+	}
+
+	public void setPricePaid(float pricePaid) {
+		this.pricePaid = pricePaid;
+	}
+
+	public float getAmountToSpecialist() {
+		return amountToSpecialist;
+	}
+
+	public void setAmountToSpecialist(float amountToSpecialist) {
+		this.amountToSpecialist = amountToSpecialist;
+	}
+
+	public float getAmountToMaterials() {
+		return amountToMaterials;
+	}
+
+	public void setAmountToMaterials(float amountToMaterials) {
+		this.amountToMaterials = amountToMaterials;
+	}
+
+	public void setFinalPrice(float finalPrice) {
+		this.finalPrice = finalPrice;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 }

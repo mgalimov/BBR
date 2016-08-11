@@ -6,6 +6,7 @@
 <%@ attribute name="buttonCancel" %>
 <%@ attribute name="showFooter" %>
 <%@ attribute name="showToolbar" %>
+<%@ attribute name="showTabs" %>
 
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
@@ -18,6 +19,7 @@
 <c:set var="itemAfterLoad" scope="request" value="${''}"/>
 <c:set var="itemToolbar" scope="request" value="${''}"/>
 <c:set var="itemToolbarCondition" scope="request" value="${''}"/>
+<c:set var="itemTabs" scope="request" value="${''}"/>
 
 <t:modal  cancelButtonLabel="LBL_CANCEL_CHANGES_KEEP_EDITING_BTN" 
 		  processButtonLabel="LBL_CANCEL_CHANGES_CANCEL_BTN" 
@@ -40,8 +42,11 @@
 		  	</div>
 		  </div>
 	  </c:if>
+	  <c:if test="${showTabs == true}">
+		  <ul class="nav nav-tabs" role="tablist" id="tablist"></ul>
+	  </c:if>
 	  <div class="panel-body">
-	  	<div>
+	  	<div class="tab-content">
 	  		<jsp:doBody/>
 	  	</div>
 	  </div>
@@ -59,6 +64,13 @@
 <script>
 	$(document).ready(function() {
 		$('#toolbarpanel').html("${itemToolbar}");
+	});
+</script>
+</c:if>
+<c:if test="${showTabs == true}">
+<script>
+	$(document).ready(function() {
+		$('#tablist').html("${itemTabs}");
 	});
 </script>
 </c:if>
