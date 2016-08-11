@@ -96,17 +96,20 @@
 			}			
 		}
 		
-		$("#discountPercentinput").change(function () {
+		$("#discountPercentinput").change(onChange);
+		$("#finalPriceinput").change(onChange);
+		
+		function onChange () {
 			var v = $("#discountPercentinput").val();
 			var vf = parseFloat(v);
-			var da = $("#discountAmountinput").val();
-			var daf = parseFloat(da);
 			var fp = $("#finalPriceinput").val();
 			var fpf = parseFloat(fp);
 
-			$("#discountAmountinput").val(Math.round(fpf * vf / 100));
-			$("#pricePaidinput").val(Math.round(fpf - Math.round(fpf * vf / 100)));
-		})
+			if (!isNaN(fpf) && !isNaN(vf)) {
+				$("#discountAmountinput").val(Math.round(fpf * vf / 100));
+				$("#pricePaidinput").val(Math.round(fpf - Math.round(fpf * vf / 100)));
+			}
+		}
 	});
 	
 </script>
