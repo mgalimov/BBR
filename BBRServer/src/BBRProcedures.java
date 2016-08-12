@@ -94,6 +94,4 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 		
 		return manager.list(query, manager.getTitleField(), pos, shop).toJson();
 	}
-
-
 }

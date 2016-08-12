@@ -13,6 +13,7 @@
 <%@ attribute name="multiple" %>
 <%@ attribute name="modifier" %>
 <%@ attribute name="currencyField" %>
+<%@ attribute name="timeStepping" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -83,6 +84,11 @@
 				<c:if test="${type.equals('datetime')}">
 					<c:set var="glyphicon" value="glyphicon-calendar"></c:set>
 					<c:set var="format" value="YYYY-MM-DD HH:mm"></c:set>
+					<c:set var="sideBySide" value=", sideBySide: true"></c:set>
+				</c:if>
+				
+				<c:if test="${timeStepping == null || timeStepping.equals('')}">
+					<c:set var="timeStepping" value="30"></c:set>
 				</c:if>
 
 		        <div class="input-group date col-md-3" id="${ft}inputdiv" >
@@ -94,6 +100,10 @@
 				<c:set var="itemSet" scope="request" value="${itemSet}
 		            $('#${ft}input').val(obj.${field});"/>
 				<c:if test="${defaultValue != null}">
+					<c:if test="${defaultValue == 'now'}">
+						<c:set var="defaultValue" value="${context.getNowString()}"/>
+					</c:if>
+				
 					<c:set var="itemPreload" scope="request" value="${itemPreload}
    					  $('#${ft}input').val('${defaultValue}');"/>
 				</c:if>
@@ -101,8 +111,9 @@
 				<script>
 					$("#${ft}inputdiv").datetimepicker({
 						format: "${format}",
-						stepping: 30,
+						stepping: ${timeStepping},
 						locale: "${context.getLocaleString()}"
+						${sideBySide}
 					});
 				</script>
 			</c:when>

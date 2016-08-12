@@ -372,4 +372,9 @@ public class BBRContext {
 				else
 					return hrs + " " + mins;
 	}
+	
+	public String getNowString() {
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+		return df.format(new Date());
+	}
 }

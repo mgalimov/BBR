@@ -7,8 +7,11 @@ public class BBRDataSet<T extends BBRDataElement> {
 	public List<T> data;
 	
 	public BBRDataSet (List<T> rows) {
-		Integer i = rows.size();
-		totalRecords = i.toString();
+		if (rows != null) {
+			Integer i = rows.size();
+			totalRecords = i.toString();
+		} else
+			totalRecords = "0";
 		this.data = rows;
 	}
 

@@ -114,11 +114,16 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         }
     }
 
-	public BBRDataSet<BBRVisit> list(Long userId, int pageNumber, int pageSize, String orderBy) {
+	public BBRDataSet<BBRVisit> list(Long userId,  BBRShop shop, BBRPoS pos, Date startDate, Date endDate, int pageNumber, int pageSize, String orderBy) {
    		if (userId == null)
    			return null;
    			
         String where = " where user.id=" + userId.toString() + "";
+        
+		String whereF = getFilterWhere(shop, pos, startDate, endDate, pageNumber);
+		if (!whereF.isEmpty())
+			where += "(" + where + ") and " + whereF;
+		
         return list(pageNumber, pageSize, where, orderBy);
 	}
 	
@@ -249,6 +254,9 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	public void close(BBRVisit visit) {
 		if (visit != null) {
 			visit.setStatus(BBRVisitStatus.VISSTATUS_PERFORMED);
+			if (visit.getRealTime() == null) {
+				visit.setRealTime(new Date()); 
+			}
 			try {
 				update(visit);
 			} catch (Exception e) {
@@ -307,7 +315,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		
 		String groupBy = " group by userName, userContacts ";
 		
-		String qry = "select userName, userContacts, max(timeScheduled) as lastVisitDate from BBRVisit " + 
+		String qry = "select userName, userContacts, max(realTime) as lastVisitDate from BBRVisit " + 
 		             where + groupBy + having + orderBy;
 
 		int count = session.createQuery(qry).list().size();
@@ -367,8 +375,11 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		return visitor;
 	}
 
-	public BBRDataSet<BBRVisit> listVisitsByNameAndContacts(String userName, String userContacts, int pageNumber, int pageSize, String orderBy) {
+	public BBRDataSet<BBRVisit> listVisitsByNameAndContacts(String userName, String userContacts, BBRShop shop, BBRPoS pos, Date startDate, Date endDate, int pageNumber, int pageSize, String orderBy) {
 		String where = "userName = '" + userName + "' and userContacts='" + userContacts + "'";
+		String whereF = getFilterWhere(shop, pos, startDate, endDate, pageNumber);
+		if (!whereF.isEmpty())
+			where = "(" + where + ") and " + whereF;
 		return list(pageNumber, pageSize, where, orderBy);
 	}
 
@@ -379,23 +390,29 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 		
 		String where = "pos.id = " + pos.getId() + 
-				" and timeScheduled >='" + df.format(BBRUtil.getStartOfDay(date)) + 
-				"' and timeScheduled <='" + df.format(BBRUtil.getEndOfDay(date)) + "'";
+				"  and ((timeScheduled >='" + df.format(BBRUtil.getStartOfDay(date)) + 
+				"' and timeScheduled <='" + df.format(BBRUtil.getEndOfDay(date)) + "')" + 
+				"   or (realTime >='" + df.format(BBRUtil.getStartOfDay(date)) + 
+				"' and realTime <='" + df.format(BBRUtil.getEndOfDay(date)) + "'))";
 		return list(pageNumber, pageSize, where, orderBy);
 	}
 
-	public BBRDataSet<BBRVisit> listUnapprovedVisitsByPos(BBRPoS pos, int pageNumber, int pageSize, String orderBy) {
+	public BBRDataSet<BBRVisit> listUnapprovedVisitsByPos(BBRPoS pos, Date startDate, Date endDate, int pageNumber, int pageSize, String orderBy) {
 		if (pos == null)
 			return null;
 		
 		String where = "pos.id = " + pos.getId() + " and status = " + BBRVisitStatus.VISSTATUS_INITIALIZED;
 		
+		String whereF = getFilterWhere(null, pos, startDate, endDate, pageNumber);
+		if (!whereF.isEmpty())
+			where += "(" + where + ") and " + whereF;
+
 		return list(pageNumber, pageSize, where, orderBy);
 	}
 
-	public BBRDataSet<BBRVisit> listAllVisitsByFilter(BBRShop shop, BBRPoS pos, Date startDate, Date endDate, int pageNumber, int pageSize, String orderBy) {
+	private String getFilterWhere(BBRShop shop, BBRPoS pos, Date startDate, Date endDate, int pageNumber) {
 		String where = "";
-		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 		
 		if (shop != null)
 			where += " pos.shop.id = " + shop.getId();
@@ -403,19 +420,36 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 			if (pos != null)
 				where += " pos.id = " + pos.getId();
 		
-		if (!where.equals(""))
-			where += " and ";
 		
-		if (startDate != null)
-			where += " timeScheduled >= '" + df.format(startDate) + "'";
-
-		if (!where.equals(""))
-			where += " and ";
+		String whereTS = "";
+		String whereRT = "";
 		
-		if (endDate != null)
-			where += " timeScheduled <= '" + df.format(endDate) + "'";
+		if (startDate != null) {
+			whereTS = " timeScheduled >= '" + df.format(BBRUtil.getStartOfDay(startDate)) + "'";
+			whereRT = " realTime >= '" + df.format(BBRUtil.getStartOfDay(startDate)) + "'";
+		}
 
-		return list(pageNumber, pageSize, where, orderBy);
+		if (!whereTS.equals(""))
+			whereTS += " and ";
+		
+		if (!whereRT.equals(""))
+			whereRT += " and ";
+		
+		if (endDate != null) {
+			whereTS += " timeScheduled <= '" + df.format(BBRUtil.getEndOfDay(endDate)) + "'";
+			whereRT += " realTime <= '" + df.format(BBRUtil.getEndOfDay(endDate)) + "'";
+		}
+
+		if (!whereTS.isEmpty() && !whereRT.isEmpty()) {
+			if (!where.equals(""))
+				where += " and ";
+			where += "((" + whereTS + ") or (" + whereRT + "))"; 
+		}	
+		return where;
+	}
+	
+	public BBRDataSet<BBRVisit> listAllVisitsByFilter(BBRShop shop, BBRPoS pos, Date startDate, Date endDate, int pageNumber, int pageSize, String orderBy) {
+		return list(pageNumber, pageSize, getFilterWhere(shop, pos, startDate, endDate, pageNumber), orderBy);
 	}
 
 	// Charts
@@ -436,8 +470,10 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		
 		Query query = session.createQuery("select " + pf + ", count(*) as visits" + 
 		                                  "  from BBRVisit " +  
-										  " where timeScheduled >= '"+df.format(startDate)+"'" + 
-		                                  "   and timeScheduled <= '"+df.format(endDate)+"'" +
+										  " where ((timeScheduled >= '"+df.format(BBRUtil.getStartOfDay(startDate))+"' " + 
+		                                  "     and timeScheduled <= '"+df.format(BBRUtil.getEndOfDay(endDate))+"') or " +
+										  "        (realTime >= '"+df.format(BBRUtil.getStartOfDay(startDate))+"' " + 
+		                                  "     and realTime <= '"+df.format(BBRUtil.getEndOfDay(endDate))+"'))" +
 										  "   and status = " + BBRVisitStatus.VISSTATUS_PERFORMED + 
 										  where +
 										  " group by " + pf + 
@@ -471,8 +507,10 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		
 		Query query = session.createQuery("select " + pf + ", sum(finalPrice) as income" + 
 		                                  "  from BBRVisit " +  
-										  " where timeScheduled >= '"+df.format(startDate)+"'" + 
-		                                  "   and timeScheduled <= '"+df.format(endDate)+"'" +
+										  " where ((timeScheduled >= '"+df.format(BBRUtil.getStartOfDay(startDate))+"' " + 
+		                                  "     and timeScheduled <= '"+df.format(BBRUtil.getEndOfDay(endDate))+"') or " +
+										  "        (realTime >= '"+df.format(BBRUtil.getStartOfDay(startDate))+"' " + 
+		                                  "     and realTime <= '"+df.format(BBRUtil.getEndOfDay(endDate))+"'))" +
 										  "   and status = " + BBRVisitStatus.VISSTATUS_PERFORMED + 
 										  where +
 										  " group by " + pf + 

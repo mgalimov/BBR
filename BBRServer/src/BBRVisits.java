@@ -76,7 +76,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				throw new Exception(BBRErrors.ERR_RECORD_NOTFOUND);
 			}
 		} else 
-			if (formMode.equals("general-edit")) 
+			if (formMode != null && formMode.equals("general-edit")) 
 			{
 				if (visitStep == 1) {
 					context.planningVisit = new BBRVisit();
@@ -144,48 +144,45 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				context.setLastVisitStep(++visitStep);
 			}
 			else {
-				String userName = params.get("userName");
-				String userContacts = params.get("userContacts");
+				try {
+					String userName = params.get("userName");
+					String userContacts = params.get("userContacts");
+					Long posId = Long.parseLong(params.get("pos"));
+					BBRPoSManager mgrPoS = new BBRPoSManager();
+					BBRPoS pos = mgrPoS.findById(posId);
 				
-				Long posId = Long.parseLong(params.get("pos"));
-				BBRPoSManager mgrPoS = new BBRPoSManager();
-				BBRPoS pos = mgrPoS.findById(posId);
-				
-				Long procedureId = Long.parseLong(params.get("procedure"));
-				BBRProcedureManager mgrProc = new BBRProcedureManager();
-				BBRProcedure proc = mgrProc.findById(procedureId);						
+					Long procedureId = Long.parseLong(params.get("procedure"));
+					BBRProcedureManager mgrProc = new BBRProcedureManager();
+					BBRProcedure proc = mgrProc.findById(procedureId);						
 	
-				Long specId = Long.parseLong(params.get("spec"));
-				BBRSpecialistManager mgrSpec = new BBRSpecialistManager();
-				BBRSpecialist spec = mgrSpec.findById(specId);						
-	
-				if (pos == null || proc == null || spec == null)
-					throw new Exception(BBRErrors.ERR_RECORD_NOTFOUND);
-				
-				DateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
-				
-				Date realTime = df.parse(params.get("realTime"));
-				float discountPercent = Float.parseFloat(params.get("discountPercent"));
-				float discountAmount = Float.parseFloat(params.get("discountAmount"));
-				float pricePaid = Float.parseFloat(params.get("pricePaid"));
-				float amountToSpecialist = Float.parseFloat(params.get("amountToSpecialist"));
-				float amountToMaterials = Float.parseFloat(params.get("amountToMaterials"));
-				String comment = params.get("comment");
-
-				context.planningVisit = manager.createAndStoreVisit(pos, 
-																	null, 
-																	realTime, 
-																	proc, 
-																	spec, 
-																	userName, 
-																	userContacts, 
-																	discountPercent, 
-																	discountAmount, 
-																	pricePaid, 
-																	amountToSpecialist, 
-																	amountToMaterials, 
-																	comment);
-				
+					Long specId = Long.parseLong(params.get("spec"));
+					BBRSpecialistManager mgrSpec = new BBRSpecialistManager();
+					BBRSpecialist spec = mgrSpec.findById(specId);						
+					DateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+					
+					Date realTime = df.parse(params.get("realTime"));
+					float discountPercent = Float.parseFloat(params.get("discountPercent"));
+					float discountAmount = Float.parseFloat(params.get("discountAmount"));
+					float pricePaid = Float.parseFloat(params.get("pricePaid"));
+					float amountToSpecialist = Float.parseFloat(params.get("amountToSpecialist"));
+					float amountToMaterials = Float.parseFloat(params.get("amountToMaterials"));
+					String comment = params.get("comment");
+					context.planningVisit = manager.createAndStoreVisit(pos, 
+							null, 
+							realTime, 
+							proc, 
+							spec, 
+							userName, 
+							userContacts, 
+							discountPercent, 
+							discountAmount, 
+							pricePaid, 
+							amountToSpecialist, 
+							amountToMaterials, 
+							comment);
+				} catch (Exception ex) {
+					throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
+				}
 			}
 				
 		
@@ -194,6 +191,8 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 
 	@Override
 	protected BBRVisit beforeUpdate(BBRVisit visit, BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String userName = params.get("userName");
+		String userContacts = params.get("userContacts");
 		float finalPrice = Float.parseFloat(params.get("finalPrice"));
 
 		BBRProcedureManager pmgr = new BBRProcedureManager();
@@ -213,6 +212,8 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 		float amountToMaterials = Float.parseFloat(params.get("amountToMaterials"));
 		String comment = params.get("comment");
 
+		visit.setUserName(userName);
+		visit.setUserContacts(userContacts);
 		visit.setFinalPrice(finalPrice);
 		visit.setProcedure(proc);
 		visit.setSpec(spec);
@@ -252,7 +253,8 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			if (userNC.length == 2)
 				userC = userNC[1];
 			
-			return manager.listVisitsByNameAndContacts(userN, userC, pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
+			return manager.listVisitsByNameAndContacts(userN, userC, context.filterShop, context.filterPoS, context.filterStartDate, context.filterEndDate, 
+													   pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
 		}
 
 		String[] datePos = (String[])context.get("datePos");
@@ -274,7 +276,8 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			try {
 				BBRPoSManager pmgr = new BBRPoSManager();
 				BBRPoS pos = pmgr.findById(Long.parseLong(poss));
-				return manager.listUnapprovedVisitsByPos(pos, pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
+				return manager.listUnapprovedVisitsByPos(pos, context.filterStartDate, context.filterEndDate, 
+														 pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
 			} catch (Exception ex) {
 				return "";
 			}
@@ -302,7 +305,8 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 		}
 		
 		if (context.user != null)
-			return manager.list(context.user.getId(), pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
+			return manager.list(context.user.getId(), context.filterShop, context.filterPoS, context.filterStartDate, context.filterEndDate,
+							    pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
 		else
 			return "";
 	}

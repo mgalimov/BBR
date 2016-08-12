@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import BBR.BBRDataElement;
 import BBR.BBRDataManager;
+import BBR.BBRDataSet;
 import BBR.BBRErrors;
 import BBRAcc.BBRUser.BBRUserRole;
 import BBRClientApp.BBRContext;
@@ -103,6 +104,10 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 			
 			String drawIndex = params.get("draw");
 			respText = getData(pageNum, rowsPerPage, columns, sortingFields, params, request, response);
+			if (respText.isEmpty()) {
+				BBRDataSet ds = new BBRDataSet<BBRDataElement>(null);
+				respText = ds.toJson();
+			}
 			respText = "{\"draw\":" + drawIndex + "," + respText.substring(1);
 		} catch (Exception ex) {
 			respText = context.gs(ex.getMessage());
