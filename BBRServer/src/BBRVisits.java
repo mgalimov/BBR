@@ -158,14 +158,14 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 					Long specId = Long.parseLong(params.get("spec"));
 					BBRSpecialistManager mgrSpec = new BBRSpecialistManager();
 					BBRSpecialist spec = mgrSpec.findById(specId);						
-					DateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 					
-					Date realTime = df.parse(params.get("realTime"));
-					float discountPercent = Float.parseFloat(params.get("discountPercent"));
-					float discountAmount = Float.parseFloat(params.get("discountAmount"));
-					float pricePaid = Float.parseFloat(params.get("pricePaid"));
-					float amountToSpecialist = Float.parseFloat(params.get("amountToSpecialist"));
-					float amountToMaterials = Float.parseFloat(params.get("amountToMaterials"));
+					Date realTime = BBRUtil.convertDT(params.get("realTime"));
+					float discountPercent = BBRUtil.convertF(params.get("discountPercent"));
+					float discountAmount = BBRUtil.convertF(params.get("discountAmount"));
+					float pricePaid = BBRUtil.convertF(params.get("pricePaid"));
+					float amountToSpecialist = BBRUtil.convertF(params.get("amountToSpecialist"));
+					float amountToMaterials = BBRUtil.convertF(params.get("amountToMaterials"));
+					
 					String comment = params.get("comment");
 					context.planningVisit = manager.createAndStoreVisit(pos, 
 							null, 
@@ -201,15 +201,13 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 		BBRSpecialistManager smgr = new BBRSpecialistManager();
 		BBRSpecialist spec = smgr.findById(Long.parseLong(params.get("spec")));
 		
-		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
-		Date timeScheduled = df.parse(params.get("timeScheduled"));
-
-		Date realTime = df.parse(params.get("realTime"));
-		float discountPercent = Float.parseFloat(params.get("discountPercent"));
-		float discountAmount = Float.parseFloat(params.get("discountAmount"));
-		float pricePaid = Float.parseFloat(params.get("pricePaid"));
-		float amountToSpecialist = Float.parseFloat(params.get("amountToSpecialist"));
-		float amountToMaterials = Float.parseFloat(params.get("amountToMaterials"));
+		Date timeScheduled = BBRUtil.convertDT(params.get("timeScheduled"));
+		Date realTime = BBRUtil.convertDT(params.get("realTime"));
+		float discountPercent = BBRUtil.convertF(params.get("discountPercent"));
+		float discountAmount = BBRUtil.convertF(params.get("discountAmount"));
+		float pricePaid = BBRUtil.convertF(params.get("pricePaid"));
+		float amountToSpecialist = BBRUtil.convertF(params.get("amountToSpecialist"));
+		float amountToMaterials = BBRUtil.convertF(params.get("amountToMaterials"));
 		String comment = params.get("comment");
 
 		visit.setUserName(userName);
@@ -245,7 +243,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 								Hashtable<Integer, Hashtable<String, String>> sortingFields, 
 								BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		BBRContext context = BBRContext.getContext(request);
-		String[] userNC = (String[])context.get("userNC"); 
+		String[] userNC = (String[])context.get("visitsUserNC"); 
 		if (userNC != null) {
 			String userN = userNC[0];
 			String userC = "";
@@ -257,7 +255,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 													   pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
 		}
 
-		String[] datePos = (String[])context.get("datePos");
+		String[] datePos = (String[])context.get("visitsDatePos");
 		if (datePos != null) {
 			try {
 				SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
@@ -271,7 +269,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			}
 		}
 
-		String poss = (String)context.get("pos");
+		String poss = (String)context.get("visitsPosId");
 		if (poss != null) {
 			try {
 				BBRPoSManager pmgr = new BBRPoSManager();
@@ -283,33 +281,29 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			}
 		}
 		
-		String all = (String)context.get("all");
-		if (all != null) {
-			try {
-				if (context.filterPoS == null && context.filterShop == null) {
-					if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
-						context.filterShop = context.user.getShop();
-					else
-						if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
-							context.filterPoS = context.user.getPos();
-				}
-					
-				if (context.filterPoS != null || context.filterShop != null)
-					return manager.listAllVisitsByFilter(context.filterShop, context.filterPoS, context.filterStartDate, context.filterEndDate, 
-													 pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
-				else
-					return null;
-			} catch (Exception ex) {
-				return "";
-			}
-		}
-		
-		if (context.user != null)
+		String myVisits = (String)context.get("visitsMy");
+		if (myVisits != null && !myVisits.isEmpty() && context.user != null)
 			return manager.list(context.user.getId(), context.filterShop, context.filterPoS, context.filterStartDate, context.filterEndDate,
 							    pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
-		else
+		
+		try {
+			if (context.filterPoS == null && context.filterShop == null) {
+				if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
+					context.filterShop = context.user.getShop();
+				else
+					if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
+						context.filterPoS = context.user.getPos();
+			}
+				
+			if (context.filterPoS != null || context.filterShop != null)
+				return manager.listAllVisitsByFilter(context.filterShop, context.filterPoS, context.filterStartDate, context.filterEndDate, 
+												 pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
+			else
+				return null;
+		} catch (Exception ex) {
 			return "";
-	}
+		}
+}
 	
 	@Override
 	protected String cancel(String id, BBRParams params,	HttpServletRequest request, HttpServletResponse response) {

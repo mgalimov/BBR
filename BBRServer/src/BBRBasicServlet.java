@@ -68,6 +68,10 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 			if (operation.equals("reference")) {
 				String q = params.get("q");
 				respText = getReferenceData(q, params, request, response);
+				if (respText.isEmpty()) {
+					BBRDataSet ds = new BBRDataSet<BBRDataElement>(null);
+					respText = ds.toJson();
+				}
 			} else 
 			if (operation.equals("badge")) {
 				respText = getBadgeNumber(params, request, response);
@@ -193,7 +197,7 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 		try {
 			obj = beforeDelete(obj, params, request, response);
 			if (obj != null)
-			manager.delete(obj);
+				manager.delete(obj);
 		} catch (Exception ex) {
 			throw new Exception(BBRErrors.ERR_CANT_DELETE_RECORD);
 		}

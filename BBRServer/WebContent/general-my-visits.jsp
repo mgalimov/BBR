@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="BBRClientApp.BBRContext"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
+<%
+	BBRContext context = BBRContext.getContext(request);
+	context.set("visitsMy", "my");
+%>
 <t:admin-grid-wrapper title="LBL_MY_VISITS_TITLE">
 	<jsp:body>
 		<t:grid method="BBRVisits" editPage="general-edit-visit.jsp" createPage="general-plan-visit.jsp" title="LBL_MY_VISITS_TITLE">

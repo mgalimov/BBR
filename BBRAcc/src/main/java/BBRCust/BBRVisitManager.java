@@ -141,8 +141,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	
 	@SuppressWarnings("unchecked")
 	public BBRScheduleList getSchedule(Date date, String posId, String procedureId) {
-		if (posId == null) return null;
-		if (posId == "") return null;
+		if (posId.isEmpty()) return null;
 		
 		boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();

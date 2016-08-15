@@ -1,6 +1,7 @@
 package BBR;
 
 import java.lang.reflect.ParameterizedType;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -131,4 +132,38 @@ public class BBRUtil {
         calendar.set(Calendar.MILLISECOND, 999);
         return calendar.getTime();
     }
- }
+    
+    public static Long convertL(String s) {
+    	try {
+    		return Long.parseLong(s);
+    	} catch (Exception ex) {
+    		return 0L;
+    	}
+    }
+
+    public static float convertF(String s) {
+    	try {
+    		return Float.parseFloat(s);
+    	} catch (Exception ex) {
+    		return 0f;
+    	}
+    }
+
+    public static Date convertD(String s) {
+    	SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
+    	try {
+    		return df.parse(s);
+    	} catch (Exception ex) {
+    		return null;
+    	}
+    }
+    
+    public static Date convertDT(String s) {
+    	SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+    	try {
+    		return df.parse(s);
+    	} catch (Exception ex) {
+    		return null;
+    	}
+    }
+} 

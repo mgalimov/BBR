@@ -74,14 +74,20 @@ public class BBRDataManager<T extends BBRDataElement> {
 
    	public Long count(String where) {
        boolean tr = BBRUtil.beginTran();
-           
-       Session session = BBRUtil.getSession();
+       Long count;
        
-       if (!where.equals("") && !where.trim().startsWith("where"))
-    	   where = " where " + where;
-       
-       Long count = (Long)session.createQuery("Select count(*) from " + typeName + " " + where).uniqueResult();
-       BBRUtil.commitTran(tr);
+       try {
+	       Session session = BBRUtil.getSession();
+	       
+	       if (!where.equals("") && !where.trim().startsWith("where"))
+	    	   where = " where " + where;
+	       
+	       count = (Long)session.createQuery("Select count(*) from " + typeName + " " + where).uniqueResult();
+	       BBRUtil.commitTran(tr);
+       } catch (Exception ex) {
+    	   BBRUtil.rollbackTran(tr);
+    	   count = 0L;
+       }
 	
        return count;
     }

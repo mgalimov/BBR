@@ -20,10 +20,9 @@
 	if (t != null && !t.isEmpty()) {
 		if (t.equals("user")) {
 			String[] userNC = params.get("query").split(BBRUtil.recordDivider);
-			context.set("userNC", userNC);
-			context.set("pos", null);
-			context.set("datePos", null);
-			context.set("all", null);
+			context.set("visitsUserNC", userNC);
+			context.set("visitsPosId", null);
+			context.set("visitsDatePos", null);
 			
 			titleMod = BBRUtil.visualTitleDelimiter + userNC[0];
 			if (userNC.length == 2)
@@ -32,10 +31,9 @@
 		
 		if (t.equals("datepos")) {
 			String[] datePos = params.get("query").split(BBRUtil.recordDivider);
-			context.set("datePos", datePos);
-			context.set("userNC", null);
-			context.set("pos", null);
-			context.set("all", null);
+			context.set("visitsDatePos", datePos);
+			context.set("visitsUserNC", null);
+			context.set("visitsPosId", null);
 			
 			if (datePos.length > 0) {
 				SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
@@ -52,30 +50,21 @@
 		}
 		
 		if (t.equals("unapproved")) {
-			context.set("pos", params.get("query"));
-			context.set("userNC", null);
-			context.set("datePos", null);
-			context.set("all", null);
+			context.set("visitsPosId", params.get("query"));
+			context.set("visitsUserNC", null);
+			context.set("visitsDatePos", null);
 			titleMod += BBRUtil.visualTitleDelimiter + context.gs("LBL_UNAPPROVED_TITLE_MOD");
 		}
 		
 		if (t.equals("all")) {
-			context.set("datePos", null);
-			context.set("userNC", null);
-			context.set("pos", null);
-			context.set("all", "all");
-			Calendar c = Calendar.getInstance();
-			c.setTime(new Date());
-			context.filterEndDate = c.getTime();
-			c.add(Calendar.MONTH, -3);
-			context.filterStartDate = c.getTime();
-			if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
-				context.filterShop = context.user.getShop();
-			else
-				if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
-					context.filterPoS = context.user.getPos();
+			context.set("visitsDatePos", null);
+			context.set("visitsUserNC", null);
+			context.set("visitsPosId", null);
 		}
-
+	} else {
+		context.set("visitsUserNC", null);
+		context.set("visitsPosId", null);
+		context.set("visitsDatePos", null);
 	}
 
 	request.setAttribute("titleMod", titleMod);

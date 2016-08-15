@@ -14,6 +14,9 @@
 	    	<c:out value="${context.gs(title)}"/>
 	    </title>
 
+		<link rel="icon" href="favicon.ico" type="image/x-icon">
+		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+		 
 	    <!-- Bootstrap -->
 	    <link href="css/bootstrap.min.css" rel="stylesheet">
 	
