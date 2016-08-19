@@ -35,7 +35,14 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 		BBRContext context = BBRContext.getContext(request);
 		int visitStep = context.getLastVisitStep();
 		
-		String formMode = params.get("formMode");
+		String formMode = "";
+		try {
+			formMode = (String)context.get("newVisitMode");
+			if (formMode == null)
+				formMode = "";
+		} catch (Exception ex) {
+		}
+
 		
 		if (formMode != null && formMode.equals("manager-edit")) {
 			try {
@@ -54,9 +61,15 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				BBRSpecialistManager mgrSpec = new BBRSpecialistManager();
 				BBRSpecialist spec = mgrSpec.findById(specId);						
 	
-				if (pos == null || proc == null || spec == null)
-					throw new Exception(BBRErrors.ERR_RECORD_NOTFOUND);
-				
+				if (pos == null)
+					throw new Exception(BBRErrors.ERR_POS_MUST_BE_SPECIFIED);
+
+				if (proc == null)
+					throw new Exception(BBRErrors.ERR_PROC_MUST_BE_SPECIFIED);
+
+				if (spec == null)
+					throw new Exception(BBRErrors.ERR_SPEC_MUST_BE_SPECIFIED);
+
 				DateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 				Date timeScheduled = df.parse(params.get("timeScheduled"));
 				
@@ -73,7 +86,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				manager.update(context.planningVisit);
 				
 			} catch (Throwable ex) {
-				throw new Exception(BBRErrors.ERR_RECORD_NOTFOUND);
+				throw new Exception(BBRErrors.ERR_FILL_REQUIRED_FIELDS);
 			}
 		} else 
 			if (formMode != null && formMode.equals("general-edit")) 
@@ -159,29 +172,32 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 					BBRSpecialistManager mgrSpec = new BBRSpecialistManager();
 					BBRSpecialist spec = mgrSpec.findById(specId);						
 					
-					Date realTime = BBRUtil.convertDT(params.get("realTime"));
-					float discountPercent = BBRUtil.convertF(params.get("discountPercent"));
-					float discountAmount = BBRUtil.convertF(params.get("discountAmount"));
-					float pricePaid = BBRUtil.convertF(params.get("pricePaid"));
-					float amountToSpecialist = BBRUtil.convertF(params.get("amountToSpecialist"));
-					float amountToMaterials = BBRUtil.convertF(params.get("amountToMaterials"));
-					
-					String comment = params.get("comment");
-					context.planningVisit = manager.createAndStoreVisit(pos, 
-							null, 
-							realTime, 
-							proc, 
-							spec, 
-							userName, 
-							userContacts, 
-							discountPercent, 
-							discountAmount, 
-							pricePaid, 
-							amountToSpecialist, 
-							amountToMaterials, 
-							comment);
+					try {
+						Date realTime = BBRUtil.convertDT(params.get("realTime"));
+						float discountPercent = BBRUtil.convertF(params.get("discountPercent"));
+						float discountAmount = BBRUtil.convertF(params.get("discountAmount"));
+						float pricePaid = BBRUtil.convertF(params.get("pricePaid"));
+						float amountToSpecialist = BBRUtil.convertF(params.get("amountToSpecialist"));
+						float amountToMaterials = BBRUtil.convertF(params.get("amountToMaterials"));
+						String comment = params.get("comment");
+						context.planningVisit = manager.createAndStoreVisit(pos, 
+								null, 
+								realTime, 
+								proc, 
+								spec, 
+								userName, 
+								userContacts, 
+								discountPercent, 
+								discountAmount, 
+								pricePaid, 
+								amountToSpecialist, 
+								amountToMaterials, 
+								comment);
+					} catch (Exception ex) {
+						throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
+					}
 				} catch (Exception ex) {
-					throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
+					throw new Exception(BBRErrors.ERR_FILL_REQUIRED_FIELDS);
 				}
 			}
 				
@@ -191,38 +207,46 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 
 	@Override
 	protected BBRVisit beforeUpdate(BBRVisit visit, BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String userName = params.get("userName");
-		String userContacts = params.get("userContacts");
-		float finalPrice = Float.parseFloat(params.get("finalPrice"));
-
-		BBRProcedureManager pmgr = new BBRProcedureManager();
-		BBRProcedure proc = pmgr.findById(Long.parseLong(params.get("procedure")));
-
-		BBRSpecialistManager smgr = new BBRSpecialistManager();
-		BBRSpecialist spec = smgr.findById(Long.parseLong(params.get("spec")));
+		try {
+			String userName = params.get("userName");
+			String userContacts = params.get("userContacts");
+	
+			BBRProcedureManager pmgr = new BBRProcedureManager();
+			BBRProcedure proc = pmgr.findById(Long.parseLong(params.get("procedure")));
+	
+			BBRSpecialistManager smgr = new BBRSpecialistManager();
+			BBRSpecialist spec = smgr.findById(Long.parseLong(params.get("spec")));
 		
-		Date timeScheduled = BBRUtil.convertDT(params.get("timeScheduled"));
-		Date realTime = BBRUtil.convertDT(params.get("realTime"));
-		float discountPercent = BBRUtil.convertF(params.get("discountPercent"));
-		float discountAmount = BBRUtil.convertF(params.get("discountAmount"));
-		float pricePaid = BBRUtil.convertF(params.get("pricePaid"));
-		float amountToSpecialist = BBRUtil.convertF(params.get("amountToSpecialist"));
-		float amountToMaterials = BBRUtil.convertF(params.get("amountToMaterials"));
-		String comment = params.get("comment");
-
-		visit.setUserName(userName);
-		visit.setUserContacts(userContacts);
-		visit.setFinalPrice(finalPrice);
-		visit.setProcedure(proc);
-		visit.setSpec(spec);
-		visit.setTimeScheduled(timeScheduled);
-		visit.setRealTime(realTime);
-		visit.setDiscountPercent(discountPercent);
-		visit.setDiscountAmount(discountAmount);
-		visit.setPricePaid(pricePaid);
-		visit.setAmountToSpecialist(amountToSpecialist);
-		visit.setAmountToMaterials(amountToMaterials);
-		visit.setComment(comment);
+			try {
+				float finalPrice = Float.parseFloat(params.get("finalPrice"));
+				Date timeScheduled = BBRUtil.convertDT(params.get("timeScheduled"));
+				Date realTime = BBRUtil.convertDT(params.get("realTime"));
+				float discountPercent = BBRUtil.convertF(params.get("discountPercent"));
+				float discountAmount = BBRUtil.convertF(params.get("discountAmount"));
+				float pricePaid = BBRUtil.convertF(params.get("pricePaid"));
+				float amountToSpecialist = BBRUtil.convertF(params.get("amountToSpecialist"));
+				float amountToMaterials = BBRUtil.convertF(params.get("amountToMaterials"));
+				String comment = params.get("comment");
+		
+				visit.setUserName(userName);
+				visit.setUserContacts(userContacts);
+				visit.setFinalPrice(finalPrice);
+				visit.setProcedure(proc);
+				visit.setSpec(spec);
+				visit.setTimeScheduled(timeScheduled);
+				visit.setRealTime(realTime);
+				visit.setDiscountPercent(discountPercent);
+				visit.setDiscountAmount(discountAmount);
+				visit.setPricePaid(pricePaid);
+				visit.setAmountToSpecialist(amountToSpecialist);
+				visit.setAmountToMaterials(amountToMaterials);
+				visit.setComment(comment);
+			} catch (Exception ex) {
+				throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
+			}
+		} catch (Exception ex) {
+			throw new Exception(BBRErrors.ERR_FILL_REQUIRED_FIELDS);
+		}
 		return visit;		
 	}
 	

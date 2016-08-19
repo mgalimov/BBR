@@ -108,6 +108,8 @@
 		request.setAttribute("outString", outString);
 	}
 	
+	context.set("newVisitMode", "general-edit");
+	
 %>
 <t:general-wrapper title="LBL_PLAN_VISIT_TITLE">
 <jsp:body>
@@ -139,7 +141,7 @@
 		</div>
 		
 		<t:card title="LBL_PLAN_VISIT_STEP_2" gridPage="general-plan-visit.jsp" method="BBRVisits" buttonSave="LBL_GOTO_STEP3_BTN" buttonCancel="LBL_CANCEL_VISIT_BTN">
-			<t:card-schedule-spec-proc mode="general-edit"/>
+			<t:card-schedule-spec-proc/>
 		</t:card>
 	</c:when>
 

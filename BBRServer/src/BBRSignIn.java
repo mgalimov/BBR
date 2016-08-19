@@ -35,7 +35,13 @@ public class BBRSignIn extends HttpServlet {
 			String email = params.get("email");
 			String password = params.get("password");
 			String rememberme = params.get("rememberme");
-			context.SignIn(email, password);
+			for (int i = 1; i <= 5; i++) {
+				try {
+					context.SignIn(email, password);
+				} catch (Exception ex) {
+					Thread.sleep(5000);
+				}
+			}
 			
 			if (context.user != null) {
 				if (rememberme != null)

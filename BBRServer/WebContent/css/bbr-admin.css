@@ -213,3 +213,7 @@ div.dashboard {
     border-color: #ddd;
     margin: 2%;
 }
+
+div.has-error .selectize-input {
+	border-color: #a94442 !important;
+}

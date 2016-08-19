@@ -157,6 +157,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         String where = " where visit.timeScheduled >= '" + df.format(startOfDay) + "' and "
         			  + " visit.timeScheduled <= '" + df.format(endOfDay) + "'";
         where = where + " and visit.pos.id = " + posId;
+        where = where + " and visit.status in (" + BBRVisitStatus.VISSTATUS_APPROVED + ", " + BBRVisitStatus.VISSTATUS_INITIALIZED + ", " + BBRVisitStatus.VISSTATUS_PERFORMED + ")";
         where = where + " and visit.spec.status = " + BBRSpecialistState.SPECSTATE_ACTIVE;
         
         String orderBy = " order by visit.timeScheduled ASC";

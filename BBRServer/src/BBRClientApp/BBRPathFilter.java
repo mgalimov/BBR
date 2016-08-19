@@ -49,13 +49,22 @@ public class BBRPathFilter implements Filter {
 	    	if (path.startsWith(book)) {
 	    		path = path.substring(book.length());
 	    		if (path.startsWith("/")) {
-	    			String posUrlID = path.substring(1);
-	    			BBRPoSManager mgr = new BBRPoSManager();
-	    			BBRPoS pos = mgr.findByUrlId(posUrlID);
-	    			if (pos == null)
-	    				response.sendRedirect(planVisitPage);
-	    			else
-	    				response.sendRedirect(planVisitPage + "?pos=" + pos.getId());
+	    			for (int i = 1; i <= 5; i++) {
+		    			try {
+			    			String posUrlID = path.substring(1);
+			    			BBRPoSManager mgr = new BBRPoSManager();
+			    			BBRPoS pos = mgr.findByUrlId(posUrlID);
+			    			if (pos == null)
+			    				response.sendRedirect(planVisitPage);
+			    			else
+			    				response.sendRedirect(planVisitPage + "?pos=" + pos.getId());
+		    			} catch (Exception ex) {
+		    				try {
+								Thread.sleep(5000);
+							} catch (InterruptedException e) {
+							}
+		    			}
+	    			}
 	    		} else
 	    			response.sendRedirect(planVisitPage);
 	    	} else

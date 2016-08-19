@@ -11,13 +11,16 @@
 <% 	
 	BBRParams params = new BBRParams(request.getQueryString());
 	request.setAttribute("posId", params.get("posId"));
+	
+	BBRContext context = BBRContext.getContext(request);
+	context.set("newVisitMode", "manager-view");
 %>
 
 <script src="js/bbr-maps.js" type="text/javascript"></script>
 <t:general-wrapper title="LBL_SPEC_SCHEDULE_TITLE">
 	<jsp:body>
 		<t:card title="LBL_SPEC_SCHEDULE" gridPage="manager-visit-create.jsp" method="BBRVisits" showFooter="false">
-			<t:card-schedule-spec-proc mode="manager-view" posId="${posId}"/>
+			<t:card-schedule-spec-proc posId="${posId}"/>
 		</t:card>
 	</jsp:body>
 </t:general-wrapper>

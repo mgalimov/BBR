@@ -11,7 +11,7 @@
 	<c:set var="active" value="active" />
 </c:if>
 
-<c:set var="itemLi" value="<li role='presentation' class='${active}'><a href='#${id}' aria-controls='${id}' role='tab' data-toggle='tab'>${context.gs(label)}</a></li>"/>
+<c:set var="itemLi" value="<li role='presentation' class='${active}'><a href='#${id}' aria-controls='${id}' role='tab' data-toggle='tab' id='#${id}link'>${context.gs(label)}</a></li>"/>
 <c:set var="itemTabs" scope="request" value="${itemTabs.concat(itemLi)}"/>
 
 <div role="tabpanel" class="tab-pane ${active}" id="${id}">

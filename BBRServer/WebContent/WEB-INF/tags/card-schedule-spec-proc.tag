@@ -9,7 +9,6 @@
 <%@tag import="BBR.BBRDataSet"%>
 <%@tag import="BBR.BBRUtil"%>
 
-<%@ attribute name="mode" %>
 <%@ attribute name="posId" %>
 
 <%@tag language="java" pageEncoding="UTF-8" description="Card Schedule-Spec-Proc" import="BBRClientApp.BBRContext"%>
@@ -25,8 +24,15 @@
 	BBRContext context = BBRContext.getContext(request);
 	
 	BBRPoS pos = null;
-	if (mode == null)
-		mode = "";
+	
+	String mode = "";
+	try {
+		mode = (String)context.get("newVisitMode");
+		if (mode == null)
+			mode = "";
+	} catch (Exception ex) {
+	}
+
 	
 	if (mode.isEmpty() || mode.equals("general-edit"))	
 		pos = context.planningVisit.getPos();
@@ -137,7 +143,7 @@
 <% if (mode.equals("manager-edit") || mode.equals("manager-view")) { %>
 	<div class="row">
 		<div class="col-md-10">
-			<t:card-item label="LBL_SELECT_POS" type="reference" field="pos" referenceFieldTitle="title" referenceMethod="BBRPoSes"></t:card-item>
+			<t:card-item label="LBL_SELECT_POS" type="reference" field="pos" referenceFieldTitle="title" referenceMethod="BBRPoSes" isRequired="required"></t:card-item>
 		</div>
 	</div>
 <% } %>
@@ -145,7 +151,7 @@
 <% if (mode.isEmpty() || mode.equals("general-edit") || mode.equals("manager-edit")) { %>	
 	<div class="row">
 		<div class="col-md-10">
-			<t:card-item label="LBL_SELECT_PROCEDURE" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures"/>
+			<t:card-item label="LBL_SELECT_PROCEDURE" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures" isRequired="required"/>
 		</div>
 	</div>
 <% } %>
@@ -254,7 +260,6 @@
 <% } %>
 <t:card-item label="" type="text" field="timeScheduled" isHidden="hidden"/>
 <t:card-item label="" type="text" field="spec" isHidden="hidden"/>
-<t:card-item label="" type="text" field="formMode" isHidden="hidden" defaultValue="<%=mode%>"/>
 
 <script>
 	var timeSelected = "12:00";

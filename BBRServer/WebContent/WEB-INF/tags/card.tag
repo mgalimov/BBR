@@ -36,17 +36,17 @@
 <h3>${context.gs(title)}</h3>
 <form role="form">
 	<div class="panel panel-default">
+	  <c:if test="${showTabs == true}">
+		  <ul class="nav nav-tabs" role="tablist" id="tablist"></ul>
+	  </c:if>
 	  <c:if test="${showToolbar == true || showToolbar == null}">
 		  <div class="panel-heading" id="toolbar">
 		    <div class="btn-toolbar" role="toolbar" aria-label="..." id="toolbarpanel">
 		  	</div>
 		  </div>
 	  </c:if>
-	  <c:if test="${showTabs == true}">
-		  <ul class="nav nav-tabs" role="tablist" id="tablist"></ul>
-	  </c:if>
 	  <div class="panel-body">
-	  	<div class="tab-content">
+	  	<div class="tab-content" id="tabcontent">
 	  		<jsp:doBody/>
 	  	</div>
 	  </div>
@@ -114,7 +114,7 @@
     		$("#cancelChanges").attr("disabled", "disabled");
     		
     		var hasErrors = false; 
-    		$("input[required]").each(function (i) {
+    		$("*[required]").each(function (i) {
     			if ($(this).val() == "") {
     				$(this).parents("div.form-group").addClass("has-error");
     				hasErrors = true;
