@@ -14,8 +14,10 @@ import BBR.BBRChartPeriods;
 import BBR.BBRDataElement;
 import BBR.BBRDataManager;
 import BBR.BBRDataSet;
+import BBR.BBRErrors;
 import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
+import BBRAcc.BBRPoSManager;
 import BBRAcc.BBRShop;
 import BBRAcc.BBRUser;
 import BBRCust.BBRSpecialist.BBRSpecialistState;
@@ -141,7 +143,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	
 	@SuppressWarnings("unchecked")
 	public BBRScheduleList getSchedule(Date date, String posId, String procedureId) {
-		if (posId.isEmpty()) return null;
+		if (posId == null || posId.isEmpty()) return null;
 		
 		boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();
@@ -230,7 +232,117 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		return new BBRScheduleList(list, procLength, specs);
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<String> getFreeTimes(Date date, String posId, String specId) throws Exception {
+		if (posId == null || posId.isEmpty()) return null;
+		if (specId == null || specId.isEmpty()) return null;
 
+		List<String> freeTimes = new ArrayList<String>();
+		List<Object[]> visitList = null;
+        BBRPoSManager pmgr = new BBRPoSManager();
+        BBRSpecialistManager smgr = new BBRSpecialistManager();
+        BBRPoS pos;
+        BBRSpecialist spec;
+        try {
+        	pos = pmgr.findById(Long.parseLong(posId));
+        	spec = smgr.findById(Long.parseLong(specId));
+        	if (pos == null)
+        		throw new Exception(BBRErrors.ERR_POS_NOTFOUND);
+        	if (spec == null)
+        		throw new Exception(BBRErrors.ERR_POS_NOTFOUND);
+        } catch (Exception ex) {
+        	throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
+        }
+        
+		boolean tr = BBRUtil.beginTran();
+		try {
+	        Session session = BBRUtil.getSession();
+	        Date startOfDay = BBRUtil.getStartOfDay(date);
+	        Date endOfDay = BBRUtil.getEndOfDay(date);
+	        DateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormatWithSecs);
+	        
+	        String select = "select visit.timeScheduled as timeScheduled, visit.length as length";
+	        String from = " from BBRVisit visit";
+	        String where = " where visit.timeScheduled >= '" + df.format(startOfDay) + "' and "
+	        			  + " visit.timeScheduled <= '" + df.format(endOfDay) + "'";
+	        where += " and visit.pos.id = " + posId;
+	        where += " and visit.status in (" + BBRVisitStatus.VISSTATUS_APPROVED + ", " + BBRVisitStatus.VISSTATUS_INITIALIZED + ", " + BBRVisitStatus.VISSTATUS_PERFORMED + ")";
+	        where += " and visit.spec.id = " + specId;
+	        
+	        String orderBy = " order by visit.timeScheduled ASC";
+	        
+	        Query query = session.createQuery(select + from + where + orderBy);
+			visitList = query.list();
+			BBRUtil.commitTran(tr);
+		} catch (Exception ex) {
+			BBRUtil.rollbackTran(tr);
+		}
+
+        BBRTurnManager tmgr = new BBRTurnManager();
+        BBRTurn turn = tmgr.findByDate(spec, date);
+        if (turn == null) {
+        	return null;
+        }
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(pos.getStartWorkHour());
+        int startHalfHour = c.get(Calendar.HOUR_OF_DAY) * 2;
+        if (c.get(Calendar.MINUTE) != 0)
+        	startHalfHour++;
+        
+        c.setTime(turn.getStartTime());
+        int specStartHalfHour = c.get(Calendar.HOUR_OF_DAY) * 2;
+        if (c.get(Calendar.MINUTE) != 0)
+        	specStartHalfHour++;
+        
+        if (specStartHalfHour > startHalfHour)
+        	startHalfHour = specStartHalfHour;
+
+        c.setTime(pos.getEndWorkHour());
+        int endHalfHour = c.get(Calendar.HOUR_OF_DAY) * 2;
+        if (c.get(Calendar.MINUTE) != 0)
+        	endHalfHour++;
+        
+        c.setTime(turn.getEndTime());
+        int specEndHalfHour = c.get(Calendar.HOUR_OF_DAY) * 2;
+        if (c.get(Calendar.MINUTE) != 0)
+        	specEndHalfHour++;
+        
+        if (specEndHalfHour < endHalfHour)
+        	endHalfHour = specEndHalfHour;
+
+        int[] hours = new int[48];
+        for (int h = 0; h < startHalfHour; h++)
+        	hours[h] = 1;
+        for (int h = startHalfHour; h < endHalfHour; h++)
+        	hours[h] = 0;
+        for (int h = endHalfHour; h < 48; h++)
+        	hours[h] = 1;
+        
+        for (Object[] v : visitList) {
+        	c.setTime((Date)v[0]);
+            int halfHour = c.get(Calendar.HOUR_OF_DAY) * 2;
+            if (c.get(Calendar.MINUTE) != 0)
+            	halfHour++;
+            for (int h = halfHour; h < halfHour + (int)((Float)v[1] * 2); h++)
+            	hours[h] = 1;
+        }
+        
+        for (int h = 0; h < 48; h++) {
+        	if (hours[h] == 0) {
+        		String freeTime = "" + (int)Math.floor(h / 2);
+        		if ((int)(Math.floor(h / 2) * 2) != h)
+        			freeTime += ":30";
+        		else {
+        			freeTime += ":00";
+        			freeTimes.add(freeTime);
+        		}
+        	}
+        }
+        
+        return freeTimes;
+	}
+	
 	public void approve(BBRVisit visit) {
 		if (visit != null) {
 			visit.setStatus(BBRVisitStatus.VISSTATUS_APPROVED);

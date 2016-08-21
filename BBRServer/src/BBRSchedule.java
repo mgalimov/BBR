@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,30 +29,42 @@ public class BBRSchedule extends HttpServlet {
 		String respText = "";
 		try {
 			BBRContext context = BBRContext.getContext(request);
-			BBRVisitManager mgr = new BBRVisitManager();
 			BBRParams params = new BBRParams(request.getQueryString());
 
-			Date dateSelected;
-			DateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
 			respText = "";
 			
+			String operation = params.get("operation");
+			BBRVisitManager mgr = new BBRVisitManager();
+			Date dateSelected;
+			DateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
 			try {
 				dateSelected = df.parse(params.get("date"));
 			} catch (Throwable ex) {
 				throw new Exception(BBRErrors.ERR_DATE_INCORRECT);
 			}
-			
-			String procId = params.get("proc");
 			String posId = params.get("pos");
 			
-			if (posId == null || posId.isEmpty()) {
-				if (context.planningVisit != null)
-					posId = context.planningVisit.getPos().getId().toString();
+			if (operation.isEmpty() || operation.equals("schedule")) {
+				String procId = params.get("proc");
+				if (posId == null || posId.isEmpty()) {
+					if (context.planningVisit != null)
+						posId = context.planningVisit.getPos().getId().toString();
+				}
+				
+				BBRScheduleList list = mgr.getSchedule(dateSelected, posId, procId);
+				respText = BBRUtil.gson().toJson(list);
+			} else
+			if (operation.equals("freetimes")) {
+				String specId = params.get("spec");
+				List<String> freeTimes = mgr.getFreeTimes(dateSelected, posId, specId);
+				if (freeTimes != null) {
+					for (String s : freeTimes) {
+						respText += "*" + s;
+					}
+					respText = respText.substring(1);
+				} else 
+					respText = "";
 			}
-			
-			BBRScheduleList list = mgr.getSchedule(dateSelected, posId, procId);
-
-			respText = BBRUtil.gson().toJson(list); 
 		} catch (Exception ex) {
 			respText = ex.getLocalizedMessage();
 			response.setStatus(700);

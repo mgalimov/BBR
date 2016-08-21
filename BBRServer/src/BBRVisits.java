@@ -375,6 +375,34 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			Long visitId = Long.parseLong(params.get("visitId"));
 			BBRVisit visit = manager.findById(visitId);
 			manager.cancel(visit);
+		} else
+		if (operation.equals("createWizardSpecTime")) {
+			String userName = params.get("userName");
+			String userContacts = params.get("userContacts");
+			String timeScheduledS = params.get("timeScheduled");
+			try {
+				SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+				Date timeScheduled = df.parse(timeScheduledS);
+
+				Long posId = Long.parseLong(params.get("pos"));
+				BBRPoSManager mgrPoS = new BBRPoSManager();
+				BBRPoS pos = mgrPoS.findById(posId);
+				if (pos == null)
+					throw new Exception(BBRErrors.ERR_POS_NOTFOUND);
+			
+				Long specId = Long.parseLong(params.get("spec"));
+				BBRSpecialistManager mgrSpec = new BBRSpecialistManager();
+				BBRSpecialist spec = mgrSpec.findById(specId);
+				if (spec == null)
+					throw new Exception(BBRErrors.ERR_SPEC_MUST_BE_SPECIFIED);
+
+				BBRVisit visit = manager.scheduleVisit(pos, null, timeScheduled, 
+						         null, spec, userName, userContacts);
+				return visit.getId().toString();
+						
+			} catch (Exception ex) {
+				return "";
+			}
 		}
 
 		return "";

@@ -43,8 +43,26 @@
 		<div class="row">
 			<div class="tab-content">
 				<div role="tabpanel" class="tab-pane active" id="selectSpec">
+					<div class='input-group date col-md-3 hide' id='dateInputDiv'>	
+						<input id='dateInput' type='text' class='form-control' />
+						<span class='input-group-addon'>
+							<span class='glyphicon glyphicon-calendar'/></span>
+						</span>
+					</div>
+					<p/>
+					<div class="form-group hide" id="nameGroup">
+						<label for="nameInput">Имя</label>
+						<input type="text" id="nameInput" class="form-control" required/>
+					</div>
+					<div class="form-group hide" id="contactGroup">
+						<label for="contactInput">Контактные данные</label>
+						<input type="text" id="contactInput" class="form-control" required/>
+					</div>
+					<a href="#" class="btn btn-primary form-control hide" id="finishBtn">Finish</a>
+					<div id="selectSpecBody">
+					</div>
 				</div>
-				<div role="tabpanel" class="tab-pane" id="selectProc" >
+				<div role="tabpanel" class="tab-pane" id="selectProc" >				
 				</div>
 			</div>
 		</div>
@@ -54,9 +72,35 @@
 
 <script>
 	$(document).ready(function () {
+		specId = 0;
+		dateSelected = new Date();
+		timeSelected = "";
+		
 		fillSpec();
 		fillProc();
-
+		
+		$("#dateInputDiv").datetimepicker({
+			format: "YYYY-MM-DD",
+			locale: "${context.getLocaleString()}",
+			defaultDate: dateSelected
+		});
+		$("#dateInputDiv").on("dp.change", fillTime);
+		
+		$("#finishBtn").click(function() {
+			$.ajax({
+				url: "BBRVisits",
+				data: {
+					operation: "createWizardSpecTime",
+					userName: $("#nameInput").val(),
+					userContacts: $("#contactsInput").val(),
+					timeScheduled: $("#dateInput").val() + " " + timeSelected,
+					pos: ${posId},
+					spec: specId
+				}
+			}).done(function () {
+				alert("OK!");
+			});
+		});
 	});
 	
 	function fillSpec() {
@@ -68,7 +112,7 @@
 			}
 		}).done(function (data) {
 			d = $.parseJSON(data);
-			html = "";
+			var html = "";
 			n = 0;
 			for (i = 0; i < d.recordsTotal; i++) {
 				spec = d.data[i];
@@ -77,9 +121,11 @@
 					html += "<a href='#' class='list-group-item' id='specA" + spec.id + "' data-type='specialist' data-id='" + spec.id + "'>" + media + "</a>";
 				}
 			}
-			$("#selectSpec").html(html);
+			$("#selectSpecBody").html(html);
 			$("[data-type$=specialist]").click(function () {
-				fillTime($(this).attr('data-id'), "selectSpec");
+				specId = $(this).attr('data-id');
+				$("#dateInputDiv").removeClass("hide");
+				fillTime();
 			})
 		});
 	}
@@ -93,7 +139,7 @@
 			}
 		}).done(function (data) {
 			d = $.parseJSON(data);
-			html = "";
+			var html = "";
 			n = 0;
 			for (i = 0; i < d.recordsTotal; i++) {
 				proc = d.data[i];
@@ -109,40 +155,39 @@
 		});
 	}
 
-	function fillTime(id, div) {
-		html="<div class='input-group date col-md-3' id='dateInputDiv'>	<input id='dateInput' type='text' class='form-control' /><span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span></span></div>";
-		$("#"+div).html(html);
-		$("#dateInputDiv").datetimepicker({
-			format: "YYYY-MM-DD",
-			locale: "${context.getLocaleString()}",
-			defaultDate: new Date()
+	function fillTime() {
+		var html = "";
+		dateSelected = $("#dateInput").val();
+
+		$.ajax({
+			url: "BBRSchedule",
+			data: {
+				operation: "freetimes",
+				date: dateSelected,
+				spec: specId,
+				pos: ${posId}
+			}
+		}).done(function (data) {
+			var a = data.split("*");
+			var n = 0;
+			var html = "";
+			for (i = 0; i < a.length; i++) {
+				time = a[i];
+                html += "<a href='#' class='list-group-item' data-type='time' data-time='" + time + "'>" + time + "</a>";
+			}
+			div = "selectSpecBody";
+			$("#"+div).html(html);
+			$("[data-type$=time]").click(function () {
+				timeSelected = $(this).attr('data-time');
+				$("#selectSpecBody").html("");
+				$("#dateInputDiv").addClass("hide");
+				$("#nameGroup").removeClass("hide");
+				$("#contactGroup").removeClass("hide");
+				$("#finishBtn").removeClass("hide");
+				$("#nameInput").focus();
+			})
 		});
 
-		dateSelected = $("#dateInput").val();
-		
-// 		$.ajax({
-// 			url: "BBRSchedule",
-// 			data: {
-// 				date: dateSelected,
-// 				proc: 0,
-// 				pos: ${posId}
-// 			}
-// 		}).done(function (data) {
-// 			d = $.parseJSON(data);
-// 			html = "";
-// 			n = 0;
-// 			for (i = 0; i < d.recordsTotal; i++) {
-// 				proc = d.data[i];
-// 				if (proc.status == 1) {
-// 					media = "<div class='media'><div class='media-left pull-left media-middle' style='padding-right: 10px;'><img class='media-object' src='images/barb.png' alt='"+proc.title+"'></div><div class='media-body'><h4 class='media-heading'>"+proc.title+"</h4>" + proc.length + ", " + proc.price + "</div></div>";
-// 					html += "<a href='#' class='list-group-item' id='procA" + proc.id + "' data-type='procedure' data-id='" + proc.id + "'>" + media + "</a>";
-// 				}
-// 			}
-// 			$("#selectProc").html(html);
-// 			$("[data-type$=procedure]").click(function () {
-// 				alert($(this).attr('data-id'));
-// 			})
-// 		});
 	}
 
 	

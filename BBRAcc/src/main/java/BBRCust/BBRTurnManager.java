@@ -1,5 +1,6 @@
 package BBRCust;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -131,6 +132,24 @@ public class BBRTurnManager extends BBRDataManager<BBRTurn>{
 		
 		turn.setSpecialist(spec);
 
+		return turn;
+    }
+    
+    public BBRTurn findByDate(BBRSpecialist spec, Date date) {
+    	if (spec == null) return null;
+    	if (date == null) return null;
+    	
+		boolean tr = BBRUtil.beginTran();
+		Session session = BBRUtil.getSession();
+		Date startOfDay = BBRUtil.getStartOfDay(date);
+        Date endOfDay = BBRUtil.getEndOfDay(date);
+        DateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormatWithSecs);
+		String where = " where specialist.id = " + spec.getId() + 
+				       "  and date >= '" + df.format(startOfDay) + "' and "
+	        			  + " date <= '" + df.format(endOfDay) + "'";
+		String qry = "from BBRTurn" + where;
+		BBRTurn turn = (BBRTurn)session.createQuery(qry).uniqueResult();
+		BBRUtil.commitTran(tr);
 		return turn;
     }
 }
