@@ -38,6 +38,7 @@ public class BBRSignIn extends HttpServlet {
 			for (int i = 1; i <= 5; i++) {
 				try {
 					context.SignIn(email, password);
+					break;
 				} catch (Exception ex) {
 					Thread.sleep(5000);
 				}

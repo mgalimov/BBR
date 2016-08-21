@@ -58,6 +58,7 @@ public class BBRPathFilter implements Filter {
 			    				response.sendRedirect(planVisitPage);
 			    			else
 			    				response.sendRedirect(planVisitPage + "?pos=" + pos.getId());
+			    			break;
 		    			} catch (Exception ex) {
 		    				try {
 								Thread.sleep(5000);

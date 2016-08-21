@@ -36,6 +36,7 @@ public class BBRContext {
 	
 	
 	public BBRContext() {
+		setLocale("ru", "RU");
 	}
 	
 	public static BBRContext getContext(HttpServletRequest request) {

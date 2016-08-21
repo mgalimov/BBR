@@ -51,6 +51,7 @@ public class BBRUtil {
             	ServiceRegistry serviceRegistry = regBuilder.applySettings(config.getProperties()).build();
             	
             	sessionFactory = config.buildSessionFactory(serviceRegistry);
+            	break;
             }
             catch (Throwable ex) {
             	try {
