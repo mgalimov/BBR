@@ -44,7 +44,7 @@ public class BBRSchedule extends HttpServlet {
 			}
 			String posId = params.get("pos");
 			
-			if (operation.isEmpty() || operation.equals("schedule")) {
+			if (operation == null || operation.isEmpty() || operation.equals("schedule")) {
 				String procId = params.get("proc");
 				if (posId == null || posId.isEmpty()) {
 					if (context.planningVisit != null)
@@ -56,7 +56,14 @@ public class BBRSchedule extends HttpServlet {
 			} else
 			if (operation.equals("freetimes")) {
 				String specId = params.get("spec");
-				List<String> freeTimes = mgr.getFreeTimes(dateSelected, posId, specId);
+				String procId = params.get("proc");
+				List<String> freeTimes = null;
+				if (specId != null && !specId.isEmpty()) {
+					freeTimes = mgr.getFreeTimesBySpec(dateSelected, posId, specId);
+				} else
+					if (procId != null && !procId.isEmpty()) {
+						freeTimes = mgr.getFreeTimesByProc(dateSelected, posId, procId);
+					}
 				if (freeTimes != null) {
 					for (String s : freeTimes) {
 						respText += "*" + s;
@@ -64,6 +71,7 @@ public class BBRSchedule extends HttpServlet {
 					respText = respText.substring(1);
 				} else 
 					respText = "";
+
 			}
 		} catch (Exception ex) {
 			respText = ex.getLocalizedMessage();

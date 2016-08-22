@@ -25,6 +25,7 @@
 		BBRPoS pos = pmgr.findById(Long.parseLong(posId));
 	    if (pos != null) {
 	    	request.setAttribute("posId", posId);
+	    	request.setAttribute("posTitle", pos.getTitle());
 	    }
 	} else
 		request.setAttribute("posId", 1);
@@ -34,36 +35,28 @@
 <jsp:body>
 	<div class="container">
 		<div class="row">
-			<ul class="nav nav-pills">
-			    <li role="presentation" class="active"><a href="#selectSpec" aria-controls="selectSpec" role="tab" data-toggle="tab">Хочу к специалисту</a></li>
-			    <li role="presentation"><a href="#selectProc" aria-controls="selectProc" role="tab" data-toggle="tab">Хочу услугу</a></li>
-			</ul>
+		  <a href="#" class="btn btn-primary" id="specBtn">Хочу к специалисту</a>
+		  <a href="#" class="btn btn-primary" id="procBtn">Хочу услугу</a>
 		</div>
 		<p/>
 		<div class="row">
-			<div class="tab-content">
-				<div role="tabpanel" class="tab-pane active" id="selectSpec">
-					<div class='input-group date col-md-3 hide' id='dateInputDiv'>	
-						<input id='dateInput' type='text' class='form-control' />
-						<span class='input-group-addon'>
-							<span class='glyphicon glyphicon-calendar'/></span>
-						</span>
-					</div>
-					<p/>
-					<div class="form-group hide" id="nameGroup">
-						<label for="nameInput">Имя</label>
-						<input type="text" id="nameInput" class="form-control" required/>
-					</div>
-					<div class="form-group hide" id="contactGroup">
-						<label for="contactInput">Контактные данные</label>
-						<input type="text" id="contactInput" class="form-control" required/>
-					</div>
-					<a href="#" class="btn btn-primary form-control hide" id="finishBtn">Finish</a>
-					<div id="selectSpecBody">
-					</div>
-				</div>
-				<div role="tabpanel" class="tab-pane" id="selectProc" >				
-				</div>
+			<div class='input-group date col-md-3 hide' id='dateInputDiv'>	
+				<input id='dateInput' type='text' class='form-control' />
+				<span class='input-group-addon'>
+					<span class='glyphicon glyphicon-calendar'/></span>
+				</span>
+			</div>
+			<p/>
+			<div class="form-group hide" id="nameGroup">
+				<label for="nameInput">Имя</label>
+				<input type="text" id="nameInput" class="form-control" required/>
+			</div>
+			<div class="form-group hide" id="contactGroup">
+				<label for="contactInput">Контактные данные</label>
+				<input type="text" id="contactInput" class="form-control" required/>
+			</div>
+			<a href="#" class="btn btn-primary form-control hide" id="finishBtn">Finish</a>
+			<div id="mainTab">
 			</div>
 		</div>
 	</div>
@@ -76,13 +69,18 @@
 		dateSelected = new Date();
 		timeSelected = "";
 		
-		fillSpec();
-		fillProc();
+		$("#specBtn").click(fillSpec);
+		$("#procBtn").click(fillProc);
 		
+		fillSpec();
+
+		moment.locale('<%=context.getLocaleString()%>');
+		var m = moment();
 		$("#dateInputDiv").datetimepicker({
 			format: "YYYY-MM-DD",
 			locale: "${context.getLocaleString()}",
-			defaultDate: dateSelected
+			defaultDate: dateSelected,
+			minDate: m.format("YYYY-MM-DD HH:mm")
 		});
 		$("#dateInputDiv").on("dp.change", fillTime);
 		
@@ -98,12 +96,20 @@
 					spec: specId
 				}
 			}).done(function () {
-				alert("OK!");
+				fillFinish();
+			}).fail(function () {
+				
 			});
 		});
 	});
 	
 	function fillSpec() {
+		procId = "";
+		procName = "";
+		$("#dateInputDiv").addClass("hide");
+		$("#nameGroup").addClass("hide");
+		$("#contactGroup").addClass("hide");
+		$("#finishBtn").addClass("hide");
 		$.ajax({
 			url: "BBRSpecialists",
 			data: {
@@ -118,19 +124,27 @@
 				spec = d.data[i];
 				if (spec.status == 1) {
 					media = "<div class='media'><div class='media-left pull-left media-middle' style='padding-right: 10px;'><img class='media-object' src='images/barb.png' alt='"+spec.name+"'></div><div class='media-body'><h4 class='media-heading'>"+spec.name+"</h4>"+spec.position+"</div></div>";
-					html += "<a href='#' class='list-group-item' id='specA" + spec.id + "' data-type='specialist' data-id='" + spec.id + "'>" + media + "</a>";
+					html += "<a href='#' class='list-group-item' id='specA" + spec.id + "' data-type='specialist' data-id='" + spec.id + "' data-name='" + spec.name + "'>" + media + "</a>";
 				}
 			}
-			$("#selectSpecBody").html(html);
+			$("#mainTab").html(html);
 			$("[data-type$=specialist]").click(function () {
 				specId = $(this).attr('data-id');
+				specName = $(this).attr('data-name');
 				$("#dateInputDiv").removeClass("hide");
+				$("#mainTab").html("");
 				fillTime();
 			})
 		});
 	}
 		
 	function fillProc() {
+		specId = "";
+		specName = "";
+		$("#dateInputDiv").addClass("hide");
+		$("#nameGroup").addClass("hide");
+		$("#contactGroup").addClass("hide");
+		$("#finishBtn").addClass("hide");
 		$.ajax({
 			url: "BBRProcedures",
 			data: {
@@ -145,18 +159,21 @@
 				proc = d.data[i];
 				if (proc.status == 1) {
 					media = "<div class='media'><div class='media-left pull-left media-middle' style='padding-right: 10px;'><img class='media-object' src='images/barb.png' alt='"+proc.title+"'></div><div class='media-body'><h4 class='media-heading'>"+proc.title+"</h4>" + proc.length + ", " + proc.price + "</div></div>";
-					html += "<a href='#' class='list-group-item' id='procA" + proc.id + "' data-type='procedure' data-id='" + proc.id + "'>" + media + "</a>";
+					html += "<a href='#' class='list-group-item' id='procA" + proc.id + "' data-type='procedure' data-id='" + proc.id + "' data-name='" + proc.title + "'>" + media + "</a>";
 				}
 			}
-			$("#selectProc").html(html);
+			$("#mainTab").html(html);
 			$("[data-type$=procedure]").click(function () {
-				alert($(this).attr('data-id'));
+				procId = $(this).attr('data-id');
+				procName = $(this).attr('data-name');
+				$("#dateInputDiv").removeClass("hide");
+				$("#mainTab").html("");
+				fillTime();
 			})
 		});
 	}
 
 	function fillTime() {
-		var html = "";
 		dateSelected = $("#dateInput").val();
 
 		$.ajax({
@@ -165,6 +182,7 @@
 				operation: "freetimes",
 				date: dateSelected,
 				spec: specId,
+				proc: procId,
 				pos: ${posId}
 			}
 		}).done(function (data) {
@@ -175,18 +193,40 @@
 				time = a[i];
                 html += "<a href='#' class='list-group-item' data-type='time' data-time='" + time + "'>" + time + "</a>";
 			}
-			div = "selectSpecBody";
-			$("#"+div).html(html);
+			$("#mainTab").html(html);
 			$("[data-type$=time]").click(function () {
+				$("#mainTab").html("");
+				dateSelected = $("#dateInput").val();
 				timeSelected = $(this).attr('data-time');
-				$("#selectSpecBody").html("");
-				$("#dateInputDiv").addClass("hide");
-				$("#nameGroup").removeClass("hide");
-				$("#contactGroup").removeClass("hide");
-				$("#finishBtn").removeClass("hide");
-				$("#nameInput").focus();
+				if (timeSelected != "") {
+					$("#selectSpecBody").html("");
+					$("#dateInputDiv").addClass("hide");
+					$("#nameGroup").removeClass("hide");
+					$("#contactGroup").removeClass("hide");
+					$("#finishBtn").removeClass("hide");
+					$("#nameInput").focus();
+				}
 			})
-		});
+		});		
+	}
+	
+	function fillFinish() {
+		$("#dateInputDiv").addClass("hide");
+		$("#nameGroup").addClass("hide");
+		$("#contactGroup").addClass("hide");
+		$("#finishBtn").addClass("hide");
+
+		var html = "<h2>" + $("#nameInput").val() + ", спасибо за бронирование!</h2>"
+		if (specId > 0)
+			html += "<p>Вы забронировали посещение к мастеру </p><h4>" + specName + "</h4><p/>";
+			else 
+				if (procId > 0)
+					html += "<p>Вы забронировали услугу</p><h4>" + procName + "</h4><p/>";
+				
+		html += "<p>на дату и время</p><h4>" + dateSelected + " " + timeSelected + "</h4><p/>";
+		html += "<p>в салоне </p><h4>${posTitle}</h4><p/>";
+	
+		$("#mainTab").html(html);
 
 	}
 

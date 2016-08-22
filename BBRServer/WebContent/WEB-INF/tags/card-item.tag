@@ -99,13 +99,18 @@
 				</div>
 				<c:set var="itemSet" scope="request" value="${itemSet}
 		            $('#${ft}input').val(obj.${field});"/>
+		            
 				<c:if test="${defaultValue != null}">
 					<c:if test="${defaultValue == 'now'}">
-						<c:set var="defaultValue" value="${context.getNowString()}"/>
+						<c:set var="itemPreload" scope="request" value="${itemPreload}
+						  moment.locale('${context.getLocaleString()}');
+						  var m = moment();
+						  $('#${ft}input').val(m.format('${format}'));"/>
 					</c:if>
-				
-					<c:set var="itemPreload" scope="request" value="${itemPreload}
-   					  $('#${ft}input').val('${defaultValue}');"/>
+					<c:if test="${defaultValue != 'now'}">
+						<c:set var="itemPreload" scope="request" value="${itemPreload}
+   						  $('#${ft}input').val('${defaultValue}');"/>
+					</c:if>
 				</c:if>
 
 				<script>
@@ -113,7 +118,7 @@
 						format: "${format}",
 						stepping: ${timeStepping},
 						locale: "${context.getLocaleString()}"
-						${sideBySide}
+						${sideBySide}${useCurrent}
 					});
 				</script>
 			</c:when>

@@ -233,7 +233,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<String> getFreeTimes(Date date, String posId, String specId) throws Exception {
+	public List<String> getFreeTimesBySpec(Date date, String posId, String specId) throws Exception {
 		if (posId == null || posId.isEmpty()) return null;
 		if (specId == null || specId.isEmpty()) return null;
 
@@ -249,7 +249,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         	if (pos == null)
         		throw new Exception(BBRErrors.ERR_POS_NOTFOUND);
         	if (spec == null)
-        		throw new Exception(BBRErrors.ERR_POS_NOTFOUND);
+        		throw new Exception(BBRErrors.ERR_SPEC_MUST_BE_SPECIFIED);
         } catch (Exception ex) {
         	throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
         }
@@ -264,11 +264,11 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        String select = "select visit.timeScheduled as timeScheduled, visit.length as length";
 	        String from = " from BBRVisit visit";
 	        String where = " where visit.timeScheduled >= '" + df.format(startOfDay) + "' and "
-	        			  + " visit.timeScheduled <= '" + df.format(endOfDay) + "'";
+	        			       + " visit.timeScheduled <= '" + df.format(endOfDay) + "'";
 	        where += " and visit.pos.id = " + posId;
 	        where += " and visit.status in (" + BBRVisitStatus.VISSTATUS_APPROVED + ", " + BBRVisitStatus.VISSTATUS_INITIALIZED + ", " + BBRVisitStatus.VISSTATUS_PERFORMED + ")";
-	        where += " and visit.spec.id = " + specId;
-	        
+	        if (spec != null)
+	        	where += " and visit.spec.id = " + specId;
 	        String orderBy = " order by visit.timeScheduled ASC";
 	        
 	        Query query = session.createQuery(select + from + where + orderBy);
@@ -342,6 +342,120 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         
         return freeTimes;
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<String> getFreeTimesByProc(Date date, String posId, String procId) throws Exception {
+		if (posId == null || posId.isEmpty()) return null;
+		if (procId == null || procId.isEmpty()) return null;
+
+		List<String> freeTimes = new ArrayList<String>();
+		List<Object[]> specList = null;
+		List<Object[]> visitList = null;
+		String specIds = "";
+		
+        BBRPoSManager pmgr = new BBRPoSManager();
+        BBRProcedureManager prmgr = new BBRProcedureManager();
+        BBRPoS pos;
+        BBRProcedure proc;
+        try {
+        	pos = pmgr.findById(Long.parseLong(posId));
+        	proc = prmgr.findById(Long.parseLong(procId));
+        	if (pos == null)
+        		throw new Exception(BBRErrors.ERR_POS_NOTFOUND);
+        	if (proc == null)
+        		throw new Exception(BBRErrors.ERR_PROC_NOTFOUND);
+        } catch (Exception ex) {
+        	throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
+        }
+        
+        Session session = BBRUtil.getSession();
+        Date startOfDay = BBRUtil.getStartOfDay(date);
+        Date endOfDay = BBRUtil.getEndOfDay(date);
+        DateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormatWithSecs);
+
+        boolean tr = BBRUtil.beginTran();
+		try {
+	        String select = "select turn.specialist.id, turn.specialist.name, turn.startTime, turn.endTime";
+	        String from = " from BBRTurn turn";
+	        String where = " where turn.date >= '" + df.format(startOfDay) + "' and "
+	        			       + " turn.date <= '" + df.format(endOfDay) + "'";
+	        where += " and turn.specialist.pos.id = " + posId;
+	        where += " and (" + procId + " member of turn.specialist.procedures)";
+	        
+	        Query query = session.createQuery(select + from + where);
+			specList = query.list();
+			BBRUtil.commitTran(tr);
+		} catch (Exception ex) {
+			BBRUtil.rollbackTran(tr);
+		}
+
+		for (Object[] s : specList) {
+			specIds += ", " + (Long)(s[0]);
+		}
+		specIds = specIds.substring(1);
+		
+		tr = BBRUtil.beginTran();
+		session = BBRUtil.getSession();
+		try {
+	        String select = "select visit.timeScheduled as timeScheduled, visit.length as length";
+	        String from = " from BBRVisit visit";
+	        String where = " where visit.timeScheduled >= '" + df.format(startOfDay) + "' and "
+	        			       + " visit.timeScheduled <= '" + df.format(endOfDay) + "'";
+	        where += " and visit.pos.id = " + posId;
+	        where += " and visit.status in (" + BBRVisitStatus.VISSTATUS_APPROVED + ", " + BBRVisitStatus.VISSTATUS_INITIALIZED + ", " + BBRVisitStatus.VISSTATUS_PERFORMED + ")";
+	        where += " and visit.spec.id in (" + specIds + ")";
+	        String orderBy = " order by visit.timeScheduled ASC";
+	        
+	        Query query = session.createQuery(select + from + where + orderBy);
+			visitList = query.list();
+			BBRUtil.commitTran(tr);
+		} catch (Exception ex) {
+			BBRUtil.rollbackTran(tr);
+		}
+		
+        Calendar c = Calendar.getInstance();
+        c.setTime(pos.getStartWorkHour());
+        int startHalfHour = c.get(Calendar.HOUR_OF_DAY) * 2;
+        if (c.get(Calendar.MINUTE) != 0)
+        	startHalfHour++;
+
+        c.setTime(pos.getEndWorkHour());
+        int endHalfHour = c.get(Calendar.HOUR_OF_DAY) * 2;
+        if (c.get(Calendar.MINUTE) != 0)
+        	endHalfHour++;
+        
+        int[] hours = new int[48];
+        for (int h = 0; h < startHalfHour; h++)
+        	hours[h] = 1;
+        for (int h = startHalfHour; h < endHalfHour; h++)
+        	hours[h] = 0;
+        for (int h = endHalfHour; h < 48; h++)
+        	hours[h] = 1;
+        
+        for (Object[] v : visitList) {
+        	c.setTime((Date)v[0]);
+            int halfHour = c.get(Calendar.HOUR_OF_DAY) * 2;
+            if (c.get(Calendar.MINUTE) != 0)
+            	halfHour++;
+            for (int h = halfHour; h < halfHour + (int)((Float)v[1] * 2); h++)
+            	hours[h] = 1;
+        }
+        
+        for (int h = 0; h < 48; h++) {
+        	if (hours[h] == 0) {
+        		String freeTime = "" + (int)Math.floor(h / 2);
+        		if ((int)(Math.floor(h / 2) * 2) != h)
+        			freeTime += ":30";
+        		else {
+        			freeTime += ":00";
+        			freeTimes.add(freeTime);
+        		}
+        	}
+        }
+        
+        return freeTimes;
+	}
+
 	
 	public void approve(BBRVisit visit) {
 		if (visit != null) {
