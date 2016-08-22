@@ -88,15 +88,16 @@
 			$.ajax({
 				url: "BBRVisits",
 				data: {
-					operation: "createWizardSpecTime",
+					operation: "createWizard",
 					userName: $("#nameInput").val(),
 					userContacts: $("#contactsInput").val(),
 					timeScheduled: $("#dateInput").val() + " " + timeSelected,
 					pos: ${posId},
-					spec: specId
+					spec: specId,
+					proc: procId
 				}
-			}).done(function () {
-				fillFinish();
+			}).done(function (data) {
+				fillFinish(data);
 			}).fail(function () {
 				
 			});
@@ -210,7 +211,7 @@
 		});		
 	}
 	
-	function fillFinish() {
+	function fillFinish(visit) {
 		$("#dateInputDiv").addClass("hide");
 		$("#nameGroup").addClass("hide");
 		$("#contactGroup").addClass("hide");

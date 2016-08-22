@@ -376,7 +376,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			BBRVisit visit = manager.findById(visitId);
 			manager.cancel(visit);
 		} else
-		if (operation.equals("createWizardSpecTime")) {
+		if (operation.equals("createWizard")) {
 			String userName = params.get("userName");
 			String userContacts = params.get("userContacts");
 			String timeScheduledS = params.get("timeScheduled");
@@ -390,15 +390,35 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				if (pos == null)
 					throw new Exception(BBRErrors.ERR_POS_NOTFOUND);
 			
-				Long specId = Long.parseLong(params.get("spec"));
-				BBRSpecialistManager mgrSpec = new BBRSpecialistManager();
-				BBRSpecialist spec = mgrSpec.findById(specId);
-				if (spec == null)
-					throw new Exception(BBRErrors.ERR_SPEC_MUST_BE_SPECIFIED);
+				BBRSpecialistManager mgrSpec;
+				BBRSpecialist spec = null;
+				BBRProcedureManager mgrProc;
+				BBRProcedure proc = null;
+				
+				String specIdS = params.get("spec");
+				String procIdS = params.get("proc");
+				if (specIdS != null && !specIdS.isEmpty()) {
+					Long specId = Long.parseLong(specIdS);
+					mgrSpec = new BBRSpecialistManager();
+					spec = mgrSpec.findById(specId);
+				}
+				
+				if (procIdS != null && !procIdS.isEmpty()) {
+					Long procId = Long.parseLong(params.get("proc"));
+					mgrProc = new BBRProcedureManager();
+					proc = mgrProc.findById(procId);
+				}
 
+				if (spec == null && proc == null)
+					throw new Exception(BBRErrors.ERR_RECORD_NOTFOUND);
+
+				if (proc != null) {
+					spec = manager.findSpecByTimeAndProc(timeScheduled, proc, pos);
+				}
+				
 				BBRVisit visit = manager.scheduleVisit(pos, null, timeScheduled, 
-						         null, spec, userName, userContacts);
-				return visit.getId().toString();
+						         proc, spec, userName, userContacts);
+				return visit.toJson();
 						
 			} catch (Exception ex) {
 				return "";

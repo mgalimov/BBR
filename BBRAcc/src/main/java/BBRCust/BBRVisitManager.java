@@ -746,5 +746,84 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		BBRUtil.commitTran(tr);
 		
 		return list;
+	}
+
+	@SuppressWarnings("unchecked")
+	public BBRSpecialist findSpecByTimeAndProc(Date timeScheduled, BBRProcedure proc, BBRPoS pos) {
+		if (pos == null) return null;
+		if (proc == null) return null;
+
+		List<Long> specList = null;
+		List<Object[]> visitList = null;
+		String specIds = "";
+		
+        Session session = BBRUtil.getSession();
+        Date startOfDay = BBRUtil.getStartOfDay(timeScheduled);
+        Date endOfDay = BBRUtil.getEndOfDay(timeScheduled);
+        DateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormatWithSecs);
+        
+        boolean tr = BBRUtil.beginTran();
+		try {
+	        String select = "select turn.specialist.id";
+	        String from = " from BBRTurn turn";
+	        String where = " where turn.date >= '" + df.format(startOfDay) + "' and "
+	        			       + " turn.date <= '" + df.format(endOfDay) + "'";
+	        where += " and turn.specialist.pos.id = " + pos.getId();
+	        where += " and (" + proc.getId() + " member of turn.specialist.procedures)";
+	        
+	        Query query = session.createQuery(select + from + where);
+			specList = query.list();
+			BBRUtil.commitTran(tr);
+		} catch (Exception ex) {
+			BBRUtil.rollbackTran(tr);
+		}
+
+		for (Long s : specList) {
+			specIds += ", " + s;
+		}
+		specIds = specIds.substring(1);
+		
+		tr = BBRUtil.beginTran();
+		session = BBRUtil.getSession();
+		try {
+	        String select = "select visit.spec.id, visit.timeScheduled, visit.length";
+	        String from = " from BBRVisit visit";
+	        String where = " where visit.timeScheduled >= '" + df.format(startOfDay) + "' and "
+	        			       + " visit.timeScheduled <= '" + df.format(endOfDay) + "'";
+	        where += " and visit.pos.id = " + pos.getId();
+	        where += " and visit.status in (" + BBRVisitStatus.VISSTATUS_APPROVED + ", " + BBRVisitStatus.VISSTATUS_INITIALIZED + ", " + BBRVisitStatus.VISSTATUS_PERFORMED + ")";
+	        where += " and visit.spec.id in (" + specIds + ")";
+	        String orderBy = " order by visit.timeScheduled ASC";
+	        
+	        Query query = session.createQuery(select + from + where + orderBy);
+			visitList = query.list();
+			BBRUtil.commitTran(tr);
+		} catch (Exception ex) {
+			BBRUtil.rollbackTran(tr);
+		}
+		
+		ArrayList<Long> specs = new ArrayList<Long>();
+		Calendar c = Calendar.getInstance();
+		
+        for (Long s : specList) {
+        	boolean found = false;
+        	for (Object[] v : visitList) {
+				c.setTime((Date)(v[1]));
+        		c.add(Calendar.MINUTE, (int)((Float)(v[2])*60));
+        		if ((Long)v[0] == s && c.) {
+        			found = true;
+        			break;
+        		}
+        	}
+        	if (!found)
+        		specs.add(s);
+        }
+        
+        if (specs.size() > 0) {
+        	int index = (int) Math.floor(Math.random() * (float)specs.size());
+        	BBRSpecialistManager smgr = new BBRSpecialistManager();
+        	BBRSpecialist spec = smgr.findById(specs.get(index));
+        	return spec; 
+        } else return null;
 	};
 }
