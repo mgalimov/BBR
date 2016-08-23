@@ -426,11 +426,11 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         
         int[] hours = new int[48];
         for (int h = 0; h < startHalfHour; h++)
-        	hours[h] = 1;
+        	hours[h] = specList.size();
         for (int h = startHalfHour; h < endHalfHour; h++)
         	hours[h] = 0;
         for (int h = endHalfHour; h < 48; h++)
-        	hours[h] = 1;
+        	hours[h] = specList.size();
         
         for (Object[] v : visitList) {
         	c.setTime((Date)v[0]);
@@ -438,11 +438,11 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
             if (c.get(Calendar.MINUTE) != 0)
             	halfHour++;
             for (int h = halfHour; h < halfHour + (int)((Float)v[1] * 2); h++)
-            	hours[h] = 1;
+            	hours[h]++;
         }
         
         for (int h = 0; h < 48; h++) {
-        	if (hours[h] == 0) {
+        	if (hours[h] < specList.size()) {
         		String freeTime = "" + (int)Math.floor(h / 2);
         		if ((int)(Math.floor(h / 2) * 2) != h)
         			freeTime += ":30";
@@ -810,7 +810,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         	for (Object[] v : visitList) {
 				c.setTime((Date)(v[1]));
         		c.add(Calendar.MINUTE, (int)((Float)(v[2])*60));
-        		if ((Long)v[0] == s && c.) {
+        		if ((Long)v[0] == s && c.getTime().compareTo(timeScheduled) > 0 && ((Date)(v[1])).compareTo(timeScheduled) <= 0) {
         			found = true;
         			break;
         		}
