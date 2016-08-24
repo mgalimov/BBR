@@ -423,6 +423,11 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			} catch (Exception ex) {
 				return "";
 			}
+		} else
+		if (operation.equals("checkBookingCode")) {
+			BBRVisit visit = manager.findByBookingCode(params.get("code"));
+			if (visit != null)
+				return visit.toJson();
 		}
 
 		return "";

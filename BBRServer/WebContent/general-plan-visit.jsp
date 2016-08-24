@@ -43,6 +43,7 @@
 		<div class="row">
 		  <a href="#" class="btn btn-default" id="specBtn">${context.gs("LBL_GET_BY_SPEC")}</a>
 		  <a href="#" class="btn btn-default" id="procBtn">${context.gs("LBL_GET_BY_PROC")}</a>
+		  <a href="#" class="btn btn-default" id="checkBtn">${context.gs("LBL_CHECK_BOOKING")}</a>
 		</div>
 		<p/>
 		<div class="row">
@@ -61,16 +62,23 @@
 				<label for="contactInput">${context.gs("LBL_YOUR_PHONE")}</label>
 				<input type="text" id="contactInput" class="form-control" required/>
 			</div>
+			<div class="form-group hide" id="bookingGroup">
+				<label for="nameInput">${context.gs("LBL_YOUR_VISIT_CODE")}</label>
+				<input type="text" id="bookingCodeInput" class="form-control" required/>
+			</div>
 			<a href="#" class="btn btn-primary hide" id="finishBtn">${context.gs("BTN_FINISH_BOOKING")}</a>
 			<div id="mainTab">
 			</div>
 			<a href="#" class="btn btn-primary hide" id="closeBtn">${context.gs("BTN_CLOSE_BOOKING")}</a>
+			<a href="#" class="btn btn-danger hide" id="cancelBtn">${context.gs("BTN_CANCEL_BOOKING")}</a>
 		</div>
 	</div>
 </jsp:body>
 </t:light-wrapper>
 
 <script>
+	timerCodeInput = null;
+
 	$(document).ready(function () {
 		specId = 0;
 		dateSelected = new Date();
@@ -78,6 +86,7 @@
 		
 		$("#specBtn").click(fillSpec);
 		$("#procBtn").click(fillProc);
+		$("#checkBtn").click(fillCheck);
 		
 		fillSpec();
 
@@ -113,7 +122,7 @@
 		$("#closeBtn").click(function() {
 			window.location.reload();
 		});
-
+		
 	});
 	
 	function fillSpec() {
@@ -121,11 +130,15 @@
 		procName = "";
 		$("#specBtn").removeClass("btn-default").addClass("btn-primary");
 		$("#procBtn").removeClass("btn-primary").addClass("btn-default");
+		$("#checkBtn").removeClass("btn-primary").addClass("btn-default");
 		$("#dateInputDiv").addClass("hide");
 		$("#nameGroup").addClass("hide");
 		$("#contactGroup").addClass("hide");
+		$("#bookingGroup").addClass("hide");
 		$("#finishBtn").addClass("hide");
 		$("#closeBtn").addClass("hide");
+		$("#cancelBtn").addClass("hide");
+		
 		$.ajax({
 			url: "BBRSpecialists",
 			data: {
@@ -159,11 +172,15 @@
 		specName = "";
 		$("#procBtn").removeClass("btn-default").addClass("btn-primary");
 		$("#specBtn").removeClass("btn-primary").addClass("btn-default");
+		$("#checkBtn").removeClass("btn-primary").addClass("btn-default");
 		$("#dateInputDiv").addClass("hide");
 		$("#nameGroup").addClass("hide");
 		$("#contactGroup").addClass("hide");
+		$("#bookingGroup").addClass("hide");
 		$("#finishBtn").addClass("hide");
 		$("#closeBtn").addClass("hide");
+		$("#cancelBtn").addClass("hide");
+		
 		$.ajax({
 			url: "BBRProcedures",
 			data: {
@@ -239,23 +256,72 @@
 		$("#dateInputDiv").addClass("hide");
 		$("#nameGroup").addClass("hide");
 		$("#contactGroup").addClass("hide");
+		$("#bookingGroup").addClass("hide");
 		$("#finishBtn").addClass("hide");
 		$("#closeBtn").removeClass("hide");
+		$("#cancelBtn").removeClass("hide");
 		
 		var html = "<h2>" + $("#nameInput").val() + "${context.gs('LBL_THANKS_FOR_BOOKING')}!</h2>"
-		if (specId > 0)
-			html += "<p>${context.gs('LBL_YOUR_SPEC_IS')}</p><h4>" + specName + "</h4><p/>";
-			else 
-				if (procId > 0) {
-					html += "<p>${context.gs('LBL_YOU_BOOKED_PROC')}</p><h4>" + procName + "</h4><p/>";
-					html += "<p>${context.gs('LBL_AT_SPEC')}</p><h4>" + visit.spec.name + "</h4><p/>";
-				}
-				
-		html += "<p>${context.gs('LBL_TO_DATE_TIME')}</p><h4>" + dateSelected + " " + timeSelected + "</h4><p/>";
-		html += "<p>${context.gs('LBL_IN_POS')}</p><h4>${posTitle}</h4><p/>";
+		html = displayVisit(visit);
 	
 		$("#mainTab").html(html);
+		
+		$("cancelBtn").click(function() {
+			fillCheck(visit.bookingCode);
+		})
 
+	}
+	
+	function fillCheck(bookingCode) {
+		$("#checkBtn").removeClass("btn-default").addClass("btn-primary");
+		$("#specBtn").removeClass("btn-primary").addClass("btn-default");
+		$("#procBtn").removeClass("btn-primary").addClass("btn-default");
+		$("#dateInputDiv").addClass("hide");
+		$("#nameGroup").addClass("hide");
+		$("#contactGroup").addClass("hide");
+		$("#bookingGroup").removeClass("hide");
+		$("#finishBtn").addClass("hide");
+		$("#closeBtn").addClass("hide");
+		$("#cancelBtn").addClass("hide");
+		$("#mainTab").html("");
+		
+		if (bookingCode != null && typeof bookingCode == "string")
+			$("#bookingCodeInput").val(bookingCode);
+		checkBookingCode();
+		$("#bookingCodeInput").keyup(function () {
+			if (timerCodeInput)
+				clearTimeout(timerCodeInput);
+			timerCodeInput = setTimeout(checkBookingCode, 1500);
+		});
+	}
+	
+	function checkBookingCode() {
+		$.ajax({
+			url: "BBRVisits",
+			data: {
+				operation: "checkBookingCode",
+				code: $("#bookingCodeInput").val()
+			}
+		}).done(function (visit) {
+			if (visit != "")
+				$("#mainTab").html(displayVisit($.parseJSON(visit)));
+			else
+				$("#mainTab").html("${context.gs('MSG_NO_VISIT_WITH_CODE')}");
+		});
+	}
+	
+	function displayVisit(visit) {
+		var html = "";
+		if (visit.spec)
+			html += "<p>${context.gs('LBL_YOUR_SPEC_IS')}</p><h4>" + visit.spec.name + "</h4><p/>";
+		if (visit.procedure) {
+			html += "<p>${context.gs('LBL_YOU_BOOKED_PROC')}</p><h4>" + visit.procedure.title + "</h4><p/>";
+		}
+				
+		html += "<p>${context.gs('LBL_YOUR_VISIT_CODE')}</p><h4>" + visit.bookingCode + "</h4><p/>";
+		html += "<p>${context.gs('LBL_TO_DATE_TIME')}</p><h4>" + visit.timeScheduled + "</h4><p/>";
+		html += "<p>${context.gs('LBL_IN_POS')}</p><h4>${posTitle}</h4><p/>";
+		return html;
 	}
 	
 	function procLength(length) {

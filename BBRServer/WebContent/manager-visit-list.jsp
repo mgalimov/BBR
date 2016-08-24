@@ -86,6 +86,7 @@
 			<t:grid-item label="LBL_PRICE_PAID" field="pricePaid"/>
 			<t:grid-item label="LBL_AMOUNT_TO_SPECIALIST" field="amountToSpecialist"/>
 			<t:grid-item label="LBL_AMOUNT_TO_MATERIALS" field="amountToMaterials"/>
+			<t:grid-item label="LBL_BOOKING_CODE" field="bookingCode"/>
 		</t:grid>
 	</jsp:body>
 </t:admin-grid-wrapper>

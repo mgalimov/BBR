@@ -53,6 +53,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 			visit.setAmountToSpecialist(0);
 			visit.setAmountToMaterials(0);
 			visit.setComment("");
+			visit.setBookingCode(generateNewBookingCode());
 	        if (procedure != null) {
 	        	visit.setLength(procedure.getLength());
 		        visit.setFinalPrice(procedure.getPrice());
@@ -76,6 +77,21 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         	return null;
         }
     }
+
+	private String generateNewBookingCode() {
+		String code="";
+		int s = BBRUtil.codeAlphabet.length();
+		boolean found = true;
+		
+		while (found) {
+			for (int i = 1; i <= 5; i++) {
+				code += BBRUtil.codeAlphabet.charAt((int)(Math.random() * s));
+			}
+			BBRVisit v = findByBookingCode(code);
+			found = (v != null);
+		}
+		return code;
+	}
 
 	public BBRVisit createAndStoreVisit(BBRPoS pos, BBRUser user, Date realTime, BBRProcedure procedure, BBRSpecialist spec, String userName, String userContacts,
 									 float discountPercent, float discountAmount, float pricePaid, float amountToSpecialist, float amountToMaterials,
@@ -825,5 +841,18 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         	BBRSpecialist spec = smgr.findById(specs.get(index));
         	return spec; 
         } else return null;
-	};
+	}
+	
+	public BBRVisit findByBookingCode(String code) {
+    	boolean tr = BBRUtil.beginTran();
+    	try {
+    		Session session = BBRUtil.getSession(); 	
+    		BBRVisit result = (BBRVisit) session.createQuery("from " + typeName + " as t where t.bookingCode = '" + code + "'").uniqueResult();
+    		BBRUtil.commitTran(tr);
+    		return result;
+    	} catch (Exception ex) {
+    		BBRUtil.rollbackTran(tr);
+    		return null;
+    	}
+    }
 }

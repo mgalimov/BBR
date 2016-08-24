@@ -77,6 +77,9 @@ public class BBRVisit extends BBRDataElement {
 	@Column(name="COMMENT")
 	private String comment = "";
 	
+	@Column(name="BOOKING_CODE")
+	private String bookingCode = "";
+	
 	public BBRVisit() {}
 	
 	public void setId(Long id) {
@@ -234,6 +237,14 @@ public class BBRVisit extends BBRDataElement {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public String getBookingCode() {
+		return bookingCode;
+	}
+
+	public void setBookingCode(String bookingCode) {
+		this.bookingCode = bookingCode;
 	}
 
 }

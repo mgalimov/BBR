@@ -15,6 +15,7 @@
 				<t:card-item label="LBL_REAL_TIME" type="datetime" field="realTime" timeStepping="5" defaultValue="now"/>
 				<t:card-item label="LBL_USER_NAME" type="text" field="userName" />
 				<t:card-item label="LBL_PHONE" type="text" field="userContacts" />
+				<t:card-item label="LBL_BOOKING_CODE" type="text" field="bookingCode" isDisabled="readonly"/>
 				<t:card-item label="LBL_PROCEDURE" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures" />
 				<t:card-item label="LBL_SPEC" type="reference" field="spec" referenceFieldTitle="name" referenceMethod="BBRSpecialists" />
 				<t:card-item label="LBL_VISIT_STATUS" field="status" type="select" options="OPT_VISIT_STATUS" isDisabled="readonly" defaultValue="3"/>
