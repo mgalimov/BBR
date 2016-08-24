@@ -26,6 +26,7 @@
 	    if (pos != null) {
 	    	request.setAttribute("posId", posId);
 	    	request.setAttribute("posTitle", pos.getTitle());
+	    	request.setAttribute("posAddress", pos.getLocationDescription());
 	    }
 	} else
 		request.setAttribute("posId", 1);
@@ -35,8 +36,13 @@
 <jsp:body>
 	<div class="container">
 		<div class="row">
-		  <a href="#" class="btn btn-primary" id="specBtn">${context.gs("LBL_GET_BY_SPEC")}</a>
-		  <a href="#" class="btn btn-primary" id="procBtn">${context.gs("LBL_GET_BY_PROC")}</a>
+			<h2>${posTitle}</h2>
+			<p>${posAddress}</p>
+			<p/>
+		</div>
+		<div class="row">
+		  <a href="#" class="btn btn-default" id="specBtn">${context.gs("LBL_GET_BY_SPEC")}</a>
+		  <a href="#" class="btn btn-default" id="procBtn">${context.gs("LBL_GET_BY_PROC")}</a>
 		</div>
 		<p/>
 		<div class="row">
@@ -113,6 +119,8 @@
 	function fillSpec() {
 		procId = "";
 		procName = "";
+		$("#specBtn").removeClass("btn-default").addClass("btn-primary");
+		$("#procBtn").removeClass("btn-primary").addClass("btn-default");
 		$("#dateInputDiv").addClass("hide");
 		$("#nameGroup").addClass("hide");
 		$("#contactGroup").addClass("hide");
@@ -149,6 +157,8 @@
 	function fillProc() {
 		specId = "";
 		specName = "";
+		$("#procBtn").removeClass("btn-default").addClass("btn-primary");
+		$("#specBtn").removeClass("btn-primary").addClass("btn-default");
 		$("#dateInputDiv").addClass("hide");
 		$("#nameGroup").addClass("hide");
 		$("#contactGroup").addClass("hide");
@@ -157,7 +167,7 @@
 		$.ajax({
 			url: "BBRProcedures",
 			data: {
-				operation: "reference",
+				operation: "limitedreference",
 				constrains: ${posId}
 			}
 		}).done(function (data) {
@@ -167,7 +177,7 @@
 			for (i = 0; i < d.recordsTotal; i++) {
 				proc = d.data[i];
 				if (proc.status == 1) {
-					media = "<div class='media'><div class='media-left pull-left media-middle' style='padding-right: 10px;'><img class='media-object' src='images/barb.png' alt='"+proc.title+"'></div><div class='media-body'><h4 class='media-heading'>"+proc.title+"</h4>" + proc.length + ", " + proc.price + "</div></div>";
+					media = "<div class='media'><div class='media-left pull-left media-middle' style='padding-right: 10px;'><img class='media-object' src='images/tool.png' alt='"+proc.title+"'></div><div class='media-body'><h4 class='media-heading'>" + proc.title + "</h4>" + procLength(proc.length) + ", " + proc.price + proc.pos.currency + "</div></div>";
 					html += "<a href='#' class='list-group-item' id='procA" + proc.id + "' data-type='procedure' data-id='" + proc.id + "' data-name='" + proc.title + "'>" + media + "</a>";
 				}
 			}
@@ -246,6 +256,38 @@
 	
 		$("#mainTab").html(html);
 
+	}
+	
+	function procLength(length) {
+		hour = Math.round(Math.floor(length));
+		minutes = Math.round((length - hour) * 60);
+		
+		if (minutes == 1)
+			mins = minutes + " ${context.gs('SYS_MINUTE')}";
+		else
+			if (minutes > 0)
+				mins = minutes + " ${context.gs('SYS_MINUTES')}";
+			else
+				mins = "";
+		
+		if (hour == 1)
+			hrs = hour + " ${context.gs('SYS_HOUR')}";
+		else
+			if (hour > 0)
+				hrs = hour + " ${context.gs('SYS_HOURS')}";
+			else
+				hrs = "";
+				
+		if (hrs == "" && mins == "")
+			return "--";
+		else
+			if (hrs == "")
+				return mins;
+			else
+				if (mins == "")
+					return hrs;
+				else
+					return hrs + " " + mins;
 	}
 
 	

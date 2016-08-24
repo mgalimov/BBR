@@ -45,13 +45,9 @@
 	    <script src="js/bbr-utils.js"></script>
 	    <link href="css/bbr-admin.css" rel="stylesheet">	
   	</head>
-  	<body>
+  	<body style="padding-top: 0px !important">
   		<div class="container-fluid">
-  			<div class="row">
-	  			<div class="col-sm-9 col-md-10 main">
-	  				<jsp:doBody/>
-	  			</div>
-  			</div>
+ 				<jsp:doBody/>
   		</div>
 	</body>
 </html>

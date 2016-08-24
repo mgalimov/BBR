@@ -44,7 +44,7 @@ public class BBRContext {
 		BBRContext app = (BBRContext)session.getAttribute("context");
 		if (app == null) {
 			app = new BBRContext();
-			app.setLocale("en", "US");
+			//app.setLocale("en", "US");
 			session.setAttribute("context", app);
 		}
 		return app;

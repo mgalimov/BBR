@@ -28,6 +28,7 @@ public class BBRProcedure extends BBRDataElement {
 	public class BBRProcedureStatus {
 		public static final int PROCSTATUS_INITIALIZED = 0;
 		public static final int PROCSTATUS_APPROVED = 1;
+		public static final int PROCSTATUS_APPROVED_LOCAL = 3;
 		public static final int PROCSTATUS_INACTIVE = 2;
 	}
 	

@@ -2,6 +2,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import BBR.BBRDataSet;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRPoSManager;
 import BBRAcc.BBRShop;
@@ -9,6 +10,7 @@ import BBRAcc.BBRUser.BBRUserRole;
 import BBRClientApp.BBRContext;
 import BBRClientApp.BBRParams;
 import BBRCust.BBRProcedure;
+import BBRCust.BBRProcedure.BBRProcedureStatus;
 import BBRCust.BBRProcedureManager;
 
 @WebServlet("/BBRProcedures")
@@ -94,4 +96,37 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 		
 		return manager.list(query, manager.getTitleField(), pos, shop).toJson();
 	}
+	
+	@Override
+	protected String processOperation(String operation, BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		if (operation.equals("limitedreference")) {
+			String constrains = params.get("constrains");
+			String query = params.get("q");
+			String respText = "";
+			
+			BBRPoS pos = null;
+			if (!constrains.equals("")) {
+				BBRPoSManager pmgr = new BBRPoSManager();
+				pos = pmgr.findById(Long.parseLong(constrains));
+			}
+
+			if (pos != null) {
+				String where = " pos.id = " + pos.getId() + " and status = " + BBRProcedureStatus.PROCSTATUS_APPROVED;
+
+				try {
+					respText = manager.list(query, manager.getTitleField(), where).toJson();
+				} catch (Exception ex) {
+					respText = "";
+				}
+			}
+			
+			if (respText.isEmpty()) {
+				BBRDataSet<BBRProcedure> ds = new BBRDataSet<BBRProcedure>(null);
+				respText = ds.toJson();
+			}
+			
+			return respText;
+		}
+		return "";
+	};
 }
