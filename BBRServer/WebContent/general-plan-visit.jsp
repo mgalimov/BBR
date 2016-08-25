@@ -1,3 +1,4 @@
+<%@page import="BBRCust.BBRVisit.BBRVisitStatus"%>
 <%@page import="BBR.BBRUtil"%>
 <%@page import="BBRAcc.BBRPoSManager"%>
 <%@page import="BBRAcc.BBRPoS"%>
@@ -20,26 +21,28 @@
 	String titleMod = "";
 
 	String posId = params.get("pos");
-	if (posId != null && !posId.isEmpty()) {
-		BBRPoSManager pmgr = new BBRPoSManager();
-		BBRPoS pos = pmgr.findById(Long.parseLong(posId));
-	    if (pos != null) {
-	    	request.setAttribute("posId", posId);
-	    	request.setAttribute("posTitle", pos.getTitle());
-	    	request.setAttribute("posAddress", pos.getLocationDescription());
-	    }
-	} else
-		request.setAttribute("posId", 1);
+	if (posId == null || posId.isEmpty())
+		posId = "1";
 	
+	BBRPoSManager pmgr = new BBRPoSManager();
+	BBRPoS pos = pmgr.findById(Long.parseLong(posId));
+    if (pos != null) {
+    	request.setAttribute("posId", posId);
+    	request.setAttribute("posTitle", pos.getTitle());
+    	request.setAttribute("posAddress", pos.getLocationDescription());
+    }
+
+	request.setAttribute("visitStatusCancelled", BBRVisitStatus.VISSTATUS_CANCELLED);
+		
 %>
 <t:light-wrapper title="LBL_PLAN_VISIT_TITLE">
 <jsp:body>
 	<div class="container">
-		<t:modal  cancelButtonLabel="LBL_GRID_CONFIRM_DELETION_CANCEL_BTN" 
-				  processButtonLabel="LBL_GRID_CONFIRM_DELETION_CONFIRM_BTN" 
-				  title="LBL_GRID_CONFIRM_DELETION_TITLE" 
+		<t:modal  cancelButtonLabel="BTN_CONFIRM_CANCEL_VISIT_CANCEL" 
+				  processButtonLabel="BTN_CONFIRM_CANCEL_VISIT_PROCESS" 
+				  title="LBL_CONFIRM_CANCEL_VISIT_TITLE" 
 				  id="sureToDelete">
-			${context.gs('MSG_GRID_CONFIRM_DELETION')} 
+			${context.gs('MSG_CONFIRM_CANCEL_VISIT')} 
 		</t:modal>
 		<div class="row">
 			<h2>${posTitle}</h2>
@@ -81,7 +84,6 @@
 			<div id="mainTab">
 			</div>
 			<a href="#" class="btn btn-primary hide" id="closeBtn">${context.gs("BTN_CLOSE_BOOKING")}</a>
-			<a href="#" class="btn btn-danger hide" id="cancelBtn">${context.gs("BTN_CANCEL_BOOKING")}</a>
 			<a href="#" class="btn btn-danger hide" id="cancelBookingBtn">${context.gs("BTN_CANCEL_BOOKING")}</a>
 		</div>
 	</div>
@@ -154,12 +156,16 @@
 			if (visitGlobal && visitGlobal.id)
 				$.ajax({
 					url: "BBRVisits",
-					operation: "cancelVisit",
-					visitId: visitGlobal.id
+					data: {
+						operation: "cancelVisit",
+						visitId: visitGlobal.id
+					}
 				}).done(function () {
-					$('#sureToDelete').hide();
+					$('#sureToDelete').modal('hide');
+					fillCheck(visitGlobal.bookingCode);
 				}).fail(function () {
-					$('#sureToDelete').hide();
+					$('#sureToDelete').modal('hide');
+					fillCheck(visitGlobal.bookingCode);
 				});
 		});
 
@@ -177,7 +183,6 @@
 		$("#bookingGroup").addClass("hide");
 		$("#finishBtn").addClass("hide");
 		$("#closeBtn").addClass("hide");
-		$("#cancelBtn").addClass("hide");
 		$("#cancelBookingBtn").addClass("hide");
 		
 		$.ajax({
@@ -220,7 +225,6 @@
 		$("#bookingGroup").addClass("hide");
 		$("#finishBtn").addClass("hide");
 		$("#closeBtn").addClass("hide");
-		$("#cancelBtn").addClass("hide");
 		$("#cancelBookingBtn").addClass("hide");
 		
 		$.ajax({
@@ -236,7 +240,7 @@
 			for (i = 0; i < d.recordsTotal; i++) {
 				proc = d.data[i];
 				if (proc.status == 1) {
-					media = "<div class='media'><div class='media-left pull-left media-middle' style='padding-right: 10px;'><img class='media-object' src='images/tool.png' alt='"+proc.title+"'></div><div class='media-body'><h4 class='media-heading'>" + proc.title + "</h4>" + procLength(proc.length) + ", " + proc.price + proc.pos.currency + "</div></div>";
+					media = "<div class='media'><div class='media-left pull-left media-middle' style='padding-right: 10px;'><img class='media-object' src='images/tool.png' alt='"+proc.title+"'></div><div class='media-body'><h4 class='media-heading'>" + proc.title + "</h4>" + procLength(proc.length) + ", " + proc.price + " " + proc.pos.currency + "</div></div>";
 					html += "<a href='#' class='list-group-item' id='procA" + proc.id + "' data-type='procedure' data-id='" + proc.id + "' data-name='" + proc.title + "'>" + media + "</a>";
 				}
 			}
@@ -304,18 +308,14 @@
 		$("#bookingGroup").addClass("hide");
 		$("#finishBtn").addClass("hide");
 		$("#closeBtn").removeClass("hide");
-		$("#cancelBtn").removeClass("hide");
-		$("#cancelBookingBtn").addClass("hide");
+		
+		if (visit.status != ${visitStatusCancelled})
+			$("#cancelBookingBtn").removeClass("hide");
 		
 		var html = "<h2>" + $("#nameInput").val() + "${context.gs('LBL_THANKS_FOR_BOOKING')}!</h2>"
 		html = displayVisit(visit);
 	
 		$("#mainTab").html(html);
-		
-		$("#cancelBtn").click(function() {
-			fillCheck(visit.bookingCode);
-		})
-
 	}
 	
 	function fillCheck(bookingCode) {
@@ -328,7 +328,6 @@
 		$("#bookingGroup").removeClass("hide");
 		$("#finishBtn").addClass("hide");
 		$("#closeBtn").addClass("hide");
-		$("#cancelBtn").addClass("hide");
 		$("#cancelBookingBtn").addClass("hide");
 		$("#mainTab").html("");
 		
@@ -349,14 +348,27 @@
 			if (visit != "") {
 				visitGlobal = $.parseJSON(visit);
 				$("#mainTab").html(displayVisit(visitGlobal));
-				$("#cancelBookingBtn").removeClass("hide");
+
+				if (visitGlobal.status != ${visitStatusCancelled})
+					$("#cancelBookingBtn").removeClass("hide");
 			}
-			else
+			else {
+				visitGlobal = null;
 				$("#mainTab").html("${context.gs('MSG_NO_VISIT_WITH_CODE')}");
+			}
 		});
 	}
 	
 	function displayVisit(visit) {
+		var visitStatusS = "${context.gs('OPT_VISIT_STATUS')}";
+		var visitStatusA = visitStatusS.split(",");
+		var visitStatuses = [];
+		
+		for (i = 0; i < visitStatusA.length; i++) {
+			var s = visitStatusA[i].split(":");
+			visitStatuses[s[0]] = s[1]; 
+		}
+		
 		var html = "";
 		if (visit.spec)
 			html += "<p>${context.gs('LBL_YOUR_SPEC_IS')}</p><h4>" + visit.spec.name + "</h4><p/>";
@@ -366,6 +378,7 @@
 				
 		html += "<p>${context.gs('LBL_YOUR_VISIT_CODE')}</p><h4>" + visit.bookingCode + "</h4><p/>";
 		html += "<p>${context.gs('LBL_TO_DATE_TIME')}</p><h4>" + visit.timeScheduled + "</h4><p/>";
+		html += "<p>${context.gs('LBL_VISIT_STATUS')}</p><h4>" + visitStatuses[visit.status] + "</h4><p/>";
 		html += "<p>${context.gs('LBL_IN_POS')}</p><h4>" + visit.pos.title + "</h4><p/>";
 		html += "<p>" + visit.pos.locationDescription + "<p/>";
 		return html;
