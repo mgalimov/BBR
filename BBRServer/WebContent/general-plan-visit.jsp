@@ -35,6 +35,12 @@
 <t:light-wrapper title="LBL_PLAN_VISIT_TITLE">
 <jsp:body>
 	<div class="container">
+		<t:modal  cancelButtonLabel="LBL_GRID_CONFIRM_DELETION_CANCEL_BTN" 
+				  processButtonLabel="LBL_GRID_CONFIRM_DELETION_CONFIRM_BTN" 
+				  title="LBL_GRID_CONFIRM_DELETION_TITLE" 
+				  id="sureToDelete">
+			${context.gs('MSG_GRID_CONFIRM_DELETION')} 
+		</t:modal>
 		<div class="row">
 			<h2>${posTitle}</h2>
 			<p>${posAddress}</p>
@@ -64,13 +70,19 @@
 			</div>
 			<div class="form-group hide" id="bookingGroup">
 				<label for="nameInput">${context.gs("LBL_YOUR_VISIT_CODE")}</label>
-				<input type="text" id="bookingCodeInput" class="form-control" required/>
+				<div class="input-group">
+					<input type="text" id="bookingCodeInput" class="form-control" required/>
+				    <span class="input-group-btn">
+	        			<button class="btn btn-default" type="button" id="bookingCodeBtn"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;</button>
+	      			</span>
+      			</div>
 			</div>
 			<a href="#" class="btn btn-primary hide" id="finishBtn">${context.gs("BTN_FINISH_BOOKING")}</a>
 			<div id="mainTab">
 			</div>
 			<a href="#" class="btn btn-primary hide" id="closeBtn">${context.gs("BTN_CLOSE_BOOKING")}</a>
 			<a href="#" class="btn btn-danger hide" id="cancelBtn">${context.gs("BTN_CANCEL_BOOKING")}</a>
+			<a href="#" class="btn btn-danger hide" id="cancelBookingBtn">${context.gs("BTN_CANCEL_BOOKING")}</a>
 		</div>
 	</div>
 </jsp:body>
@@ -78,6 +90,7 @@
 
 <script>
 	timerCodeInput = null;
+	visitGlobal = null;
 
 	$(document).ready(function () {
 		specId = 0;
@@ -123,6 +136,33 @@
 			window.location.reload();
 		});
 		
+		$("#bookingCodeInput").keyup(function () {
+			if (timerCodeInput)
+				clearTimeout(timerCodeInput);
+			timerCodeInput = setTimeout(checkBookingCode, 1500);
+		}).keydown(function (e) {
+			if (e.which == 13)
+				checkBookingCode();
+		});
+		$("#bookingCodeBtn").click(checkBookingCode);
+		
+		$("#cancelBookingBtn").click(function () {
+			$('#sureToDelete').modal();
+		});
+
+		$('#sureToDeleteprocess').click(function () {
+			if (visitGlobal && visitGlobal.id)
+				$.ajax({
+					url: "BBRVisits",
+					operation: "cancelVisit",
+					visitId: visitGlobal.id
+				}).done(function () {
+					$('#sureToDelete').hide();
+				}).fail(function () {
+					$('#sureToDelete').hide();
+				});
+		});
+
 	});
 	
 	function fillSpec() {
@@ -138,6 +178,7 @@
 		$("#finishBtn").addClass("hide");
 		$("#closeBtn").addClass("hide");
 		$("#cancelBtn").addClass("hide");
+		$("#cancelBookingBtn").addClass("hide");
 		
 		$.ajax({
 			url: "BBRSpecialists",
@@ -180,6 +221,7 @@
 		$("#finishBtn").addClass("hide");
 		$("#closeBtn").addClass("hide");
 		$("#cancelBtn").addClass("hide");
+		$("#cancelBookingBtn").addClass("hide");
 		
 		$.ajax({
 			url: "BBRProcedures",
@@ -253,6 +295,9 @@
 	}
 	
 	function fillFinish(visit) {
+		if (!visit) return;
+		visitGlobal = visit;
+		
 		$("#dateInputDiv").addClass("hide");
 		$("#nameGroup").addClass("hide");
 		$("#contactGroup").addClass("hide");
@@ -260,13 +305,14 @@
 		$("#finishBtn").addClass("hide");
 		$("#closeBtn").removeClass("hide");
 		$("#cancelBtn").removeClass("hide");
+		$("#cancelBookingBtn").addClass("hide");
 		
 		var html = "<h2>" + $("#nameInput").val() + "${context.gs('LBL_THANKS_FOR_BOOKING')}!</h2>"
 		html = displayVisit(visit);
 	
 		$("#mainTab").html(html);
 		
-		$("cancelBtn").click(function() {
+		$("#cancelBtn").click(function() {
 			fillCheck(visit.bookingCode);
 		})
 
@@ -283,16 +329,13 @@
 		$("#finishBtn").addClass("hide");
 		$("#closeBtn").addClass("hide");
 		$("#cancelBtn").addClass("hide");
+		$("#cancelBookingBtn").addClass("hide");
 		$("#mainTab").html("");
 		
 		if (bookingCode != null && typeof bookingCode == "string")
 			$("#bookingCodeInput").val(bookingCode);
+		
 		checkBookingCode();
-		$("#bookingCodeInput").keyup(function () {
-			if (timerCodeInput)
-				clearTimeout(timerCodeInput);
-			timerCodeInput = setTimeout(checkBookingCode, 1500);
-		});
 	}
 	
 	function checkBookingCode() {
@@ -303,8 +346,11 @@
 				code: $("#bookingCodeInput").val()
 			}
 		}).done(function (visit) {
-			if (visit != "")
-				$("#mainTab").html(displayVisit($.parseJSON(visit)));
+			if (visit != "") {
+				visitGlobal = $.parseJSON(visit);
+				$("#mainTab").html(displayVisit(visitGlobal));
+				$("#cancelBookingBtn").removeClass("hide");
+			}
 			else
 				$("#mainTab").html("${context.gs('MSG_NO_VISIT_WITH_CODE')}");
 		});
@@ -320,7 +366,8 @@
 				
 		html += "<p>${context.gs('LBL_YOUR_VISIT_CODE')}</p><h4>" + visit.bookingCode + "</h4><p/>";
 		html += "<p>${context.gs('LBL_TO_DATE_TIME')}</p><h4>" + visit.timeScheduled + "</h4><p/>";
-		html += "<p>${context.gs('LBL_IN_POS')}</p><h4>${posTitle}</h4><p/>";
+		html += "<p>${context.gs('LBL_IN_POS')}</p><h4>" + visit.pos.title + "</h4><p/>";
+		html += "<p>" + visit.pos.locationDescription + "<p/>";
 		return html;
 	}
 	
