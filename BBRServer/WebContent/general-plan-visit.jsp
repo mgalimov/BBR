@@ -37,7 +37,7 @@
 %>
 <t:light-wrapper title="LBL_PLAN_VISIT_TITLE">
 <jsp:body>
-	<div class="container">
+	<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
 		<t:modal  cancelButtonLabel="BTN_CONFIRM_CANCEL_VISIT_CANCEL" 
 				  processButtonLabel="BTN_CONFIRM_CANCEL_VISIT_PROCESS" 
 				  title="LBL_CONFIRM_CANCEL_VISIT_TITLE" 
