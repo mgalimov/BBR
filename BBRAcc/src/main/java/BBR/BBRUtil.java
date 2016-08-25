@@ -27,6 +27,7 @@ public class BBRUtil {
 	public static final String visualTitleDelimiter = " &#8212; ";
 	
 	public static final String codeAlphabet = "0123456789ABCDEFGHIJKLMNPQRSTUVWXYZ";
+	public static final int codeLength = 3;
 
     public static SessionFactory buildSessionFactory() {
     	SessionFactory sessionFactory = null;

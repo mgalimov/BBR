@@ -56,7 +56,11 @@
 		</div>
 		<p/>
 		<div class="row">
-			<div class='input-group date col-md-3 hide' id='dateInputDiv'>	
+			<div class="alert alert-warning alert-dismissable hide" id="alertMessage">
+    			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    			<div id="alertText"></div>
+			</div>
+			<div class='input-group date hide' id='dateInputDiv'>	
 				<input id='dateInput' type='text' class='form-control' />
 				<span class='input-group-addon'>
 					<span class='glyphicon glyphicon-calendar'/></span>
@@ -69,12 +73,12 @@
 			</div>
 			<div class="form-group hide" id="contactGroup">
 				<label for="contactInput">${context.gs("LBL_YOUR_PHONE")}</label>
-				<input type="text" id="contactInput" class="form-control" required/>
+				<input type="text" id="contactInput" class="form-control" placeholder="8 (900) 123-45-67" required/>
 			</div>
 			<div class="form-group hide" id="bookingGroup">
 				<label for="nameInput">${context.gs("LBL_YOUR_VISIT_CODE")}</label>
 				<div class="input-group">
-					<input type="text" id="bookingCodeInput" class="form-control" required/>
+					<input type="text" id="bookingCodeInput" class="form-control"/>
 				    <span class="input-group-btn">
 	        			<button class="btn btn-default" type="button" id="bookingCodeBtn"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;</button>
 	      			</span>
@@ -116,22 +120,46 @@
 		$("#dateInputDiv").on("dp.change", fillTime);
 		
 		$("#finishBtn").click(function() {
-			$.ajax({
-				url: "BBRVisits",
-				data: {
-					operation: "createWizard",
-					userName: $("#nameInput").val(),
-					userContacts: $("#contactsInput").val(),
-					timeScheduled: $("#dateInput").val() + " " + timeSelected,
-					pos: ${posId},
-					spec: specId,
-					proc: procId
-				}
-			}).done(function (data) {
-				fillFinish($.parseJSON(data));
-			}).fail(function () {
-				
-			});
+			var hasErrors = false; 
+    		$("*[required]").each(function (i) {
+    			if ($(this).val() == "") {
+    				$(this).parents("div.form-group").addClass("has-error");
+    				hasErrors = true;
+    			} else
+    				$(this).parents("div.form-group").removeClass("has-error");
+    		});
+    		
+    		
+    		var regexp = /^([+]?[0-9\s-\(\)]{3,25})*$/i; //^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$
+    		if (!$("#contactInput").val().match(regexp))
+    			hasErrors = true;
+    		
+    		if (hasErrors) {
+	    		$('#alertMessage').text('${context.gs("ERR_FILL_REQUIRED_FIELDS")}');
+				$('#alertMessage').removeClass('hide');
+			    $('html body').animate({
+			        scrollTop: 0 
+			    }, 200);    			
+    		} else {
+    			$('#alertMessage').addClass('hide');
+			      
+				$.ajax({
+					url: "BBRVisits",
+					data: {
+						operation: "createWizard",
+						userName: $("#nameInput").val(),
+						userContacts: $("#contactInput").val(),
+						timeScheduled: $("#dateInput").val() + " " + timeSelected,
+						pos: ${posId},
+						spec: specId,
+						proc: procId
+					}
+				}).done(function (data) {
+					fillFinish($.parseJSON(data));
+				}).fail(function () {
+					
+				});
+    		}
 		});
 		
 		$("#closeBtn").click(function() {
@@ -184,6 +212,7 @@
 		$("#finishBtn").addClass("hide");
 		$("#closeBtn").addClass("hide");
 		$("#cancelBookingBtn").addClass("hide");
+		$('#alertMessage').addClass('hide');
 		
 		$.ajax({
 			url: "BBRSpecialists",
@@ -226,6 +255,7 @@
 		$("#finishBtn").addClass("hide");
 		$("#closeBtn").addClass("hide");
 		$("#cancelBookingBtn").addClass("hide");
+		$('#alertMessage').addClass('hide');
 		
 		$.ajax({
 			url: "BBRProcedures",
@@ -240,7 +270,7 @@
 			for (i = 0; i < d.recordsTotal; i++) {
 				proc = d.data[i];
 				if (proc.status == 1) {
-					media = "<div class='media'><div class='media-left pull-left media-middle' style='padding-right: 10px;'><img class='media-object' src='images/tool.png' alt='"+proc.title+"'></div><div class='media-body'><h4 class='media-heading'>" + proc.title + "</h4>" + procLength(proc.length) + ", " + proc.price + " " + proc.pos.currency + "</div></div>";
+					media = "<div class='media'><div class='media-left pull-left media-middle' style='padding-right: 10px;'><img class='media-object' src='images/tool.png' alt='"+proc.title+"'></div><div class='media-body'><h4 class='media-heading'>" + proc.title + "</h4>" + procLength(proc.length) + ", ${context.gs('LBL_PRICE_FROM')} " + proc.price + " " + proc.pos.currency + "</div></div>";
 					html += "<a href='#' class='list-group-item' id='procA" + proc.id + "' data-type='procedure' data-id='" + proc.id + "' data-name='" + proc.title + "'>" + media + "</a>";
 				}
 			}
@@ -308,6 +338,7 @@
 		$("#bookingGroup").addClass("hide");
 		$("#finishBtn").addClass("hide");
 		$("#closeBtn").removeClass("hide");
+		$('#alertMessage').addClass('hide');
 		
 		if (visit.status != ${visitStatusCancelled})
 			$("#cancelBookingBtn").removeClass("hide");
@@ -370,17 +401,16 @@
 		}
 		
 		var html = "";
+		if (visit.procedure)
+			html += "<p>${context.gs('LBL_YOU_BOOKED_PROC')} <b>" + visit.procedure.title + "</b></p><p/>";
 		if (visit.spec)
-			html += "<p>${context.gs('LBL_YOUR_SPEC_IS')}</p><h4>" + visit.spec.name + "</h4><p/>";
-		if (visit.procedure) {
-			html += "<p>${context.gs('LBL_YOU_BOOKED_PROC')}</p><h4>" + visit.procedure.title + "</h4><p/>";
-		}
+			html += "<p>${context.gs('LBL_YOUR_SPEC_IS')} <b>" + visit.spec.name + "</b></p><p/>";
 				
-		html += "<p>${context.gs('LBL_YOUR_VISIT_CODE')}</p><h4>" + visit.bookingCode + "</h4><p/>";
-		html += "<p>${context.gs('LBL_TO_DATE_TIME')}</p><h4>" + visit.timeScheduled + "</h4><p/>";
-		html += "<p>${context.gs('LBL_VISIT_STATUS')}</p><h4>" + visitStatuses[visit.status] + "</h4><p/>";
-		html += "<p>${context.gs('LBL_IN_POS')}</p><h4>" + visit.pos.title + "</h4><p/>";
-		html += "<p>" + visit.pos.locationDescription + "<p/>";
+		html += "<p>${context.gs('LBL_TO_DATE_TIME')} <b>" + visit.timeScheduled + "</b></p><p/>";
+		html += "<p>${context.gs('LBL_IN_POS')} <b>" + visit.pos.title + "</b>";
+		html += ", 	" + visit.pos.locationDescription + "</p><p/>";
+		html += "<p>${context.gs('LBL_VISIT_STATUS')} &#151; <b>" + visitStatuses[visit.status] + "</b></p><p/>";
+		html += "<p>${context.gs('LBL_YOUR_VISIT_CODE')} <b>" + visit.bookingCode + "</b></p><p/>";
 		return html;
 	}
 	

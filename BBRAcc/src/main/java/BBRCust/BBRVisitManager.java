@@ -84,7 +84,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		boolean found = true;
 		
 		while (found) {
-			for (int i = 1; i <= 5; i++) {
+			for (int i = 1; i <= BBRUtil.codeLength; i++) {
 				code += BBRUtil.codeAlphabet.charAt((int)(Math.random() * s));
 			}
 			BBRVisit v = findByBookingCode(code);
