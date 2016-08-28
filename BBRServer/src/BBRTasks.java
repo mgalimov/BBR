@@ -137,7 +137,7 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 				BBRVisit visit = manager.getVisit(task);
 				if (visit != null) {
 					BBRVisitManager mgr = new BBRVisitManager();
-					mgr.disapprove(visit);
+					mgr.cancel(visit);
 				}
 				manager.update(task);
 			}
