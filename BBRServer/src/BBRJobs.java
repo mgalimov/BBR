@@ -51,7 +51,7 @@ public class BBRJobs extends BBRBasicServlet<BBRJob, BBRJobManager> {
 		String runConditions = params.get("runConditions");
 		String runMethod = params.get("runMethod");
 		
-		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 		Date nextRun;
 		try {
 			nextRun = df.parse(nextRunString);

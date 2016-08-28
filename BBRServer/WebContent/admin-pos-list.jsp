@@ -12,6 +12,8 @@
 			<t:grid-item label="LBL_CURRENCY" field="currency" type="text"/>
 			<t:grid-item label="LBL_TIMEZONE" field="timeZone" type="text"/>
 			<t:grid-item label="LBL_URLID" field="urlID" type="text"/>
+			<t:grid-item label="LBL_EMAIL_NOTIFICATION" field="email" type="text"/>
+			<t:grid-item label="LBL_SMS_NOTIFICATION" field="sms" type="text"/>
 		</t:grid>
 	</jsp:body>
 </t:admin-grid-wrapper>

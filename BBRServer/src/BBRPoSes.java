@@ -35,6 +35,8 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 		String currency = params.get("currency");
 		String timeZone = params.get("timeZone");
 		String urlID = params.get("urlID");
+		String email = params.get("email");
+		String sms = params.get("sms");
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullTimeFormat);
 		BBRShopManager shopMgr = new BBRShopManager();
 		BBRShop shop = shopMgr.findById(Long.parseLong(shopId));
@@ -48,7 +50,9 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 					df.parse(endWorkHour),
 					currency,
 					timeZone,
-					urlID
+					urlID,
+					email,
+					sms
 					);
 		return "";
 	}
@@ -65,6 +69,8 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 		String currency = params.get("currency");
 		String timeZone = params.get("timeZone");
 		String urlID = params.get("urlID");
+		String email = params.get("email");
+		String sms = params.get("sms");
 		if (locationLat.isEmpty())
 			locationLat = "0";
 		if (locationLng.isEmpty())
@@ -81,8 +87,9 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 			pos.setEndWorkHour(df.parse(endWorkHour));
 			pos.setCurrency(currency);
 			pos.setTimeZone(timeZone);
-
 			pos.setUrlID(urlID);
+			pos.setEmail(email);
+			pos.setSms(sms);
 			manager.update(pos);
 		}
 		return null;		

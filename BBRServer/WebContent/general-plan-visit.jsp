@@ -1,3 +1,4 @@
+<%@page import="BBRAcc.BBRUser.BBRUserRole"%>
 <%@page import="BBRCust.BBRVisit.BBRVisitStatus"%>
 <%@page import="BBR.BBRUtil"%>
 <%@page import="BBRAcc.BBRPoSManager"%>
@@ -21,8 +22,22 @@
 	String titleMod = "";
 
 	String posId = params.get("pos");
-	if (posId == null || posId.isEmpty())
-		posId = "1";
+	if (posId == null || posId.isEmpty()) {
+		if (context.user != null)
+			if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
+				posId = context.user.getPos().getId().toString();
+			else
+				if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN) {
+					BBRPoSManager pmgr = new BBRPoSManager();
+					posId = pmgr.list("", "", "shop.id = " + context.user.getShop().getId()).data.get(0).getId().toString();
+				}
+				else
+					if (context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER || 
+						context.user.getRole() == BBRUserRole.ROLE_VISITOR) {
+						BBRPoSManager pmgr = new BBRPoSManager();
+						posId = pmgr.list("", "", "").data.get(0).getId().toString();						
+					}
+	};
 	
 	BBRPoSManager pmgr = new BBRPoSManager();
 	BBRPoS pos = pmgr.findById(Long.parseLong(posId));

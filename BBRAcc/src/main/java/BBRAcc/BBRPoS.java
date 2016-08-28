@@ -51,6 +51,12 @@ public class BBRPoS extends BBRDataElement {
 
 	@Column(name="URL_ID")
 	private String urlID;
+	
+	@Column(name="EMAIL_NOTIFICATION")
+	private String email;
+
+	@Column(name="SMS_NOTIFICATION")
+	private String sms;
 
 	public BBRPoS() {}
 	
@@ -140,5 +146,21 @@ public class BBRPoS extends BBRDataElement {
 
 	public void setUrlID(String urlID) {
 		this.urlID = urlID;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getSms() {
+		return sms;
+	}
+
+	public void setSms(String sms) {
+		this.sms = sms;
 	}
 }

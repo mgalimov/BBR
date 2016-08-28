@@ -15,6 +15,7 @@ import BBR.BBRDataElement;
 import BBR.BBRDataManager;
 import BBR.BBRDataSet;
 import BBR.BBRErrors;
+import BBR.BBRMailer;
 import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRPoSManager;
@@ -46,7 +47,6 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        visit.setUserName(userName);
 	        visit.setUserContacts(userContacts);
 	        visit.setStatus(BBRVisitStatus.VISSTATUS_INITIALIZED);
-			visit.setRealTime(timeScheduled);
 			visit.setDiscountPercent(0);
 			visit.setDiscountAmount(0);
 			visit.setPricePaid(0);
@@ -65,12 +65,32 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 	        
 	        BBRTaskManager tmgr = new BBRTaskManager();
-	        tmgr.createAndStoreTask("Approve visit", null, pos, new Date(), new Date(), 
+	        tmgr.createAndStoreTask("Подтвердите запись!", null, pos, new Date(), new Date(), 
 	        						df.format(visit.getTimeScheduled()) + " --> " + visit.getPos().getTitle() + 
 	        						", " + visit.getUserName() + ", " + visit.getUserContacts(), 
 	        						BBRVisit.class.getName(), visit.getId());
 
 	        BBRUtil.commitTran(tr);
+	        
+	        try{
+	        	String p = "не указана";
+	        	String s = "не указан";
+	        	if (visit.getProcedure() != null && visit.getProcedure().getTitle() != "")
+	        		p = visit.getProcedure().getTitle();
+	        	if (visit.getSpec() != null && visit.getSpec().getName() != "")
+	        		s = visit.getSpec().getName();
+	        	
+	        	BBRMailer.send(visit.getPos().getEmail(), 
+	        			"Barbiny: Новая запись в " + visit.getPos().getTitle(), 
+	        			"Время: " + df.format(visit.getTimeScheduled()) + "\n" +
+	        			"Имя: " + visit.getUserName() + "\n" +
+	        			"Контакты: " + visit.getUserContacts() + "\n" +
+	        			"Услуга: " + p + "\n" +
+	        			"Мастер: " + s + "\n" + "\n" + 
+	        			"http://www.barbiny.ru/manager-visit-edit.jsp?id=" + visit.getId());
+	        }catch (Exception ex) {
+	        }
+	        
 	        return visit;
         } catch (Exception ex) {
         	BBRUtil.rollbackTran(tr);

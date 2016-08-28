@@ -142,7 +142,9 @@ public class BBRDataManager<T extends BBRDataElement> {
         boolean tr = BBRUtil.beginTran();
         try {
 	        Session session = BBRUtil.getSession();
-	   		String orderBy = " order by " + sortBy;
+	        String orderBy = "";
+	        if (sortBy != null && !sortBy.isEmpty())
+		   		orderBy = " order by " + sortBy;
 	   		
 	   		if (queryTerm != null && !queryTerm.equals("")) {
 	   			queryTerm.replaceAll("\\s", "%");
