@@ -11,7 +11,7 @@
 			<t:toolbar-item label="LBL_CLOSE_VISIT" id="closeVisitButton" accent="btn-primary" condition="obj.status<=1"></t:toolbar-item>
 			<t:card-tab label="LBL_MAIN_VISIT_TAB" id="mainTab" isActive="true">
 				<t:card-item label="LBL_POS" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes"/>
-				<t:card-item label="LBL_DATE_TIME" type="datetime" field="timeScheduled" isDisabled="readonly"/>
+				<t:card-item label="LBL_DATE_TIME" type="datetime" field="timeScheduled"/>
 				<t:card-item label="LBL_REAL_TIME" type="datetime" field="realTime" timeStepping="5" defaultValue="now"/>
 				<t:card-item label="LBL_USER_NAME" type="text" field="userName" />
 				<t:card-item label="LBL_PHONE" type="text" field="userContacts" />
@@ -76,7 +76,6 @@
 		});
 		
 		$("#closeVisitButton").click(function() {
-			$("#saveChanges").click();
 			performOperation('close');
 		});
 
@@ -89,8 +88,13 @@
 		        		operation: operation,
 		        		visitId: idParam
 		        	}
+		        }).done(function () {
+		        	saveChanges();
+		        	window.location.href = window.location.href;		        	
+		        }).fail(function () {
+		        	window.location.href = window.location.href;
 		        });									
-				window.location.href = window.location.href; 
+				 
 			}			
 		}
 		

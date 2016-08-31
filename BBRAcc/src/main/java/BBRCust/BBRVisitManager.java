@@ -34,7 +34,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		classTitle = "Visit";	
 	}
 
-	public BBRVisit scheduleVisit(BBRPoS pos, BBRUser user, Date timeScheduled, BBRProcedure procedure, BBRSpecialist spec, String userName, String userContacts) {
+	public BBRVisit scheduleVisit(boolean notification, BBRPoS pos, BBRUser user, Date timeScheduled, BBRProcedure procedure, BBRSpecialist spec, String userName, String userContacts) {
 		boolean tr = BBRUtil.beginTran();
         try {
 	        Session session = BBRUtil.getSession();
@@ -61,36 +61,41 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        if (visit.getLength() < minimalLength)
 	        	visit.setLength(minimalLength);
 	        session.save(visit);
-	        
-	        SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
-	        
-	        BBRTaskManager tmgr = new BBRTaskManager();
-	        tmgr.createAndStoreTask("Подтвердите запись!", null, pos, new Date(), new Date(), 
-	        						df.format(visit.getTimeScheduled()) + " --> " + visit.getPos().getTitle() + 
-	        						", " + visit.getUserName() + ", " + visit.getUserContacts(), 
-	        						BBRVisit.class.getName(), visit.getId());
-
 	        BBRUtil.commitTran(tr);
 	        
-	        try{
-	        	String p = "не указана";
-	        	String s = "не указан";
-	        	if (visit.getProcedure() != null && visit.getProcedure().getTitle() != "")
-	        		p = visit.getProcedure().getTitle();
-	        	if (visit.getSpec() != null && visit.getSpec().getName() != "")
-	        		s = visit.getSpec().getName();
-	        	
-	        	BBRMailer.send(visit.getPos().getEmail(), 
-	        			"Barbiny: Новая запись в " + visit.getPos().getTitle(), 
-	        			"Время: " + df.format(visit.getTimeScheduled()) + "\n" +
-	        			"Имя: " + visit.getUserName() + "\n" +
-	        			"Контакты: " + visit.getUserContacts() + "\n" +
-	        			"Услуга: " + p + "\n" +
-	        			"Мастер: " + s + "\n" + "\n" + 
-	        			"http://www.barbiny.ru/manager-visit-edit.jsp?id=" + visit.getId());
-	        }catch (Exception ex) {
+	        if (notification) {
+	        	boolean t = BBRUtil.beginTran();
+	        	SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+		        try {
+			        BBRTaskManager tmgr = new BBRTaskManager();
+			        tmgr.createAndStoreTask("Подтвердите запись!", null, pos, new Date(), new Date(), 
+			        						df.format(visit.getTimeScheduled()) + " --> " + visit.getPos().getTitle() + 
+			        						", " + visit.getUserName() + ", " + visit.getUserContacts(), 
+			        						BBRVisit.class.getName(), visit.getId());
+			        BBRUtil.commitTran(t);
+		        } catch (Exception ex) {
+		        	BBRUtil.rollbackTran(t);
+		        }
+		        
+		        try{
+		        	String p = "не указана";
+		        	String s = "не указан";
+		        	if (visit.getProcedure() != null && visit.getProcedure().getTitle() != "")
+		        		p = visit.getProcedure().getTitle();
+		        	if (visit.getSpec() != null && visit.getSpec().getName() != "")
+		        		s = visit.getSpec().getName();
+		        	
+		        	BBRMailer.send(visit.getPos().getEmail(), 
+		        			"Barbiny: Новая запись в " + visit.getPos().getTitle(), 
+		        			"Время: " + df.format(visit.getTimeScheduled()) + "\n" +
+		        			"Имя: " + visit.getUserName() + "\n" +
+		        			"Контакты: " + visit.getUserContacts() + "\n" +
+		        			"Услуга: " + p + "\n" +
+		        			"Мастер: " + s + "\n" + "\n" + 
+		        			"http://www.barbiny.ru/manager-visit-edit.jsp?id=" + visit.getId());
+		        }catch (Exception ex) {
+		        }
 	        }
-	        
 	        return visit;
         } catch (Exception ex) {
         	BBRUtil.rollbackTran(tr);

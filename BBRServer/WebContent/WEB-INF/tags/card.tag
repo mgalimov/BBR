@@ -77,8 +77,14 @@
 
 <script>
 	var saved = false;
+	var needToGoToGrid = true;
 	var obj;
 
+	function saveChanges() {
+		needToGoToGrid = false;
+		$('#saveChanges').click();
+	}
+	
  	$(document).ready(function () {
  		idParam = getUrlParameter('id');
  		if (idParam == "")
@@ -130,22 +136,27 @@
 			        scrollTop: 0 
 			    }, 200);    			
     		} else
-	            $.get('${method}',
-	             {id:idParam,${itemReq}
-	              operation: op}, 
-	              function(responseText) { 
-					saved = true; 
-					goToGrid('${gridPage}');
-	              }).fail(function(data) {
-					saved = false;
-					$('#alertText').text(data.responseText);
-					$("#saveChanges").prop("disabled", false);
-		    		$("#cancelChanges").prop("disabled", false);
-					$('#alertMessage').removeClass('hide');
-				    $('html body').animate({
-				        scrollTop: 0 
-				    }, 200);
-	              });
+	            $.get('${method}', 
+	            	{
+	            		id:idParam,${itemReq}
+	              		operation: op
+	            	}, 
+	              	function(responseText) { 
+						saved = true; 
+						if (needToGoToGrid)
+							goToGrid('${gridPage}');
+						needToGoToGrid = true;
+	              	}).fail(function(data) {
+						saved = false;
+						$('#alertText').text(data.responseText);
+						$("#saveChanges").prop("disabled", false);
+		    			$("#cancelChanges").prop("disabled", false);
+						$('#alertMessage').removeClass('hide');
+				    	$('html body').animate({
+				        	scrollTop: 0 
+				    	}, 200);
+				    	needToGoToGrid = true;
+	       	       });
            });			 		
 
 		$('#cancelChanges').click(function(event) {

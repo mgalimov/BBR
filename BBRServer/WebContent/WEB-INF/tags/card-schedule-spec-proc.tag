@@ -250,9 +250,9 @@
 			<div class="panel-body">
 				<span class="visit-status-0"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></span> <%=context.gs("LBL_VISIT_INITIALIZED")%><br/>
 				<span class="visit-status-1"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></span> <%=context.gs("LBL_VISIT_APPROVED")%><br/>
-				<span class="visit-status-2"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></span> <%=context.gs("LBL_VISIT_CANCELLED")%><br/>
+<%-- 				<span class="visit-status-2"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></span> <%=context.gs("LBL_VISIT_CANCELLED")%><br/> --%>
 				<span class="visit-status-3"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></span> <%=context.gs("LBL_VISIT_PERFORMED")%><br/>
-				<span class="visit-status-4"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></span> <%=context.gs("LBL_VISIT_DISAPPROVED")%><br/>
+<%-- 				<span class="visit-status-4"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></span> <%=context.gs("LBL_VISIT_DISAPPROVED")%><br/> --%>
 			</div>
 		</div>
 	</div>

@@ -73,7 +73,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				DateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 				Date timeScheduled = df.parse(params.get("timeScheduled"));
 				
-				context.planningVisit = manager.scheduleVisit(
+				context.planningVisit = manager.scheduleVisit(false,
 													pos, 
 													null, 
 													timeScheduled, 
@@ -144,7 +144,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 					context.planningVisit.setUserName(userName);
 					context.planningVisit.setUserContacts(userContacts);
 	
-					context.planningVisit = manager.scheduleVisit(
+					context.planningVisit = manager.scheduleVisit(true,
 							context.planningVisit.getPos(), 
 							context.user, 
 							context.planningVisit.getTimeScheduled(), 
@@ -416,7 +416,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 					spec = manager.findSpecByTimeAndProc(timeScheduled, proc, pos);
 				}
 				
-				BBRVisit visit = manager.scheduleVisit(pos, null, timeScheduled, 
+				BBRVisit visit = manager.scheduleVisit(true, pos, null, timeScheduled, 
 						         proc, spec, userName, userContacts);
 				return visit.toJson();
 						
