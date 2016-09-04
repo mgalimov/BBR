@@ -14,10 +14,14 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
 import org.quartz.impl.StdSchedulerFactory;
+import org.telegram.telegrambots.TelegramApiException;
+import org.telegram.telegrambots.TelegramBotsApi;
+import org.telegram.telegrambots.logging.BotLogger;
 
 import BBR.BBRDataSet;
 import BBRAcc.BBRJob;
 import BBRAcc.BBRJobManager;
+import BBRBots.BBRTelegramBot;
 
 public class BBRListener implements ServletContextListener {
 	private static Scheduler sched;
@@ -75,6 +79,14 @@ public class BBRListener implements ServletContextListener {
     			} catch (ExceptionInInitializerError e) {
     				
     			}
+    	    	
+    	        TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
+    	        try {
+    	            telegramBotsApi.registerBot(new BBRTelegramBot());
+    	        } catch (TelegramApiException e) {
+    	            BotLogger.error("ERROR", e);
+    	        }
+
     		}
     	};
     	thread.start();

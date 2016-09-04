@@ -89,6 +89,13 @@
     </plugins>
   </build>
   
+    <repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+	
   <dependencyManagement>
   	<dependencies>
   		<dependency>
@@ -111,6 +118,11 @@
   			<artifactId>jstl</artifactId>
   			<version>1.2</version>
   		</dependency>
+  		<dependency>
+  			<groupId>com.github.rubenlagus</groupId>
+  			<artifactId>TelegramBots</artifactId>
+  			<version>v2.3.5</version>
+  		</dependency>
   	</dependencies>
   </dependencyManagement>
 
@@ -130,6 +142,10 @@
   	<dependency>
   		<groupId>jstl</groupId>
   		<artifactId>jstl</artifactId>
+  	</dependency>
+  	<dependency>
+	    <groupId>com.github.rubenlagus</groupId>
+	    <artifactId>TelegramBots</artifactId>
   	</dependency>
   </dependencies>
   <artifactId>BBRServer</artifactId>
