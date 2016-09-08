@@ -7,6 +7,7 @@
 <%@ attribute name="customToolbar" %>
 <%@ attribute name="standardFilters" %>
 <%@ attribute name="standardFiltersShopsOnly" %>
+<%@ attribute name="paging"%>
 
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
@@ -18,6 +19,12 @@
 <c:set var="itemToolbar" scope="request" value="${''}"/>
 <c:set var="filterStartDate" scope="request" value="${context.getFilterStartDate()}" />
 <c:set var="filterEndDate" scope="request" value="${context.getFilterEndDate()}" />
+
+<c:if test="${!paging.equals('false')}">
+	<c:set var="paging" value="true"/>
+</c:if>
+
+
 
 <!-- http://www.onjava.com/pub/a/onjava/excerpt/jserverpages3_ch11/ -->
 
@@ -158,6 +165,8 @@
 		 	    	serverSide: true,
 		 	    	lengthChange: false,
 		 	    	searching: false,
+		 	    	paging: ${paging},
+		 	    	pageLength: 25,
 		 	    	language: {
 		 	    		url: 'js/localization/grid_${context.getLocaleString()}.json'
 		 	    	}

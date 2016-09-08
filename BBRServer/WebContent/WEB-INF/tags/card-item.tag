@@ -345,7 +345,7 @@
 				    labelField: '${referenceFieldTitle}',
 				    searchField: '${referenceFieldTitle}',
 				    create: false,
-				    maxOptions: 10,
+				    maxOptions: 100,
 				    maxItems: ${mult},
 				    openOnFocus: true,
 				    load: ${ft}LoadData 

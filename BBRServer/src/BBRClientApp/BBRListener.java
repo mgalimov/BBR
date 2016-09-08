@@ -16,7 +16,6 @@ import org.quartz.SchedulerFactory;
 import org.quartz.impl.StdSchedulerFactory;
 import org.telegram.telegrambots.TelegramApiException;
 import org.telegram.telegrambots.TelegramBotsApi;
-import org.telegram.telegrambots.logging.BotLogger;
 
 import BBR.BBRDataSet;
 import BBRAcc.BBRJob;
@@ -80,13 +79,14 @@ public class BBRListener implements ServletContextListener {
     				
     			}
     	    	
-    	        TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
-    	        try {
-    	            telegramBotsApi.registerBot(new BBRTelegramBot());
-    	        } catch (TelegramApiException e) {
-    	            BotLogger.error("ERROR", e);
-    	        }
-
+    	    	String host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
+    	    	if (host == null || (host != null && host.isEmpty())) {
+	    	        TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
+	    	        try {
+	    	            telegramBotsApi.registerBot(new BBRTelegramBot());
+	    	        } catch (TelegramApiException e) {
+	    	        }
+    	    	}
     		}
     	};
     	thread.start();

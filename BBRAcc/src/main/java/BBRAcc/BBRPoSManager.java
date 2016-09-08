@@ -67,6 +67,15 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
         BBRUtil.commitTran(tr);
         return result;
     }
+	
+	@SuppressWarnings("unchecked")
+	public List<BBRPoS> findByTitleLike(String title) {
+        boolean tr = BBRUtil.beginTran();
+        title = title.replace(" ", "%").replace("\t", "%").replace("\n", "%");
+        List<BBRPoS> list = BBRUtil.getSession().createQuery("from BBRPoS as pos where pos.title like '%" + title + "%'").list();
+        BBRUtil.commitTran(tr);
+        return list;
+    }
 
 	@SuppressWarnings({ "unchecked", "unused" })
 	public BBRDataSet<BBRPoS> listLocal(BBRGPS locationGPS, Double radius) {
