@@ -123,12 +123,17 @@
     		$("*[required]").each(function (i) {
     			if ($(this).val() == "") {
     				$(this).parents("div.form-group").addClass("has-error");
+    				if ($(this).parents("div.tab-pane")) {
+	    				var errTabId = $(this).parents("div.tab-pane").attr("id");
+	    				$("a[aria-controls='" + errTabId + "']").addClass("has-error");
+    				}
     				hasErrors = true;
     			}
     		});
-    		
+   		
     		if (hasErrors) {
-				$("#saveChanges").prop("disabled", false);
+     
+    			$("#saveChanges").prop("disabled", false);
 	    		$("#cancelChanges").prop("disabled", false);
 	    		$('#alertMessage').text('${context.gs("ERR_FILL_REQUIRED_FIELDS")}');
 				$('#alertMessage').removeClass('hide');

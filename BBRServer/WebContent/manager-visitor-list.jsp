@@ -14,7 +14,7 @@
 %>
 
 
-<t:admin-grid-wrapper title="LBL_VISITORS_TITLE">
+<t:wrapper title="LBL_VISITORS_TITLE">
 	<jsp:body>
 		<t:grid method="BBRVisitors" editPage="manager-visitor-edit.jsp" 
 				createPage="" title="LBL_VISITORS_TITLE" 
@@ -71,4 +71,4 @@
 
 		</script>
 	</jsp:body>
-</t:admin-grid-wrapper>
+</t:wrapper>

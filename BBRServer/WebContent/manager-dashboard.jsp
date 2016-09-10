@@ -2,7 +2,7 @@
 		 import="BBRClientApp.BBRContext" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<t:admin-card-wrapper title="LBL_DASHBOARD_TITLE">
+<t:wrapper title="LBL_DASHBOARD_TITLE">
 	<jsp:body>
 		<t:dashboard title="LBL_DASHBOARD_TITLE">
 		  	<t:dashboard-group title="LBL_DASHBOARD_TITLE">
@@ -13,4 +13,4 @@
 		  	</t:dashboard-group>
 		</t:dashboard>
 	</jsp:body>
-</t:admin-card-wrapper>
+</t:wrapper>

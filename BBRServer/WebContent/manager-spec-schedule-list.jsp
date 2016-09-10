@@ -17,10 +17,10 @@
 %>
 
 <script src="js/bbr-maps.js" type="text/javascript"></script>
-<t:general-wrapper title="LBL_SPEC_SCHEDULE_TITLE">
+<t:wrapper title="LBL_SPEC_SCHEDULE_TITLE">
 	<jsp:body>
 		<t:card title="LBL_SPEC_SCHEDULE" gridPage="manager-visit-create.jsp" method="BBRVisits" showFooter="false">
 			<t:card-schedule-spec-proc posId="${posId}"/>
 		</t:card>
 	</jsp:body>
-</t:general-wrapper>
+</t:wrapper>

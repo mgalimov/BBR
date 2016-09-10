@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
-<t:admin-grid-wrapper title="LBL_SERVICES_TITLE">
+<t:wrapper title="LBL_SERVICES_TITLE">
 	<jsp:body>
 		<t:grid method="BBRServices" editPage="system-service-edit.jsp" createPage="system-service-create.jsp"
 		        title="LBL_SERVICES_TITLE" standardFilters="false">
@@ -11,4 +11,4 @@
 			<t:grid-item label="LBL_SERVICE_PRICE" field="currentPrice"/>
 		</t:grid>
 	</jsp:body>
-</t:admin-grid-wrapper>
+</t:wrapper>

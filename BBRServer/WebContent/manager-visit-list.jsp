@@ -70,7 +70,7 @@
 	request.setAttribute("titleMod", titleMod);
 %>
 
-<t:admin-grid-wrapper title="LBL_USER_VISITS_TITLE" titleModifier="${titleMod}">
+<t:wrapper title="LBL_USER_VISITS_TITLE" titleModifier="${titleMod}">
 	<jsp:body>
 		<t:grid method="BBRVisits" editPage="manager-visit-edit.jsp" createPage="manager-visit-edit.jsp" title="LBL_USER_VISITS_TITLE" titleModifier="${titleMod}">
 			<t:grid-item label="LBL_DATE_TIME" field="timeScheduled" />
@@ -89,4 +89,4 @@
 			<t:grid-item label="LBL_BOOKING_CODE" field="bookingCode"/>
 		</t:grid>
 	</jsp:body>
-</t:admin-grid-wrapper>
+</t:wrapper>

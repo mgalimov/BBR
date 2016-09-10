@@ -161,7 +161,7 @@
 		<label>${context.gs('LBL_SET_DATE_TIME_TITLE')}</label>
 	</div>
 
-	<div class="form-group col-md-2 col-sm-3">
+	<div class="form-group col-md-4 col-sm-4">
 		<div class='input-group date' id='datepicker'>
         	<input type='text' class="form-control" />
    			<span class="input-group-addon">
@@ -320,9 +320,6 @@
 	 		});
 	 	}
 
-<% if (mode.isEmpty() || mode.equals("general-edit") || mode.equals("manager-edit")) { %>	
-	 	$("#scheduleTable td").on("click", function(e) {setTime($(e.target));});
-<% } %>	 	
 	 	$("#nextDateBtn").click(function(e) { changeDatesOnButtons(<%=datesPerPage-datesPerPage+1 %>); });
 	 	$("#prevDateBtn").click(function(e) { changeDatesOnButtons(-<%=datesPerPage-datesPerPage+1 %>); });
 	 	$("#todayDateBtn").click(function(e) { changeDatesOnButtons(0); });
@@ -365,6 +362,9 @@
  			posSelected = $("#posinput").val();
  		else
  			posSelected = "";
+ 		
+ 		if (posSelected == "")
+ 			return;
  		
  		$("#timeScheduledinput").val(dateSelected + " ");
  		
@@ -439,8 +439,11 @@
 				}
 				
 				<% if (mode.equals("manager-view") || mode.equals("manager-edit")) { %>
-				$("td.clickable").off('click').tooltip('destroy').removeClass('clickable');
+				$("td.clickable").off("click").tooltip('destroy').removeClass('clickable');
 				<% } %>
+				<% if (mode.isEmpty() || mode.equals("general-edit") || mode.equals("manager-edit")) { %>	
+			 	$("#scheduleTable td").on("click", function(e) {setTime($(e.target));});
+				<% } %>	 
 				
 				for (i = 0; i <= 23; i++)
 					for (j = 0; j < specs.length; j++) {

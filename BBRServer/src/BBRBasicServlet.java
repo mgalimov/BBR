@@ -108,7 +108,7 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 			
 			String drawIndex = params.get("draw");
 			respText = getData(pageNum, rowsPerPage, columns, sortingFields, params, request, response);
-			if (respText.isEmpty()) {
+			if (respText == null || respText.isEmpty()) {
 				BBRDataSet ds = new BBRDataSet<BBRDataElement>(null);
 				respText = ds.toJson();
 			}

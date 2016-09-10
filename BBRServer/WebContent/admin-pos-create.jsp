@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
-<t:admin-card-wrapper title="LBL_POS_TITLE">
+<t:wrapper title="LBL_POS_TITLE">
 	<jsp:body>
 		<t:card method="BBRPoSes" gridPage="admin-pos-list.jsp" title="LBL_POS_TITLE">
 			<t:card-item label="LBL_SHOP" field="shop" type="reference" referenceMethod="BBRShops" referenceFieldTitle="title" isRequired="required"/>
@@ -17,4 +17,4 @@
 			<t:card-item label="LBL_SMS_NOTIFICATION" field="sms" type="text"/>
 		</t:card>
 	</jsp:body>
-</t:admin-card-wrapper>
+</t:wrapper>

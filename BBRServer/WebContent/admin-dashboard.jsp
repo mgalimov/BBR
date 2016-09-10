@@ -5,8 +5,8 @@
 	BBRContext context = BBRContext.getContext(request);
 	request.setAttribute("userName", context.user.getFirstName() + " " + context.user.getLastName());
 %>
-<t:admin-card-wrapper title="LBL_CONTROL_PANEL">
+<t:wrapper title="LBL_CONTROL_PANEL">
 <jsp:body>
   <p>Welcome to control panel, ${userName}</p>
 </jsp:body>
-</t:admin-card-wrapper>
+</t:wrapper>

@@ -46,7 +46,7 @@
 	request.setAttribute("defEndTime", defEndTime);
 %>
 
-<t:admin-card-wrapper title="LBL_EDIT_TURN_TITLE">
+<t:wrapper title="LBL_EDIT_TURN_TITLE">
 <jsp:body>
 		<t:card title="LBL_EDIT_TURN_TITLE" gridPage="manager-turn-list.jsp" method="BBRTurns">
 			<t:toolbar-item label="LBL_GUESS_TURN_BTN" id="guessTurnBtn" />
@@ -61,7 +61,7 @@
 			<t:card-item label="LBL_END_TIME" field="endTime" type="time" defaultValue="${defEndTime}"/>
 		</t:card>
 </jsp:body>
-</t:admin-card-wrapper>
+</t:wrapper>
 
 <script>
 	$(document).ready(function () {

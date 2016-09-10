@@ -28,7 +28,7 @@
 	request.setAttribute("titleMod", titleMod);
 %>
 
-<t:admin-grid-wrapper title="LBL_TRAN_TITLE">
+<t:wrapper title="LBL_TRAN_TITLE">
 	<jsp:body>
 		<t:grid method="BBRTransactions" editPage="" createPage="" 
 				title="LBL_TRAN_TITLE" standardFilters="true" titleModifier="${titleMod}"
@@ -40,4 +40,4 @@
 			<t:grid-item label="LBL_TRAN_CURRENCY" field="currency" />
 		</t:grid>
 	</jsp:body>
-</t:admin-grid-wrapper>
+</t:wrapper>

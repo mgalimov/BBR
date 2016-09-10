@@ -111,7 +111,7 @@
 	context.set("newVisitMode", "general-edit");
 	
 %>
-<t:general-wrapper title="LBL_PLAN_VISIT_TITLE">
+<t:wrapper title="LBL_PLAN_VISIT_TITLE">
 <jsp:body>
 
 <c:choose>
@@ -169,4 +169,4 @@
 	</c:when>
 </c:choose>
 </jsp:body>
-</t:general-wrapper>
+</t:wrapper>

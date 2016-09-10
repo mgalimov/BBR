@@ -2,7 +2,7 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 
-<t:general-wrapper title="LBL_CREATE_PROCEDURE_TITLE">
+<t:wrapper title="LBL_CREATE_PROCEDURE_TITLE">
 <jsp:body>
 		<t:card title="LBL_CREATE_PROCEDURE_TITLE" gridPage="manager-proc-list.jsp" method="BBRProcedures">
 			<t:card-item label="LBL_POS" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes" />
@@ -13,7 +13,7 @@
 			<t:card-item label="LBL_PROC_STATUS" type="select" field="status" options="OPT_PROC_STATUS"/>
 		</t:card>
 </jsp:body>
-</t:general-wrapper>
+</t:wrapper>
 
 <script>
 	$(document).ready(function () {

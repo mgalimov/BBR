@@ -4,7 +4,7 @@
 <%
 	BBRContext context = BBRContext.getContext(request);
 %>
-<t:admin-card-wrapper title="LBL_SUBSCR_EDIT">
+<t:wrapper title="LBL_SUBSCR_EDIT">
 	<jsp:body>
 		<t:modal cancelButtonLabel="BTN_RETURN" processButtonLabel="BTN_CANCEL_SUBSCRIPTION" title="LBL_CANCEL_SUBSCRIPTION" id="modalCancel">
 			${context.gs("LBL_REALLY_WANT_TO_CANCEL_SUBSCRIPTION")}
@@ -22,7 +22,7 @@
 			<t:card-item label="LBL_SUBSCR_STATUS" field="status" type="select" options="OPT_SUBSCR_STATUS"  isDisabled="readonly"/>
 		</t:card>
 	</jsp:body>
-</t:admin-card-wrapper>
+</t:wrapper>
 
 <script>
 	$(document).ready(function () {

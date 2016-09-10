@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<t:general-wrapper title="LBL_EDIT_VISIT_TITLE">
+<t:wrapper title="LBL_EDIT_VISIT_TITLE">
 <jsp:body>
 		<t:card title="LBL_EDIT_VISIT_TITLE" gridPage="general-plan-visit.jsp" method="BBRVisits">
 			<t:card-item label="LBL_POS_SELECTED" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes" isDisabled="readonly"/>
@@ -16,4 +16,4 @@
 			<t:card-item label="LBL_VISIT_STATUS" field="status" type="select" options="OPT_VISIT_STATUS" isDisabled="readonly"/>
 		</t:card>
 </jsp:body>
-</t:general-wrapper>
+</t:wrapper>

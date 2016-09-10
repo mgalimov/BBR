@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
-<t:admin-card-wrapper title="LBL_VISITOR_TITLE">
+<t:wrapper title="LBL_VISITOR_TITLE">
 	<jsp:body>
 		<t:card method="BBRVisitors" gridPage="manager-visitor-list.jsp" title="LBL_VISITOR_TITLE" showFooter="false" showToolbar="true">
 			<t:toolbar-item label="LBL_VISITOR_SHOW_MORE_BTN" id="showMoreButton" accent="btn-info"/> 
@@ -18,4 +18,4 @@
 			});
 		</script>
 	</jsp:body>
-</t:admin-card-wrapper>
+</t:wrapper>

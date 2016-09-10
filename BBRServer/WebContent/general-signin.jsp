@@ -17,7 +17,7 @@
 	request.setAttribute("lastError", lastError);
 %>
 
-<t:general-wrapper title="LBL_SIGN_IN_TITLE">
+<t:wrapper title="LBL_SIGN_IN_TITLE">
 
 <jsp:body>
     <script>
@@ -103,4 +103,4 @@
 		</div>
     </div>
 </jsp:body>
-</t:general-wrapper>
+</t:wrapper>

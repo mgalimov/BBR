@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
 
-<t:admin-card-wrapper title="LBL_TASK_TITLE">
+<t:wrapper title="LBL_TASK_TITLE">
 	<jsp:body>
 		<script>
 			$(document).ready(function() {
@@ -95,4 +95,4 @@
 			});
 		</script>
 	</jsp:body>
-</t:admin-card-wrapper>
+</t:wrapper>

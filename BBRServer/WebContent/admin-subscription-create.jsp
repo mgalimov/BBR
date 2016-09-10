@@ -9,7 +9,7 @@
 	request.setAttribute("now", df.format(new Date()));
 %>
 
-<t:admin-card-wrapper title="LBL_SUBSCR_CREATE">
+<t:wrapper title="LBL_SUBSCR_CREATE">
 	<jsp:body>
 		<t:card method="BBRSubscriptions" gridPage="admin-subscription-list.jsp" title="LBL_SUBSCR_CREATE">
 			<t:card-item label="LBL_SHOP" field="shop" type="reference" referenceMethod="BBRShops" referenceFieldTitle="title"/>
@@ -22,7 +22,7 @@
 			<t:card-item label="LBL_SUBSCR_STATUS" field="status" type="select" options="OPT_SUBSCR_STATUS" isDisabled="readonly"/>
 		</t:card>
 	</jsp:body>
-</t:admin-card-wrapper>
+</t:wrapper>
 
 <script>
 var serviceId; 

@@ -17,7 +17,7 @@
 	request.setAttribute("serviceId", sId);
 	request.setAttribute("serviceTitle", sTitle);
 %>
-<t:admin-card-wrapper title="LBL_SERVICE_PRICE_CREATE">
+<t:wrapper title="LBL_SERVICE_PRICE_CREATE">
 	<jsp:body>
 		<t:card method="BBRServicePrices" gridPage="system-serviceprice-list.jsp" title="LBL_SERVICE_PRICE_CREATE">
 			<t:card-item label="LBL_SERVICE" field="service" type="reference" 
@@ -31,4 +31,4 @@
 			<t:card-item label="LBL_SPRICE_LIMIT" field="creditLimit" type="number" />
 		</t:card>
 	</jsp:body>
-</t:admin-card-wrapper>
+</t:wrapper>

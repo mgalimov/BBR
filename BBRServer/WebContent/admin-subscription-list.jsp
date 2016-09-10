@@ -14,7 +14,7 @@
 		request.setAttribute("viewBtn", "#viewAll");
 %>
 
-<t:admin-grid-wrapper title="LBL_SUBSCRIPTIONS_TITLE">
+<t:wrapper title="LBL_SUBSCRIPTIONS_TITLE">
 	<jsp:body>
 		<t:grid method="BBRSubscriptions" editPage="admin-subscription-edit.jsp" createPage="admin-subscription-create.jsp" 
 				title="LBL_SUBSCRIPTIONS_TITLE" standardFilters="true" standardFiltersShopsOnly="true" customToolbar="True">
@@ -36,7 +36,7 @@
 			<t:grid-item label="LBL_SUBSCR_STATUS" field="status" type="select" options="OPT_SUBSCR_STATUS" />
 		</t:grid>
 	</jsp:body>
-</t:admin-grid-wrapper>
+</t:wrapper>
 
 
 <script>

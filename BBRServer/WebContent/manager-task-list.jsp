@@ -16,7 +16,7 @@
 		request.setAttribute("viewBtn", "#viewAll");
 %>
 
-<t:admin-grid-wrapper title="LBL_TASKS_TITLE">
+<t:wrapper title="LBL_TASKS_TITLE">
 	<jsp:body>
 		<t:grid method="BBRTasks" editPage="manager-task-edit.jsp" 
 				createPage="manager-task-create.jsp" title="LBL_TASKS_TITLE" 
@@ -38,7 +38,7 @@
 			<t:grid-item label="LBL_TASK_STATE" field="state" type="select" options="OPT_TASK_STATE"/>
 		</t:grid>
 	</jsp:body>
-</t:admin-grid-wrapper>
+</t:wrapper>
 
 <script>
 		$(document).ready(function() {

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
-<t:admin-card-wrapper title="LBL_SPEC_CREATE_TITLE">
+<t:wrapper title="LBL_SPEC_CREATE_TITLE">
 	<jsp:body>
 		<t:card method="BBRSpecialists" gridPage="manager-spec-list.jsp" title="LBL_SPEC_CREATE_TITLE">
 			<t:card-item label="LBL_NAME" field="name" type="text" isRequired="required"/>
@@ -12,7 +12,7 @@
 			<t:card-item label="LBL_AVAILABLE_PROCEDURES" field="procedures" type="reference" referenceFieldTitle="title" referenceMethod="BBRProcedures" multiple="true" isRequired="required"/>
 		</t:card>
 	</jsp:body>
-</t:admin-card-wrapper>
+</t:wrapper>
 
 
 <script>
