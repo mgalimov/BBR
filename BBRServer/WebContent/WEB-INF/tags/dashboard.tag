@@ -8,7 +8,7 @@
 <% 
 	BBRContext context = BBRContext.getContext(request);
 %>
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<!-- <script type="text/javascript" src="https://www.google.com/jsapi"></script> -->
 
 <c:set var="items" scope="request" value=""/>
 <c:set var="chartpackages" scope="request" value="'corechart'"/>
@@ -58,11 +58,12 @@
 </div>
 
 <script>
-	google.load('visualization', '1.0', {'packages':[${chartpackages}]});
-	google.setOnLoadCallback(drawCharts);
 	var periods = null;
 	
 	$(document).ready(function () {
+		google.charts.load('current', {'packages':[${chartpackages}]});
+		google.charts.setOnLoadCallback(drawCharts);
+		
 		moment.locale('<%=context.getLocaleString()%>');
 
 		locale = {

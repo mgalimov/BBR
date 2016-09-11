@@ -40,15 +40,16 @@ public abstract class BBRBasicChartServlet extends HttpServlet {
 			
 			BBRChartPeriods periods = new BBRChartPeriods();
 			SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
-			if (!params.get("periods[startDate]").equals(""));
+			if (params.get("periods[startDate]") != null)
+				if (!params.get("periods[startDate]").isEmpty());
 				periods.startDate = df.parse(params.get("periods[startDate]"));
-			if (!params.get("periods[endDate]").equals(""));
+			if (params.get("periods[endDate]") != null && !params.get("periods[endDate]").isEmpty());
 				periods.endDate = df.parse(params.get("periods[endDate]"));
-			if (!params.get("periods[detail]").equals(""));
+			if (params.get("periods[detail]") != null && !params.get("periods[detail]").isEmpty());
 				periods.detail = Integer.parseInt(params.get("periods[detail]"));
-			if (!params.get("periods[compareToStartDate]").equals(""))
+			if (params.get("periods[compareToStartDate]") != null && !params.get("periods[compareToStartDate]").isEmpty())
 				periods.compareToStartDate = df.parse(params.get("periods[compareToStartDate]"));
-			if (!params.get("periods[compareToEndDate]").equals(""))
+			if (params.get("periods[compareToEndDate]") != null && !params.get("periods[compareToEndDate]").isEmpty())
 				periods.compareToEndDate = df.parse(params.get("periods[compareToEndDate]"));
 		
 			BBRPoS pos = null;
@@ -68,7 +69,10 @@ public abstract class BBRBasicChartServlet extends HttpServlet {
 			if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN && pos == null && shop == null)
 				shop = context.user.getShop();
 			
-			respText = getChartData(indicator, type, options, periods, shop, pos, params, request, response);
+			if (pos == null && shop == null)
+				respText = "";
+			else
+				respText = getChartData(indicator, type, options, periods, shop, pos, params, request, response);
 		} catch (Exception ex) {
 			respText = ex.getMessage();
 			if (context != null)

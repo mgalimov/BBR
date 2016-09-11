@@ -44,6 +44,7 @@
 
 <script>
 	function ${indicator}${type}chart () {
+		if (!google.visualization) return;
 		spId = $("#shopposinput").val();
 		shopId = null;
 		posId = null;
@@ -63,8 +64,11 @@
 				posId: posId
 			}
 		}).done(function (data) {
-			var dt = $.parseJSON(data);
-			//var gdt = google.visualization.arrayToDataTable(dt, false);
+			var dt;
+			if (data == "")
+				dt = {cols:[{label:"X",type:"string"},{label:"Y",type:"number"}], rows:[]};
+			else
+				dt = $.parseJSON(data);
 			var gdt = new google.visualization.DataTable(dt);
 			var chart = new google.visualization.${typefunc}(document.getElementById("${indicator}_${type}_chart"));
 			var options = {

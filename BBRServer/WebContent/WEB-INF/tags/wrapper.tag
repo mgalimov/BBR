@@ -50,10 +50,13 @@
 	    <script src="js/bbr-utils.js"></script>
 	    <link href="css/bbr-admin.css" type="text/css" rel="stylesheet">
 		 
-		<!--  Datagrid -->
+		<!-- Datagrid -->
 		<link rel="stylesheet" type="text/css" href="css/dataTables.bootstrap.css">
 		<script type="text/javascript" src="js/jquery.dataTables.js"></script>
 		<script type="text/javascript" src="js/dataTables.bootstrap.js"></script>
+		
+		<!-- Google Charts -->
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   	</head>
   	<body>
 		<t:top-menu title="${context.gs('LBL_CONTROL_PANEL').concat(' ').concat(context.gs(title)).concat(titleModifier)}" />
