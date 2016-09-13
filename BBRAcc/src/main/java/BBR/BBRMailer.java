@@ -32,12 +32,13 @@ public class BBRMailer {
           });
 
         try {
-            final Message message = new MimeMessage(session);
+            final MimeMessage message = new MimeMessage(session);
+            message.setContent(text, "text/plain; charset=UTF-8");
             message.setFrom(new InternetAddress(username));
             message.setRecipients(Message.RecipientType.TO,
                 InternetAddress.parse(address));
-            message.setSubject(subject);
-            message.setText(text);
+            message.setSubject(subject, "UTF-8");
+            message.setText(text, "UTF-8");
 
             Thread thread = new Thread() {;
             	public void run() {
