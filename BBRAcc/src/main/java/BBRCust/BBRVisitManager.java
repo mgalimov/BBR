@@ -900,4 +900,19 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
     		return null;
     	}
     }
+
+	public boolean isTimeAvailable(Date time, Long posId, Long procId) {
+		try {
+			BBRProcedureManager prmgr = new BBRProcedureManager();
+			BBRPoSManager pmgr = new BBRPoSManager();
+			BBRPoS pos = pmgr.findById(posId);
+			BBRProcedure proc = prmgr.findById(procId); 
+			BBRSpecialist spec = findSpecByTimeAndProc(time, proc, pos);
+			if (spec != null)
+				return true;
+			return false;
+		} catch (Exception ex) {
+			return false;
+		}
+	}
 }

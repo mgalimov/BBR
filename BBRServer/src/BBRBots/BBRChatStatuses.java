@@ -15,10 +15,11 @@ public class BBRChatStatuses {
 		 public static final int CHAT_STEP_PROC_SELECTED 	= 20;
 		 public static final int CHAT_STEP_SPEC_BEFORE 		= 25;
 		 public static final int CHAT_STEP_SPEC_SELECTED 	= 30;
-		 public static final int CHAT_STEP_TIME_BEFORE 		= 35;
-		 public static final int CHAT_STEP_TIME_SELECTED 	= 40;
-		 public static final int CHAT_STEP_INFO_BEFORE 		= 45;
-		 public static final int CHAT_STEP_INFO_ENTERED 	= 50;
+		 public static final int CHAT_STEP_TIME_BEFORE 		= 45;
+		 public static final int CHAT_STEP_TIME_SELECTED 	= 50;
+		 public static final int CHAT_STEP_INFO_BEFORE 		= 55;
+		 public static final int CHAT_STEP_PHONE_SELECTED 	= 60;
+		 public static final int CHAT_STEP_NAME_SELECTED 	= 65;
 	}
 	
 	public static void setStatus(String chatId, int status) {
@@ -31,8 +32,8 @@ public class BBRChatStatuses {
 		return chatStatus.get(chatId);
 	}
 
-	public static void setData(String chatId, Long posId, Long procId, Long specId, Date time) {
-		BBRChatDatum d = new BBRChatDatum(posId, procId, specId, time);
+	public static void setData(String chatId, Long posId, Long procId, Long specId, Date time, String phone, String name) {
+		BBRChatDatum d = new BBRChatDatum(posId, procId, specId, time, phone, name);
 		chatData.put(chatId, d);
 	}
 	

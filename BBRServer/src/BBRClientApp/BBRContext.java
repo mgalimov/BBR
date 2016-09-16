@@ -373,7 +373,45 @@ public class BBRContext {
 				else
 					return hrs + " " + mins;
 	}
-	
+
+	public static String getDurationStringL (float duration) {
+		long hour = Math.round(Math.floor(duration));
+		long minutes = Math.round((duration - hour) * 60);
+		
+		String hrs;
+		String mins = "";
+		
+		if (minutes == 1)
+			mins = minutes + " минута";
+		else
+			if (minutes > 0)
+				mins = minutes + " минут";
+			else
+				mins = "";
+		
+		if (hour == 1)
+			hrs = hour + " час";
+		else
+			if (hour >= 2 && hour <= 4)
+				hrs = hour + " часа";
+			else
+				if (hour >= 5)
+					hrs = hour + " часов";
+				else 
+					hrs = "";
+				
+		if (hrs.isEmpty() && mins.isEmpty())
+			return "--";
+		else
+			if (hrs.isEmpty())
+				return mins;
+			else
+				if (mins.isEmpty())
+					return hrs;
+				else
+					return hrs + " " + mins;
+	}
+
 	public String getNowString() {
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 		return df.format(new Date());
