@@ -32,6 +32,18 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 	protected String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String name = params.get("name");
 		String position = params.get("position");
+		String dailyAmountS = params.get("dailyAmount");
+		String procedurePercentS = params.get("procedurePercent");
+		Float dailyAmount = null;
+		Float procedurePercent = null;
+		try {
+			dailyAmount = BBRUtil.convertF(dailyAmountS);
+			procedurePercent = BBRUtil.convertF(procedurePercentS);
+			if (procedurePercent < 0 || procedurePercent > 100 || dailyAmount < 0)
+				throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
+		} catch (Exception ex) {
+			throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
+		}
 		String posId = params.get("pos");
 		String startWorkHour = params.get("startWorkHour");
 		String endWorkHour = params.get("endWorkHour");
@@ -59,7 +71,7 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 			} else
 				throw new Exception(BBRErrors.ERR_PROC_NOTSPECIFIED);
 			
-			manager.createAndStoreSpecialist(name, position, null, pos, status, startWH, endWH, procedures);
+			manager.createAndStoreSpecialist(name, position, dailyAmount, procedurePercent, null, pos, status, startWH, endWH, procedures);
 		}
 		return "";
 	}
@@ -73,6 +85,18 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 		String endWorkHour = params.get("endWorkHour");
 		String procs = params.get("procedures");
 		int status = Integer.parseInt(params.get("status"));
+		String dailyAmountS = params.get("dailyAmount");
+		String procedurePercentS = params.get("procedurePercent");
+		Float dailyAmount = null;
+		Float procedurePercent = null;
+		try {
+			dailyAmount = BBRUtil.convertF(dailyAmountS);
+			procedurePercent = BBRUtil.convertF(procedurePercentS);
+			if (procedurePercent < 0 || procedurePercent > 100 || dailyAmount < 0)
+				throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
+		} catch (Exception ex) {
+			throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
+		}
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullTimeFormat);
 		BBRPoSManager mgrPos = new BBRPoSManager();
 		BBRPoS pos = mgrPos.findById(Long.parseLong(posId));
@@ -81,6 +105,8 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 			spec.setPosition(position);
 			spec.setPos(pos);
 			spec.setUser(null);
+			spec.setDailyAmount(dailyAmount);
+			spec.setProcedurePercent(procedurePercent);
 			if (!startWorkHour.equals(""))
 				spec.setStartWorkHour(df.parse(startWorkHour));
 			if (!endWorkHour.equals(""))

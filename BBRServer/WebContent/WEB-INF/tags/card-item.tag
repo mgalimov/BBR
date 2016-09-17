@@ -123,6 +123,44 @@
 				</script>
 			</c:when>
 
+			<c:when test="${type.equals('picture')}">
+		        <div class="input-group date col-md-3" id="${ft}inputdiv" >
+			        <div class="fileinput fileinput-new" data-provides="fileinput">
+	  					<div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
+						    <img data-src="holder.js/100%x100%" alt="...">
+	  					</div>
+	  					<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
+		  				<div>
+	    					<span class="btn btn-default btn-file"><span class="fileinput-new">Select image</span><span class="fileinput-exists">Change</span><input type="file" name="..."></span>
+	    					<a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+	  					</div>
+					</div> 
+					<input id="${ft}input" type="text" class="form-control ${isHidden}" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled} />
+					<span class="input-group-addon ${isHidden}">
+						<span class="glyphicon ${glyphicon} ${isHidden}"></span>
+					</span>
+				</div>
+				<c:set var="itemSet" scope="request" value="${itemSet}
+		            $('#${ft}input').val(obj.${field});"/>
+		            
+				<c:if test="${defaultValue != null}">
+					<c:if test="${defaultValue == 'now'}">
+						<c:set var="itemPreload" scope="request" value="${itemPreload}
+						  moment.locale('${context.getLocaleString()}');
+						  var m = moment();
+						  $('#${ft}input').val(m.format('${format}'));"/>
+					</c:if>
+					<c:if test="${defaultValue != 'now'}">
+						<c:set var="itemPreload" scope="request" value="${itemPreload}
+   						  $('#${ft}input').val('${defaultValue}');"/>
+					</c:if>
+				</c:if>
+
+				<script>
+					$("#${ft}inputdiv").fileinput();
+				</script>
+			</c:when>
+
 			<c:when test="${type.equals('number')}">
 				<div class="row">
 					<span class="col-md-6 col-lg-5 col-sm-6">

@@ -17,8 +17,11 @@
 				<t:card-item label="LBL_PHONE" type="text" field="userContacts" isRequired="required" />
 				<t:card-item label="LBL_BOOKING_CODE" type="text" field="bookingCode" isDisabled="readonly" />
 				<t:card-item label="LBL_PROCEDURE" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures" isRequired="required" />
+				<t:card-item label="LBL_ADDITIONAL_PROCEDURES" field="procedures" type="reference" referenceFieldTitle="title" referenceMethod="BBRProcedures" multiple="true" isRequired="required"/>
+				<t:card-item label="LBL_LENGTH" type="text" field="length" isRequired="required" />
 				<t:card-item label="LBL_SPEC" type="reference" field="spec" referenceFieldTitle="name" referenceMethod="BBRSpecialists" isRequired="required" />
 				<t:card-item label="LBL_VISIT_STATUS" field="status" type="select" options="OPT_VISIT_STATUS" isDisabled="readonly" defaultValue="3"/>
+				<t:card-item label="LBL_COMMENT" type="text" field="comment" />
 			</t:card-tab>
 			<t:card-tab label="LBL_MONEY_TAB" id="moneyTab">
 				<t:card-item label="LBL_FINAL_PRICE" type="text" field="finalPrice" isRequired="required" />
@@ -27,7 +30,6 @@
 				<t:card-item label="LBL_PRICE_PAID" type="text" field="pricePaid"  isRequired="required"/>
 				<t:card-item label="LBL_AMOUNT_TO_SPECIALIST" type="text" field="amountToSpecialist" isRequired="required"/>
 				<t:card-item label="LBL_AMOUNT_TO_MATERIALS" type="text" field="amountToMaterials" isRequired="required"/>
-				<t:card-item label="LBL_COMMENT" type="text" field="comment" />
 			</t:card-tab>
 		</t:card>
 </jsp:body>
@@ -35,6 +37,9 @@
 
 <script>
 	var posId; 
+	var price = 0;
+	var length = 0;
+	var procedurePercent = 0;
 
 	$(document).ready(function() {
 		posId = $("#posinput").val();
@@ -100,6 +105,22 @@
 		
 		$("#discountPercentinput").change(onChange);
 		$("#finalPriceinput").change(onChange);
+		$("#specinput").change(function () {
+			specId = $("#specinput").val(); 
+			$.ajax({
+	        	url: 'BBRSpecialists',
+	        	data: {
+	        		operation: "getdata",
+	        		id: specId
+	        	}
+        	}).done(function (data) {
+        		d = $.parseJSON(data);
+        		procedurePercent = d.procedurePercent;
+        		if (isNaN(procedurePercent))
+        			procedurePercent = 0;
+        		onChange();
+        	});	
+		});
 		
 		function onChange () {
 			var v = $("#discountPercentinput").val();
@@ -111,6 +132,8 @@
 				$("#discountAmountinput").val(Math.round(fpf * vf / 100));
 				$("#pricePaidinput").val(Math.round(fpf - Math.round(fpf * vf / 100)));
 			}
+			
+			$("#amountToSpecialistinput").val(Math.round(fpf * procedurePercent / 100));
 		}
 		
 		$("#posinput")[0].selectize.on("load", function () {
@@ -122,19 +145,37 @@
 			}
 		});
 		
-		$("#procedureinput").on("change", function() {
-			procId = $("#procedureinput").val();
-			$.ajax({
+		$("#procedureinput").on("change", procChange);
+		$("#proceduresinput").on("change", procChange);
+			
+		
+		function procChange() {
+			price = 0;
+			length = 0;
+			var prids = $("#procedureinput").val();
+			var prids1 = $("#proceduresinput").val(); 
+			if (prids1 != null && prids1 != "")
+				prids = prids + "," + prids1;
+
+			var procIds = prids.split(",");
+			for (i = 0; i < procIds.length; i++) {
+				procId = procIds[i];
+				$.ajax({
 		        	url: 'BBRProcedures',
 		        	data: {
 		        		operation: "getdata",
 		        		id: procId
 		        	}
 	        	}).done(function (data) {
-	        		$("#finalPriceinput").val($.parseJSON(data).price);
+	        		d = $.parseJSON(data);
+	        		length += d.length;
+	        		price += d.price;
+	        		$("#lengthinput").val(length)
+	        		$("#finalPriceinput").val(price);
 	        		onChange();
 	        	});	
-		})
+			}
+		}
 		
 /*		idParam = getUrlParameter('id');
 		if (!idParam || idParam == 'new') {
