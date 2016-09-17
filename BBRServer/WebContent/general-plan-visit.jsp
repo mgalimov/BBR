@@ -436,6 +436,7 @@
 		html += ", 	" + visit.pos.locationDescription + "</p><p/>";
 		html += "<p>${context.gs('LBL_VISIT_STATUS')} &#151; <b>" + visitStatuses[visit.status] + "</b></p><p/>";
 		html += "<p>${context.gs('LBL_YOUR_VISIT_CODE')} <b>" + visit.bookingCode + "</b></p><p/>";
+		html += "<p>${context.gs('LBL_COMMENT')} &#151; <b>" + visit.comment + "</b></p><p/>";
 		return html;
 	}
 	
