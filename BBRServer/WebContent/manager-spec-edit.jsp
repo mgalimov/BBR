@@ -7,6 +7,8 @@
 			<t:card-item label="LBL_NAME" field="name" type="text" isRequired="required" />
 			<t:card-item label="LBL_POS" type="reference" field="pos" referenceFieldTitle="title" referenceMethod="BBRPoSes"/>
 			<t:card-item label="LBL_POSITION" field="position" type="text" isRequired="required" />
+			<t:card-item label="LBL_DAILY_AMOUNT" field="dailyAmount" type="text" isRequired="required" defaultValue="0"/>
+			<t:card-item label="LBL_PROCEDURE_PERCENT" field="procedurePercent" type="text" isRequired="required" defaultValue="0"/>
 			<t:card-item label="LBL_SPEC_STATUS" type="select" field="status" options="OPT_SPEC_STATUS"/>
 			<t:card-item label="LBL_START_WORKHOUR" field="startWorkHour" type="time"/>
 			<t:card-item label="LBL_END_WORKHOUR" field="endWorkHour" type="time"/>

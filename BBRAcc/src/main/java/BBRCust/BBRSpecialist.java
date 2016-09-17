@@ -23,6 +23,12 @@ public class BBRSpecialist extends BBRDataElement {
 	
 	@Column(name="POSITION")
 	private String position;
+
+	@Column(name="DAILY_AMOUNT")
+	private Float dailyAmount;
+
+	@Column(name="PROCEDURE_PERCENT")
+	private Float procedurePercent;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	private BBRUser user;
@@ -53,6 +59,9 @@ public class BBRSpecialist extends BBRDataElement {
 			@JoinColumn(name = "PROC_ID")
 	})
 	private Set<BBRProcedure> procedures;
+	
+	@Column(name="PHOTOPATH")
+	private String photoPath;
 	
 	public BBRSpecialist() {}
 	
@@ -127,6 +136,30 @@ public class BBRSpecialist extends BBRDataElement {
 
 	public void setProcedures(Set<BBRProcedure> procedures) {
 		this.procedures = procedures;
+	}
+
+	public String getPhotoPath() {
+		return photoPath;
+	}
+
+	public void setPhotoPath(String photoPath) {
+		this.photoPath = photoPath;
+	}
+
+	public Float getDailyAmount() {
+		return dailyAmount;
+	}
+
+	public void setDailyAmount(Float dailyAmount) {
+		this.dailyAmount = dailyAmount;
+	}
+
+	public Float getProcedurePercent() {
+		return procedurePercent;
+	}
+
+	public void setProcedurePercent(Float procedurePercent) {
+		this.procedurePercent = procedurePercent;
 	}
 
 }

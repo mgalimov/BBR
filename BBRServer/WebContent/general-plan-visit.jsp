@@ -90,6 +90,10 @@
 				<label for="contactInput">${context.gs("LBL_YOUR_PHONE")}</label>
 				<input type="text" id="contactInput" class="form-control" placeholder="8 (900) 123-45-67" required/>
 			</div>
+			<div class="form-group hide" id="commentGroup">
+				<label for="commentInput">${context.gs("LBL_COMMENT")}</label>
+				<input type="text" id="commentInput" class="form-control" />
+			</div>
 			<div class="form-group hide" id="bookingGroup">
 				<label for="nameInput">${context.gs("LBL_YOUR_VISIT_CODE")}</label>
 				<div class="input-group">
@@ -164,6 +168,7 @@
 						operation: "createWizard",
 						userName: $("#nameInput").val(),
 						userContacts: $("#contactInput").val(),
+						comment: $("#commentInput").val(),
 						timeScheduled: $("#dateInput").val() + " " + timeSelected,
 						pos: ${posId},
 						spec: specId,
@@ -223,6 +228,7 @@
 		$("#dateInputDiv").addClass("hide");
 		$("#nameGroup").addClass("hide");
 		$("#contactGroup").addClass("hide");
+		$("#commentGroup").addClass("hide");
 		$("#bookingGroup").addClass("hide");
 		$("#finishBtn").addClass("hide");
 		$("#closeBtn").addClass("hide");
@@ -266,6 +272,7 @@
 		$("#dateInputDiv").addClass("hide");
 		$("#nameGroup").addClass("hide");
 		$("#contactGroup").addClass("hide");
+		$("#commentGroup").addClass("hide");
 		$("#bookingGroup").addClass("hide");
 		$("#finishBtn").addClass("hide");
 		$("#closeBtn").addClass("hide");
@@ -334,6 +341,7 @@
 					$("#dateInputDiv").addClass("hide");
 					$("#nameGroup").removeClass("hide");
 					$("#contactGroup").removeClass("hide");
+					$("#commentGroup").removeClass("hide");
 					$("#finishBtn").removeClass("hide");
 					$("#nameInput").focus();
 				}
@@ -350,6 +358,7 @@
 		$("#dateInputDiv").addClass("hide");
 		$("#nameGroup").addClass("hide");
 		$("#contactGroup").addClass("hide");
+		$("#commentGroup").addClass("hide");
 		$("#bookingGroup").addClass("hide");
 		$("#finishBtn").addClass("hide");
 		$("#closeBtn").removeClass("hide");
@@ -371,6 +380,7 @@
 		$("#dateInputDiv").addClass("hide");
 		$("#nameGroup").addClass("hide");
 		$("#contactGroup").addClass("hide");
+		$("#commentGroup").addClass("hide");
 		$("#bookingGroup").removeClass("hide");
 		$("#finishBtn").addClass("hide");
 		$("#closeBtn").addClass("hide");

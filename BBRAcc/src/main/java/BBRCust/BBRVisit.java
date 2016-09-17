@@ -1,6 +1,7 @@
 package BBRCust;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -79,6 +80,14 @@ public class BBRVisit extends BBRDataElement {
 	
 	@Column(name="BOOKING_CODE")
 	private String bookingCode = "";
+	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "VISIT_PROC", joinColumns = {
+			@JoinColumn(name = "VISIT_ID")
+	}, inverseJoinColumns = {
+			@JoinColumn(name = "PROC_ID")
+	})
+	private Set<BBRProcedure> procedures;
 	
 	public BBRVisit() {}
 	
@@ -245,6 +254,14 @@ public class BBRVisit extends BBRDataElement {
 
 	public void setBookingCode(String bookingCode) {
 		this.bookingCode = bookingCode;
+	}
+
+	public Set<BBRProcedure> getProcedures() {
+		return procedures;
+	}
+
+	public void setProcedures(Set<BBRProcedure> procedures) {
+		this.procedures = procedures;
 	}
 
 }

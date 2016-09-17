@@ -1,7 +1,9 @@
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Set;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -48,6 +50,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			try {
 				String userName = params.get("userName");
 				String userContacts = params.get("userContacts");
+				String comment = params.get("comment");
 				
 				Long posId = Long.parseLong(params.get("pos"));
 				BBRPoSManager mgrPoS = new BBRPoSManager();
@@ -80,7 +83,8 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 													proc, 
 													spec, 
 													userName,
-													userContacts);
+													userContacts,
+													comment);
 				
 				context.planningVisit.setStatus(BBRVisitStatus.VISSTATUS_APPROVED);
 				manager.update(context.planningVisit);
@@ -151,7 +155,8 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 							context.planningVisit.getProcedure(), 
 							context.planningVisit.getSpec(), 
 							context.planningVisit.getUserName(),
-							context.planningVisit.getUserContacts());
+							context.planningVisit.getUserContacts(),
+							"");
 				}
 	
 				context.setLastVisitStep(++visitStep);
@@ -161,19 +166,31 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 					String userName = params.get("userName");
 					String userContacts = params.get("userContacts");
 					Long posId = Long.parseLong(params.get("pos"));
+					
 					BBRPoSManager mgrPoS = new BBRPoSManager();
 					BBRPoS pos = mgrPoS.findById(posId);
 				
 					Long procedureId = Long.parseLong(params.get("procedure"));
 					BBRProcedureManager mgrProc = new BBRProcedureManager();
-					BBRProcedure proc = mgrProc.findById(procedureId);						
+					BBRProcedure proc = mgrProc.findById(procedureId);	
 	
 					Long specId = Long.parseLong(params.get("spec"));
 					BBRSpecialistManager mgrSpec = new BBRSpecialistManager();
 					BBRSpecialist spec = mgrSpec.findById(specId);						
 					
+					Set<BBRProcedure> procedures = new HashSet<BBRProcedure>();
+					String procs = params.get("procedures");
+					if (!procs.equals("")) {
+						for (String prc : procs.split(",")) {
+							BBRProcedure procedure = mgrProc.findById(Long.parseLong(prc));
+							if (procedure != null) 
+								procedures.add(procedure);
+						}
+					}
+					
 					try {
 						Date realTime = BBRUtil.convertDT(params.get("realTime"));
+						float length = BBRUtil.convertF(params.get("length"));
 						float discountPercent = BBRUtil.convertF(params.get("discountPercent"));
 						float discountAmount = BBRUtil.convertF(params.get("discountAmount"));
 						float pricePaid = BBRUtil.convertF(params.get("pricePaid"));
@@ -186,13 +203,15 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 								proc, 
 								spec, 
 								userName, 
-								userContacts, 
+								userContacts,
+								length,
 								discountPercent, 
 								discountAmount, 
 								pricePaid, 
 								amountToSpecialist, 
 								amountToMaterials, 
-								comment);
+								comment,
+								procedures);
 					} catch (Exception ex) {
 						throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
 					}
@@ -216,11 +235,22 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 	
 			BBRSpecialistManager smgr = new BBRSpecialistManager();
 			BBRSpecialist spec = smgr.findById(Long.parseLong(params.get("spec")));
-		
+
+			Set<BBRProcedure> procedures = new HashSet<BBRProcedure>();
+			String procs = params.get("procedures");
+			if (!procs.equals("")) {
+				for (String prc : procs.split(",")) {
+					BBRProcedure procedure = pmgr.findById(Long.parseLong(prc));
+					if (procedure != null) 
+						procedures.add(procedure);
+				}
+			}
+
 			try {
 				float finalPrice = Float.parseFloat(params.get("finalPrice"));
 				Date timeScheduled = BBRUtil.convertDT(params.get("timeScheduled"));
 				Date realTime = BBRUtil.convertDT(params.get("realTime"));
+				float length = BBRUtil.convertF(params.get("length"));
 				float discountPercent = BBRUtil.convertF(params.get("discountPercent"));
 				float discountAmount = BBRUtil.convertF(params.get("discountAmount"));
 				float pricePaid = BBRUtil.convertF(params.get("pricePaid"));
@@ -235,12 +265,14 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				visit.setSpec(spec);
 				visit.setTimeScheduled(timeScheduled);
 				visit.setRealTime(realTime);
+				visit.setLength(length);
 				visit.setDiscountPercent(discountPercent);
 				visit.setDiscountAmount(discountAmount);
 				visit.setPricePaid(pricePaid);
 				visit.setAmountToSpecialist(amountToSpecialist);
 				visit.setAmountToMaterials(amountToMaterials);
 				visit.setComment(comment);
+				visit.setProcedures(procedures);
 			} catch (Exception ex) {
 				throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
 			}
@@ -379,6 +411,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 		if (operation.equals("createWizard")) {
 			String userName = params.get("userName");
 			String userContacts = params.get("userContacts");
+			String comment = params.get("comment");
 			String timeScheduledS = params.get("timeScheduled");
 			try {
 				SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
@@ -417,7 +450,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				}
 				
 				BBRVisit visit = manager.scheduleVisit(true, pos, null, timeScheduled, 
-						         proc, spec, userName, userContacts);
+						         proc, spec, userName, userContacts, comment);
 				return visit.toJson();
 						
 			} catch (Exception ex) {

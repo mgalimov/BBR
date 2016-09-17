@@ -35,6 +35,9 @@ public class BBRProcedure extends BBRDataElement {
 	@Column(name="STATUS")
 	private int status;
 	
+	@Column(name="PHOTOPATH")
+	private String photoPath;
+	
 	BBRProcedure() {
 	}
 
@@ -84,5 +87,13 @@ public class BBRProcedure extends BBRDataElement {
 
 	public void setPos(BBRPoS pos) {
 		this.pos = pos;
+	}
+
+	public String getPhotoPath() {
+		return photoPath;
+	}
+
+	public void setPhotoPath(String photoPath) {
+		this.photoPath = photoPath;
 	}
 }

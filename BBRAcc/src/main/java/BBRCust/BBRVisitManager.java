@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -34,7 +35,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		classTitle = "Visit";	
 	}
 
-	public BBRVisit scheduleVisit(boolean notification, BBRPoS pos, BBRUser user, Date timeScheduled, BBRProcedure procedure, BBRSpecialist spec, String userName, String userContacts) {
+	public BBRVisit scheduleVisit(boolean notification, BBRPoS pos, BBRUser user, Date timeScheduled, BBRProcedure procedure, BBRSpecialist spec, String userName, String userContacts, String comment) {
 		boolean tr = BBRUtil.beginTran();
         try {
 	        Session session = BBRUtil.getSession();
@@ -52,7 +53,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 			visit.setPricePaid(0);
 			visit.setAmountToSpecialist(0);
 			visit.setAmountToMaterials(0);
-			visit.setComment("");
+			visit.setComment(comment);
 			visit.setBookingCode(generateNewBookingCode());
 	        if (procedure != null) {
 	        	visit.setLength(procedure.getLength());
@@ -119,8 +120,8 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	}
 
 	public BBRVisit createAndStoreVisit(BBRPoS pos, BBRUser user, Date realTime, BBRProcedure procedure, BBRSpecialist spec, String userName, String userContacts,
-									 float discountPercent, float discountAmount, float pricePaid, float amountToSpecialist, float amountToMaterials,
-									 String comment) {
+									 float length, float discountPercent, float discountAmount, float pricePaid, float amountToSpecialist, float amountToMaterials,
+									 String comment, Set<BBRProcedure> procedures) {
 		boolean tr = BBRUtil.beginTran();
         try {
 	        Session session = BBRUtil.getSession();
@@ -134,15 +135,18 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        visit.setUserName(userName);
 	        visit.setUserContacts(userContacts);
 	        visit.setStatus(BBRVisitStatus.VISSTATUS_PERFORMED);
+	        visit.setLength(length);
 			visit.setDiscountPercent(discountPercent);
 			visit.setDiscountAmount(discountAmount);
 			visit.setPricePaid(pricePaid);
 			visit.setAmountToSpecialist(amountToSpecialist);
 			visit.setAmountToMaterials(amountToMaterials);
 			visit.setComment(comment);
+			visit.setProcedures(procedures);
 			
 			if (procedure != null) {
-	        	visit.setLength(procedure.getLength());
+				if (visit.getLength() == null || visit.getLength() <= 0.1)
+					visit.setLength(procedure.getLength());
 		        visit.setFinalPrice(procedure.getPrice());
 	        }
 	        if (visit.getLength() < minimalLength)
