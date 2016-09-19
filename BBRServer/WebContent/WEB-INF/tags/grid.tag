@@ -72,11 +72,10 @@
   </div>
   
  <c:if test="${standardFilters != false}">
-  <div class="col-md-12 collapse" id="filterPanel">
+  <div class="collapse filterPanel" id="filterPanel">
   	<div class="pull-right">
 	  	<form class="form-inline">
 	  		<t:select-shop-pos field="shoppos" isShopsOnly="${standardFiltersShopsOnly}"/>&nbsp;
-	  		<span class='glyphicon glyphicon-calendar'></span>
 	  		<input type='text' class='form-control' id='periodPicker'/>
 	  		<button type="button" class="btn btn-primary" id="applyFilters">
 			  	${context.gs('LBL_DATERANGE_APPLY_BTN')}

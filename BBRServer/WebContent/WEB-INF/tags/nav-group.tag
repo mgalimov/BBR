@@ -9,8 +9,6 @@
    request.setAttribute("allowed", context.isPageAllowed(level));%>
 
 <c:if test="${allowed}">
-	<h5>${context.gs(title)}</h5>
-	<ul class="nav nav-pills nav-stacked">
-	    <jsp:doBody/>
-	</ul>
+	<h4 class="nav">${context.gs(title)}</h4>
+    <jsp:doBody/>
 </c:if>

@@ -8,13 +8,12 @@
 
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
    <div class="container-fluid">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar">
-        <span class="sr-only">${context.gs('LBL_TOP_MENU_TOGGLE_NAV')}</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-
+   	  <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target="#navmenu" data-canvas="body">
+	    <span class="icon-bar"></span>
+	    <span class="icon-bar"></span>
+	    <span class="icon-bar"></span>
+	  </button>
+   
      <div class="navbar-header">
        <a class="navbar-brand" href="${context.getWelcomePage()}">
        		<span class="glyphicon glyphicon-home" aria-hidden="true"></span> <c:out value="${context.gs('LBL_APPLICATION_NAME')}"/>

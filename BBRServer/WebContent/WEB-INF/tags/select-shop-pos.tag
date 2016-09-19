@@ -12,7 +12,7 @@
 
 <c:set var="ft" scope="request" value="${fn:replace(field, '.', '_')}" />
 
-<div class="form-group ${isHidden}" style="width: 160px">
+<div class="form-group ${isHidden}" style="min-width: 160px">
 	<c:set var="isDis" value="${isDisabled}" />
 	<c:if test="${isDisabled.equals('readonly')}">
 		<c:set var="isDis" value="disabled" />

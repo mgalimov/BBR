@@ -9,7 +9,7 @@
 <%-- 			<t:toolbar-item label="LBL_DISAPPROVE_VISIT" id="disapproveButton" accent="btn-danger" condition="obj.status==0 || obj.status==2"></t:toolbar-item> --%>
 			<t:toolbar-item label="LBL_CANCEL_VISIT" id="cancelVisitButton" accent="btn-default" condition="obj.status<=1"></t:toolbar-item>
 			<t:toolbar-item label="LBL_CLOSE_VISIT" id="closeVisitButton" accent="btn-primary" condition="obj.status<=1"></t:toolbar-item>
-			<t:card-tab label="LBL_MAIN_VISIT_TAB" id="mainTab" isActive="true">
+			<t:card-tab label="LBL_MAIN_VISIT_TAB" id="mainTab" isActive="true" combined="true">
 				<t:card-item label="LBL_POS" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes"/>
 				<t:card-item label="LBL_DATE_TIME" type="datetime" field="timeScheduled"/>
 				<t:card-item label="LBL_REAL_TIME" type="datetime" field="realTime" timeStepping="5" defaultValue="now" isRequired="required" />
@@ -23,7 +23,7 @@
 				<t:card-item label="LBL_VISIT_STATUS" field="status" type="select" options="OPT_VISIT_STATUS" isDisabled="readonly" defaultValue="3"/>
 				<t:card-item label="LBL_COMMENT" type="text" field="comment" />
 			</t:card-tab>
-			<t:card-tab label="LBL_MONEY_TAB" id="moneyTab">
+			<t:card-tab label="LBL_MONEY_TAB" id="moneyTab" combined="true">
 				<t:card-item label="LBL_FINAL_PRICE" type="text" field="finalPrice" isRequired="required" />
 				<t:card-item label="LBL_DISCOUNT_PERCENT" type="text" field="discountPercent" defaultValue="0" isRequired="required"/>
 				<t:card-item label="LBL_DISCOUNT_AMOUNT" type="text" field="discountAmount" defaultValue="0" isRequired="required"/>

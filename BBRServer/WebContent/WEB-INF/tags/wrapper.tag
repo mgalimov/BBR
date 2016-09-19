@@ -58,16 +58,16 @@
 		<!-- Google Charts -->
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 		
-		<!-- File Upload -->
+		<!-- File Upload & Nav Menu -->
 		<link rel="stylesheet" href="css/jasny-bootstrap.min.css">
 		<script src="js/jasny-bootstrap.min.js"></script>
   	</head>
   	<body>
-		<t:top-menu title="${context.gs('LBL_CONTROL_PANEL').concat(' ').concat(context.gs(title)).concat(titleModifier)}" />
+ 		<t:top-menu  title="${context.gs('LBL_CONTROL_PANEL')} ${context.gs(title)} ${titleModifier}"/> 
    		<div class="container-fluid">
   			<div class="row">
 		  		<t:side-menu />
-	  			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+	  			<div class="main">
 	  				<jsp:doBody/>
 	  			</div>
   			</div>
