@@ -263,9 +263,9 @@ h4.nav {
 }
 
 /* Tab panels */
-@media (min-width: 1400px) {
+@media (min-width: 1200px) {
 	.tab-content > .tab-pane.combined{
-		width: 45%;
+		width: 49%;
 		display: inline-block !important;
 		padding-right: 20px;
 		padding-left: 20px;
