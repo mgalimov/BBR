@@ -83,7 +83,7 @@
 						<span class='glyphicon glyphicon-calendar'/></span>
 					</span>
 				</div>
-				<div class='input-group input-spec date hide col-md-3 col-xs-3 col-sm-3 col-lg-2' id='dateBtnsDiv'>
+				<div class='input-group input-spec date hide col-md-3 col-xs-4 col-sm-3 col-lg-2' id='dateBtnsDiv'>
 					<div class="btn-group" role="group" aria-label="...">
 						<button class="btn btn-default" title='${context.gs("LBL_TODAY")}' id="todayBtn">
 							&nbsp;&nbsp;<span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp;

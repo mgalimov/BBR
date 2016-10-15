@@ -46,10 +46,20 @@ public class BBRChartPeriods {
 				"CONCAT(STR(YEAR(" + field + ")), '-', STR(MONTH(" + field + ")), '-', STR(DAY(" + field + ")), ' ', STR(HOUR(" + field + ")), ':00')", 
 				"CONCAT(STR(YEAR(" + field + ")), '-', STR(MONTH(" + field + ")), '-', STR(DAY(" + field + ")))", 
 				"CONCAT(STR(YEAR(" + field + ")), '-', STR(MONTH(" + field + ")), '-01')", 
-				"STR(YEAR(timeScheduled))"};
+				"STR(YEAR(" + field + "))"};
 		return functions[detail];
     }
-    
+
+    public static String periodFunction(String field, String altField, int detail) {
+    	String fld = "nullif(" + field + ", " + altField + ")";
+		String[] functions = {fld, 
+				"CONCAT(STR(YEAR(" + fld + ")), '-', STR(MONTH(" + fld + ")), '-', STR(DAY(" + fld + ")), ' ', STR(HOUR(" + fld + ")), ':00')", 
+				"CONCAT(STR(YEAR(" + fld + ")), '-', STR(MONTH(" + fld + ")), '-', STR(DAY(" + fld + ")))", 
+				"CONCAT(STR(YEAR(" + fld + ")), '-', STR(MONTH(" + fld + ")), '-01')", 
+				"STR(YEAR(" + fld + "))"};
+		return functions[detail];
+    }
+
 	private static String indftms[] = {"yyyy-M-dd HH:mm", "yyyy-M-dd HH:mm", "yyyy-M-dd", "yyyy-M-dd", "yyyy"};
 	private static String outdftms[] = {"yyyy-MM-dd HH:mm", "yyyy-MM-dd HH:mm", "yyyy-MM-dd", "yyyy-MM", "yyyy"};
 	private static int delta[] = {0, Calendar.HOUR, Calendar.DAY_OF_MONTH, Calendar.MONTH, Calendar.YEAR};

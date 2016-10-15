@@ -750,8 +750,8 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		Session session = BBRUtil.getSession();
 		
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
-		String pf = BBRChartPeriods.periodFunction("timeScheduled", detail);
-		
+		String pf = BBRChartPeriods.periodFunction("timeScheduled", "realTime", detail);
+	
 		String where = "";
 		if (pos != null)
 			where = " and pos.id = " + pos.getId();
@@ -765,7 +765,8 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		                                  "     and timeScheduled <= '"+df.format(BBRUtil.getEndOfDay(endDate))+"') or " +
 										  "        (realTime >= '"+df.format(BBRUtil.getStartOfDay(startDate))+"' " + 
 		                                  "     and realTime <= '"+df.format(BBRUtil.getEndOfDay(endDate))+"'))" +
-										  "   and status = " + BBRVisitStatus.VISSTATUS_PERFORMED + 
+										  "   and (status = " + BBRVisitStatus.VISSTATUS_PERFORMED + 
+										  "        or status = " + BBRVisitStatus.VISSTATUS_APPROVED + ")" + 
 										  where +
 										  " group by " + pf + 
 										  " order by timeScheduled asc");
@@ -787,7 +788,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		Session session = BBRUtil.getSession();
 		
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
-		String pf = BBRChartPeriods.periodFunction("timeScheduled", detail);
+		String pf = BBRChartPeriods.periodFunction("timeScheduled", "realTime", detail);
 		
 		String where = "";
 		if (pos != null)
@@ -802,7 +803,8 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		                                  "     and timeScheduled <= '"+df.format(BBRUtil.getEndOfDay(endDate))+"') or " +
 										  "        (realTime >= '"+df.format(BBRUtil.getStartOfDay(startDate))+"' " + 
 		                                  "     and realTime <= '"+df.format(BBRUtil.getEndOfDay(endDate))+"'))" +
-										  "   and status = " + BBRVisitStatus.VISSTATUS_PERFORMED + 
+										  "   and (status = " + BBRVisitStatus.VISSTATUS_PERFORMED + 
+										  "        or status = " + BBRVisitStatus.VISSTATUS_APPROVED + ")" + 
 										  where +
 										  " group by " + pf + 
 										  " order by timeScheduled asc");

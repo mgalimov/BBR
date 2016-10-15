@@ -161,7 +161,11 @@ public class BBRChartData extends BBRDataElement {
 
 			Calendar cdr = Calendar.getInstance();
 			if (i < list.size()) {
-				dt = idf.parse((list.get(i)[0]).toString());
+				try {
+					dt = idf.parse((list.get(i)[0]).toString());
+				} catch (Exception ex) {
+					dt = startDate;
+				}
 				cdr.setTime(dt);
 			}
 

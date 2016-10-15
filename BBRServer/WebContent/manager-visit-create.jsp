@@ -19,7 +19,7 @@
 <script src="js/bbr-maps.js" type="text/javascript"></script>
 <t:wrapper title="LBL_CREATE_VISIT_TITLE">
 	<jsp:body>
-		<t:card title="LBL_CREATE_VISIT" gridPage="manager-spec-schedule-list.jsp" method="BBRVisits">
+		<t:card title="LBL_CREATE_VISIT" gridPage="manager-visit-create.jsp" method="BBRVisits">
 			<t:card-schedule-spec-proc posId="${posId}"/>
 		</t:card>
 	</jsp:body>
