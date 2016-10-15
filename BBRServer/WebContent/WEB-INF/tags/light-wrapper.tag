@@ -45,7 +45,7 @@
 	    <script src="js/bbr-utils.js"></script>
 	    <link href="css/bbr-admin.css" rel="stylesheet">	
   	</head>
-  	<body style="padding-top: 0px !important">
+  	<body style="padding-top: 0px !important; padding-left: 0px !important">
   		<div class="container-fluid">
  				<jsp:doBody/>
   		</div>

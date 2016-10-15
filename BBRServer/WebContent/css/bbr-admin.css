@@ -280,6 +280,12 @@ h4.nav {
 	}
 	
 	div.input-group.date {
-		width: 50%;
+		width: 49%;
 	}
 }
+
+/* For small elements */
+	.input-spec {
+		display: inline-table;
+		vertical-align: middle;	
+	}

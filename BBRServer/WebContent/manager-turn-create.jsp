@@ -122,5 +122,9 @@
 				}
 			}
 		}
+		
+		$("#specialistinput")[0].selectize.on("change", function () {
+			$("#guessTurnBtn").click();
+		});
 	});
 </script>

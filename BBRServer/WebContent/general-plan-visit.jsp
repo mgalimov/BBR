@@ -52,7 +52,7 @@
 %>
 <t:light-wrapper title="LBL_PLAN_VISIT_TITLE">
 <jsp:body>
-	<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+	<div class="col-xs-12 col-sm-8 col-md-6 col-lg-6">
 		<t:modal  cancelButtonLabel="BTN_CONFIRM_CANCEL_VISIT_CANCEL" 
 				  processButtonLabel="BTN_CONFIRM_CANCEL_VISIT_PROCESS" 
 				  title="LBL_CONFIRM_CANCEL_VISIT_TITLE" 
@@ -75,12 +75,26 @@
     			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     			<div id="alertText"></div>
 			</div>
-			<div class='input-group date hide' id='dateInputDiv'>	
-				<input id='dateInput' type='text' class='form-control' />
-				<span class='input-group-addon'>
-					<span class='glyphicon glyphicon-calendar'/></span>
-				</span>
+		</div>
+			<div class="row">
+				<div class='input-group input-spec date hide col-md-6 col-xs-5 col-sm-5 col-lg-6' id='dateInputDiv'>	
+					<input id='dateInput' type='text' class='form-control' />
+					<span class='input-group-addon'>
+						<span class='glyphicon glyphicon-calendar'/></span>
+					</span>
+				</div>
+				<div class='input-group input-spec date hide col-md-3 col-xs-3 col-sm-3 col-lg-2' id='dateBtnsDiv'>
+					<div class="btn-group" role="group" aria-label="...">
+						<button class="btn btn-default" title='${context.gs("LBL_TODAY")}' id="todayBtn">
+							&nbsp;&nbsp;<span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp;
+						</button>
+						<button class="btn btn-default" title='${context.gs("LBL_NEXT_DAY")}' id="nextDayBtn">
+							&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>&nbsp;
+						</button>
+					</div>
+				</div>
 			</div>
+		<div class="row">
 			<p/>
 			<div class="form-group hide" id="nameGroup">
 				<label for="nameInput">${context.gs("LBL_YOUR_NAME")}</label>
@@ -216,6 +230,16 @@
 					fillCheck(visitGlobal.bookingCode);
 				});
 		});
+		
+		$("#todayBtn").click(function () {
+			$("#dateInputDiv").data("DateTimePicker").date(new Date);
+		})
+
+		$("#nextDayBtn").click(function () {
+			m = $("#dateInputDiv").data("DateTimePicker").date();
+			m.add(1, "day");
+			$("#dateInputDiv").data("DateTimePicker").date(m);
+		})
 
 	});
 	
@@ -226,6 +250,7 @@
 		$("#procBtn").removeClass("btn-primary").addClass("btn-default");
 		$("#checkBtn").removeClass("btn-primary").addClass("btn-default");
 		$("#dateInputDiv").addClass("hide");
+		$("#dateBtnsDiv").addClass("hide");
 		$("#nameGroup").addClass("hide");
 		$("#contactGroup").addClass("hide");
 		$("#commentGroup").addClass("hide");
@@ -257,6 +282,7 @@
 				specId = $(this).attr('data-id');
 				specName = $(this).attr('data-name');
 				$("#dateInputDiv").removeClass("hide");
+				$("#dateBtnsDiv").removeClass("hide");
 				$("#mainTab").html("");
 				fillTime();
 			})
@@ -270,6 +296,7 @@
 		$("#specBtn").removeClass("btn-primary").addClass("btn-default");
 		$("#checkBtn").removeClass("btn-primary").addClass("btn-default");
 		$("#dateInputDiv").addClass("hide");
+		$("#dateBtnsDiv").addClass("hide");
 		$("#nameGroup").addClass("hide");
 		$("#contactGroup").addClass("hide");
 		$("#commentGroup").addClass("hide");
@@ -301,6 +328,7 @@
 				procId = $(this).attr('data-id');
 				procName = $(this).attr('data-name');
 				$("#dateInputDiv").removeClass("hide");
+				$("#dateBtnsDiv").removeClass("hide");
 				$("#mainTab").html("");
 				fillTime();
 			})
@@ -339,6 +367,7 @@
 				if (timeSelected != "") {
 					$("#selectSpecBody").html("");
 					$("#dateInputDiv").addClass("hide");
+					$("#dateBtnsDiv").addClass("hide");
 					$("#nameGroup").removeClass("hide");
 					$("#contactGroup").removeClass("hide");
 					$("#commentGroup").removeClass("hide");
@@ -356,6 +385,7 @@
 		visitGlobal = visit;
 		
 		$("#dateInputDiv").addClass("hide");
+		$("#dateBtnsDiv").addClass("hide");
 		$("#nameGroup").addClass("hide");
 		$("#contactGroup").addClass("hide");
 		$("#commentGroup").addClass("hide");
@@ -378,6 +408,7 @@
 		$("#specBtn").removeClass("btn-primary").addClass("btn-default");
 		$("#procBtn").removeClass("btn-primary").addClass("btn-default");
 		$("#dateInputDiv").addClass("hide");
+		$("#dateBtnsDiv").addClass("hide");
 		$("#nameGroup").addClass("hide");
 		$("#contactGroup").addClass("hide");
 		$("#commentGroup").addClass("hide");
