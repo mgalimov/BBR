@@ -20,6 +20,11 @@
 <c:set var="chartpackage" scope="page" value=""/>
 
 <c:choose>
+	<c:when test="${type.equals('singleValue')}">
+		<c:set var="chartpackage" scope="page" value=""/>
+		<c:set var="typefunc" scope="page" value="Text"/>
+		<c:set var="chartoptions" scope="page" value=""/>
+	</c:when>
 	<c:when test="${type.equals('pie')}">
 		<c:set var="chartpackage" scope="page" value=""/>
 		<c:set var="typefunc" scope="page" value="PieChart"/>
@@ -65,17 +70,23 @@
 			}
 		}).done(function (data) {
 			var dt;
-			if (data == "")
-				dt = {cols:[{label:"X",type:"string"},{label:"Y",type:"number"}], rows:[]};
-			else
-				dt = $.parseJSON(data);
-			var gdt = new google.visualization.DataTable(dt);
-			var chart = new google.visualization.${typefunc}(document.getElementById("${indicator}_${type}_chart"));
-			var options = {
-					legend: "none",
-					${chartoptions}
-			};
-	        chart.draw(gdt, options);
+			if ("${type}" == "singleValue") {
+				if (data == "")
+					data = "${context.gs('MSG_NO_NEW_DATA')}";
+				$("#${indicator}_${type}_chart").html("<div class='singleValue'>" + data + "</div>");
+			} else {
+				if (data == "")
+					dt = {cols:[{label:"X",type:"string"},{label:"Y",type:"number"}], rows:[]};
+				else
+					dt = $.parseJSON(data);
+				var gdt = new google.visualization.DataTable(dt);
+				var chart = new google.visualization.${typefunc}(document.getElementById("${indicator}_${type}_chart"));
+				var options = {
+						legend: "none",
+						${chartoptions}
+				};
+		        chart.draw(gdt, options);
+			}
 		});
 	};
 </script>

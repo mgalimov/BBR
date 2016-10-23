@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.*;
@@ -17,6 +18,9 @@ import com.google.gson.GsonBuilder;
 public class BBRUtil {
     private static SessionFactory sessionFactory = buildSessionFactory();
     public static final GsonBuilder gsonBuilder = createGsonBuilder();
+    
+    public static final Logger log=Logger.getLogger("BBR");
+    
 	public static final String recordDivider = "@@";
 
 	public static final String fullDateFormat = "yyyy-MM-dd";

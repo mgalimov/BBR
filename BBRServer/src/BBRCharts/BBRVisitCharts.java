@@ -1,5 +1,7 @@
 package BBRCharts;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.annotation.WebServlet;
@@ -7,12 +9,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import BBR.BBRChartData;
+import BBR.BBRUtil;
 import BBR.BBRChartData.BBRChartDataTypes;
 import BBR.BBRChartPeriods;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRShop;
+import BBRAcc.BBRUser.BBRUserRole;
+import BBRClientApp.BBRContext;
 import BBRClientApp.BBRParams;
 import BBRCust.BBRVisitManager;
+import BBRCust.BBRVisit.BBRVisitStatus;
 
 @WebServlet("/BBRVisitCharts")
 public class BBRVisitCharts extends BBRBasicChartServlet {
@@ -22,6 +28,34 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 				BBRChartPeriods period, BBRShop shop, BBRPoS pos,
 			  	BBRParams params, HttpServletRequest request, 
 			  	HttpServletResponse response) {
+
+		if (indicator.equals("newVisits")) {
+			BBRContext context = BBRContext.getContext(request);
+			BBRVisitManager manager = new BBRVisitManager();
+			String where = "";
+			if (context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER)
+				return "0";
+			
+			if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
+				if (context.user.getPos() != null)
+					where = manager.wherePos(context.user.getPos().getId());
+			if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
+				if (context.user.getShop() != null)
+					where = manager.whereShop(context.user.getShop().getId());
+			if (!where.equals("")) 
+				where = "(" + where +") and";
+			Date dt = new Date();
+			SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+			where += "(status = " + BBRVisitStatus.VISSTATUS_INITIALIZED + ") and (timeScheduled >= '" + df.format(BBRUtil.getStartOfDay(dt)) + "')";
+
+			String count1 = manager.count(where).toString();
+			
+	        where += " and (timeScheduled <= '" + df.format(BBRUtil.getEndOfDay(dt)) + "')";
+			String count2 = manager.count(where).toString();
+		
+			return count2 + " на сегодня и " + count1 + " всего";
+		}
+		
 		if (indicator.equals("visitsByPeriod")) {
 			return visitsByPeriod(type, options, period, shop, pos);
 		}

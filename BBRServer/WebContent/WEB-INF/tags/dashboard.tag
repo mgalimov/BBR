@@ -4,6 +4,7 @@
 
 <%@ attribute name="title" required="true" %>
 <%@ attribute name="titleModifier" %>
+<%@ attribute name="hidePanel" %>
 
 <% 
 	BBRContext context = BBRContext.getContext(request);
@@ -13,8 +14,14 @@
 <c:set var="items" scope="request" value=""/>
 <c:set var="chartpackages" scope="request" value="'corechart'"/>
 
+<c:set var="hideClass" value=""/>
+<c:if test='${hidePanel.equals("true")}'>
+	<c:set var="hideClass" value="hide"/>
+</c:if>
+
 <div class="row">
 	<h3>${context.gs(title).concat(titleModifier)}</h3>
+	<div class="${hideClass}">
 	<form class="form-inline pull-right">
 		<span class="glyphicon glyphicon-globe"></span>&nbsp;
 		<t:select-shop-pos field="shoppos" />&nbsp;&nbsp;&nbsp;&nbsp;
@@ -47,6 +54,7 @@
 	       	<button type='button' class="btn btn-primary" id="applyBtn">${context.gs("LBL_DATERANGE_APPLY_BTN")}</button>
 	    </div>
 	 </form>
+	</div>
 </div> 
 
 <div class="row">

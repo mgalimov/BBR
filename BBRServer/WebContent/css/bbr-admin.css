@@ -51,16 +51,17 @@ body {
 .main {
   padding: 20px;
 }
+
 @media (min-width: 768px) {
   .main {
     padding-right: 40px;
     padding-left: 40px;
   }
 }
+
 .main .page-header {
   margin-top: 0;
 }
-
 
 /*
  * Placeholder dashboard
@@ -253,7 +254,10 @@ h4.nav {
 		margin-left: 15px;
 		vertical-align: middle;
 	}	
-
+	
+	.nav-bar {
+		display: none;
+	}
 }
 
 @media (min-width: 768px) {
@@ -289,3 +293,15 @@ h4.nav {
 		display: inline-table;
 		vertical-align: middle;	
 	}
+
+
+/* Dashboard */
+.singleValue {
+	vertical-align: middle;
+	text-align: center;
+	display: inline-block;
+	line-height: 100%;
+	font-size: 200%;
+	height: 100%;
+	width: 100%;
+}

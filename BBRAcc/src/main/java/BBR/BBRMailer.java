@@ -39,12 +39,14 @@ public class BBRMailer {
                 InternetAddress.parse(address));
             message.setSubject(subject, "UTF-8");
             message.setText(text, "UTF-8");
+        	BBRUtil.log.info(text);
 
             Thread thread = new Thread() {;
             	public void run() {
             		try {
 						Transport.send(message);
 					} catch (MessagingException e) {
+						BBRUtil.log.warn(e.getMessage());
 						throw new RuntimeException(e);
 					}
             	}

@@ -6,7 +6,11 @@
 	request.setAttribute("userName", context.user.getFirstName() + " " + context.user.getLastName());
 %>
 <t:wrapper title="LBL_CONTROL_PANEL">
-<jsp:body>
-  <p>Welcome to control panel, ${userName}</p>
-</jsp:body>
+	<jsp:body>
+  		<t:dashboard title="LBL_CONTROL_PANEL" hidePanel="true">
+		  	<t:dashboard-group title="">
+		  		<t:dashboard-item type="singleValue" title="LBL_NEW_VISITS" method="BBRVisitCharts" indicator="newVisits"/>
+		  	</t:dashboard-group>
+		</t:dashboard>
+	</jsp:body>
 </t:wrapper>
