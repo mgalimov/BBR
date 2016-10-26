@@ -56,6 +56,33 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 			return count2 + " на сегодня и " + count1 + " всего";
 		}
 		
+		if (indicator.equals("todayVisits")) {
+			BBRContext context = BBRContext.getContext(request);
+			BBRVisitManager manager = new BBRVisitManager();
+			String where = "";
+			if (context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER)
+				return "0";
+			
+			if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
+				if (context.user.getPos() != null)
+					where = manager.wherePos(context.user.getPos().getId());
+			if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
+				if (context.user.getShop() != null)
+					where = manager.whereShop(context.user.getShop().getId());
+			if (!where.equals("")) 
+				where = "(" + where +") and";
+			Date dt = new Date();
+			SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+			where += "(status in (" + BBRVisitStatus.VISSTATUS_INITIALIZED + ", " + 
+			                          BBRVisitStatus.VISSTATUS_APPROVED +", " + 
+					                  BBRVisitStatus.VISSTATUS_PERFORMED + "))" + 
+			         " and (timeScheduled >= '" + df.format(BBRUtil.getStartOfDay(dt)) + "')" + 
+					 " and (timeScheduled <= '" + df.format(BBRUtil.getEndOfDay(dt)) + "')";
+			String count = manager.count(where).toString();
+		
+			return count + " посещений сегодня";
+		}
+		
 		if (indicator.equals("visitsByPeriod")) {
 			return visitsByPeriod(type, options, period, shop, pos);
 		}

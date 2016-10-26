@@ -79,13 +79,14 @@ public class BBRContext {
 		String email = "";
 		String pwdhash = "";
 		Cookie[] cookies = request.getCookies();
-		for (int i = 0; i < cookies.length; i++) {
-			Cookie c = cookies[i];
-			if (c.getName().equals("email"))
-				email = c.getValue();
-			if (c.getName().equals("pwdhash"))
-				pwdhash = c.getValue();
-		}
+		if (cookies != null)
+			for (int i = 0; i < cookies.length; i++) {
+				Cookie c = cookies[i];
+				if (c.getName().equals("email"))
+					email = c.getValue();
+				if (c.getName().equals("pwdhash"))
+					pwdhash = c.getValue();
+			}
 		
 		if (email != "" && !pwdhash.equals("")) {
 			BBRUser candidate = mgr.findUserByEmail(email);

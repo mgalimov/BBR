@@ -121,7 +121,7 @@
 			<div id="mainTab">
 			</div>
 			<a href="#" class="btn btn-primary hide" id="closeBtn">${context.gs("BTN_CLOSE_BOOKING")}</a>
-			<a href="#" class="btn btn-danger hide" id="cancelBookingBtn">${context.gs("BTN_CANCEL_BOOKING")}</a>
+			<a href="#" class="btn btn-warning hide" id="cancelBookingBtn">${context.gs("BTN_CANCEL_BOOKING")}</a>
 		</div>
 	</div>
 </jsp:body>
@@ -425,25 +425,32 @@
 	}
 	
 	function checkBookingCode() {
-		$.ajax({
-			url: "BBRVisits",
-			data: {
-				operation: "checkBookingCode",
-				code: $("#bookingCodeInput").val()
-			}
-		}).done(function (visit) {
-			if (visit != "") {
-				visitGlobal = $.parseJSON(visit);
-				$("#mainTab").html(displayVisit(visitGlobal));
-
-				if (visitGlobal.status != ${visitStatusCancelled})
-					$("#cancelBookingBtn").removeClass("hide");
-			}
-			else {
-				visitGlobal = null;
-				$("#mainTab").html("${context.gs('MSG_NO_VISIT_WITH_CODE')}");
-			}
-		});
+		var bcode = $("#bookingCodeInput").val();
+		
+		if (bcode != null && bcode != "") {
+			$.ajax({
+				url: "BBRVisits",
+				data: {
+					operation: "checkBookingCode",
+					code: bcode
+				}
+			}).done(function (visit) {
+				if (visit != "") {
+					visitGlobal = $.parseJSON(visit);
+					$("#mainTab").html(displayVisit(visitGlobal));
+	
+					if (visitGlobal.status != ${visitStatusCancelled})
+						$("#cancelBookingBtn").removeClass("hide");
+				}
+				else {
+					visitGlobal = null;
+					$("#mainTab").html("${context.gs('MSG_NO_VISIT_WITH_CODE')}");
+				}
+			});
+		} else {
+			visitGlobal = null;
+			$("#mainTab").html("${context.gs('MSG_NO_VISIT_WITH_CODE')}");
+		}
 	}
 	
 	function displayVisit(visit) {
@@ -456,7 +463,7 @@
 			visitStatuses[s[0]] = s[1]; 
 		}
 		
-		var html = "";
+		var html = "<h3 class='text-success'>${context.gs('LBL_YOU_BOOKED_SUCCESSFULLY')}</h3>";
 		if (visit.procedure)
 			html += "<p>${context.gs('LBL_YOU_BOOKED_PROC')} <b>" + visit.procedure.title + "</b></p><p/>";
 		if (visit.spec)

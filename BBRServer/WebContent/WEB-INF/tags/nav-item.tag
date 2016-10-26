@@ -30,13 +30,20 @@
 
 <c:if test="${badge.equals('true')}">
 <script>
-	$.ajax({url: "${badgeMethod}", 
+	function ${badgeMethod}TimerFunc() {
+		$.ajax({url: "${badgeMethod}", 
 			data: {operation: "badge"}})
 	 	.done(function(data){
 	 		if (data == "")
 	 			$("#${itemId}").addClass("hidden");
 	 		else
 	 			$("#${itemId}").text(data);
-	 	});
+	 		setTimeout(${badgeMethod}TimerFunc, 60000);
+	 	});		
+	}
+
+	setTimeout(${badgeMethod}TimerFunc, 60000);
+	${badgeMethod}TimerFunc();
+	
 </script>
 </c:if>
