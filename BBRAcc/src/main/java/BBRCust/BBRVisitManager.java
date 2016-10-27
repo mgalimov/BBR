@@ -197,17 +197,17 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         DateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormatWithSecs);
         DateFormat sdf = new SimpleDateFormat(BBRUtil.fullDateFormat);
         
-        String select = "select visit.timeScheduled as timeScheduled, visit.spec.id as spec, visit.length as length, "+
+        String select = "select coalesce(visit.realTime, visit.timeScheduled) as timeScheduled, visit.spec.id as spec, visit.length as length, "+
         				"visit.userName as userName, case when trim(visit.userContacts) = '' then '–' else visit.userContacts end as userContacts, " + 
         				"visit.id, visit.status";
         String from = " from BBRVisit visit";
-        String where = " where visit.timeScheduled >= '" + df.format(startOfDay) + "' and "
-        			  + " visit.timeScheduled <= '" + df.format(endOfDay) + "'";
+        String where = " where coalesce(visit.realTime, visit.timeScheduled) >= '" + df.format(startOfDay) + "' and "
+        			  + " coalesce(visit.realTime, visit.timeScheduled) <= '" + df.format(endOfDay) + "'";
         where = where + " and visit.pos.id = " + posId;
         where = where + " and visit.status in (" + BBRVisitStatus.VISSTATUS_APPROVED + ", " + BBRVisitStatus.VISSTATUS_INITIALIZED + ", " + BBRVisitStatus.VISSTATUS_PERFORMED + ")";
         where = where + " and visit.spec.status = " + BBRSpecialistState.SPECSTATE_ACTIVE;
         
-        String orderBy = " order by visit.timeScheduled ASC";
+        String orderBy = " order by coalesce(visit.realTime, visit.timeScheduled) ASC";
         
         Query query = session.createQuery(select + from + where + orderBy);
 		List<Object[]> list = query.list();
@@ -306,15 +306,15 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        Date endOfDay = BBRUtil.getEndOfDay(date);
 	        DateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormatWithSecs);
 	        
-	        String select = "select visit.timeScheduled as timeScheduled, visit.length as length";
+	        String select = "select coalesce(visit.realTime, visit.timeScheduled) as timeScheduled, visit.length as length";
 	        String from = " from BBRVisit visit";
-	        String where = " where visit.timeScheduled >= '" + df.format(startOfDay) + "' and "
-	        			       + " visit.timeScheduled <= '" + df.format(endOfDay) + "'";
+	        String where = " where coalesce(visit.realTime, visit.timeScheduled) >= '" + df.format(startOfDay) + "' and "
+	        			       + " coalesce(visit.realTime, visit.timeScheduled) <= '" + df.format(endOfDay) + "'";
 	        where += " and visit.pos.id = " + posId;
 	        where += " and visit.status in (" + BBRVisitStatus.VISSTATUS_APPROVED + ", " + BBRVisitStatus.VISSTATUS_INITIALIZED + ", " + BBRVisitStatus.VISSTATUS_PERFORMED + ")";
 	        if (spec != null)
 	        	where += " and visit.spec.id = " + specId;
-	        String orderBy = " order by visit.timeScheduled ASC";
+	        String orderBy = " order by coalesce(visit.realTime, visit.timeScheduled) ASC";
 	        
 	        Query query = session.createQuery(select + from + where + orderBy);
 			visitList = query.list();
@@ -462,14 +462,14 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		tr = BBRUtil.beginTran();
 		session = BBRUtil.getSession();
 		try {
-	        String select = "select visit.timeScheduled as timeScheduled, visit.length as length";
+	        String select = "select coalesce(visit.realTime, visit.timeScheduled) as timeScheduled, visit.length as length";
 	        String from = " from BBRVisit visit";
-	        String where = " where visit.timeScheduled >= '" + df.format(startOfDay) + "' and "
-	        			       + " visit.timeScheduled <= '" + df.format(endOfDay) + "'";
+	        String where = " where coalesce(visit.realTime, visit.timeScheduled) >= '" + df.format(startOfDay) + "' and "
+	        			       + " coalesce(visit.realTime, visit.timeScheduled) <= '" + df.format(endOfDay) + "'";
 	        where += " and visit.pos.id = " + posId;
 	        where += " and visit.status in (" + BBRVisitStatus.VISSTATUS_APPROVED + ", " + BBRVisitStatus.VISSTATUS_INITIALIZED + ", " + BBRVisitStatus.VISSTATUS_PERFORMED + ")";
 	        where += " and visit.spec.id in (" + specIds + ")";
-	        String orderBy = " order by visit.timeScheduled ASC";
+	        String orderBy = " order by coalesce(visit.realTime, visit.timeScheduled) ASC";
 	        
 	        Query query = session.createQuery(select + from + where + orderBy);
 			visitList = query.list();
@@ -646,7 +646,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		if (userName == null || userName.isEmpty())
 			return null;
 
-		Query query = session.createQuery("select userName, userContacts, max(timeScheduled) as lastVisitDate"+ 
+		Query query = session.createQuery("select userName, userContacts, max(coalesce(visit.realTime, visit.timeScheduled)) as lastVisitDate"+ 
 		                                  "  from BBRVisit " +  
 										  " where userName = :userName" + 
 		                                  "   and userContacts = :userContacts" +
@@ -769,7 +769,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 										  "        or status = " + BBRVisitStatus.VISSTATUS_APPROVED + ")" + 
 										  where +
 										  " group by " + pf + 
-										  " order by timeScheduled asc");
+										  " order by coalesce(visit.realTime, visit.timeScheduled) asc");
 
 		List<Object[]> list = query.list();
 		BBRUtil.commitTran(tr);
@@ -807,7 +807,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 										  "        or status = " + BBRVisitStatus.VISSTATUS_APPROVED + ")" + 
 										  where +
 										  " group by " + pf + 
-										  " order by timeScheduled asc");
+										  " order by coalesce(visit.realTime, visit.timeScheduled) asc");
 
 		List<Object[]> list = query.list();
 		BBRUtil.commitTran(tr);
@@ -853,14 +853,14 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		tr = BBRUtil.beginTran();
 		session = BBRUtil.getSession();
 		try {
-	        String select = "select visit.spec.id, visit.timeScheduled, visit.length";
+	        String select = "select visit.spec.id, coalesce(visit.realTime, visit.timeScheduled) as timeScheduled, visit.length";
 	        String from = " from BBRVisit visit";
-	        String where = " where visit.timeScheduled >= '" + df.format(startOfDay) + "' and "
-	        			       + " visit.timeScheduled <= '" + df.format(endOfDay) + "'";
+	        String where = " where coalesce(visit.realTime, visit.timeScheduled) >= '" + df.format(startOfDay) + "' and "
+	        			       + " coalesce(visit.realTime, visit.timeScheduled) <= '" + df.format(endOfDay) + "'";
 	        where += " and visit.pos.id = " + pos.getId();
 	        where += " and visit.status in (" + BBRVisitStatus.VISSTATUS_APPROVED + ", " + BBRVisitStatus.VISSTATUS_INITIALIZED + ", " + BBRVisitStatus.VISSTATUS_PERFORMED + ")";
 	        where += " and visit.spec.id in (" + specIds + ")";
-	        String orderBy = " order by visit.timeScheduled ASC";
+	        String orderBy = " order by coalesce(visit.realTime, visit.timeScheduled) ASC";
 	        
 	        Query query = session.createQuery(select + from + where + orderBy);
 			visitList = query.list();

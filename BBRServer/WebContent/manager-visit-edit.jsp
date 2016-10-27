@@ -4,7 +4,7 @@
 
 <t:wrapper title="LBL_EDIT_VISIT_TITLE">
 <jsp:body>
-		<t:card title="LBL_EDIT_VISIT_TITLE" gridPage="manager-visit-list.jsp" method="BBRVisits" showTabs="true">
+		<t:card title="LBL_EDIT_VISIT_TITLE" gridPage="source" method="BBRVisits" showTabs="true">
 			<t:toolbar-item label="LBL_APPROVE_VISIT" id="approveButton" accent="btn-success" condition="obj.status==0 || obj.status==2"></t:toolbar-item>
 <%-- 			<t:toolbar-item label="LBL_DISAPPROVE_VISIT" id="disapproveButton" accent="btn-danger" condition="obj.status==0 || obj.status==2"></t:toolbar-item> --%>
 			<t:toolbar-item label="LBL_CANCEL_VISIT" id="cancelVisitButton" accent="btn-default" condition="obj.status<=1"></t:toolbar-item>
@@ -12,7 +12,7 @@
 			<t:card-tab label="LBL_MAIN_VISIT_TAB" id="mainTab" isActive="true" combined="true">
 				<t:card-item label="LBL_POS" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes"/>
 				<t:card-item label="LBL_DATE_TIME" type="datetime" field="timeScheduled"/>
-				<t:card-item label="LBL_REAL_TIME" type="datetime" field="realTime" timeStepping="5" defaultValue="now" isRequired="required" />
+				<t:card-item label="LBL_REAL_TIME" type="datetime" field="realTime" timeStepping="30" defaultValue="now" isRequired="required" />
 				<t:card-item label="LBL_USER_NAME" type="text" field="userName" isRequired="required" />
 				<t:card-item label="LBL_PHONE" type="text" field="userContacts" isRequired="required" />
 				<t:card-item label="LBL_BOOKING_CODE" type="text" field="bookingCode" isDisabled="readonly" />
@@ -150,8 +150,8 @@
 			
 		
 		function procChange() {
-			price = 0;
-			length = 0;
+			var pr = 0;
+			var len = 0;
 			var prids = $("#procedureinput").val();
 			var prids1 = $("#proceduresinput").val(); 
 			if (prids1 != null && prids1 != "")
@@ -168,10 +168,12 @@
 		        	}
 	        	}).done(function (data) {
 	        		d = $.parseJSON(data);
-	        		length += d.length;
-	        		price += d.price;
-	        		$("#lengthinput").val(length)
-	        		$("#finalPriceinput").val(price);
+	        		len += d.length;
+	        		pr += d.price;
+	        		length = len;
+	        		price = pr;
+	        		$("#lengthinput").val(len)
+	        		$("#finalPriceinput").val(pr);
 	        		onChange();
 	        	});	
 			}

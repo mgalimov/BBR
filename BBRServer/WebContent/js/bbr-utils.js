@@ -21,6 +21,9 @@ function goToGrid(address) {
 		window.location.href = document.referrer; 
 	else
 		goBackOrTo(address);*/
+	if (address == "source") {
+		address = document.referrer;
+	}
 	window.location.href = address;
 }
 
