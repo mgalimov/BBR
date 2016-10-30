@@ -25,7 +25,7 @@
 	<form class="form-inline pull-right">
 		<span class="glyphicon glyphicon-globe"></span>&nbsp;
 		<t:select-shop-pos field="shoppos" />&nbsp;&nbsp;&nbsp;&nbsp;
-	
+
 		<div class="form-group">
 			<span class="glyphicon glyphicon-calendar"></span>&nbsp;
 	       	<input type='text' class="form-control" name="baseDatePicker" id="baseDatePicker"/>

@@ -13,8 +13,8 @@
 				<t:card-item label="LBL_POS" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes"/>
 				<t:card-item label="LBL_DATE_TIME" type="datetime" field="timeScheduled"/>
 				<t:card-item label="LBL_REAL_TIME" type="datetime" field="realTime" timeStepping="30" defaultValue="now" isRequired="required" />
-				<t:card-item label="LBL_USER_NAME" type="text" field="userName" isRequired="required" />
-				<t:card-item label="LBL_PHONE" type="text" field="userContacts" isRequired="required" />
+				<t:card-item label="LBL_USER_NAME" type="text" field="userName" />
+				<t:card-item label="LBL_PHONE" type="text" field="userContacts" />
 				<t:card-item label="LBL_BOOKING_CODE" type="text" field="bookingCode" isDisabled="readonly" />
 				<t:card-item label="LBL_PROCEDURE" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures" isRequired="required" />
 				<t:card-item label="LBL_ADDITIONAL_PROCEDURES" field="procedures" type="reference" referenceFieldTitle="title" referenceMethod="BBRProcedures" multiple="true" isRequired="required"/>
@@ -29,7 +29,7 @@
 				<t:card-item label="LBL_DISCOUNT_AMOUNT" type="text" field="discountAmount" defaultValue="0" isRequired="required"/>
 				<t:card-item label="LBL_PRICE_PAID" type="text" field="pricePaid"  isRequired="required"/>
 				<t:card-item label="LBL_AMOUNT_TO_SPECIALIST" type="text" field="amountToSpecialist" isRequired="required"/>
-				<t:card-item label="LBL_AMOUNT_TO_MATERIALS" type="text" field="amountToMaterials" isRequired="required"/>
+				<t:card-item label="LBL_AMOUNT_TO_MATERIALS" type="text" field="amountToMaterials" isRequired="required" defaultValue="0"/>
 			</t:card-tab>
 		</t:card>
 </jsp:body>

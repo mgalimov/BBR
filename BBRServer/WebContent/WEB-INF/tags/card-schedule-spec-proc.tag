@@ -212,7 +212,6 @@
 		<button class='btn btn-link' id='prevDateBtn' type="button"><span class="glyphicon glyphicon-chevron-left"></span></button>
 		<button class='btn btn-link' id='todayDateBtn' type="button"><span class="glyphicon glyphicon-time"></span></button>
 		<button class='btn btn-link' id='nextDateBtn' type="button"><span class="glyphicon glyphicon-chevron-right"></span></button>
-
 	</div>
 	<div class="col-md-8 col-sm-8 col-xs-8 hidden-sm hidden-xs" >
 		<div class="btn-group btn-group-justified" role="group">

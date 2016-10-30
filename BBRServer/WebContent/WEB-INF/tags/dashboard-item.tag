@@ -12,7 +12,7 @@
 <c:set var="items" scope="request" value="${items}${indicator}${type}chart();
         "/>
 
-<div class="dashboard col-md-6">
+<div class="dashboard">
 	<h4>${context.gs(title)}</h4>
 	<div id="${indicator}_${type}_chart"></div>
 </div>

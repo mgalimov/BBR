@@ -164,7 +164,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			else {
 				try {
 					String userName = params.get("userName");
-					String userContacts = params.get("userContacts");
+					String userContacts = params.get("userContacts");					
 					Long posId = Long.parseLong(params.get("pos"));
 					
 					BBRPoSManager mgrPoS = new BBRPoSManager();

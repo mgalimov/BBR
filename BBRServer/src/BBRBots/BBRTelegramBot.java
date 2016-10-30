@@ -24,6 +24,7 @@ import BBRBots.BBRChatStatuses.BBRChatStatus;
 import BBRClientApp.BBRContext;
 import BBRCust.BBRProcedure;
 import BBRCust.BBRProcedureManager;
+import BBRCust.BBRVisit;
 import BBRCust.BBRVisitManager;
 
 public class BBRTelegramBot extends TelegramLongPollingBot {
@@ -55,19 +56,19 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
 	            
 	            send.setChatId(chatId);
 	            
-	            if (msg.startsWith(COMMAND_START)) {
+	            if (msg.startsWith(COMMAND_START) || msg.toLowerCase().startsWith("отмен")) {
 	            	BBRChatStatuses.setStatus(chatId, BBRChatStatus.CHAT_STEP_INIT);
 	            	send = chooseSalon(msg, send);
 	            	send.setText("Добро пожаловать! Я помогаю записаться в салон красоты.\n\n" + send.getText());
 	            } else
 	            if (msg.startsWith(COMMAND_HELP)) {
 	            	resp = "Я поддерживаю команды:\n" +
-	            		   "/start - начало работы\n" +
+	            		   "/start [ID] - начало работы [и выбор салона]\n" +
 	            		   "/help - справка\n" +
 	            		   "/salon ID - выбор салона";
 	            	send.setText(resp);
 	            } else
-	            if (msg.startsWith(COMMAND_SALON)) {
+	            if (msg.startsWith(COMMAND_SALON) || msg.toLowerCase().startsWith("help") || msg.toLowerCase().startsWith("помо")) {
 	            	send = chooseSalon(msg, send);
 	            } else
 	            if (status == BBRChatStatus.CHAT_STEP_POS_BEFORE) {
@@ -97,9 +98,11 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
 	            if (status == BBRChatStatus.CHAT_STEP_TIME_BEFORE) {
 	            	resp = parseTime(send, msg);
 	            	if (resp != null)
-	            		send.setText(resp + "\n\n" + "Укажите ваш телефон");
-	            	else
+	            		send.setText(resp);
+	            	else {
+	            		send.setText("В это время нет свободных мастеров, очень жаль.");
 	            		send = chooseTime(msg, send);
+	            	}
 	            }  else
 	            if (status == BBRChatStatus.CHAT_STEP_TIME_SELECTED) {
 	            	resp = parsePhone(send, msg);
@@ -110,8 +113,9 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
 	            } else
 	            if (status == BBRChatStatus.CHAT_STEP_PHONE_SELECTED) {
 	            	resp = msg;
-	            	if (resp != null && !resp.isEmpty())
-	            		send.setText("Спасибо, " + resp + "\n\n");
+	            	if (resp != null && !resp.isEmpty()) {
+	            		send.setText(nameSelected(send, resp));
+	            	}
 	            	else
 	            		send.setText("А давайте снова?");
 	            }
@@ -138,7 +142,8 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
     	if (s.length > 1)
     		salon = s[1];
     	if (salon.isEmpty()) {
-    		resp = "Укажите название, код или ИД салона, например /salon strizhi"; 
+    		resp = "Укажите название, код или ИД салона, например /salon strizhi";
+    		send.setText(resp);
     	} else
     	{
     		BBRPoSManager mgr = new BBRPoSManager();
@@ -265,6 +270,22 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
 
 	protected SendMessage chooseTime(String msg, SendMessage send) {
 		String resp = "";
+		Date date = new Date();
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.roll(Calendar.DAY_OF_YEAR, true);
+        SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
+        
+		resp = "Укажите дату и время. Например, 'завтра в 9:00' или '" + df.format(c.getTime()) + " в 6 вечера'";
+		BBRChatStatuses.setStatus(send.getChatId(), BBRChatStatus.CHAT_STEP_TIME_BEFORE);
+		
+    	send.setText(send.getText() + "\n\n" + resp);
+    	return send;
+	
+	}
+	
+	protected SendMessage chooseTime2(String msg, SendMessage send) {
+		String resp = "";
 
 		BBRPoSManager pmgr = new BBRPoSManager();
 		BBRPoS pos = new BBRPoS();
@@ -282,7 +303,7 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
 		
    		BBRVisitManager mgr = new BBRVisitManager();
 
-		send.enableMarkdown(true);
+		send.enableMarkdown(false);
 
 		ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
 		replyKeyboardMarkup.setSelective(true);
@@ -339,7 +360,7 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
 		send.enableMarkdown(false);
 		
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
-		return "Ваше время " + df.format(time);
+		return "Ваше время " + df.format(time) + "\n\n Укажите ваш телефон";
 	}
 
 	protected String parseTime(SendMessage send, String msg) {
@@ -348,15 +369,66 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
 		Long posId = BBRChatStatuses.getData(chatId).posId;
 		Long procId = BBRChatStatuses.getData(chatId).procId;
 		
-		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
+		SimpleDateFormat df1 = new SimpleDateFormat("dd.MM.yyyy");
+		SimpleDateFormat df2 = new SimpleDateFormat("MM/dd/yyyy");
+		SimpleDateFormat tf = new SimpleDateFormat(BBRUtil.fullTimeFormat);
 		BBRVisitManager mgr = new BBRVisitManager();
+		Calendar c = Calendar.getInstance();
 		
 		try {
 			time = df.parse(msg);
-			if (!mgr.isTimeAvailable(time, posId, procId))
-				time = null;
 		} catch (Exception ex) {
-			time = null;
+			String[] timeParts = msg.split("\\s+");
+			String datePart = timeParts[0].trim();
+			if (datePart.equalsIgnoreCase("сегодня")) {
+				time = new Date();
+			} else
+				if (datePart.equalsIgnoreCase("завтра")) {
+					c.setTime(new Date());
+					c.roll(Calendar.DAY_OF_YEAR, true);	
+				} else
+					if (datePart.trim().equalsIgnoreCase("послезавтра")) {
+						c.setTime(new Date());
+						c.add(Calendar.DAY_OF_YEAR, 2);
+					} else
+					{
+						try {
+							c.setTime(df.parse(datePart));
+						} catch (Exception ex0)	{
+							try {
+								c.setTime(df1.parse(datePart));
+							} catch (Exception ex1)	{
+								try {
+									c.setTime(df2.parse(datePart));
+								} catch (Exception ex2)	{
+									c.setTime(new Date());
+								}
+							}
+						}
+					}
+			
+			for (int i = 1; i < timeParts.length; i++) {
+				if (!timeParts[i].trim().equalsIgnoreCase("в")) {
+					try {
+						Date t = tf.parse(timeParts[i].trim());
+						Calendar c1 = Calendar.getInstance();
+						c1.setTime(t);
+						c.set(Calendar.HOUR_OF_DAY, c1.get(Calendar.HOUR_OF_DAY));
+						c.set(Calendar.MINUTE, c1.get(Calendar.MINUTE));
+					} catch (Exception ex3) {
+						c.set(Calendar.HOUR_OF_DAY, 12);
+						c.set(Calendar.MINUTE, 00);
+					}
+					
+				}
+			}
+		}
+
+		time = c.getTime();
+		
+		if (time != null && !mgr.isTimeAvailable(time, posId, procId)) {
+			return null;
 		}
 		
 		if (time == null) {
@@ -395,6 +467,34 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
 		}
 		
 		return phoneSelected(send, phone);
+	}
+
+	protected String nameSelected(SendMessage send, String name) {
+		String chatId = send.getChatId();
+		Long posId = BBRChatStatuses.getData(chatId).posId;
+		Long procId = BBRChatStatuses.getData(chatId).procId;
+		Date time = BBRChatStatuses.getData(chatId).time;
+		String phone = BBRChatStatuses.getData(chatId).phone;
+		BBRChatStatuses.setStatus(chatId, BBRChatStatus.CHAT_STEP_INIT);
+		BBRChatStatuses.setData(chatId, posId, procId, null, time, phone, name);
+
+		BBRVisitManager mgr = new BBRVisitManager();
+		BBRPoSManager pmgr = new BBRPoSManager();
+		BBRPoS pos = pmgr.findById(posId);
+		BBRProcedureManager prmgr = new BBRProcedureManager();
+		BBRProcedure proc = prmgr.findById(procId);
+		
+		BBRVisit visit = mgr.scheduleVisit(true, pos, null, time, proc, null, name, phone, "из Telegram");
+		
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+		String resp = "Спасибо, " + name + "!\n\n" + 
+					  "Вы успешно записались в " + visit.getPos().getTitle() + "!\n" +
+					  "на услугу " + visit.getProcedure().getTitle() + "\n" +
+					  "Ваше время " + df.format(visit.getTimeScheduled()) + ".\n" +
+					  "Код бронирования " + visit.getBookingCode() + ".\n\n" +
+					  "Нажмите /start для того, чтобы начать заново, нажмите /help для справки.";
+		
+		return resp;
 	}
 
 }

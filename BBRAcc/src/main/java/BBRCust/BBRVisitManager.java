@@ -126,6 +126,12 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         try {
 	        Session session = BBRUtil.getSession();
 	        BBRVisit visit = new BBRVisit();
+	        
+			if (userName.isEmpty())
+				userName = "Anonymous";
+			if (userContacts.isEmpty())
+				userContacts = "999999999999";
+				
 	        visit.setPos(pos);
 	        visit.setUser(user);
 	        visit.setTimeScheduled(null);
@@ -197,7 +203,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         DateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormatWithSecs);
         DateFormat sdf = new SimpleDateFormat(BBRUtil.fullDateFormat);
         
-        String select = "select coalesce(visit.realTime, visit.timeScheduled) as timeScheduled, visit.spec.id as spec, visit.length as length, "+
+        String select = "select coalesce(visit.realTime, visit.timeScheduled, visit.timeScheduled, visit.timeScheduled) as timeScheduled, visit.spec.id as spec, visit.length as length, "+
         				"visit.userName as userName, case when trim(visit.userContacts) = '' then '–' else visit.userContacts end as userContacts, " + 
         				"visit.id, visit.status";
         String from = " from BBRVisit visit";
@@ -211,6 +217,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         
         Query query = session.createQuery(select + from + where + orderBy);
 		List<Object[]> list = query.list();
+		BBRUtil.log.info(list.size());
 		
 		String selProc = "";
 		
@@ -820,7 +827,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		if (pos == null) return null;
 		if (proc == null) return null;
 
-		List<Long> specList = null;
+		List<Object[]> specList = null;
 		List<Object[]> visitList = null;
 		String specIds = "";
 		
@@ -831,7 +838,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         
         boolean tr = BBRUtil.beginTran();
 		try {
-	        String select = "select turn.specialist.id";
+	        String select = "select turn.specialist.id, turn.startTime, turn.endTime";
 	        String from = " from BBRTurn turn";
 	        String where = " where turn.date >= '" + df.format(startOfDay) + "' and "
 	        			       + " turn.date <= '" + df.format(endOfDay) + "'";
@@ -845,8 +852,8 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 			BBRUtil.rollbackTran(tr);
 		}
 
-		for (Long s : specList) {
-			specIds += ", " + s;
+		for (Object[] s : specList) {
+			specIds += ", " + ((Long)s[0]).toString();
 		}
 		specIds = specIds.substring(1);
 		
@@ -872,18 +879,31 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		ArrayList<Long> specs = new ArrayList<Long>();
 		Calendar c = Calendar.getInstance();
 		
-        for (Long s : specList) {
+        for (Object[] s : specList) {
         	boolean found = false;
+        	Long spec = (Long)s[0];
+        	Date st = (Date)s[1];
+        	Date et = (Date)s[2];
+
+        	c.setTime(et);
+        	if (proc != null)
+        		c.add(Calendar.MINUTE, -(int)(proc.getLength()));
+        	else 
+        		c.add(Calendar.MINUTE, -30);
+        	
+        	if (timeScheduled.compareTo(st) < 0 || timeScheduled.compareTo(c.getTime()) > 0)
+        		found = true;
+        	
         	for (Object[] v : visitList) {
 				c.setTime((Date)(v[1]));
         		c.add(Calendar.MINUTE, (int)((Float)(v[2])*60));
-        		if ((Long)v[0] == s && c.getTime().compareTo(timeScheduled) > 0 && ((Date)(v[1])).compareTo(timeScheduled) <= 0) {
+        		if ((Long)v[0] == spec && c.getTime().compareTo(timeScheduled) > 0 && ((Date)(v[1])).compareTo(timeScheduled) <= 0) {
         			found = true;
         			break;
         		}
         	}
         	if (!found)
-        		specs.add(s);
+        		specs.add(spec);
         }
         
         if (specs.size() > 0) {

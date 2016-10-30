@@ -153,6 +153,13 @@
 							   });
 					}
 				});
+		var p = window.location.href.split("?")[0];
+		var j = getCookie(p + "-order");
+		
+		if (j && j != "undefined")
+			o = $.parseJSON(j);
+		else
+			o = [${sorting}];
 		
 		var table = $('#grid').DataTable({
 		 			ajax: {
@@ -160,7 +167,7 @@
 		 				type: 'POST'
 		 			},
 		 			columns: [${items}],
-		 	    	order: [${sorting}],
+		 	    	order: o,
 		 	    	serverSide: true,
 		 	    	lengthChange: false,
 		 	    	searching: false,
@@ -179,7 +186,14 @@
 	    $('#grid').on( 'dblclick', 'tbody tr', function (e) {
 	    	$("#edit").click();
 	    	e.stopPropagation();
-	    } );
+	    });
+	    
+	    $('#grid').on( 'draw.dt', function (e) {
+	    	o = $('#grid').DataTable().order();
+	    	p = window.location.href.split("?")[0];
+	    	j = $.toJSON(o);
+	    	setCookie(p + "-order", j, {expires: 7*24*60});
+	    });
 	    
 <c:if test="${standardFilters != false}">	    
 		moment.locale('${context.getLocaleString()}');
