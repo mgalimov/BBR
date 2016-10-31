@@ -776,7 +776,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 										  "        or status = " + BBRVisitStatus.VISSTATUS_APPROVED + ")" + 
 										  where +
 										  " group by " + pf + 
-										  " order by coalesce(visit.realTime, visit.timeScheduled) asc");
+										  " order by coalesce(realTime, timeScheduled) asc");
 
 		List<Object[]> list = query.list();
 		BBRUtil.commitTran(tr);
@@ -814,7 +814,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 										  "        or status = " + BBRVisitStatus.VISSTATUS_APPROVED + ")" + 
 										  where +
 										  " group by " + pf + 
-										  " order by coalesce(visit.realTime, visit.timeScheduled) asc");
+										  " order by coalesce(realTime, timeScheduled) asc");
 
 		List<Object[]> list = query.list();
 		BBRUtil.commitTran(tr);

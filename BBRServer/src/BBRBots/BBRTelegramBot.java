@@ -24,6 +24,7 @@ import BBRBots.BBRChatStatuses.BBRChatStatus;
 import BBRClientApp.BBRContext;
 import BBRCust.BBRProcedure;
 import BBRCust.BBRProcedureManager;
+import BBRCust.BBRSpecialist;
 import BBRCust.BBRVisit;
 import BBRCust.BBRVisitManager;
 
@@ -409,9 +410,27 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
 					}
 			
 			for (int i = 1; i < timeParts.length; i++) {
-				if (!timeParts[i].trim().equalsIgnoreCase("в")) {
+				String tm = timeParts[i].trim().toLowerCase();
+				if (tm.equals("в")) {}
+				if (tm.startsWith("вечер")) {
+					int h = c.get(Calendar.HOUR_OF_DAY);
+					if (h <= 11 && h >= 4)
+						c.add(Calendar.HOUR_OF_DAY, 12);
+				} else
+				if (tm.startsWith("утр")) {
+				} else
+				if (tm.startsWith("ноч")) {
+				} else
+				if (tm.startsWith("дня")) {
+					int h = c.get(Calendar.HOUR_OF_DAY);
+					if (h <= 4 && h >= 1)
+						c.add(Calendar.HOUR_OF_DAY, 12);
+				} else
+				{
 					try {
-						Date t = tf.parse(timeParts[i].trim());
+						if (!tm.contains(":"))
+							tm = tm + ":00";
+						Date t = tf.parse(tm);
 						Calendar c1 = Calendar.getInstance();
 						c1.setTime(t);
 						c.set(Calendar.HOUR_OF_DAY, c1.get(Calendar.HOUR_OF_DAY));
@@ -483,17 +502,28 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
 		BBRPoS pos = pmgr.findById(posId);
 		BBRProcedureManager prmgr = new BBRProcedureManager();
 		BBRProcedure proc = prmgr.findById(procId);
+		BBRSpecialist spec = null;
+		String resp = "";
 		
-		BBRVisit visit = mgr.scheduleVisit(true, pos, null, time, proc, null, name, phone, "из Telegram");
-		
-		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
-		String resp = "Спасибо, " + name + "!\n\n" + 
-					  "Вы успешно записались в " + visit.getPos().getTitle() + "!\n" +
-					  "на услугу " + visit.getProcedure().getTitle() + "\n" +
-					  "Ваше время " + df.format(visit.getTimeScheduled()) + ".\n" +
-					  "Код бронирования " + visit.getBookingCode() + ".\n\n" +
-					  "Нажмите /start для того, чтобы начать заново, нажмите /help для справки.";
-		
+		if (proc != null)
+			spec = mgr.findSpecByTimeAndProc(time, proc, pos);
+
+			
+		if (spec == null) {
+			resp = "Не удалось записать вас к мастеру. Попробуйте другое время.";
+			BBRChatStatuses.setStatus(chatId, BBRChatStatus.CHAT_STEP_TIME_BEFORE);
+		} else {
+			BBRVisit visit = mgr.scheduleVisit(true, pos, null, time, proc, spec, name, phone, "из Telegram");
+			
+			SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+			resp = "Спасибо, " + name + "!\n\n" + 
+			 	  "Вы успешно записались в " + visit.getPos().getTitle() + "\n" +
+				  "на услугу " + visit.getProcedure().getTitle() + "\n" +
+				  "к специалисту " + visit.getSpec().getName() + ".\n\n" +
+				  "Ваше время " + df.format(visit.getTimeScheduled()) + ".\n\n" +
+				  "Код бронирования " + visit.getBookingCode() + ".\n\n" +
+				  "Нажмите /start для того, чтобы начать заново, нажмите /help для справки.";
+		}
 		return resp;
 	}
 

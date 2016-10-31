@@ -31,12 +31,13 @@
 	       	<input type='text' class="form-control" name="baseDatePicker" id="baseDatePicker"/>
 		</div>
 
-		<div class="form-group" style="width: 80px">
+		<div class="form-group" style="width: 90px">
 	       	<select id="detailSelect" name="detailSelect" class="selectized" style="display: none">
 	       		<option value="1">${context.gs("OPT_DATE_DETAIL_HOUR")}</option>
 	       		<option value="2">${context.gs("OPT_DATE_DETAIL_DAY")}</option>
-	       		<option value="3" selected="selected">${context.gs("OPT_DATE_DETAIL_MONTH")}</option>
-	       		<option value="4">${context.gs("OPT_DATE_DETAIL_YEAR")}</option>
+	       		<option value="3" selected="selected">${context.gs("OPT_DATE_DETAIL_WEEK")}</option>
+	       		<option value="4">${context.gs("OPT_DATE_DETAIL_MONTH")}</option>
+	       		<option value="5">${context.gs("OPT_DATE_DETAIL_YEAR")}</option>
 	       	</select>
 	    </div>
 	    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -110,7 +111,7 @@
 				var range = dtp.endDate.diff(dtp.startDate, "days");
 				var detail = $("#detailSelect").val();
 				
-				if (detail >= 3) {
+				if (detail >= 4) {
 					range = Math.round(range / 30);
 					startDate = moment(dtp.startDate);
 					startDate.subtract(range, "months");
