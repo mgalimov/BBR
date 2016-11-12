@@ -86,14 +86,18 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		        	if (visit.getSpec() != null && visit.getSpec().getName() != "")
 		        		s = visit.getSpec().getName();
 		        	
-		        	BBRMailer.send(visit.getPos().getEmail(), 
-		        			"Barbiny: Новая запись в " + visit.getPos().getTitle(), 
-		        			"Время: " + df.format(visit.getTimeScheduled()) + "\n" +
-		        			"Имя: " + visit.getUserName() + "\n" +
-		        			"Контакты: " + visit.getUserContacts() + "\n" +
-		        			"Услуга: " + p + "\n" +
-		        			"Мастер: " + s + "\n" + "\n" + 
-		        			"http://www.barbiny.ru/manager-visit-edit.jsp?id=" + visit.getId());
+		        	String emails = visit.getPos().getEmail();
+		        	
+		        	for (String em : emails.split(",")) {
+			        	BBRMailer.send(em, 
+			        			"Barbiny: Новая запись в " + visit.getPos().getTitle(), 
+			        			"Время: " + df.format(visit.getTimeScheduled()) + "\n" +
+			        			"Имя: " + visit.getUserName() + "\n" +
+			        			"Контакты: " + visit.getUserContacts() + "\n" +
+			        			"Услуга: " + p + "\n" +
+			        			"Мастер: " + s + "\n" + "\n" + 
+			        			"http://www.barbiny.ru/manager-visit-edit.jsp?id=" + visit.getId());
+		        	}
 		        }catch (Exception ex) {
 		        }
 	        }
