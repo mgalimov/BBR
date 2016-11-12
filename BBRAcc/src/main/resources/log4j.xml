@@ -8,17 +8,17 @@
 		</layout>
 	</appender>
 	<appender name="fileAppender" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="./logs/bbr.log" />
+		<param name="File" value="../../logs/bbr.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="aa %p %c: %m%n" />
 		</layout>
 	</appender>
 	<root>
-		<priority value="debug" />
+		<priority value="info" />
 		<appender-ref ref="fileAppender" />
 	</root>
 	<logger name="org.hibernate">
-		<level value="info" />
+		<level value="warn" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 </log4j:configuration>
