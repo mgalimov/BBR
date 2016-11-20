@@ -79,8 +79,8 @@ public class BBRListener implements ServletContextListener {
     				
     			}
     	    	
-    	    	//String host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
-    	    	/*if (host == null || (host != null && host.isEmpty())) */{
+    	    	String host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
+    	    	if (host != null) {
 	    	        TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
 	    	        try {
 	    	            telegramBotsApi.registerBot(new BBRTelegramBot());

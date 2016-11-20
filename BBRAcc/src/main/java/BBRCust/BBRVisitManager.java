@@ -47,7 +47,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        visit.setSpec(spec);
 	        visit.setUserName(userName);
 	        visit.setUserContacts(userContacts);
-	        visit.setStatus(BBRVisitStatus.VISSTATUS_INITIALIZED);
+	        visit.setStatus(BBRVisitStatus.VISSTATUS_APPROVED);
 			visit.setDiscountPercent(0);
 			visit.setDiscountAmount(0);
 			visit.setPricePaid(0);
@@ -97,6 +97,16 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 			        			"Услуга: " + p + "\n" +
 			        			"Мастер: " + s + "\n" + "\n" + 
 			        			"http://www.barbiny.ru/manager-visit-edit.jsp?id=" + visit.getId());
+		        	}
+		        	
+		        	String phones = visit.getPos().getSms();
+		        	
+		        	for (String ph : phones.split(",")) {
+			        	BBRMailer.sendSMS(ph, 
+			        			"Barbiny: " + visit.getPos().getTitle() + "\n" +
+			        			df.format(visit.getTimeScheduled()) + "\n" +
+			        			visit.getUserName() + "\n" +
+			        			visit.getUserContacts());
 		        	}
 		        }catch (Exception ex) {
 		        }
