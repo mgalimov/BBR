@@ -23,6 +23,7 @@ import BBRAcc.BBRPoSManager;
 import BBRBots.BBRChatStatuses.BBRChatStatus;
 import BBRClientApp.BBRContext;
 import BBRCust.BBRProcedure;
+import BBRCust.BBRProcedure.BBRProcedureStatus;
 import BBRCust.BBRProcedureManager;
 import BBRCust.BBRSpecialist;
 import BBRCust.BBRVisit;
@@ -223,7 +224,7 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
 		}
 		
    		BBRProcedureManager mgr = new BBRProcedureManager();
-   		BBRDataSet<BBRProcedure> plist = mgr.list("", "title", pos, null);
+   		BBRDataSet<BBRProcedure> plist = mgr.list("", "id", "pos.id = " + pos.getId() + " and status = " + BBRProcedureStatus.PROCSTATUS_APPROVED);
    		BBRProcedure proc = null;
    		
 		if (plist != null && plist.data.size() > 0) {

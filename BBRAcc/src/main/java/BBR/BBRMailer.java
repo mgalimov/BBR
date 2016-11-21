@@ -35,18 +35,28 @@ import org.jsmpp.util.AbsoluteTimeFormatter;
 import org.jsmpp.util.TimeFormatter;
 
 public class BBRMailer {
-    public static void send(String address, String subject, String text) {
-        final String username = "agent@barbiny.ru";
-        final String password = "barb2807GM";
+	public static String mailServerUserName = "agent@barbiny.ru";
+	public static String mailServerPassword = "barb2807GM";
+	public static String mailServerURL = "smtp.yandex.ru";
+	public static String mailServerPort = "465";
+	
+	public static String smsServerUserName = "barbiny";
+	public static String smsServerPassword = "Gal4502";
+	public static String smsServerURL = "smpp.smsc.ru";
+	public static int smsServerPort = 3700;
+
+	public static void send(String address, String subject, String text) {
+        final String username = mailServerUserName;
+        final String password = mailServerPassword;
 
         Properties props = new Properties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.host", "smtp.yandex.ru");
-        props.put("mail.smtp.socketFactory.port", "465");
+        props.put("mail.smtp.host", mailServerURL);
+        props.put("mail.smtp.socketFactory.port", mailServerPort);
         props.put("mail.smtp.socketFactory.class",
                 "javax.net.ssl.SSLSocketFactory");
-        props.put("mail.smtp.port", "465");
+        props.put("mail.smtp.port", mailServerPort);
 
         Session session = Session.getInstance(props,
           new javax.mail.Authenticator() {
@@ -86,12 +96,12 @@ public class BBRMailer {
     	 
     	 try {
              session.connectAndBind(
-             	"smpp.smsc.ru",//"31.186.99.90",
-             	3700,//2775,
+             	smsServerURL,//"31.186.99.90",
+             	smsServerPort,//2775,
              	new BindParameter(
              		BindType.BIND_TRX,
-             		"barbiny", 	
-             		"Gal4502",	
+             		smsServerUserName, 	
+             		smsServerPassword,	
              		"",
              		TypeOfNumber.ALPHANUMERIC,
              		NumberingPlanIndicator.ISDN,
@@ -106,7 +116,7 @@ public class BBRMailer {
          OptionalParameter sarSegmentSeqnum = OptionalParameters.newSarSegmentSeqnum(1);
     	 
     	 String messageId = null;
-    	 GeneralDataCoding coding = new GeneralDataCoding(Alphabet.ALPHA_UCS2, MessageClass.CLASS0, false);
+    	 GeneralDataCoding coding = new GeneralDataCoding(Alphabet.ALPHA_UCS2, MessageClass.CLASS1, false);
     	 
          try {
              BBRUtil.log.info("SMPP: message sending " + text);
