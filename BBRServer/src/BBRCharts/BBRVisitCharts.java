@@ -44,7 +44,7 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 					where = manager.whereShop(context.user.getShop().getId());
 			if (!where.equals("")) 
 				where = "(" + where +") and";
-			Date dt = new Date();
+			Date dt = BBRUtil.now(context.getTimeZone());
 			SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 			where += "(status = " + BBRVisitStatus.VISSTATUS_INITIALIZED + ") and (timeScheduled >= '" + df.format(BBRUtil.getStartOfDay(dt)) + "')";
 
@@ -71,7 +71,7 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 					where = manager.whereShop(context.user.getShop().getId());
 			if (!where.equals("")) 
 				where = "(" + where +") and";
-			Date dt = new Date();
+			Date dt = BBRUtil.now(context.getTimeZone());
 			SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 			where += "(status in (" + BBRVisitStatus.VISSTATUS_INITIALIZED + ", " + 
 			                          BBRVisitStatus.VISSTATUS_APPROVED +", " + 

@@ -55,6 +55,7 @@
 				  		<input type="checkbox" value="remember-me" name="rememberme"> ${context.gs("LBL_REMEMBER_ME")}
 				  	</label>
 			  	 </div>
+			  	 <input type="text" id="tz" name="timezone" class="hide">
 			  </div>
 		      <div class="panel-footer">
 				 <button class="btn btn-primary" type="submit" id="signIn">${context.gs("LBL_SIGN_IN_BTN")}</button>
@@ -104,3 +105,14 @@
     </div>
 </jsp:body>
 </t:wrapper>
+
+<script>
+	$(document).ready(function () {
+		var tzo = new Date().getTimezoneOffset() / 60;
+		tzo = -tzo;
+		if (tzo < 0)
+			$("#tz").val("UTC-" + (-tzo));
+		else
+			$("#tz").val("UTC+" + tzo);
+	})
+</script>

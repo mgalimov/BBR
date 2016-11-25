@@ -69,10 +69,16 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        	SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 		        try {
 			        BBRTaskManager tmgr = new BBRTaskManager();
-			        tmgr.createAndStoreTask("Подтвердите запись!", null, pos, new Date(), new Date(), 
+			        Date dt = BBRUtil.now(visit.getPos().getTimeZone());
+			        tmgr.createAndStoreTask("Подтвердите запись!", 
+			        						null, 
+			        						pos, 
+			        						dt, 
+			        						dt, 
 			        						df.format(visit.getTimeScheduled()) + " --> " + visit.getPos().getTitle() + 
-			        						", " + visit.getUserName() + ", " + visit.getUserContacts(), 
-			        						BBRVisit.class.getName(), visit.getId());
+			        							", " + visit.getUserName() + ", " + visit.getUserContacts(), 
+			        						BBRVisit.class.getName(), 
+			        						visit.getId());
 			        BBRUtil.commitTran(t);
 		        } catch (Exception ex) {
 		        	BBRUtil.rollbackTran(t);
@@ -568,7 +574,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		if (visit != null) {
 			visit.setStatus(BBRVisitStatus.VISSTATUS_PERFORMED);
 			if (visit.getRealTime() == null) {
-				visit.setRealTime(new Date()); 
+				visit.setRealTime(BBRUtil.now(visit.getPos().getTimeZone())); 
 			}
 			try {
 				update(visit);
@@ -620,7 +626,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		String having = "";
 		if (days != null && days > 0) {
 			Calendar c = Calendar.getInstance();
-			c.setTime(new Date());
+			c.setTime(BBRUtil.now(pos.getTimeZone()));
 			c.add(Calendar.DATE, -days);
 			SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
 			having = " having max(timeScheduled) > '" + df.format(c.getTime()) + "' ";

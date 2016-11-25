@@ -18,3 +18,19 @@
 		</t:card>
 	</jsp:body>
 </t:wrapper>
+
+<script>
+	$("#shopinput").on("change", function () {
+		shopId = $("#shopinput").val();
+		$.get("BBRShops",
+				{	
+					id: shopId,
+					operation: "getdata"
+				}
+			).done(function (data) {
+				shop = $.parseJSON(data);
+				el = $("#timeZoneinput")[0].selectize;
+				el.addItem(shop.timeZone);
+			});
+	});
+</script>

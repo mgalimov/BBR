@@ -111,13 +111,13 @@ public class BBRTurnManager extends BBRDataManager<BBRTurn>{
 		boolean tr = BBRUtil.beginTran();
 		Session session = BBRUtil.getSession();
 		String where = " where specialist.id = " + spec.getId() + 
-						" and date >= '" + df.format(new Date()) + "'" ;
+						" and date >= '" + df.format(BBRUtil.now(spec.getPos().getTimeZone())) + "'" ;
 		String qry = "select max(date) from BBRTurn" + where;
 		Date dt = (Date)session.createQuery(qry).uniqueResult();
 		BBRUtil.commitTran(tr);
 		
 		if (dt == null)
-			dt = new Date();
+			dt = BBRUtil.now(spec.getPos().getTimeZone());
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(dt);

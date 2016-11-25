@@ -4,6 +4,7 @@ import java.lang.reflect.ParameterizedType;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
@@ -173,5 +174,13 @@ public class BBRUtil {
     	} catch (Exception ex) {
     		return null;
     	}
+    }
+    
+    public static Date now(String timeZone) {
+    	Calendar c = Calendar.getInstance();
+    	c.setTime(new Date());
+    	TimeZone tz = TimeZone.getTimeZone(timeZone);
+    	c.setTimeZone(tz);
+    	return c.getTime();
     }
 } 

@@ -35,9 +35,10 @@ public class BBRSignIn extends HttpServlet {
 			String email = params.get("email");
 			String password = params.get("password");
 			String rememberme = params.get("rememberme");
+			String timezone = params.get("timezone");
 			for (int i = 1; i <= 5; i++) {
 				try {
-					context.SignIn(email, password);
+					context.SignIn(email, password, timezone);
 					break;
 				} catch (Exception ex) {
 					Thread.sleep(5000);
@@ -52,6 +53,10 @@ public class BBRSignIn extends HttpServlet {
 						response.addCookie(c);
 						
 						c = new Cookie("pwdhash", context.user.getEncodedPassword());
+						c.setMaxAge(24*60*30);
+						response.addCookie(c);
+						
+						c = new Cookie("timezone", context.getTimeZone());
 						c.setMaxAge(24*60*30);
 						response.addCookie(c);
 					}

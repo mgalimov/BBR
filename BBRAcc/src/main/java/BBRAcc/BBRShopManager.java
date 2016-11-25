@@ -16,13 +16,14 @@ public class BBRShopManager extends BBRDataManager<BBRShop>{
 		classTitle = "Shop";	
 	}
 	
-	public void createAndStoreShop(String title, String country) {
+	public void createAndStoreShop(String title, String country, String timeZone) {
         boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();
 
         BBRShop shop = new BBRShop();
         shop.setTitle(title);
         shop.setCountry(country);
+        shop.setTimeZone(timeZone);
         session.save(shop);
 
         BBRUtil.commitTran(tr);

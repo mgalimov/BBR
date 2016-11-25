@@ -272,7 +272,15 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
 
 	protected SendMessage chooseTime(String msg, SendMessage send) {
 		String resp = "";
-		Date date = new Date();
+		Date date;
+		
+		try {
+			BBRPoSManager mgr = new BBRPoSManager();
+			BBRPoS pos = mgr.findById(BBRChatStatuses.getData(send.getChatId()).posId);
+			date = BBRUtil.now(pos.getTimeZone());
+		} catch (Exception ex) {
+			date = new Date();
+		}
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
 		c.roll(Calendar.DAY_OF_YEAR, true);
@@ -314,7 +322,8 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
         List<KeyboardRow> keyboard = new ArrayList<>();
         KeyboardRow krow = new KeyboardRow();
         
-        Date date = new Date(); 
+		Date date = BBRUtil.now(pos.getTimeZone());
+		
         SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
         Calendar c = Calendar.getInstance();
         int n = 0;
@@ -378,20 +387,29 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
 		BBRVisitManager mgr = new BBRVisitManager();
 		Calendar c = Calendar.getInstance();
 		
+		Date today;
+		try {
+			BBRPoSManager pmgr = new BBRPoSManager();
+			BBRPoS pos = pmgr.findById(BBRChatStatuses.getData(send.getChatId()).posId);
+			today = BBRUtil.now(pos.getTimeZone());
+		} catch (Exception ex1) {
+			today = new Date();
+		}
+		
 		try {
 			time = df.parse(msg);
 		} catch (Exception ex) {
 			String[] timeParts = msg.split("\\s+");
 			String datePart = timeParts[0].trim();
 			if (datePart.equalsIgnoreCase("сегодня")) {
-				time = new Date();
+				time = today;
 			} else
 				if (datePart.equalsIgnoreCase("завтра")) {
-					c.setTime(new Date());
+					c.setTime(today);
 					c.roll(Calendar.DAY_OF_YEAR, true);	
 				} else
 					if (datePart.trim().equalsIgnoreCase("послезавтра")) {
-						c.setTime(new Date());
+						c.setTime(today);
 						c.add(Calendar.DAY_OF_YEAR, 2);
 					} else
 					{
@@ -404,7 +422,7 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
 								try {
 									c.setTime(df2.parse(datePart));
 								} catch (Exception ex2)	{
-									c.setTime(new Date());
+									c.setTime(today);
 								}
 							}
 						}

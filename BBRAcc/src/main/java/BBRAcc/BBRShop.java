@@ -17,6 +17,9 @@ public class BBRShop extends BBRDataElement {
 	
 	@Column(name="COUNTRY")
 	private String country;
+
+	@Column(name="TIMEZONE")
+	private String timeZone;
 	
 	public BBRShop() {}
 	
@@ -42,5 +45,13 @@ public class BBRShop extends BBRDataElement {
 
 	public void setCountry(String country) {
 		this.country = country;
+	}
+
+	public String getTimeZone() {
+		return timeZone;
+	}
+
+	public void setTimeZone(String timeZone) {
+		this.timeZone = timeZone;
 	}
 }

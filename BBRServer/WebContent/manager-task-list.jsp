@@ -35,6 +35,7 @@
 			<t:grid-item label="LBL_PERFORMER" field="performer"/>
 			<t:grid-item label="LBL_TASK_TEXT" field="text"/>
 			<t:grid-item label="LBL_DEADLINE" field="deadline" sort="desc"/>
+			<t:grid-item label="LBL_CREATEDAT" field="createdAt" sort="desc"/>
 			<t:grid-item label="LBL_TASK_STATE" field="state" type="select" options="OPT_TASK_STATE"/>
 		</t:grid>
 	</jsp:body>

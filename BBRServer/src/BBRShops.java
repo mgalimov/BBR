@@ -20,7 +20,8 @@ public class BBRShops extends BBRBasicServlet<BBRShop, BBRShopManager> {
 	protected String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String title = params.get("title");
 		String country = params.get("country");
-		manager.createAndStoreShop(title, country);
+		String timeZone = params.get("timeZone");
+		manager.createAndStoreShop(title, country, timeZone);
 		return "";
 	}
 
@@ -28,8 +29,10 @@ public class BBRShops extends BBRBasicServlet<BBRShop, BBRShopManager> {
 	protected BBRShop beforeUpdate(BBRShop shop, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		String title = params.get("title");
 		String country = params.get("country");
+		String timeZone = params.get("timeZone");
 		shop.setTitle(title);
 		shop.setCountry(country);
+		shop.setTimeZone(timeZone);
 		return shop;		
 	}
 

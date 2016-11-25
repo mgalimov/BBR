@@ -36,7 +36,7 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 		BBRUser performer = mgr.findById(Long.parseLong(performerId));
 		if (performer != null) {
 			SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
-			Date createdAt = new Date();
+			Date createdAt = BBRUtil.now(BBRContext.getContext(request).timeZone);
 			Date deadline;
 			try {
 				deadline = df.parse(params.get("deadline"));
@@ -57,7 +57,7 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 		BBRUser performer = mgr.findById(Long.parseLong(performerId));
 		if (performer != null) {
 			SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
-			Date createdAt = new Date();
+			Date createdAt = BBRUtil.now(BBRContext.getContext(request).timeZone);
 			Date deadline;
 			try {
 				deadline = df.parse(params.get("deadline"));
@@ -69,7 +69,8 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 	    	task.setTitle(title);
 	    	task.setPerformer(performer);
 	    	task.setDeadline(deadline);
-	    	task.setCreatedAt(createdAt);
+	    	if (task.getCreatedAt() == null)
+	    		task.setCreatedAt(createdAt);
 	    	task.setText(text);
 	        task.setState((int) Long.parseLong(state));
 	        return task;

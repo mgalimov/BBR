@@ -114,13 +114,18 @@ public class BBRTurns extends BBRBasicServlet<BBRTurn, BBRTurnManager> {
 
 		BBRContext context = BBRContext.getContext(request);
 		String where = "";
+		String tz = "";
 		if (context.user != null) {
 			if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN || context.user.getRole() == BBRUserRole.ROLE_POS_SPECIALIST)
-				if (context.user.getPos() != null)
+				if (context.user.getPos() != null) {
 					where = manager.wherePos(context.user.getPos().getId());
+					tz = context.user.getPos().getTimeZone();
+				}
 			if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
-				if (context.user.getShop() != null)
+				if (context.user.getShop() != null) {
 					where = manager.whereShop(context.user.getShop().getId());
+					tz = context.user.getShop().getTimeZone();
+				}
 		}
 		
 		String specId = (String)context.get("spec");
@@ -134,7 +139,7 @@ public class BBRTurns extends BBRBasicServlet<BBRTurn, BBRTurnManager> {
 			SimpleDateFormat sdf = new SimpleDateFormat(BBRUtil.fullDateFormat);
 			if (!where.isEmpty())
 				where += " and ";
-			where += "date >= '" +  sdf.format(new Date()) + "'";
+			where += "date >= '" +  sdf.format(BBRUtil.now(tz)) + "'";
 		}
 		
 		return manager.list(pageNumber, pageSize, where, BBRContext.getOrderBy(sortingFields, fields)).toJson();

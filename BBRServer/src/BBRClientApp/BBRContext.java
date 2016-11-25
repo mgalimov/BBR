@@ -26,6 +26,7 @@ public class BBRContext {
 	public Date filterEndDate = null;
 	public BBRShop filterShop = null;
 	public BBRPoS filterPoS = null;
+	public String timeZone = "";
 	
 	private String lastSignInError = "";
 	private BBRGPS location = null;
@@ -37,6 +38,7 @@ public class BBRContext {
 	
 	public BBRContext() {
 		setLocale("ru", "RU");
+		timeZone = "UTC+3";
 	}
 	
 	public static BBRContext getContext(HttpServletRequest request) {
@@ -50,7 +52,7 @@ public class BBRContext {
 		return app;
 	}
 
-	public String SignIn(String email, String password) {
+	public String SignIn(String email, String password, String timeZone) {
 		BBRUserManager mgr = new BBRUserManager();
 		
 		if (email == null || email.equals("")) {
@@ -63,6 +65,7 @@ public class BBRContext {
 				if (candidate.comparePasswordTo(BBRUserManager.encodePassword(password))) {
 					user = candidate;
 					setLocale(user.getLanguage());
+					this.timeZone = timeZone;
 					lastSignInError = "";
 				} else {
 					lastSignInError = gs(BBRErrors.ERR_INCORRECT_PASSWORD);
@@ -78,6 +81,7 @@ public class BBRContext {
 		
 		String email = "";
 		String pwdhash = "";
+		String timeZone = "";
 		Cookie[] cookies = request.getCookies();
 		if (cookies != null)
 			for (int i = 0; i < cookies.length; i++) {
@@ -86,6 +90,8 @@ public class BBRContext {
 					email = c.getValue();
 				if (c.getName().equals("pwdhash"))
 					pwdhash = c.getValue();
+				if (c.getName().equals("timezone"))
+					timeZone = c.getValue();
 			}
 		
 		if (email != "" && !pwdhash.equals("")) {
@@ -96,6 +102,7 @@ public class BBRContext {
 				if (candidate.comparePasswordTo(pwdhash)) {
 					user = candidate;
 					setLocale(user.getLanguage());
+					this.timeZone = timeZone;
 					lastSignInError = "";
 				} else {
 					lastSignInError = gs(BBRErrors.ERR_INCORRECT_PASSWORD);
@@ -415,6 +422,10 @@ public class BBRContext {
 
 	public String getNowString() {
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
-		return df.format(new Date());
+		return df.format(BBRUtil.now(timeZone));
+	}
+
+	public String getTimeZone() {
+		return timeZone;
 	}
 }
