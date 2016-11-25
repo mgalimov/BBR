@@ -179,8 +179,10 @@ public class BBRUtil {
     public static Date now(String timeZone) {
     	Calendar c = Calendar.getInstance();
     	c.setTime(new Date());
-    	TimeZone tz = TimeZone.getTimeZone(timeZone);
-    	c.setTimeZone(tz);
+    	int off = c.getTimeZone().getRawOffset();
+    	TimeZone tz = TimeZone.getTimeZone("Etc/" + timeZone.trim().replace("UTC", "GMT").replace("+","*").replace("-","+").replace("*","-"));
+    	int off1 = tz.getRawOffset();
+    	c.add(Calendar.MILLISECOND, off1 - off);
     	return c.getTime();
     }
 } 
