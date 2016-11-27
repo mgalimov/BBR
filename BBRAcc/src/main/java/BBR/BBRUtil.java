@@ -177,10 +177,15 @@ public class BBRUtil {
     }
     
     public static Date now(String timeZone) {
+    	if (timeZone == null)
+    		timeZone = "GMT";
+    	timeZone = timeZone.trim();
+    	if (timeZone.startsWith("UTC") || timeZone.startsWith("GMT"))
+    		timeZone = "Etc/" + timeZone.replace("UTC", "GMT").replace("+","*").replace("-","+").replace("*","-");
     	Calendar c = Calendar.getInstance();
     	c.setTime(new Date());
     	int off = c.getTimeZone().getRawOffset();
-    	TimeZone tz = TimeZone.getTimeZone("Etc/" + timeZone.trim().replace("UTC", "GMT").replace("+","*").replace("-","+").replace("*","-"));
+    	TimeZone tz = TimeZone.getTimeZone(timeZone);
     	int off1 = tz.getRawOffset();
     	c.add(Calendar.MILLISECOND, off1 - off);
     	return c.getTime();

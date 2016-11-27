@@ -358,36 +358,39 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         	return null;
         }
 
-        int startHalfHour;
-        
         Calendar c = Calendar.getInstance();
-//        c.setTime(pos.getStartWorkHour());
-//        startHalfHour = c.get(Calendar.HOUR_OF_DAY) * 2;
-//        if (c.get(Calendar.MINUTE) != 0)
-//        	startHalfHour++;
+        Calendar c1 = Calendar.getInstance();
+        int startHalfHour;
+        int nowStartHalfHour;
+        
+        c.setTime(BBRUtil.now(pos.getTimeZone()));
+        c1.setTime(date);
+        if (c.get(Calendar.YEAR) == c1.get(Calendar.YEAR) &&
+        	c.get(Calendar.MONTH) == c1.get(Calendar.MONTH) &&
+        	c.get(Calendar.DAY_OF_MONTH) == c1.get(Calendar.DAY_OF_MONTH)) {
+        	nowStartHalfHour = c.get(Calendar.HOUR_OF_DAY) * 2;
+        	if (c.get(Calendar.MINUTE) != 0)
+        		nowStartHalfHour++;
+        } else
+        	nowStartHalfHour = 0;
         
         c.setTime(turn.getStartTime());
         int specStartHalfHour = c.get(Calendar.HOUR_OF_DAY) * 2;
         if (c.get(Calendar.MINUTE) != 0)
         	specStartHalfHour++;
         
-//        if (specStartHalfHour < startHalfHour)
+        if (specStartHalfHour >= nowStartHalfHour)
         	startHalfHour = specStartHalfHour;
-
+        else
+        	startHalfHour = nowStartHalfHour;
+        
         int endHalfHour;
-        
-//        c.setTime(pos.getEndWorkHour());
-//        endHalfHour = c.get(Calendar.HOUR_OF_DAY) * 2;
-//        if (c.get(Calendar.MINUTE) != 0)
-//        	endHalfHour++;
-        
         c.setTime(turn.getEndTime());
         int specEndHalfHour = c.get(Calendar.HOUR_OF_DAY) * 2;
         if (c.get(Calendar.MINUTE) != 0)
         	specEndHalfHour++;
         
-//        if (specEndHalfHour < endHalfHour)
-        	endHalfHour = specEndHalfHour;
+       	endHalfHour = specEndHalfHour;
 
         int[] hours = new int[48];
         for (int h = 0; h < startHalfHour; h++)
@@ -471,6 +474,20 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		int endHalfHour = 0;
 		
 		Calendar c = Calendar.getInstance();
+	
+        Calendar c1 = Calendar.getInstance();
+        int nowStartHalfHour;
+        
+        c.setTime(BBRUtil.now(pos.getTimeZone()));
+        c1.setTime(date);
+        if (c.get(Calendar.YEAR) == c1.get(Calendar.YEAR) &&
+        	c.get(Calendar.MONTH) == c1.get(Calendar.MONTH) &&
+        	c.get(Calendar.DAY_OF_MONTH) == c1.get(Calendar.DAY_OF_MONTH)) {
+        	nowStartHalfHour = c.get(Calendar.HOUR_OF_DAY) * 2;
+        	if (c.get(Calendar.MINUTE) != 0)
+        		nowStartHalfHour++;
+        } else
+        	nowStartHalfHour = 0;
 		
 		for (Object[] s : specList) {
 			specIds += ", " + (Long)(s[0]);
@@ -487,6 +504,9 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        	endHalfHour = specEndHalfHour;
 		}
 		specIds = specIds.substring(1);
+		
+		if (nowStartHalfHour > startHalfHour)
+			startHalfHour = nowStartHalfHour;
 		
 		tr = BBRUtil.beginTran();
 		session = BBRUtil.getSession();
@@ -506,18 +526,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		} catch (Exception ex) {
 			BBRUtil.rollbackTran(tr);
 		}
-		
-//        Calendar c = Calendar.getInstance();
-//        c.setTime(pos.getStartWorkHour());
-//        int startHalfHour = c.get(Calendar.HOUR_OF_DAY) * 2;
-//        if (c.get(Calendar.MINUTE) != 0)
-//        	startHalfHour++;
-//
-//        c.setTime(pos.getEndWorkHour());
-//        int endHalfHour = c.get(Calendar.HOUR_OF_DAY) * 2;
-//        if (c.get(Calendar.MINUTE) != 0)
-//        	endHalfHour++;
-        
+   
         int[] hours = new int[48];
         for (int h = 0; h < startHalfHour; h++)
         	hours[h] = specList.size();
