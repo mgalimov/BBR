@@ -1,20 +1,28 @@
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Hashtable;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import BBR.BBRDataElement;
 import BBR.BBRDataManager;
 import BBR.BBRDataSet;
 import BBR.BBRErrors;
+import BBR.BBRUtil;
 import BBRAcc.BBRUser.BBRUserRole;
 import BBRClientApp.BBRContext;
 import BBRClientApp.BBRParams;
 
 @SuppressWarnings("rawtypes")
+@MultipartConfig(maxFileSize = 16177215)   
 public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BBRDataManager> extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final int errorResponseCode = 700;
@@ -95,32 +103,73 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 
 	// Getting data
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		BBRParams params = new BBRParams(request.getReader());
+		String operation = params.get("operation");
 		String respText = "";
 		BBRContext context = BBRContext.getContext(request);
-		try {
-			BBRParams params = new BBRParams(request.getReader());
-			String startItem = params.get("start");
-			String pageLength = params.get("length");
-			Integer rowsPerPage = Integer.parseInt(pageLength);
-			Integer pageNum = Integer.parseInt(startItem) / rowsPerPage;
-			Hashtable<Integer, Hashtable<String, String>> sortingFields = params.getArray("order");
-			Hashtable<Integer, Hashtable<String, String>> columns = params.getArray("columns");
-			
-			String drawIndex = params.get("draw");
-			respText = getData(pageNum, rowsPerPage, columns, sortingFields, params, request, response);
-			if (respText == null || respText.isEmpty()) {
-				BBRDataSet ds = new BBRDataSet<BBRDataElement>(null);
-				respText = ds.toJson();
-			}
-			respText = "{\"draw\":" + drawIndex + "," + respText.substring(1);
-		} catch (Exception ex) {
-			respText = context.gs(ex.getMessage());
-			response.setStatus(700);
-		}
+
+		if (operation == null)
+			operation = "";
 		
-		response.setContentType("text/plain");  
-		response.setCharacterEncoding("UTF-8"); 
-		response.getWriter().write(respText); 
+		if (operation.equals("saveImages")) {
+			String id = params.get("id");
+			InputStream in = null;
+			FileOutputStream out = null;
+			
+			String names = params.get("names");
+			for (String name: names.split(",")) {
+				if (!name.isEmpty()) {
+					try {
+					Part filePart = request.getPart(name);
+					if (filePart != null) {
+						in = filePart.getInputStream();
+						out = new FileOutputStream(manager.getClassTitle() + "_" + id + ".jpg");
+						
+						int read = 0;
+				        final byte[] bytes = new byte[1024];
+				        while ((read = in.read(bytes)) != -1) {
+				            out.write(bytes, 0, read);
+				        }				        
+				        BBRUtil.log.info("Successfully saved image: " + manager.getClassTitle() + ", " + id + ", " + name);
+					}
+					} catch (Exception ex) {
+						BBRUtil.log.error("Cannot read / write image: " + manager.getClassTitle() + ", " + id + ", " + name);
+					} finally {
+						if (out != null) {
+				            out.close();
+				        }
+				        if (in != null) {
+				            in.close();
+				        }
+					}
+				}
+			}
+		} else 
+		if (operation.equals("getGrid") || operation.isEmpty()) {
+			try {
+				String startItem = params.get("start");
+				String pageLength = params.get("length");
+				Integer rowsPerPage = Integer.parseInt(pageLength);
+				Integer pageNum = Integer.parseInt(startItem) / rowsPerPage;
+				Hashtable<Integer, Hashtable<String, String>> sortingFields = params.getArray("order");
+				Hashtable<Integer, Hashtable<String, String>> columns = params.getArray("columns");
+				
+				String drawIndex = params.get("draw");
+				respText = getData(pageNum, rowsPerPage, columns, sortingFields, params, request, response);
+				if (respText == null || respText.isEmpty()) {
+					BBRDataSet ds = new BBRDataSet<BBRDataElement>(null);
+					respText = ds.toJson();
+				}
+				respText = "{\"draw\":" + drawIndex + "," + respText.substring(1);
+			} catch (Exception ex) {
+				respText = context.gs(ex.getMessage());
+				response.setStatus(700);
+			}
+			
+			response.setContentType("text/plain");  
+			response.setCharacterEncoding("UTF-8"); 
+			response.getWriter().write(respText); 			
+		}
 	}
 	
 	// Application methods

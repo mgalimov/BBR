@@ -106,15 +106,16 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		        	}
 		        	
 		        	String phones = visit.getPos().getSms();
-		        			        	
-		        	for (String ph : phones.split(",")) {
-			        	BBRMailer.sendSMS(ph, 
-			        			"Barbiny: " + visit.getPos().getTitle() + "\n" +
-			        			df.format(visit.getTimeScheduled()) + "\n" +
-			        			visit.getUserName() + "\n" +
-			        			visit.getUserContacts() + "\n" +
-			        			p);
-		        	}
+		        	
+		        	if (phones != null && !phones.trim().isEmpty())
+			        	for (String ph : phones.split(",")) {
+				        	BBRMailer.sendSMS(ph, 
+				        			"Barbiny: " + visit.getPos().getTitle() + "\n" +
+				        			df.format(visit.getTimeScheduled()) + "\n" +
+				        			visit.getUserName() + "\n" +
+				        			visit.getUserContacts() + "\n" +
+				        			p);
+			        	}
 		        }catch (Exception ex) {
 		        }
 	        }

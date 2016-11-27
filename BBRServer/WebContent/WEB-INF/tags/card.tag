@@ -20,6 +20,7 @@
 <c:set var="itemToolbar" scope="request" value="${''}"/>
 <c:set var="itemToolbarCondition" scope="request" value="${''}"/>
 <c:set var="itemTabs" scope="request" value="${''}"/>
+<c:set var="imageItemIds" scope="request" value="${''}"/>
 
 <t:modal  cancelButtonLabel="LBL_CANCEL_CHANGES_KEEP_EDITING_BTN" 
 		  processButtonLabel="LBL_CANCEL_CHANGES_CANCEL_BTN" 
@@ -84,6 +85,18 @@
 		needToGoToGrid = false;
 		$('#saveChanges').click();
 	}
+
+	function saveFailed(data) {
+		saved = false;
+		$('#alertText').text(data.responseText);
+		$("#saveChanges").prop("disabled", false);
+		$("#cancelChanges").prop("disabled", false);
+		$('#alertMessage').removeClass('hide');
+    	$('html body').animate({
+        	scrollTop: 0 
+    	}, 200);
+    	needToGoToGrid = true;			
+	}
 	
  	$(document).ready(function () {
  		idParam = getUrlParameter('id');
@@ -147,29 +160,26 @@
 	              		operation: op
 	            	}, 
 	              	function(responseText) { 
-						saved = true; 
-						if (needToGoToGrid)
-							goToGrid('${gridPage}');
-						needToGoToGrid = true;
-	              	}).fail(function(data) {
-						saved = false;
-						$('#alertText').text(data.responseText);
-						$("#saveChanges").prop("disabled", false);
-		    			$("#cancelChanges").prop("disabled", false);
-						$('#alertMessage').removeClass('hide');
-				    	$('html body').animate({
-				        	scrollTop: 0 
-				    	}, 200);
-				    	needToGoToGrid = true;
-	       	       });
+	            		$.post('${method}',
+	            				{
+	            					id:idParam,
+	            					names: '${imageItemIds}',
+	            					operation: 'saveImages'
+	            				},
+	            				function (responseText) {
+	        						saved = true; 
+	        						if (needToGoToGrid)
+	        							goToGrid('${gridPage}');
+	        						needToGoToGrid = true;
+	            				}).fail(saveFailed);
+	              	}).fail(saveFailed);
            });			 		
-
+		
 		$('#cancelChanges').click(function(event) {
 			saved = true;
 			$.get('${method}', {id : idParam, operation : 'cancel'});
 			goToGrid('${gridPage}');
-		});
-		
+		});	
  	});
  	
  	$(window).bind('beforeunload', function () {
