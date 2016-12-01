@@ -121,7 +121,7 @@ public class BBRMailer {
 		    	 GeneralDataCoding coding = new GeneralDataCoding(Alphabet.ALPHA_UCS2, MessageClass.CLASS1, false);
 		    	 
 		         try {
-		             BBRUtil.log.info("SMPP: message sending " + text);
+		             BBRUtil.log.info("SMPP: message sending " + text.replace("\n", "\\n"));
 		             messageId = session.submitShortMessage(
 		            		 	"CMT", 
 		            		 	TypeOfNumber.ALPHANUMERIC, 

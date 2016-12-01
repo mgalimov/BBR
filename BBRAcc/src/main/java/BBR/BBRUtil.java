@@ -20,7 +20,7 @@ public class BBRUtil {
     private static SessionFactory sessionFactory = buildSessionFactory();
     public static final GsonBuilder gsonBuilder = createGsonBuilder();
     
-    public static final Logger log=Logger.getLogger("BBR");
+    public static final Logger log = Logger.getLogger("BBR");
     
 	public static final String recordDivider = "@@";
 
