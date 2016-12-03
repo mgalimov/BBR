@@ -161,7 +161,7 @@
 		<label>${context.gs('LBL_SET_DATE_TIME_TITLE')}</label>
 	</div>
 
-	<div class="form-group col-md-4 col-sm-4">
+	<div class="form-group col-md-3 col-sm-3">
 		<div class='input-group date' id='datepicker'>
         	<input type='text' class="form-control" />
    			<span class="input-group-addon">
@@ -171,16 +171,18 @@
 	</div>
 	
 	<% if (mode.equals("manager-view") || mode.equals("manager-edit")) { %>
-	<div class="btn-group" role="group" aria-label="...">
-		<button class='btn btn-default' id='openVisits' type="button">
-			<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> <%=context.gs("LBL_OPEN_VISITS_BTN") %>
-		</button>
-		<button class='btn btn-default' id='openAllUnapprovedVisits' type="button">
-			<span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> <%=context.gs("LBL_OPEN_ALL_UNAPPROVED_VISITS_BTN") %>
-		</button>
-		<button class='btn btn-default' id='openAllVisits' type="button">
-			<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> <%=context.gs("LBL_OPEN_ALL_VISITS_BTN") %>
-		</button>
+	<div class="form-group col-md-8 col-sm-8">
+		<div class="btn-group" role="group" aria-label="...">
+			<button class='btn btn-default' id='openVisits' type="button">
+				<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> <%=context.gs("LBL_OPEN_VISITS_BTN") %>
+			</button>
+			<button class='btn btn-default' id='openAllUnapprovedVisits' type="button">
+				<span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> <%=context.gs("LBL_OPEN_ALL_UNAPPROVED_VISITS_BTN") %>
+			</button>
+			<button class='btn btn-default' id='openAllVisits' type="button">
+				<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> <%=context.gs("LBL_OPEN_ALL_VISITS_BTN") %>
+			</button>
+		</div>
 	</div>
 			
 		<script>
@@ -208,12 +210,14 @@
 </div>
 
 <div class="row">
-	<div class="col-md-2 col-sm-2 col-xs-2 hidden-sm hidden-xs">
-		<button class='btn btn-link' id='prevDateBtn' type="button"><span class="glyphicon glyphicon-chevron-left"></span></button>
-		<button class='btn btn-link' id='todayDateBtn' type="button"><span class="glyphicon glyphicon-time"></span></button>
-		<button class='btn btn-link' id='nextDateBtn' type="button"><span class="glyphicon glyphicon-chevron-right"></span></button>
+	<div class="col-md-2 col-sm-2 hidden-xs">
+		<div class="btn-group btn-group-justified" role="group">
+			<button class='btn btn-link' id='prevDateBtn' type="button"><span class="glyphicon glyphicon-chevron-left"></span></button>
+			<button class='btn btn-link' id='todayDateBtn' type="button"><span class="glyphicon glyphicon-time"></span></button>
+			<button class='btn btn-link' id='nextDateBtn' type="button"><span class="glyphicon glyphicon-chevron-right"></span></button>
+		</div>
 	</div>
-	<div class="col-md-8 col-sm-8 col-xs-8 hidden-sm hidden-xs" >
+	<div class="col-md-9 col-sm-9 hidden-xs" >
 		<div class="btn-group btn-group-justified" role="group">
 		<%
 			out.println("<a href='#' role='button' class='btn btn-info btn-sm' id='sd" + sf.format(calendar.getTime()) + "'></a>");

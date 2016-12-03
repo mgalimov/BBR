@@ -124,30 +124,22 @@
 			</c:when>
 
 			<c:when test="${type.equals('picture')}">
-		        <div class="input-group date col-md-3" id="${ft}inputdiv" >
-			        <div class="fileinput fileinput-new" data-provides="fileinput">
-	  					<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 200px;"></div>
-		  				<div>
-	    					<span class="btn btn-default btn-file">
-	    						<span class="fileinput-new">Select image</span>
-	    						<span class="fileinput-exists">Change</span>
-	    						<input type="file" name="${ft}input" id="${ft}input">
-	    					</span>
-	    					<a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
-	  					</div>
-					</div> 
+		        <div class="input-group col-md-3" id="${ft}inputdiv" >
+					<input type="file" name="${ft}input" id="${ft}input" class="file" multiple/>
 				</div>
 				<c:set var="imageItemIds" scope="request" value="${imageItemIds}${ft}input,"/>
-				<c:set var="itemSet" scope="request" value="${itemSet}
-		            $('#${ft}input').val(obj.${field});"/>
-				<c:if test="${defaultValue != null}">
-					<c:set var="itemPreload" scope="request" value="${itemPreload}
-   					  $('#${ft}input').val('${defaultValue}');"/>
-				</c:if>
 				
-				<script>
-					$("#${ft}inputdiv").fileinput();
-				</script>
+				<c:set var="imgSrc" value="' + obj.${field}.replace('\\\\','/') + '" />
+				<c:set var="img" value='<img src="${imgSrc}" class="file-preview-image">' />
+				<c:set var="itemSet" scope="request" value="${itemSet}
+					$('#${ft}input').fileinput({
+						showUpload : false,
+						showUploadedThumbs : false,
+						initialPreview : [
+						   '${img}'
+						]
+					});
+					"/>
 			</c:when>
 
 			<c:when test="${type.equals('number')}">

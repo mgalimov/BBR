@@ -90,7 +90,7 @@ public class BBRMailer {
         }
     }
     
-    public static void sendSMS(String phone, String text) {
+    public static void sendSMS(String phones, String text) {
         Thread thread = new Thread() {
 	    	public void run() {
 		       	 TimeFormatter timeFormatter = new AbsoluteTimeFormatter();
@@ -120,42 +120,46 @@ public class BBRMailer {
 		    	 String messageId = null;
 		    	 GeneralDataCoding coding = new GeneralDataCoding(Alphabet.ALPHA_UCS2, MessageClass.CLASS1, false);
 		    	 
-		         try {
-		             BBRUtil.log.info("SMPP: message sending " + text.replace("\n", "\\n"));
-		             messageId = session.submitShortMessage(
-		            		 	"CMT", 
-		            		 	TypeOfNumber.ALPHANUMERIC, 
-		            		 	NumberingPlanIndicator.ISDN, 
-		            		 	"Barbiny", 
-		            		 	TypeOfNumber.INTERNATIONAL, 
-		            		 	NumberingPlanIndicator.ISDN, 
-		            		 	phone, 
-		            		 	new ESMClass(), 
-		            		 	(byte)0, 
-		            		 	(byte)1,  
-		            		 	timeFormatter.format(new Date()), 
-		            		 	null, 
-		            		 	new RegisteredDelivery(SMSCDeliveryReceipt.DEFAULT), 
-		            		 	(byte)0, 
-		            		 	coding,//DataCodings.ZERO, 
-		            		 	(byte)0, 
-		            		 	text.getBytes(Charset.forName("UTF-16")), 
-		            		 	sarMsgRefNum, 
-		            		 	sarSegmentSeqnum, 
-		            		 	sarTotalSegments);
-		         } catch (PDUException e) {
-		        	 BBRUtil.log.error("SMPP: Invalid PDU parameter");
-		         } catch (ResponseTimeoutException e) {
-		        	 BBRUtil.log.error("SMPP: Response timeout");
-		         } catch (InvalidResponseException e) {
-		        	 BBRUtil.log.error("SMPP: Receive invalid respose");
-		         } catch (NegativeResponseException e) {
-		        	 BBRUtil.log.error("SMPP: Receive negative response");
-		         } catch (IOException e) {
-		        	 BBRUtil.log.error("SMPP: IO error occur");
-		         }
-		         
-		         BBRUtil.log.info("SMPP: message sent " + (messageId == null ? "null" : messageId));
+
+		         if (phones != null && !phones.trim().isEmpty())
+		        	 for (String phone : phones.split(",")) {
+				         try {
+				             BBRUtil.log.info("SMPP: message sending " + text.replace("\n", "\\n"));
+				             messageId = session.submitShortMessage(
+				            		 	"CMT", 
+				            		 	TypeOfNumber.ALPHANUMERIC, 
+				            		 	NumberingPlanIndicator.ISDN, 
+				            		 	"Barbiny", 
+				            		 	TypeOfNumber.INTERNATIONAL, 
+				            		 	NumberingPlanIndicator.ISDN, 
+				            		 	phone, 
+				            		 	new ESMClass(), 
+				            		 	(byte)0, 
+				            		 	(byte)1,  
+				            		 	timeFormatter.format(new Date()), 
+				            		 	null, 
+				            		 	new RegisteredDelivery(SMSCDeliveryReceipt.DEFAULT), 
+				            		 	(byte)0, 
+				            		 	coding,//DataCodings.ZERO, 
+				            		 	(byte)0, 
+				            		 	text.getBytes(Charset.forName("UTF-16")), 
+				            		 	sarMsgRefNum, 
+				            		 	sarSegmentSeqnum, 
+				            		 	sarTotalSegments);
+				         } catch (PDUException e) {
+				        	 BBRUtil.log.error("SMPP: Invalid PDU parameter");
+				         } catch (ResponseTimeoutException e) {
+				        	 BBRUtil.log.error("SMPP: Response timeout");
+				         } catch (InvalidResponseException e) {
+				        	 BBRUtil.log.error("SMPP: Receive invalid respose");
+				         } catch (NegativeResponseException e) {
+				        	 BBRUtil.log.error("SMPP: Receive negative response");
+				         } catch (IOException e) {
+				        	 BBRUtil.log.error("SMPP: IO error occur");
+				         }
+				         
+				         BBRUtil.log.info("SMPP: message sent " + (messageId == null ? "null" : messageId));
+		        	}
 	    	 }
         };
         thread.start();

@@ -1,5 +1,6 @@
 package BBR;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -189,4 +190,13 @@ public class BBRDataManager<T extends BBRDataElement> {
     public String whereShop(Long shopId) {
     	return "shop.id = " + shopId;
     };
+    
+    public void saveImagePath(Long objectId, String fieldName, String fileName) throws Exception {
+    	T obj = findById(objectId);
+    	if (obj != null) {
+    		Method m = obj.getClass().getMethod("set" + fieldName.substring(0,1).toUpperCase() + fieldName.substring(1), new Class[] { fileName.getClass() });
+    		m.invoke(obj, fileName);
+    		update(obj);
+    	}
+    }
 }

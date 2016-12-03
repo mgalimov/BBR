@@ -160,18 +160,30 @@
 	              		operation: op
 	            	}, 
 	              	function(responseText) { 
-	            		$.post('${method}',
-	            				{
-	            					id:idParam,
-	            					names: '${imageItemIds}',
-	            					operation: 'saveImages'
-	            				},
-	            				function (responseText) {
+	            		var fdata = new FormData();
+	            		var fids = '${imageItemIds}';
+	            		$.each(fids.split(','), function(i, fid) {
+	            			if (fid != "") {
+	            				file = $('#' + fid).prop('files')[0]; 
+	            		    	fdata.append(idParam + "#" + fid, file);
+	            			}
+	            		});
+	            		$.ajax('${method}',
+	            			{
+	            			   data: fdata,
+	            			   dataType: 'text',
+	            			   cache: false,
+	                           contentType: false,
+	                           processData: false,
+	                           type: 'post',
+	            			   success: function (responseText) {
 	        						saved = true; 
 	        						if (needToGoToGrid)
 	        							goToGrid('${gridPage}');
 	        						needToGoToGrid = true;
-	            				}).fail(saveFailed);
+	            				},
+	            			   error: saveFailed
+	            			});
 	              	}).fail(saveFailed);
            });			 		
 		

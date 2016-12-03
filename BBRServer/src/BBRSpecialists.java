@@ -3,6 +3,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +22,7 @@ import BBRCust.BBRProcedure;
 import BBRCust.BBRProcedureManager;
 
 @WebServlet("/BBRSpecialists")
+@MultipartConfig
 public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialistManager> {
 	private static final long serialVersionUID = 1L;
        

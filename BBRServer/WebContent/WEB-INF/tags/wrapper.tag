@@ -59,9 +59,13 @@
 		<!-- Google Charts -->
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 		
-		<!-- File Upload & Nav Menu -->
+		<!-- Nav Menu -->
 		<link rel="stylesheet" href="css/jasny-bootstrap.min.css">
 		<script src="js/jasny-bootstrap.min.js"></script>
+		
+		<!-- File Upload -->
+		<link rel="stylesheet" href="css/fileinput.min.css">
+		<script src="js/fileinput.min.js"></script>
   	</head>
   	<body>
  		<t:top-menu  title="${context.gs('LBL_CONTROL_PANEL')} ${context.gs(title)} ${titleModifier}"/> 

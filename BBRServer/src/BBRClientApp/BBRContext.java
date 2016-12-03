@@ -1,5 +1,6 @@
 package BBRClientApp;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -27,6 +28,7 @@ public class BBRContext {
 	public BBRShop filterShop = null;
 	public BBRPoS filterPoS = null;
 	public String timeZone = "";
+	public String appDir = "";
 	
 	private String lastSignInError = "";
 	private BBRGPS location = null;
@@ -34,6 +36,8 @@ public class BBRContext {
 	private Locale locale = null;
 	private ResourceBundle resourceBundle;
 	private Hashtable<String, Object> data = new Hashtable<String, Object>();
+	
+	private static String PICTURES_DIR_NAME = "pictures";
 	
 	
 	public BBRContext() {
@@ -46,6 +50,7 @@ public class BBRContext {
 		BBRContext app = (BBRContext)session.getAttribute("context");
 		if (app == null) {
 			app = new BBRContext();
+			app.appDir = request.getServletContext().getRealPath("");
 			//app.setLocale("en", "US");
 			session.setAttribute("context", app);
 		}
@@ -427,5 +432,13 @@ public class BBRContext {
 
 	public String getTimeZone() {
 		return timeZone;
+	}
+
+	public String getAbsolutePictureDir() {
+		return this.appDir + File.separator + PICTURES_DIR_NAME;
+	}
+	
+	public String getRelativePictureDir() {
+		return PICTURES_DIR_NAME;
 	}
 }

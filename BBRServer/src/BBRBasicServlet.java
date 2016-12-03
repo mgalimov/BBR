@@ -2,7 +2,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Hashtable;
 
 import javax.servlet.ServletException;
@@ -22,7 +21,7 @@ import BBRClientApp.BBRContext;
 import BBRClientApp.BBRParams;
 
 @SuppressWarnings("rawtypes")
-@MultipartConfig(maxFileSize = 16177215)   
+@MultipartConfig   
 public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BBRDataManager> extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final int errorResponseCode = 700;
@@ -101,74 +100,105 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 
 	}
 
-	// Getting data
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		BBRParams params = new BBRParams(request.getReader());
-		String operation = params.get("operation");
-		String respText = "";
-		BBRContext context = BBRContext.getContext(request);
+    private String getPartAttrName(Part part, String attr) {
+        String contentDisp = part.getHeader("content-disposition");
+        String[] tokens = contentDisp.split(";");
+        for (String token : tokens) {
+            if (token.trim().startsWith(attr)) {
+                return token.substring(token.indexOf("=") + 2, token.length()-1);
+            }
+        }
+        return "";
+    }
 
-		if (operation == null)
-			operation = "";
-		
-		if (operation.equals("saveImages")) {
-			String id = params.get("id");
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if (request.getContentType() != null && 
+			request.getContentType().toLowerCase().indexOf("multipart/form-data") > -1 ) {
+			
 			InputStream in = null;
 			FileOutputStream out = null;
-			
-			String names = params.get("names");
-			for (String name: names.split(",")) {
-				if (!name.isEmpty()) {
-					try {
-					Part filePart = request.getPart(name);
+			String name = "";
+			String id = "";
+
+			for (Part filePart : request.getParts()) {
+				try {
 					if (filePart != null) {
+						String fname = getPartAttrName(filePart, "name");
+						id = fname.split("#")[0];
+						name = fname.split("#")[1];
+						name = name.substring(0, name.length() - 5);
+
+						fname = getPartAttrName(filePart, "filename");
+						int i = fname.lastIndexOf('.');
+						String ext = fname.substring(i); 
+
+						BBRContext context = BBRContext.getContext(request);
+						
+						File fileSaveDir = new File(context.getAbsolutePictureDir());
+					    if (!fileSaveDir.exists()) 
+					        fileSaveDir.mkdir();
+					    
+						fname =  fileSaveDir + File.separator + manager.getClassTitle() + "_" + id + ext;
+						
 						in = filePart.getInputStream();
-						out = new FileOutputStream(manager.getClassTitle() + "_" + id + ".jpg");
+						out = new FileOutputStream(fname);
 						
 						int read = 0;
 				        final byte[] bytes = new byte[1024];
 				        while ((read = in.read(bytes)) != -1) {
 				            out.write(bytes, 0, read);
-				        }				        
+				        }
+				        
+						Long oId = Long.parseLong(id);
+						fname =  context.getRelativePictureDir() + File.separator + manager.getClassTitle() + "_" + id + ext;
+						manager.saveImagePath(oId, name, fname);
+						
 				        BBRUtil.log.info("Successfully saved image: " + manager.getClassTitle() + ", " + id + ", " + name);
 					}
-					} catch (Exception ex) {
-						BBRUtil.log.error("Cannot read / write image: " + manager.getClassTitle() + ", " + id + ", " + name);
-					} finally {
+				} catch (Exception ex) {
+					BBRUtil.log.error("Cannot read / write image: " + manager.getClassTitle() + ", " + id + ", " + name);
+				} finally {
 						if (out != null) {
 				            out.close();
 				        }
 				        if (in != null) {
 				            in.close();
 				        }
+				}
+			}			
+		} else {
+			BBRParams params = new BBRParams(request.getReader());
+			String operation = params.get("operation");
+			String respText = "";
+			BBRContext context = BBRContext.getContext(request);
+	
+			if (operation == null)
+				operation = "";
+			if (operation.equals("getGrid") || operation.isEmpty()) {
+				try {
+					String startItem = params.get("start");
+					String pageLength = params.get("length");
+					Integer rowsPerPage = Integer.parseInt(pageLength);
+					Integer pageNum = Integer.parseInt(startItem) / rowsPerPage;
+					Hashtable<Integer, Hashtable<String, String>> sortingFields = params.getArray("order");
+					Hashtable<Integer, Hashtable<String, String>> columns = params.getArray("columns");
+					
+					String drawIndex = params.get("draw");
+					respText = getData(pageNum, rowsPerPage, columns, sortingFields, params, request, response);
+					if (respText == null || respText.isEmpty()) {
+						BBRDataSet ds = new BBRDataSet<BBRDataElement>(null);
+						respText = ds.toJson();
 					}
+					respText = "{\"draw\":" + drawIndex + "," + respText.substring(1);
+				} catch (Exception ex) {
+					respText = context.gs(ex.getMessage());
+					response.setStatus(700);
 				}
-			}
-		} else 
-		if (operation.equals("getGrid") || operation.isEmpty()) {
-			try {
-				String startItem = params.get("start");
-				String pageLength = params.get("length");
-				Integer rowsPerPage = Integer.parseInt(pageLength);
-				Integer pageNum = Integer.parseInt(startItem) / rowsPerPage;
-				Hashtable<Integer, Hashtable<String, String>> sortingFields = params.getArray("order");
-				Hashtable<Integer, Hashtable<String, String>> columns = params.getArray("columns");
 				
-				String drawIndex = params.get("draw");
-				respText = getData(pageNum, rowsPerPage, columns, sortingFields, params, request, response);
-				if (respText == null || respText.isEmpty()) {
-					BBRDataSet ds = new BBRDataSet<BBRDataElement>(null);
-					respText = ds.toJson();
-				}
-				respText = "{\"draw\":" + drawIndex + "," + respText.substring(1);
-			} catch (Exception ex) {
-				respText = context.gs(ex.getMessage());
-				response.setStatus(700);
+				response.setContentType("text/plain");  
+				response.setCharacterEncoding("UTF-8"); 
+				response.getWriter().write(respText);
 			}
-			
-			response.setContentType("text/plain");  
-			response.setCharacterEncoding("UTF-8"); 
-			response.getWriter().write(respText); 			
 		}
 	}
 	
