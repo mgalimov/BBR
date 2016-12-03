@@ -129,15 +129,22 @@
 				</div>
 				<c:set var="imageItemIds" scope="request" value="${imageItemIds}${ft}input,"/>
 				
-				<c:set var="imgSrc" value="' + obj.${field}.replace('\\\\','/') + '" />
+				<c:set var="imgData" value="obj.${field}.replace('\\\\','/')" />
+				<c:set var="imgSrc" value="' + ${imgData} + '" />
 				<c:set var="img" value='<img src="${imgSrc}" class="file-preview-image">' />
 				<c:set var="itemSet" scope="request" value="${itemSet}
 					$('#${ft}input').fileinput({
+						overwriteInitial : false,
 						showUpload : false,
 						showUploadedThumbs : false,
 						initialPreview : [
-						   '${img}'
-						]
+						   ${imgData}
+						],
+						initialPreviewAsData : true,
+						initialPreviewConfig: [
+        					{caption: '!!!', key: 11}
+    					],
+						initialPreviewFileType: 'image'
 					});
 					"/>
 			</c:when>
