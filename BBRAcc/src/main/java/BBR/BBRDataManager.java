@@ -199,4 +199,15 @@ public class BBRDataManager<T extends BBRDataElement> {
     		update(obj);
     	}
     }
+    
+    public String getFieldValue(Long objectId, String fieldName) throws Exception {
+    	T obj = findById(objectId);
+    	if (obj != null) {
+    		Method m = obj.getClass().getMethod("get" + fieldName.substring(0,1).toUpperCase() + fieldName.substring(1));
+    		Object o = m.invoke(obj);
+    		if (o != null) 
+    			return o.toString();
+    	}
+    	return null;
+    }
 }

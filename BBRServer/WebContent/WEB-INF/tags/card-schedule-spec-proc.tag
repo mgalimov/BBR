@@ -162,7 +162,7 @@
 	</div>
 
 	<div class="form-group col-md-3 col-sm-3">
-		<div class='input-group date' id='datepicker'>
+		<div class='input-group date' id='datepicker' style='width:100%'>
         	<input type='text' class="form-control" />
    			<span class="input-group-addon">
 				<span class="glyphicon glyphicon-calendar"></span>

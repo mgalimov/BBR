@@ -289,7 +289,7 @@ h4.nav {
 	}
 	
 	div.input-group.date {
-		width: 60%;
+		width: 50%;
 	}
 }
 
@@ -316,3 +316,14 @@ h4.nav {
 		float: none !important;
 	}
 }
+
+.pic-crop {
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+}
+
+.pic-crop img {
+    max-width: 50px;
+}
+

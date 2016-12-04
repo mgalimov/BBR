@@ -1,10 +1,14 @@
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -85,6 +89,10 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 			} else 
 			if (operation.equals("cancel")) {
 				respText = cancel(id, params, request, response);
+			} else
+			if (operation.equals("pic")) {
+				respText = getPicture(id, params, request, response);
+				return;
 			} else	{
 				respText = processOperation(operation, params, request, response);
 			}
@@ -97,7 +105,6 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 		response.setContentType("text/plain");  
 		response.setCharacterEncoding("UTF-8"); 
 		response.getWriter().write(respText); 
-
 	}
 
     private String getPartAttrName(Part part, String attr) {
@@ -131,17 +138,16 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 						fname = getPartAttrName(filePart, "filename");
 						int i = fname.lastIndexOf('.');
 						String ext = fname.substring(i); 
-
 						BBRContext context = BBRContext.getContext(request);
 						
-						File fileSaveDir = new File(context.getAbsolutePictureDir());
+						fname =  manager.getClassTitle() + "_" + id + ext;
+												
+						File fileSaveDir = new File(context.getAppDir() + File.separator + context.getPictureDir());
 					    if (!fileSaveDir.exists()) 
 					        fileSaveDir.mkdir();
 					    
-						fname =  fileSaveDir + File.separator + manager.getClassTitle() + "_" + id + ext;
-						
-						in = filePart.getInputStream();
-						out = new FileOutputStream(fname);
+					    in = filePart.getInputStream();
+						out = new FileOutputStream(fileSaveDir + File.separator + fname);
 						
 						int read = 0;
 				        final byte[] bytes = new byte[1024];
@@ -150,10 +156,8 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 				        }
 				        
 						Long oId = Long.parseLong(id);
-						fname =  context.getRelativePictureDir() + File.separator + manager.getClassTitle() + "_" + id + ext;
 						manager.saveImagePath(oId, name, fname);
-						
-				        BBRUtil.log.info("Successfully saved image: " + manager.getClassTitle() + ", " + id + ", " + name);
+						BBRUtil.log.info("Successfully saved image: " + fname);
 					}
 				} catch (Exception ex) {
 					BBRUtil.log.error("Cannot read / write image: " + manager.getClassTitle() + ", " + id + ", " + name);
@@ -306,6 +310,60 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 	}
 
 	protected String cancel(String id, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+		return "";
+	}
+
+	// TODO: check access rights
+	protected String getPicture(String id, BBRParams params, HttpServletRequest request,
+			HttpServletResponse response) {
+		ServletOutputStream fout = null;
+		FileInputStream fin = null;
+		BufferedInputStream bin = null;
+		BufferedOutputStream bout = null;
+		
+		try {
+			String fieldName = params.get("fld");
+			Long oId = Long.parseLong(id);
+			String fname = manager.getFieldValue(oId, fieldName);
+			int i = fname.lastIndexOf('.');
+			String ext = fname.substring(i);
+			
+			if (ext.startsWith(".jp"))
+				response.setContentType("image/jpeg");
+			else
+				response.setContentType("image/" + ext);
+			
+			BBRContext context = BBRContext.getContext(request);
+			File fileSaveDir = new File(context.getAppDir() + File.separator + context.getPictureDir());
+			  
+			fout = response.getOutputStream();  
+			fin = new FileInputStream(fileSaveDir + File.separator + fname);  
+			      
+			bin = new BufferedInputStream(fin);     
+			bout = new BufferedOutputStream(fout);  
+			
+			int ch =0; ;  
+			while((ch=bin.read())!=-1) {  
+			    bout.write(ch);  
+			}  
+			      
+		} catch (Exception ex) {
+			BBRUtil.log.error(ex.getMessage());
+		} finally {
+			try {
+			    if (bin != null) 
+			    	bin.close();  
+			    if (fin != null)
+			    	fin.close();  
+			    if (bout != null)
+			    	bout.close();  
+			    if (fout != null)
+			    	fout.close();
+			} catch (Exception ex1) {
+				
+			}
+		}
+		    
 		return "";
 	}
 }

@@ -21,6 +21,7 @@
 <c:set var="itemToolbarCondition" scope="request" value="${''}"/>
 <c:set var="itemTabs" scope="request" value="${''}"/>
 <c:set var="imageItemIds" scope="request" value="${''}"/>
+<c:set var="cardMethod" scope="request" value="${method}"/>
 
 <t:modal  cancelButtonLabel="LBL_CANCEL_CHANGES_KEEP_EDITING_BTN" 
 		  processButtonLabel="LBL_CANCEL_CHANGES_CANCEL_BTN" 

@@ -273,7 +273,7 @@
 			for (i = 0; i < d.recordsTotal; i++) {
 				spec = d.data[i];
 				if (spec.status == 1) {
-					media = "<div class='media'><div class='media-left pull-left media-middle' style='padding-right: 10px;'><img class='media-object' src='images/barb.png' alt='"+spec.name+"'></div><div class='media-body'><h4 class='media-heading'>"+spec.name+"</h4>"+spec.position+"</div></div>";
+					media = "<div class='media'><div class='media-left pull-left media-middle pic-crop' style='padding-right: 10px;'><img class='media-object' src='BBRSpecialists?operation=pic&fld=photoPath&id=" + spec.id + "' alt='"+spec.name+"' width='50px'></div><div class='media-body'><h4 class='media-heading'>"+spec.name+"</h4>"+spec.position+"</div></div>";
 					html += "<a href='#' class='list-group-item' id='specA" + spec.id + "' data-type='specialist' data-id='" + spec.id + "' data-name='" + spec.name + "'>" + media + "</a>";
 				}
 			}

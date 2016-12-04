@@ -1,6 +1,5 @@
 package BBRClientApp;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -434,11 +433,11 @@ public class BBRContext {
 		return timeZone;
 	}
 
-	public String getAbsolutePictureDir() {
-		return this.appDir + File.separator + PICTURES_DIR_NAME;
+	public String getAppDir() {
+		return this.appDir;
 	}
 	
-	public String getRelativePictureDir() {
+	public String getPictureDir() {
 		return PICTURES_DIR_NAME;
 	}
 }

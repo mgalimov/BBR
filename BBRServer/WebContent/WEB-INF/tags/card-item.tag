@@ -129,7 +129,8 @@
 				</div>
 				<c:set var="imageItemIds" scope="request" value="${imageItemIds}${ft}input,"/>
 				
-				<c:set var="imgData" value="obj.${field}.replace('\\\\','/')" />
+<%-- 				<c:set var="imgData" value="obj.${field}.replace('\\\\','/')" /> --%>
+				<c:set var="imgData" value="'${cardMethod}?operation=pic&id='+idParam+'&fld=${field}'" />
 				<c:set var="itemSet" scope="request" value="${itemSet}
 					$('#${ft}input').fileinput({
 						overwriteInitial: true,
