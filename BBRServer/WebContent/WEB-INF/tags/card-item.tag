@@ -125,25 +125,29 @@
 
 			<c:when test="${type.equals('picture')}">
 		        <div class="input-group col-md-3" id="${ft}inputdiv" >
-					<input type="file" name="${ft}input" id="${ft}input" class="file" multiple/>
+					<input type="file" name="${ft}input" id="${ft}input" class="file-loading" multiple/>
 				</div>
 				<c:set var="imageItemIds" scope="request" value="${imageItemIds}${ft}input,"/>
 				
 				<c:set var="imgData" value="obj.${field}.replace('\\\\','/')" />
-				<c:set var="imgSrc" value="' + ${imgData} + '" />
-				<c:set var="img" value='<img src="${imgSrc}" class="file-preview-image">' />
 				<c:set var="itemSet" scope="request" value="${itemSet}
 					$('#${ft}input').fileinput({
-						overwriteInitial : false,
-						showUpload : false,
-						showUploadedThumbs : false,
-						initialPreview : [
-						   ${imgData}
-						],
+						overwriteInitial: true,
+						showCaption: false,
+						showCancel: false,
+						showUpload: false,
+						showClose: false,
+						browseLabel: '',
+						removeLabel: '',
+						maxFileCount: 1,
+						layoutTemplates: {
+							size: '',
+							footer: ''
+						},
+						showUploadedThumbs: false,
+						initialPreview: [${imgData}],
 						initialPreviewAsData : true,
-						initialPreviewConfig: [
-        					{caption: '!!!', key: 11}
-    					],
+						
 						initialPreviewFileType: 'image'
 					});
 					"/>
