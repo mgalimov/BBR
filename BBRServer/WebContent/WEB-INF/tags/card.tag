@@ -43,8 +43,13 @@
 	  </c:if>
 	  <c:if test="${showToolbar == true || showToolbar == null}">
 		  <div class="panel-heading" id="toolbar">
-		    <div class="btn-toolbar" role="toolbar" aria-label="..." id="toolbarpanel">
-		  	</div>
+	  		<c:if test="${showFooter == true || showFooter == null}">
+	  			<button type="button" class="btn btn-default" id="saveChanges"><c:if test="${buttonSave == null}"><span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span></c:if><c:if test="${buttonSave != null}">${context.gs(buttonSave)}</c:if></button>
+	  		</c:if>
+		    <span id="toolbarpanel"></span>		  	
+	  		<c:if test="${showFooter == true || showFooter == null}">
+		  		<button type="button" class="btn btn-link pull-right" id="cancelChanges"><c:if test="${buttonCancel == null}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></c:if><c:if test="${buttonCancel != null}">${context.gs(buttonCancel)}</c:if></button>
+	  		</c:if>
 		  </div>
 	  </c:if>
 	  <div class="panel-body">
@@ -53,9 +58,11 @@
 	  	</div>
 	  </div>
 	  <c:if test="${showFooter == true || showFooter == null}">
-		  <div class="panel-footer">
+		  <div class="panel-footer clearfix">
+		  	<div class="pull-right">
 		  		<button type="button" class="btn btn-default" id="cancelChanges"><c:if test="${buttonCancel == null}">${context.gs('LBL_CANCEL_CHANGES_CANCEL_BTN')}</c:if><c:if test="${buttonCancel != null}">${context.gs(buttonCancel)}</c:if></button>
 		  		<button type="button" class="btn btn-primary" id="saveChanges"><c:if test="${buttonSave == null}">${context.gs('LBL_CANCEL_CHANGES_SAVE_BTN')}</c:if><c:if test="${buttonSave != null}">${context.gs(buttonSave)}</c:if></button>
+		  	</div>
 		  </div>
 	  </c:if>
 	</div>

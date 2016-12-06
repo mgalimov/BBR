@@ -683,7 +683,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 			return null;
 
 		Query query = session.createQuery("select userName, userContacts, max(coalesce(visit.realTime, visit.timeScheduled)) as lastVisitDate"+ 
-		                                  "  from BBRVisit " +  
+		                                  "  from BBRVisit visit " +  
 										  " where userName = :userName" + 
 		                                  "   and userContacts = :userContacts" +
 										  " group by userName, userContacts").
