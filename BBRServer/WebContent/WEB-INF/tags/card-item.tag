@@ -14,6 +14,7 @@
 <%@ attribute name="modifier" %>
 <%@ attribute name="currencyField" %>
 <%@ attribute name="timeStepping" %>
+<%@ attribute name="calculated" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -24,18 +25,23 @@
 
 <div class="form-group ${isHidden}">
 	<label for="${ft}input">${context.gs(label)}</label>
-	<c:set var="itemids" scope="request" value="${itemids}
-				${ft}input,"/>
-	<c:set var="itemReq" scope="request" value="${itemReq}
-				${ft}:${ft}String,"/>
-	<c:set var="itemVal" scope="request" value="${itemVal}
-				${ft}String = $('#${ft}input').val();"/>
+	
+	<c:if test="${!calculated.equals('true')}">
+		<c:set var="itemids" scope="request" value="${itemids}
+					${ft}input,"/>
+		<c:set var="itemReq" scope="request" value="${itemReq}
+					${ft}:${ft}String,"/>
+		<c:set var="itemVal" scope="request" value="${itemVal}
+					${ft}String = $('#${ft}input').val();"/>
+	</c:if>
 		
-		<c:choose>
+		<c:choose>			
 			<c:when test="${type.equals('info')}">
 				<p class="form-control-static" id="${ft}input"/>
-				<c:set var="itemSet" scope="request" value="${itemSet}
-					$('#${ft}').text(obj.${field});"/>
+				<c:if test="${!calculated.equals('true')}">
+					<c:set var="itemSet" scope="request" value="${itemSet}
+						$('#${ft}').text(obj.${field});"/>
+				</c:if>
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload}
 						$('#${ft}input').text('${defaultValue}');"/>
@@ -44,8 +50,10 @@
 			
 			<c:when test="${type.equals('text')}">
 				<input type="text" class="form-control ${isHidden}" id="${ft}input" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}/>
-				<c:set var="itemSet" scope="request" value="${itemSet}
-		            $('#${ft}input').val(obj.${field});"/>
+				<c:if test="${!calculated.equals('true')}">
+					<c:set var="itemSet" scope="request" value="${itemSet}
+			            $('#${ft}input').val(obj.${field});"/>
+				</c:if>
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload}
    					  $('#${ft}input').val('${defaultValue}');"/>
@@ -54,8 +62,10 @@
 			
 			<c:when test="${type.equals('textarea')}">
 				<textarea class="form-control ${isHidden}" rows="3" id="${ft}input" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}></textarea>
-				<c:set var="itemSet" scope="request" value="${itemSet}
-		            $('#${ft}input').val(obj.${field});"/>
+				<c:if test="${!calculated.equals('true')}">
+					<c:set var="itemSet" scope="request" value="${itemSet}
+			            $('#${ft}input').val(obj.${field});"/>
+				</c:if>
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload}
    					  $('#${ft}input').val('${defaultValue}');"/>
@@ -64,8 +74,10 @@
 			
 			<c:when test="${type.equals('password')}">
 				<input type="password" class="form-control ${isHidden}" id="${ft}input" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}/>
-				<c:set var="itemSet" scope="request" value="${itemSet}
-		            $('#${ft}input').val(obj.${field});"/>
+				<c:if test="${!calculated.equals('true')}">
+					<c:set var="itemSet" scope="request" value="${itemSet}
+			            $('#${ft}input').val(obj.${field});"/>
+				</c:if>
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload}
    					  $('#${ft}input').val('${defaultValue}');"/>
@@ -97,8 +109,10 @@
 						<span class="glyphicon ${glyphicon} ${isHidden}"></span>
 					</span>
 				</div>
-				<c:set var="itemSet" scope="request" value="${itemSet}
-		            $('#${ft}input').val(obj.${field});"/>
+				<c:if test="${!calculated.equals('true')}">
+					<c:set var="itemSet" scope="request" value="${itemSet}
+			            $('#${ft}input').val(obj.${field});"/>
+		        </c:if>
 		            
 				<c:if test="${defaultValue != null}">
 					<c:if test="${defaultValue == 'now'}">
@@ -130,7 +144,12 @@
 				<c:set var="imageItemIds" scope="request" value="${imageItemIds}${ft}input,"/>
 				
 <%-- 				<c:set var="imgData" value="obj.${field}.replace('\\\\','/')" /> --%>
-				<c:set var="imgData" value="'${cardMethod}?operation=pic&id='+idParam+'&fld=${field}'" />
+				<c:if test="${defaultValue != null}">
+					<c:set var="imgData" value="'${cardMethod}?operation=pic&id='+idParam+'&fld=${defaultValue}'" />
+				</c:if>
+				<c:if test="${defaultValue == null && !calculated.equals('true')}">
+					<c:set var="imgData" value="'${cardMethod}?operation=pic&id='+idParam+'&fld=${field}'" />
+				</c:if>
 				<c:set var="itemSet" scope="request" value="${itemSet}
 					$('#${ft}input').fileinput({
 						overwriteInitial: true,
@@ -159,8 +178,10 @@
 					<span class="col-md-6 col-lg-5 col-sm-6">
 						<input type="number" class="form-control ${isHidden}" style="display: inline-block !important" id="${ft}input" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}/>
 					</span>
-					<c:set var="itemSet" scope="request" value="${itemSet}
-			            $('#${ft}input').val(obj.${field});"/>
+					<c:if test="${!calculated.equals('true')}">
+						<c:set var="itemSet" scope="request" value="${itemSet}
+				            $('#${ft}input').val(obj.${field});"/>
+				    </c:if>
 					<c:if test="${defaultValue != null}">
 						<c:set var="itemPreload" scope="request" value="${itemPreload}
 	   					  $('#${ft}input').val('${defaultValue}');"/>
@@ -173,8 +194,10 @@
 					<span class="col-md-6 col-lg-5 col-sm-6">
 						<input type="number" class="form-control ${isHidden}" style="display: inline-block !important" id="${ft}input" placeholder="${context.gs(label)}" ${isRequired} ${isDisabled}/>
 					</span>
-					<c:set var="itemSet" scope="request" value="${itemSet}
-			            $('#${ft}input').val(obj.${field});"/>
+					<c:if test="${!calculated.equals('true')}">
+						<c:set var="itemSet" scope="request" value="${itemSet}
+				            $('#${ft}input').val(obj.${field});"/>
+					</c:if>
 					<c:if test="${defaultValue != null}">
 						<c:set var="itemPreload" scope="request" value="${itemPreload}
 	   					  $('#${ft}input').val('${defaultValue}');"/>
@@ -183,13 +206,14 @@
 					<c:set var="ftc" scope="request" value="${fn:replace(currencyField, '.', '_')}" />
 					<c:set var="ftc" scope="request" value="${ftc}${modifier}" />
 					
-					<c:set var="itemids" scope="request" value="${itemids}
-						${ftc}input,"/>
-					<c:set var="itemReq" scope="request" value="${itemReq}
-						${ftc}:${ftc}String,"/>
-					<c:set var="itemVal" scope="request" value="${itemVal}
-						${ftc}String = $('#${ftc}input').val();"/>
-					
+					<c:if test="${!calculated.equals('true')}">
+						<c:set var="itemids" scope="request" value="${itemids}
+							${ftc}input,"/>
+						<c:set var="itemReq" scope="request" value="${itemReq}
+							${ftc}:${ftc}String,"/>
+						<c:set var="itemVal" scope="request" value="${itemVal}
+							${ftc}String = $('#${ftc}input').val();"/>
+					</c:if>					
 					<c:set var="isDis" value="${isDisabled}" />
 					<c:if test="${isDisabled.equals('readonly')}">
 						<c:set var="isDis" value="disabled" />
@@ -209,9 +233,10 @@
 					</span>
 				</div>
 				
-				<c:set var="itemSet" scope="request" value="${itemSet}
-		            $('#${ftc}input')[0].selectize.addItem([obj.${currencyField}]);"/>
-				
+				<c:if test="${!calculated.equals('true')}">
+					<c:set var="itemSet" scope="request" value="${itemSet}
+			            $('#${ftc}input')[0].selectize.addItem([obj.${currencyField}]);"/>
+				</c:if>		
 				<script>
 				$("#${ftc}input").selectize({
 				    openOnFocus: true
@@ -242,9 +267,11 @@
 					</c:forTokens>
 				</select>
 				
-				<c:set var="itemSet" scope="request" value="${itemSet}
-		            $('#${ft}input')[0].selectize.addItem([obj.${field}]);"/>
-				
+				<c:if test="${!calculated.equals('true')}">
+					<c:set var="itemSet" scope="request" value="${itemSet}
+			            $('#${ft}input')[0].selectize.addItem([obj.${field}]);"/>
+				</c:if>
+						
 				<script>
 				$("#${ft}input").selectize({
 				    openOnFocus: true,
@@ -271,8 +298,10 @@
 					</c:forTokens>
 				</select>
 				
-				<c:set var="itemSet" scope="request" value="${itemSet}
-		            $('#${ft}input')[0].selectize.addItem([obj.${field}]);"/>
+				<c:if test="${!calculated.equals('true')}">
+					<c:set var="itemSet" scope="request" value="${itemSet}
+		            	$('#${ft}input')[0].selectize.addItem([obj.${field}]);"/>
+				</c:if>
 				
 				<script>
 				$("#${ft}input").selectize({
@@ -294,33 +323,34 @@
 				<select class="selectized" style="display: none" id="${ft}input" ${isRequired}  ${isDis}>
 				</select>
 
-				<c:set var="itemSet" scope="request" value="${itemSet}
-				    el = $('#${ft}input')[0].selectize;"/>
-				<c:if test="${multiple.equals('true')}">
+				<c:if test="${!calculated.equals('true')}">
 					<c:set var="itemSet" scope="request" value="${itemSet}
-					obj.${field}.forEach(function (objItem) {"/>
+					    el = $('#${ft}input')[0].selectize;"/>
+					<c:if test="${multiple.equals('true')}">
+						<c:set var="itemSet" scope="request" value="${itemSet}
+						obj.${field}.forEach(function (objItem) {"/>
+					</c:if>
+					<c:if test="${!multiple.equals('true')}">
+						<c:set var="itemSet" scope="request" value="${itemSet}
+						objItem = obj.${field};"/>
+					</c:if>
+						<c:set var="itemSet" scope="request" value="${itemSet}
+							el.addOption(objItem?{id: objItem.id, ${referenceFieldTitle}: objItem.${referenceFieldTitle}}:{});"/>
+						<c:set var="itemSet" scope="request" value="${itemSet}
+							el.addItem(objItem?objItem.id:null);"/>
+					<c:if test="${multiple.equals('true')}">
+						<c:set var="itemSet" scope="request" value="${itemSet}
+						});"/>
+					</c:if>
+	
+					<c:set var="itemSet" scope="request" value="${itemSet}
+					    el.load(${ft}LoadInitialData);
+					    el.refreshOptions(false);
+					    el.refreshItems();"/>
+	
+					<c:set var="itemAfterLoad" scope="request" value="${itemAfterLoad}
+						$('#${ft}input')[0].selectize.load(${ft}LoadInitialData);"/>
 				</c:if>
-				<c:if test="${!multiple.equals('true')}">
-					<c:set var="itemSet" scope="request" value="${itemSet}
-					objItem = obj.${field};"/>
-				</c:if>
-					<c:set var="itemSet" scope="request" value="${itemSet}
-						el.addOption(objItem?{id: objItem.id, ${referenceFieldTitle}: objItem.${referenceFieldTitle}}:{});"/>
-					<c:set var="itemSet" scope="request" value="${itemSet}
-						el.addItem(objItem?objItem.id:null);"/>
-				<c:if test="${multiple.equals('true')}">
-					<c:set var="itemSet" scope="request" value="${itemSet}
-					});"/>
-				</c:if>
-
-				<c:set var="itemSet" scope="request" value="${itemSet}
-				    el.load(${ft}LoadInitialData);
-				    el.refreshOptions(false);
-				    el.refreshItems();"/>
-
-				<c:set var="itemAfterLoad" scope="request" value="${itemAfterLoad}
-					$('#${ft}input')[0].selectize.load(${ft}LoadInitialData);"/>
-
 				<c:if test="${defaultValue != null}">
 					<c:set var="itemPreload" scope="request" value="${itemPreload}
 				    	el = $('#${ft}input')[0].selectize;

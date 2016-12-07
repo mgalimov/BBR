@@ -466,6 +466,15 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				return visit.toJson();
 			else
 				return "";
+		} else
+		if (operation.equals("getVisitsNumber")) {
+			String userContacts = params.get("userContacts").trim(); 
+			if (userContacts.equals(""))
+				return "";
+			else {
+				return manager.getVisitsNumber(userContacts).toString();
+			}
+				
 		}
 
 		return "";

@@ -970,4 +970,22 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 			return false;
 		}
 	}
+
+	public Long getVisitsNumber(String userContacts) {
+        Session session = BBRUtil.getSession();
+        boolean tr = BBRUtil.beginTran();
+        try {
+    		Query query = session.createQuery(
+    				"select count(*)" + 
+                    "  from BBRVisit " +  
+    			    " where userContacts = '" + userContacts + "' " + 
+    				"   and status in (" + BBRVisitStatus.VISSTATUS_APPROVED + "," + BBRVisitStatus.VISSTATUS_PERFORMED + ")"); 
+        	Long count = (Long)query.uniqueResult();
+        	BBRUtil.commitTran(tr);
+        	return count;
+        } catch (Exception ex) {
+        	BBRUtil.rollbackTran(tr);
+        }
+        return 0L;
+	}
 }

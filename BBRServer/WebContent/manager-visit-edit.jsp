@@ -24,6 +24,7 @@
 				<t:card-item label="LBL_COMMENT" type="text" field="comment" />
 			</t:card-tab>
 			<t:card-tab label="LBL_MONEY_TAB" id="moneyTab" combined="true">
+				<t:card-item label="LBL_VISIT_NUMBER" type="text" field="visitsNumber" isDisabled="readonly" defaultValue="${visitNumber}" calculated="true"/>
 				<t:card-item label="LBL_FINAL_PRICE" type="text" field="finalPrice" isRequired="required" />
 				<t:card-item label="LBL_DISCOUNT_PERCENT" type="text" field="discountPercent" defaultValue="0" isRequired="required"/>
 				<t:card-item label="LBL_DISCOUNT_AMOUNT" type="text" field="discountAmount" defaultValue="0" isRequired="required"/>
@@ -179,10 +180,21 @@
 			}
 		}
 		
-/*		idParam = getUrlParameter('id');
-		if (!idParam || idParam == 'new') {
-			$("#timeScheduledinput").attr("readonly", "");
-		}*/
+		$("#userContactsinput").on("change", onUserContactsChange);
+		
+		function onUserContactsChange() {
+			$.ajax({
+	        	url: 'BBRVisits',
+	        	data: {
+	        		operation: 'getVisitsNumber',
+	        		userContacts: $('#userContactsinput').val()
+	        	}
+	    	}).done(function (data) {
+	    		$("#visitsNumberinput").val(data);	
+	    	});
+		}
+		
+		onUserContactsChange();
 	});
 	
 </script>
