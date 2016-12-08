@@ -337,6 +337,39 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			}
 		}
 		
+		String[] prev = (String[])context.get("visitsPrevious");
+		if (prev != null) {
+			try {
+				String userContacts = prev[0];
+				String sPosId = null;
+				String sVisitId = null;
+				if (prev.length > 0)
+					sPosId = prev[1];
+				if (prev.length > 1)
+					sVisitId = prev[2];
+				
+				if (userContacts.equals(""))
+					return "";
+				else {
+					Long visitId = null;
+					try {
+						visitId = Long.parseLong(sVisitId);
+					} catch (Exception ex2) {
+					}
+
+					Long posId = null;
+					try {
+						posId = Long.parseLong(sPosId);
+					} catch (Exception ex2) {
+						return "";
+					}
+
+					return manager.listPreviousVisits(userContacts, visitId, posId, pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
+				}
+			} catch (Exception ex) {
+				return "";
+			}
+		}
 		String myVisits = (String)context.get("visitsMy");
 		if (myVisits != null && !myVisits.isEmpty() && context.user != null)
 			return manager.list(context.user.getId(), context.filterShop, context.filterPoS, context.filterStartDate, context.filterEndDate,
@@ -469,16 +502,33 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 		} else
 		if (operation.equals("getVisitsNumber")) {
 			String userContacts = params.get("userContacts").trim(); 
-			String posId = params.get("posId").trim();
+			String sPosId = params.get("posId").trim();
+			String sVisitId = params.get("visitId").trim();
 			
 			BBRContext context = BBRContext.getContext(request);
 			if (userContacts.equals(""))
 				return "";
 			else {
-				Long l = manager.getVisitsNumber(userContacts);
+				Long visitId = null;
+				Long posId = null;
+				
+				if (sVisitId != "") {
+					try {
+						visitId = Long.parseLong(sVisitId);
+					} catch (Exception ex2) {
+					}
+				}
+				
+				try {
+					posId = Long.parseLong(sPosId);
+				} catch (Exception ex2) {
+					return "";
+				}
+				
+				Long l = manager.getVisitsNumber(userContacts, visitId, posId);
 				String prizeString = "";
 				try {
-					if (manager.isPrizeVisit(l, Long.parseLong(posId)))
+					if (manager.isPrizeVisit(l, posId))
 						prizeString = context.gs("MSG_PRIZE_VISIT");
 					String d[] = new String[2];
 					d[0] = l.toString();

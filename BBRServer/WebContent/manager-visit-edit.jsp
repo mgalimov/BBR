@@ -12,32 +12,39 @@
 	        	data: {
 	        		operation: 'getVisitsNumber',
 	        		userContacts: $('#userContactsinput').val(),
-	        		posId: $("#posinput").val()
+	        		posId: $("#posinput").val(),
+	        		visitId: obj.id
 	        	}
 	    	}).done(function (data) {
 	    		if (data != "") {
 		    		d = $.parseJSON(data);
-		    		$("#visitsNumberinput").val(d[0]);
+// 		    		$("#visitsNumberinput").val(d[0]);
+		    		$("#openPreviousVisitsButton").text("${context.gs('LBL_PREVIOUS_VISITS')} : " + d[0]);
 		    		if (d[1] != "") {
 		    			$('#alertText').text(d[1]);
 		    			$('#alertMessage').removeClass('hide');
 		    		}
-	    		} else
-	    			$("#visitsNumberinput").val("0");
+	    		} else {
+// 	    			$("#visitsNumberinput").val("0");
+	    			$("#openPreviousVisitsButton").text("${context.gs('LBL_PREVIOUS_VISITS')} : 0");
+	    		}
 	    	});
 		}
 		</script>
 		
 		<t:card title="LBL_EDIT_VISIT_TITLE" gridPage="source" method="BBRVisits" showTabs="true">
-			<t:toolbar-item label="LBL_APPROVE_VISIT" id="approveButton" accent="btn-success" condition="obj.status==0 || obj.status==2"></t:toolbar-item>
-			<t:toolbar-item label="LBL_CANCEL_VISIT" id="cancelVisitButton" accent="btn-default" condition="obj.status<=1"></t:toolbar-item>
-			<t:toolbar-item label="LBL_CLOSE_VISIT" id="closeVisitButton" accent="btn-primary" condition="obj.status<=1"></t:toolbar-item>
+			<t:toolbar-group spaceBefore="true">
+				<t:toolbar-item label="LBL_APPROVE_VISIT" id="approveButton" accent="btn-success" condition="obj.status==0 || obj.status==2" spaceBefore="true" />
+				<t:toolbar-item label="LBL_CANCEL_VISIT" id="cancelVisitButton" accent="btn-default" condition="obj.status<=1"/>
+				<t:toolbar-item label="LBL_CLOSE_VISIT" id="closeVisitButton" accent="btn-primary" condition="obj.status<=1"/>
+			</t:toolbar-group>
+			<t:toolbar-item label="LBL_PREVIOUS_VISITS" id="openPreviousVisitsButton" accent="btn-default" spaceBefore="true"/>
 			<t:card-tab label="LBL_MAIN_VISIT_TAB" id="mainTab" isActive="true" combined="true">
 				<t:card-item label="LBL_DATE_TIME" type="datetime" field="timeScheduled"/>
 				<t:card-item label="LBL_REAL_TIME" type="datetime" field="realTime" timeStepping="30" defaultValue="now" isRequired="required" />
 				<t:card-item label="LBL_USER_NAME" type="text" field="userName" />
 				<t:card-item label="LBL_PHONE" type="text" field="userContacts" />
-				<t:card-item label="LBL_VISITS_NUMBER" type="text" field="visitsNumber" isDisabled="readonly" defaultValue="" calculated="true"/>
+<%-- 				<t:card-item label="LBL_VISITS_NUMBER" type="text" field="visitsNumber" isDisabled="readonly" defaultValue="" calculated="true"/> --%>
 				<t:card-item label="LBL_COMMENT" type="text" field="comment" />
 				<t:card-item label="LBL_POS" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes"/>
 				<t:card-item label="LBL_SPEC" type="reference" field="spec" referenceFieldTitle="name" referenceMethod="BBRSpecialists" isRequired="required" />
@@ -208,6 +215,12 @@
 		}
 		
 		$("#userContactsinput").on("change", onUserContactsChange);
+		$("#openPreviousVisitsButton").click(function() {
+			pos = $("#posinput").val();
+			userContacts = $('#userContactsinput').val();
+    		visitId = obj.id;
+			window.location.href = "manager-visit-list.jsp?t=previous&query="+userContacts+"@@"+pos+"@@"+visitId;
+		});
 	});
 	
 </script>

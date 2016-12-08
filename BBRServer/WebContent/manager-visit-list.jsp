@@ -23,6 +23,7 @@
 			context.set("visitsUserNC", userNC);
 			context.set("visitsPosId", null);
 			context.set("visitsDatePos", null);
+			context.set("visitsPrevious", null);
 			
 			titleMod = BBRUtil.visualTitleDelimiter + userNC[0];
 			if (userNC.length == 2)
@@ -34,6 +35,7 @@
 			context.set("visitsDatePos", datePos);
 			context.set("visitsUserNC", null);
 			context.set("visitsPosId", null);
+			context.set("visitsPrevious", null);
 			
 			if (datePos.length > 0) {
 				SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
@@ -53,7 +55,17 @@
 			context.set("visitsPosId", params.get("query"));
 			context.set("visitsUserNC", null);
 			context.set("visitsDatePos", null);
+			context.set("visitsPrevious", null);
 			titleMod += BBRUtil.visualTitleDelimiter + context.gs("LBL_UNAPPROVED_TITLE_MOD");
+		}
+		
+		if (t.equals("previous")) {
+			String[] prev = params.get("query").split(BBRUtil.recordDivider);
+			context.set("visitsDatePos", null);
+			context.set("visitsPosId", null);
+			context.set("visitsUserNC", null);
+			context.set("visitsPrevious", prev);
+			titleMod += BBRUtil.visualTitleDelimiter + context.gs("LBL_PREVIOUS_VISITS");
 		}
 		
 		if (t.equals("all")) {

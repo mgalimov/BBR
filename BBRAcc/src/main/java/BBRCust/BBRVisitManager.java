@@ -737,6 +737,30 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		return list(pageNumber, pageSize, where, orderBy);
 	}
 
+	public BBRDataSet<BBRVisit> listPreviousVisits(String userContacts, Long visitId, Long posId, int pageNumber, int pageSize, String orderBy) {
+		if (posId == null)
+			return null;
+		
+		String where = "";
+		String visitWhere = "";
+    	try {
+    		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+    		BBRVisitManager vmgr = new BBRVisitManager();
+    		BBRVisit v = vmgr.findById(visitId);
+		    visitWhere = " and id <> " + v.getId() + 
+		    		     " and coalesce(realTime, timeScheduled) <= '" + df.format(v.getRealTime()) + "'";
+
+    	} catch (Exception ex1) {
+    	}
+    	
+		where = " userContacts = '" + userContacts + "' " +
+                " and pos.id = " + posId.toString() + 
+                visitWhere + 
+				" and status in (" + BBRVisitStatus.VISSTATUS_APPROVED + "," + BBRVisitStatus.VISSTATUS_PERFORMED + ")";		
+		
+		return list(pageNumber, pageSize, where, orderBy);
+	}
+
 	private String getFilterWhere(BBRShop shop, BBRPoS pos, Date startDate, Date endDate, int pageNumber) {
 		String where = "";
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
@@ -971,14 +995,26 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		}
 	}
 
-	public Long getVisitsNumber(String userContacts) {
+	public Long getVisitsNumber(String userContacts, Long visitId, Long posId) {
         Session session = BBRUtil.getSession();
         boolean tr = BBRUtil.beginTran();
         try {
+        	String visitWhere = "";
+        	try {
+        		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+        		BBRVisitManager vmgr = new BBRVisitManager();
+        		BBRVisit v = vmgr.findById(visitId);
+			    visitWhere = "   and visit.id <> " + v.getId() + 
+			    		     "   and coalesce(visit.realTime, visit.timeScheduled) <= '" + df.format(v.getRealTime()) + "'";
+
+        	} catch (Exception ex1) {
+        	}
     		Query query = session.createQuery(
     				"select count(*)" + 
-                    "  from BBRVisit " +  
-    			    " where userContacts = '" + userContacts + "' " + 
+                    "  from BBRVisit visit " +  
+    			    " where userContacts = '" + userContacts + "' " +
+                    "   and pos.id = " + posId.toString() + 
+                    visitWhere + 
     				"   and status in (" + BBRVisitStatus.VISSTATUS_APPROVED + "," + BBRVisitStatus.VISSTATUS_PERFORMED + ")"); 
         	Long count = (Long)query.uniqueResult();
         	BBRUtil.commitTran(tr);
@@ -994,7 +1030,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		BBRPoS pos = pmgr.findById(posId);
 		if (pos != null) {
 			Long p = pos.getPrizeVisitNumber(); 
-			if (l%p == 0)
+			if (p != null && p > 0 && (l+1)%p == 0)
 				return true;
 		}
 		return false;
