@@ -1,30 +1,53 @@
 <%@page import="BBRClientApp.BBRContext"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 
 <t:wrapper title="LBL_EDIT_VISIT_TITLE">
 <jsp:body>
+		<script>
+		function onUserContactsChange() {
+			$.ajax({
+	        	url: 'BBRVisits',
+	        	data: {
+	        		operation: 'getVisitsNumber',
+	        		userContacts: $('#userContactsinput').val(),
+	        		posId: $("#posinput").val()
+	        	}
+	    	}).done(function (data) {
+	    		if (data != "") {
+		    		d = $.parseJSON(data);
+		    		$("#visitsNumberinput").val(d[0]);
+		    		if (d[1] != "") {
+		    			$('#alertText').text(d[1]);
+		    			$('#alertMessage').removeClass('hide');
+		    		}
+	    		} else
+	    			$("#visitsNumberinput").val("0");
+	    	});
+		}
+		</script>
+		
 		<t:card title="LBL_EDIT_VISIT_TITLE" gridPage="source" method="BBRVisits" showTabs="true">
 			<t:toolbar-item label="LBL_APPROVE_VISIT" id="approveButton" accent="btn-success" condition="obj.status==0 || obj.status==2"></t:toolbar-item>
-<%-- 			<t:toolbar-item label="LBL_DISAPPROVE_VISIT" id="disapproveButton" accent="btn-danger" condition="obj.status==0 || obj.status==2"></t:toolbar-item> --%>
 			<t:toolbar-item label="LBL_CANCEL_VISIT" id="cancelVisitButton" accent="btn-default" condition="obj.status<=1"></t:toolbar-item>
 			<t:toolbar-item label="LBL_CLOSE_VISIT" id="closeVisitButton" accent="btn-primary" condition="obj.status<=1"></t:toolbar-item>
 			<t:card-tab label="LBL_MAIN_VISIT_TAB" id="mainTab" isActive="true" combined="true">
-				<t:card-item label="LBL_POS" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes"/>
 				<t:card-item label="LBL_DATE_TIME" type="datetime" field="timeScheduled"/>
 				<t:card-item label="LBL_REAL_TIME" type="datetime" field="realTime" timeStepping="30" defaultValue="now" isRequired="required" />
 				<t:card-item label="LBL_USER_NAME" type="text" field="userName" />
 				<t:card-item label="LBL_PHONE" type="text" field="userContacts" />
-				<t:card-item label="LBL_BOOKING_CODE" type="text" field="bookingCode" isDisabled="readonly" />
+				<t:card-item label="LBL_VISITS_NUMBER" type="text" field="visitsNumber" isDisabled="readonly" defaultValue="" calculated="true"/>
+				<t:card-item label="LBL_COMMENT" type="text" field="comment" />
+				<t:card-item label="LBL_POS" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes"/>
+				<t:card-item label="LBL_SPEC" type="reference" field="spec" referenceFieldTitle="name" referenceMethod="BBRSpecialists" isRequired="required" />
 				<t:card-item label="LBL_PROCEDURE" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures" isRequired="required" />
 				<t:card-item label="LBL_ADDITIONAL_PROCEDURES" field="procedures" type="reference" referenceFieldTitle="title" referenceMethod="BBRProcedures" multiple="true" isRequired="required"/>
+				<t:card-item label="LBL_BOOKING_CODE" type="text" field="bookingCode" isDisabled="readonly" />
 				<t:card-item label="LBL_LENGTH" type="text" field="length" isRequired="required" />
-				<t:card-item label="LBL_SPEC" type="reference" field="spec" referenceFieldTitle="name" referenceMethod="BBRSpecialists" isRequired="required" />
 				<t:card-item label="LBL_VISIT_STATUS" field="status" type="select" options="OPT_VISIT_STATUS" isDisabled="readonly" defaultValue="3"/>
-				<t:card-item label="LBL_COMMENT" type="text" field="comment" />
 			</t:card-tab>
 			<t:card-tab label="LBL_MONEY_TAB" id="moneyTab" combined="true">
-				<t:card-item label="LBL_VISIT_NUMBER" type="text" field="visitsNumber" isDisabled="readonly" defaultValue="${visitNumber}" calculated="true"/>
 				<t:card-item label="LBL_FINAL_PRICE" type="text" field="finalPrice" isRequired="required" />
 				<t:card-item label="LBL_DISCOUNT_PERCENT" type="text" field="discountPercent" defaultValue="0" isRequired="required"/>
 				<t:card-item label="LBL_DISCOUNT_AMOUNT" type="text" field="discountAmount" defaultValue="0" isRequired="required"/>
@@ -32,9 +55,13 @@
 				<t:card-item label="LBL_AMOUNT_TO_SPECIALIST" type="text" field="amountToSpecialist" isRequired="required"/>
 				<t:card-item label="LBL_AMOUNT_TO_MATERIALS" type="text" field="amountToMaterials" isRequired="required" defaultValue="0"/>
 			</t:card-tab>
+			
+			<c:set var="itemSet" scope="request" value="${itemSet} 
+						onUserContactsChange();" />
 		</t:card>
 </jsp:body>
 </t:wrapper>
+
 
 <script>
 	var posId; 
@@ -181,20 +208,6 @@
 		}
 		
 		$("#userContactsinput").on("change", onUserContactsChange);
-		
-		function onUserContactsChange() {
-			$.ajax({
-	        	url: 'BBRVisits',
-	        	data: {
-	        		operation: 'getVisitsNumber',
-	        		userContacts: $('#userContactsinput').val()
-	        	}
-	    	}).done(function (data) {
-	    		$("#visitsNumberinput").val(data);	
-	    	});
-		}
-		
-		onUserContactsChange();
 	});
 	
 </script>

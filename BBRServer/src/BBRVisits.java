@@ -469,14 +469,26 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 		} else
 		if (operation.equals("getVisitsNumber")) {
 			String userContacts = params.get("userContacts").trim(); 
+			String posId = params.get("posId").trim();
+			
+			BBRContext context = BBRContext.getContext(request);
 			if (userContacts.equals(""))
 				return "";
 			else {
-				return manager.getVisitsNumber(userContacts).toString();
+				Long l = manager.getVisitsNumber(userContacts);
+				String prizeString = "";
+				try {
+					if (manager.isPrizeVisit(l, Long.parseLong(posId)))
+						prizeString = context.gs("MSG_PRIZE_VISIT");
+					String d[] = new String[2];
+					d[0] = l.toString();
+					d[1] = prizeString;
+					return BBRUtil.gson().toJson(d);
+				} catch (Exception ex) {
+					return "";
+				}
 			}
-				
 		}
-
 		return "";
 	};
 

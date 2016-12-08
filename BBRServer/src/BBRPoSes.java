@@ -37,6 +37,14 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 		String urlID = params.get("urlID");
 		String email = params.get("email");
 		String sms = params.get("sms");
+		String sPrizeVisitNumber = params.get("prizeVisitNumber");
+		Long prizeVisitNumber = 0L;
+		
+		try {
+			prizeVisitNumber = Long.parseLong(sPrizeVisitNumber);
+		} catch (Exception ex) {
+		}
+		
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullTimeFormat);
 		BBRShopManager shopMgr = new BBRShopManager();
 		BBRShop shop = shopMgr.findById(Long.parseLong(shopId));
@@ -52,7 +60,8 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 					timeZone,
 					urlID,
 					email,
-					sms
+					sms,
+					prizeVisitNumber
 					);
 		return "";
 	}
@@ -71,10 +80,19 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 		String urlID = params.get("urlID");
 		String email = params.get("email");
 		String sms = params.get("sms");
+		String sPrizeVisitNumber = params.get("prizeVisitNumber");
+		Long prizeVisitNumber = 0L;
+		
+		try {
+			prizeVisitNumber = Long.parseLong(sPrizeVisitNumber);
+		} catch (Exception ex) {
+		}
+
 		if (locationLat.isEmpty())
 			locationLat = "0";
 		if (locationLng.isEmpty())
 			locationLng = "0";
+		
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullTimeFormat);
 		BBRShopManager shopMgr = new BBRShopManager();
 		BBRShop shop = shopMgr.findById(Long.parseLong(shopId));
@@ -90,6 +108,7 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 			pos.setUrlID(urlID);
 			pos.setEmail(email);
 			pos.setSms(sms);
+			pos.setPrizeVisitNumber(prizeVisitNumber);
 			manager.update(pos);
 		}
 		return null;		

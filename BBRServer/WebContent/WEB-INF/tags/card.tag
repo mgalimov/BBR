@@ -44,11 +44,11 @@
 	  <c:if test="${showToolbar == true || showToolbar == null}">
 		  <div class="panel-heading" id="toolbar">
 	  		<c:if test="${showFooter == true || showFooter == null}">
-	  			<button type="button" class="btn btn-default" id="saveChanges"><c:if test="${buttonSave == null}"><span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span></c:if><c:if test="${buttonSave != null}">${context.gs(buttonSave)}</c:if></button>
+	  			<button type="button" class="btn btn-default" id="saveChangesTop"><c:if test="${buttonSave == null}"><span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span></c:if><c:if test="${buttonSave != null}">${context.gs(buttonSave)}</c:if></button>
 	  		</c:if>
 		    <span id="toolbarpanel"></span>		  	
 	  		<c:if test="${showFooter == true || showFooter == null}">
-		  		<button type="button" class="btn btn-link pull-right" id="cancelChanges"><c:if test="${buttonCancel == null}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></c:if><c:if test="${buttonCancel != null}">${context.gs(buttonCancel)}</c:if></button>
+		  		<button type="button" class="btn btn-link pull-right" id="cancelChangesTop"><c:if test="${buttonCancel == null}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></c:if><c:if test="${buttonCancel != null}">${context.gs(buttonCancel)}</c:if></button>
 	  		</c:if>
 		  </div>
 	  </c:if>
@@ -125,81 +125,91 @@
 			${itemAfterLoad}
  		}
 		
-		$('#saveChanges').click(function(event) { 
-	 		idParam = getUrlParameter('id');
-            ${itemVal}
-    		if (!idParam || idParam == 'new')
-    			op = 'create';
-    		else
-    			op = 'update';
-
-    		$("div.form-group.has-error").each(function (i) {
-   				$(this).removeClass("has-error");
-    		});
-
-    		$("#saveChanges").attr("disabled", "disabled");
-    		$("#cancelChanges").attr("disabled", "disabled");
-    		
-    		var hasErrors = false; 
-    		$("*[required]").each(function (i) {
-    			if ($(this).val() == "") {
-    				$(this).parents("div.form-group").addClass("has-error");
-    				if ($(this).parents("div.tab-pane")) {
-	    				var errTabId = $(this).parents("div.tab-pane").attr("id");
-	    				$("a[aria-controls='" + errTabId + "']").addClass("has-error");
-    				}
-    				hasErrors = true;
-    			}
-    		});
-   		
-    		if (hasErrors) {
-     
-    			$("#saveChanges").prop("disabled", false);
-	    		$("#cancelChanges").prop("disabled", false);
-	    		$('#alertMessage').text('${context.gs("ERR_FILL_REQUIRED_FIELDS")}');
-				$('#alertMessage').removeClass('hide');
-			    $('html body').animate({
-			        scrollTop: 0 
-			    }, 200);    			
-    		} else
-	            $.get('${method}', 
-	            	{
-	            		id:idParam,${itemReq}
-	              		operation: op
-	            	}, 
-	              	function(responseText) { 
-	            		var fdata = new FormData();
-	            		var fids = '${imageItemIds}';
-	            		$.each(fids.split(','), function(i, fid) {
-	            			if (fid != "") {
-	            				file = $('#' + fid).prop('files')[0]; 
-	            		    	fdata.append(idParam + "#" + fid, file);
-	            			}
-	            		});
-	            		$.ajax('${method}',
-	            			{
-	            			   data: fdata,
-	            			   dataType: 'text',
-	            			   cache: false,
-	                           contentType: false,
-	                           processData: false,
-	                           type: 'post',
-	            			   success: function (responseText) {
-	        						saved = true; 
-	        						if (needToGoToGrid)
-	        							goToGrid('${gridPage}');
-	        						needToGoToGrid = true;
-	            				},
-	            			   error: saveFailed
-	            			});
-	              	}).fail(saveFailed);
-           });			 		
-		
-		$('#cancelChanges').click(function(event) {
+	
+		function saveChangesBtnClick(event) { 
+		 		idParam = getUrlParameter('id');
+	            ${itemVal}
+	    		if (!idParam || idParam == 'new')
+	    			op = 'create';
+	    		else
+	    			op = 'update';
+	
+	    		$("div.form-group.has-error").each(function (i) {
+	   				$(this).removeClass("has-error");
+	    		});
+	
+	    		$("#saveChanges").attr("disabled", "disabled");
+	    		$("#saveChangesTop").attr("disabled", "disabled");
+	    		$("#cancelChanges").attr("disabled", "disabled");
+	    		$("#cancelChangesTop").attr("disabled", "disabled");
+	    		
+	    		var hasErrors = false; 
+	    		$("*[required]").each(function (i) {
+	    			if ($(this).val() == "") {
+	    				$(this).parents("div.form-group").addClass("has-error");
+	    				if ($(this).parents("div.tab-pane")) {
+		    				var errTabId = $(this).parents("div.tab-pane").attr("id");
+		    				$("a[aria-controls='" + errTabId + "']").addClass("has-error");
+	    				}
+	    				hasErrors = true;
+	    			}
+	    		});
+	   		
+	    		if (hasErrors) {
+	     
+	    			$("#saveChanges").prop("disabled", false);
+	    			$("#saveChangesTop").prop("disabled", false);
+		    		$("#cancelChanges").prop("disabled", false);
+		    		$("#cancelChangesTop").prop("disabled", false);
+		    		$('#alertMessage').text('${context.gs("ERR_FILL_REQUIRED_FIELDS")}');
+					$('#alertMessage').removeClass('hide');
+				    $('html body').animate({
+				        scrollTop: 0 
+				    }, 200);    			
+	    		} else
+		            $.get('${method}', 
+		            	{
+		            		id:idParam,${itemReq}
+		              		operation: op
+		            	}, 
+		              	function(responseText) { 
+		            		var fdata = new FormData();
+		            		var fids = '${imageItemIds}';
+		            		$.each(fids.split(','), function(i, fid) {
+		            			if (fid != "") {
+		            				file = $('#' + fid).prop('files')[0]; 
+		            		    	fdata.append(idParam + "#" + fid, file);
+		            			}
+		            		});
+		            		$.ajax('${method}',
+		            			{
+		            			   data: fdata,
+		            			   dataType: 'text',
+		            			   cache: false,
+		                           contentType: false,
+		                           processData: false,
+		                           type: 'post',
+		            			   success: function (responseText) {
+		        						saved = true; 
+		        						if (needToGoToGrid)
+		        							goToGrid('${gridPage}');
+		        						needToGoToGrid = true;
+		            				},
+		            			   error: saveFailed
+		            			});
+		              	}).fail(saveFailed);
+	    }
+	
+		function cancelChangesBtnClick() {
 			saved = true;
 			$.get('${method}', {id : idParam, operation : 'cancel'});
 			goToGrid('${gridPage}');
-		});	
+		}
+		
+		$('#saveChanges').click(saveChangesBtnClick);
+		$('#saveChangesTop').click(saveChangesBtnClick);
+		$('#cancelChanges').click(cancelChangesBtnClick);
+		$('#cancelChangesTop').click(cancelChangesBtnClick);
  	});
  	
  	$(window).bind('beforeunload', function () {

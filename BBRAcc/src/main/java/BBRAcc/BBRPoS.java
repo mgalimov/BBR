@@ -57,6 +57,9 @@ public class BBRPoS extends BBRDataElement {
 
 	@Column(name="SMS_NOTIFICATION")
 	private String sms;
+	
+	@Column(name="PRIZE_VISIT_NUMBER")
+	private Long prizeVisitNumber;
 
 	public BBRPoS() {}
 	
@@ -162,5 +165,13 @@ public class BBRPoS extends BBRDataElement {
 
 	public void setSms(String sms) {
 		this.sms = sms;
+	}
+
+	public Long getPrizeVisitNumber() {
+		return prizeVisitNumber;
+	}
+
+	public void setPrizeVisitNumber(Long prizeVisitNumber) {
+		this.prizeVisitNumber = prizeVisitNumber;
 	}
 }

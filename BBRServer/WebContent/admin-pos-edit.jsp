@@ -18,7 +18,24 @@
 				<t:card-item label="LBL_URLID" field="urlID" type="text"/>
 				<t:card-item label="LBL_EMAIL_NOTIFICATION" field="email" type="text"/>
 				<t:card-item label="LBL_SMS_NOTIFICATION" field="sms" type="text"/>
+				<t:card-item label="LBL_PRIZE_VISIT_NUMBER" field="prizeVisitNumber" type="number"/>
 			</t:card-tab>
 		</t:card>
 	</jsp:body>
 </t:wrapper>
+
+<script>
+	$("#shopinput").on("change", function () {
+		shopId = $("#shopinput").val();
+		$.get("BBRShops",
+				{	
+					id: shopId,
+					operation: "getdata"
+				}
+			).done(function (data) {
+				shop = $.parseJSON(data);
+				el = $("#timeZoneinput")[0].selectize;
+				el.addItem(shop.timeZone);
+			});
+	});
+</script>

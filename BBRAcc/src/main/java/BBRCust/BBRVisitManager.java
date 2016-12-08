@@ -988,4 +988,15 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         }
         return 0L;
 	}
+
+	public boolean isPrizeVisit(Long l, Long posId) {
+		BBRPoSManager pmgr = new BBRPoSManager();
+		BBRPoS pos = pmgr.findById(posId);
+		if (pos != null) {
+			Long p = pos.getPrizeVisitNumber(); 
+			if (l%p == 0)
+				return true;
+		}
+		return false;
+	}
 }

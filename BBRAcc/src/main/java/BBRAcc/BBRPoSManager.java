@@ -22,7 +22,7 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 	
 	public void createAndStorePoS(BBRShop shop, String title, String locationDescription, 
 								  BBRGPS locationGPS, Date startWorkHour, Date endWorkHour,
-								  String currency, String timeZone, String urlID, String email, String sms) throws Exception {
+								  String currency, String timeZone, String urlID, String email, String sms, Long prizeVisitNumber) throws Exception {
 		boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();
 
@@ -38,6 +38,7 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
         pos.setUrlID(urlID);
         pos.setEmail(email);
         pos.setSms(sms);
+        pos.setPrizeVisitNumber(prizeVisitNumber);
 
         checkBeforeUpdate(pos);
         session.save(pos);
