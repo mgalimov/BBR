@@ -16,7 +16,7 @@
 				<t:card-item label="LBL_AVAILABLE_PROCEDURES" field="procedures" type="reference" referenceFieldTitle="title" referenceMethod="BBRProcedures" multiple="true" isRequired="required"/>
 			</t:card-tab>
 			<t:card-tab label="LBL_PHOTO" id="photoTab" combined="true">
-				<t:card-item label="LBL_PHOTO" field="photoPath" type="picture" />
+				<t:card-item label="LBL_PHOTO" field="photo" type="picture" />
 			</t:card-tab>
 		</t:card>
 	</jsp:body>

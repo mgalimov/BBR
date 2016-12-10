@@ -1,5 +1,6 @@
 package BBRCust;
 
+import java.sql.Blob;
 import java.util.Date;
 import java.util.Set;
 
@@ -60,9 +61,12 @@ public class BBRSpecialist extends BBRDataElement {
 	})
 	private Set<BBRProcedure> procedures;
 	
-	@Column(name="PHOTOPATH")
-	private String photoPath;
-	
+	@Column(name="PHOTO", columnDefinition="LONGBLOB")
+	private Blob photo;
+
+	@Column(name="PHOTOEXT")
+	private String photoExt;
+
 	public BBRSpecialist() {}
 	
 	public void setId(Long id) {
@@ -138,12 +142,12 @@ public class BBRSpecialist extends BBRDataElement {
 		this.procedures = procedures;
 	}
 
-	public String getPhotoPath() {
-		return photoPath;
+	public Blob getPhoto() {
+		return photo;
 	}
 
-	public void setPhotoPath(String photoPath) {
-		this.photoPath = photoPath;
+	public void setPhoto(Blob photo) {
+		this.photo = photo;
 	}
 
 	public Float getDailyAmount() {
@@ -160,6 +164,14 @@ public class BBRSpecialist extends BBRDataElement {
 
 	public void setProcedurePercent(Float procedurePercent) {
 		this.procedurePercent = procedurePercent;
+	}
+
+	public String getPhotoExt() {
+		return photoExt;
+	}
+
+	public void setPhotoExt(String photoExt) {
+		this.photoExt = photoExt;
 	}
 
 }

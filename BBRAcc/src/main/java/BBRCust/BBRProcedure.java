@@ -1,5 +1,7 @@
 package BBRCust;
 
+import java.sql.Blob;
+
 import javax.persistence.*;
 
 import BBR.BBRDataElement;
@@ -35,8 +37,8 @@ public class BBRProcedure extends BBRDataElement {
 	@Column(name="STATUS")
 	private int status;
 	
-	@Column(name="PHOTOPATH")
-	private String photoPath;
+	@Column(name="PHOTO")
+	private Blob photo;
 	
 	BBRProcedure() {
 	}
@@ -89,11 +91,11 @@ public class BBRProcedure extends BBRDataElement {
 		this.pos = pos;
 	}
 
-	public String getPhotoPath() {
-		return photoPath;
+	public Blob getPhoto() {
+		return photo;
 	}
 
-	public void setPhotoPath(String photoPath) {
-		this.photoPath = photoPath;
+	public void setPhoto(Blob photo) {
+		this.photo = photo;
 	}
 }

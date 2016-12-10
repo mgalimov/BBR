@@ -1,8 +1,12 @@
 package BBR;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Method;
+import java.sql.Blob;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -191,23 +195,95 @@ public class BBRDataManager<T extends BBRDataElement> {
     	return "shop.id = " + shopId;
     };
     
-    public void saveImagePath(Long objectId, String fieldName, String fileName) throws Exception {
-    	T obj = findById(objectId);
-    	if (obj != null) {
-    		Method m = obj.getClass().getMethod("set" + fieldName.substring(0,1).toUpperCase() + fieldName.substring(1), new Class[] { fileName.getClass() });
-    		m.invoke(obj, fileName);
-    		update(obj);
-    	}
-    }
+//    public void saveImagePath(Long objectId, String fieldName, String fileName) throws Exception {
+//    	T obj = findById(objectId);
+//    	if (obj != null) {
+//    		Method m = obj.getClass().getMethod("set" + fieldName.substring(0,1).toUpperCase() + fieldName.substring(1), new Class[] { fileName.getClass() });
+//    		m.invoke(obj, fileName);
+//    		update(obj);
+//    	}
+//    }
     
-    public String getFieldValue(Long objectId, String fieldName) throws Exception {
+    public Blob getBlobFieldValue(Long objectId, String fieldName, OutputStream out) throws Exception {
     	T obj = findById(objectId);
     	if (obj != null) {
     		Method m = obj.getClass().getMethod("get" + fieldName.substring(0,1).toUpperCase() + fieldName.substring(1));
+
     		Object o = m.invoke(obj);
-    		if (o != null) 
-    			return o.toString();
+    		if (o != null) {
+    			Blob p = (Blob)o;
+    			
+    			if (out != null) {
+        			InputStream in = p.getBinaryStream();
+        			
+    	    		byte[] b = new byte[1024];
+    	    		int n = 0; 
+    	            while ((n = in.read(b)) != -1) { 
+    	                out.write(b, 0, n); 
+    	            }
+    	            out.close();
+    			}
+    			
+	            return p;
+    		}
     	}
     	return null;
     }
+    
+    public void setBlobFieldValue(Long objectId, String fieldName, InputStream in) throws Exception {
+    	boolean tr = false;
+    	T obj = findById(objectId);
+    	if (obj != null) {
+    		try {
+	    		tr = BBRUtil.beginTran();
+	    		Blob blob = Hibernate.getLobCreator(BBRUtil.getSession()).createBlob(new byte[0]);
+	    		Method m = obj.getClass().getMethod("set" + fieldName.substring(0,1).toUpperCase() + fieldName.substring(1), java.sql.Blob.class);
+	    		OutputStream out = blob.setBinaryStream(1);
+	    		
+	    		byte[] b = new byte[1024];
+	    		int n = 0; 
+	            while ((n = in.read(b)) != -1) { 
+	                out.write(b, 0, n); 
+	            }
+	            out.close();
+	    		m.invoke(obj, blob);
+	    		BBRUtil.getSession().merge(obj);
+	    		BBRUtil.commitTran(tr);
+    		} catch (Exception ex) {
+    			BBRUtil.rollbackTran(tr);
+    			throw new Exception(ex);
+    		}
+    	}
+    }
+    
+    public String getStringFieldValue(Long objectId, String fieldName) throws Exception {
+    	T obj = findById(objectId);
+    	if (obj != null) {
+    		Method m = obj.getClass().getMethod("get" + fieldName.substring(0,1).toUpperCase() + fieldName.substring(1));
+
+    		Object o = m.invoke(obj);
+    		if (o != null) {
+	            return o.toString();
+    		}
+    	}
+    	return null;
+    }
+
+    public void setStringFieldValue(Long objectId, String fieldName, String value) throws Exception {
+       	boolean tr = false;
+        T obj = findById(objectId);
+    	if (obj != null) {
+    		try {
+	    		tr = BBRUtil.beginTran();
+	    		Method m = obj.getClass().getMethod("set" + fieldName.substring(0,1).toUpperCase() + fieldName.substring(1), String.class);
+	    		m.invoke(obj, value);
+	    		BBRUtil.getSession().merge(obj);
+	    		BBRUtil.commitTran(tr);
+    		} catch (Exception ex) {
+    			BBRUtil.rollbackTran(tr);
+    			throw new Exception(ex);
+    		}
+    	}
+    }
+
 }

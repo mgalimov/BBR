@@ -1,7 +1,3 @@
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -138,25 +134,13 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 						fname = getPartAttrName(filePart, "filename");
 						int i = fname.lastIndexOf('.');
 						String ext = fname.substring(i); 
-						BBRContext context = BBRContext.getContext(request);
-						
+					
 						fname =  manager.getClassTitle() + "_" + id + ext;
-												
-						File fileSaveDir = new File(context.getAppDir() + File.separator + context.getPictureDir());
-					    if (!fileSaveDir.exists()) 
-					        fileSaveDir.mkdir();
-					    
 					    in = filePart.getInputStream();
-						out = new FileOutputStream(fileSaveDir + File.separator + fname);
-						
-						int read = 0;
-				        final byte[] bytes = new byte[1024];
-				        while ((read = in.read(bytes)) != -1) {
-				            out.write(bytes, 0, read);
-				        }
-				        
+					    
 						Long oId = Long.parseLong(id);
-						manager.saveImagePath(oId, name, fname);
+						manager.setBlobFieldValue(oId, name, in);
+						manager.setStringFieldValue(oId, name + "Ext", ext);
 						BBRUtil.log.info("Successfully saved image: " + fname);
 					}
 				} catch (Exception ex) {
@@ -316,49 +300,25 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 	// TODO: check access rights
 	protected String getPicture(String id, BBRParams params, HttpServletRequest request,
 			HttpServletResponse response) {
-		ServletOutputStream fout = null;
-		FileInputStream fin = null;
-		BufferedInputStream bin = null;
-		BufferedOutputStream bout = null;
+		ServletOutputStream out = null;
 		
 		try {
 			String fieldName = params.get("fld");
 			Long oId = Long.parseLong(id);
-			String fname = manager.getFieldValue(oId, fieldName);
-			int i = fname.lastIndexOf('.');
-			String ext = fname.substring(i);
+			out = response.getOutputStream();
+			manager.getBlobFieldValue(oId, fieldName, out);
+			String ext = manager.getStringFieldValue(oId, fieldName + "Ext");
 			
 			if (ext.startsWith(".jp"))
 				response.setContentType("image/jpeg");
 			else
-				response.setContentType("image/" + ext);
-			
-			BBRContext context = BBRContext.getContext(request);
-			File fileSaveDir = new File(context.getAppDir() + File.separator + context.getPictureDir());
-			  
-			fout = response.getOutputStream();  
-			fin = new FileInputStream(fileSaveDir + File.separator + fname);  
-			      
-			bin = new BufferedInputStream(fin);     
-			bout = new BufferedOutputStream(fout);  
-			
-			int ch =0; ;  
-			while((ch=bin.read())!=-1) {  
-			    bout.write(ch);  
-			}  
-			      
+				response.setContentType("image/" + ext.substring(1));
 		} catch (Exception ex) {
 			BBRUtil.log.error(ex.getMessage());
 		} finally {
 			try {
-			    if (bin != null) 
-			    	bin.close();  
-			    if (fin != null)
-			    	fin.close();  
-			    if (bout != null)
-			    	bout.close();  
-			    if (fout != null)
-			    	fout.close();
+			    if (out != null)
+			    	out.close();
 			} catch (Exception ex1) {
 				
 			}
