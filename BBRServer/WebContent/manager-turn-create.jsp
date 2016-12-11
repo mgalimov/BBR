@@ -48,17 +48,22 @@
 
 <t:wrapper title="LBL_EDIT_TURN_TITLE">
 <jsp:body>
-		<t:card title="LBL_EDIT_TURN_TITLE" gridPage="manager-turn-list.jsp" method="BBRTurns">
+		<t:card title="LBL_EDIT_TURN_TITLE" gridPage="manager-turn-list.jsp" method="BBRTurns" showTabs="true">
 			<t:toolbar-item label="LBL_GUESS_TURN_BTN" id="guessTurnBtn" />
-			<t:card-item label="LBL_POS" field="pos" type="reference" 
-						 referenceFieldTitle="title" referenceMethod="BBRPoSes"/>
-			<t:card-item label="LBL_SPECIALIST" field="specialist" type="reference" 
-						 referenceFieldTitle="name" referenceMethod="BBRSpecialists"
-						 defaultValue="${specId}" defaultDisplay="${specName}"/>
-			<t:card-item label="LBL_TURN_DATE" field="date" type="date" 
-						 defaultValue="${defDate}"/>
-			<t:card-item label="LBL_START_TIME" field="startTime" type="time" defaultValue="${defStartTime}"/>
-			<t:card-item label="LBL_END_TIME" field="endTime" type="time" defaultValue="${defEndTime}"/>
+			<t:card-tab label="LBL_EDIT_TURN_TITLE" id="mainTab" isActive="true" combined="true">
+				<t:card-item label="LBL_POS" field="pos" type="reference" 
+							 referenceFieldTitle="title" referenceMethod="BBRPoSes"/>
+				<t:card-item label="LBL_SPECIALIST" field="specialist" type="reference" 
+							 referenceFieldTitle="name" referenceMethod="BBRSpecialists"
+							 defaultValue="${specId}" defaultDisplay="${specName}"/>
+				<t:card-item label="LBL_TURN_DATE" field="date" type="date" 
+							 defaultValue="${defDate}"/>
+				<t:card-item label="LBL_START_TIME" field="startTime" type="time" defaultValue="${defStartTime}"/>
+				<t:card-item label="LBL_END_TIME" field="endTime" type="time" defaultValue="${defEndTime}"/>
+			</t:card-tab>
+			<t:card-tab label="LBL_EDIT_TURN_TITLE" id="scheduleTab" isActive="false" combined="true">
+				<t:card-schedule-spec-turns posId="1"/>
+			</t:card-tab>
 		</t:card>
 </jsp:body>
 </t:wrapper>

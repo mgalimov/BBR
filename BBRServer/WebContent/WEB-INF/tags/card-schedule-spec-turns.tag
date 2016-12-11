@@ -1,0 +1,329 @@
+<%@tag import="BBRAcc.BBRPoSManager"%>
+<%@tag import="java.util.*"%>
+<%@tag import="java.text.SimpleDateFormat"%>
+<%@tag import="BBRCust.BBRVisitManager"%>
+<%@tag import="BBRCust.BBRVisitManager.*"%>
+<%@tag import="BBRCust.BBRSpecialistManager"%>
+<%@tag import="BBRCust.BBRSpecialist"%>
+<%@tag import="BBRAcc.BBRUser.BBRUserRole"%>
+<%@tag import="BBR.BBRDataSet"%>
+<%@tag import="BBR.BBRUtil"%>
+
+<%@ attribute name="posId" %>
+
+<%@tag language="java" pageEncoding="UTF-8" description="Card Schedule-Spec-Proc" import="BBRClientApp.BBRContext"%>
+<%@tag import="BBRAcc.BBRPoS"%>
+<%@tag import="java.util.Calendar"%>
+
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+
+<%
+	int datesPerPage = 7;
+
+	BBRContext context = BBRContext.getContext(request);
+	BBRPoSManager pmgr = new BBRPoSManager(); 
+	BBRPoS pos = null;
+	try {
+		if (posId != null && posId != "")
+			pos = pmgr.findById(Long.parseLong(posId));
+	} catch (Exception ex) {
+	}
+
+	if (pos == null)
+		return;
+	
+	Date dateSelected = new Date();
+
+	SimpleDateFormat df = new SimpleDateFormat("dd MMMM");
+	SimpleDateFormat sf = new SimpleDateFormat(BBRUtil.fullDateFormat);
+	
+	BBRSpecialistManager smgr = new BBRSpecialistManager();
+	BBRDataSet<BBRSpecialist> slist = smgr.listAvailableSpecialists(pos);
+	
+	Calendar calendar = Calendar.getInstance(context.getLocale());
+	calendar.setTime(dateSelected);
+	
+	String schOut = "";
+	String specOut = "<td><small>" +
+					 "  	<div class='btn-group btn-group-justified' role='group'>" +
+					 "			<button class='btn btn-link' id='prevDateBtn' type='button'><span class='glyphicon glyphicon-chevron-left'></span></button>" +
+					 "			<button class='btn btn-link' id='todayDateBtn' type='button'><span class='glyphicon glyphicon-time'></span></button>" +
+					 "			<button class='btn btn-link' id='nextDateBtn' type='button'><span class='glyphicon glyphicon-chevron-right'></span></button>" +
+					 "		</div>" +
+					 "</small></td>";
+	
+	schOut += "<thead><tr>" + specOut;
+	for (int i = 1; i < datesPerPage; i++) {
+		calendar.add(Calendar.DATE, 1);
+		schOut += "<td><a href='#' role='button' class='btn btn-default btn-sm' id='sd" + i + "' data-date='" + sf.format(calendar.getTime()) + "'></a></td>";
+	}
+	schOut += "</tr></thead><tbody>";
+
+	for (BBRSpecialist spec : slist.data) {
+		schOut += "<tr>";
+		schOut += "<td><small>" + spec.getName() + ", " + spec.getPosition() + "</small></td>";
+		String sid = spec.getId().toString(); 
+		calendar.setTime(dateSelected);
+		for (int i = 1; i <= datesPerPage; i++) {
+			schOut += "<td id='sp"+ sid + "_" + i + "' data-date='"+sf.format(calendar.getTime()) + "'><small>&nbsp;</small></td>";
+			calendar.add(Calendar.DATE, 1);
+		}
+		schOut += "</tr>";
+	}
+	
+	schOut += "</tbody>";
+	
+	Map<String, Integer> months = calendar.getDisplayNames(Calendar.MONTH, Calendar.LONG, context.getLocale());
+%>
+
+<div class="row">
+	<div class="form-group col-md-4 col-sm-4">
+		<div class='input-group date' id='datepicker' style='width:100%'>
+        	<input type='text' class="form-control" />
+   			<span class="input-group-addon">
+				<span class="glyphicon glyphicon-calendar"></span>
+			</span>
+       </div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="panel col-md-10" style="overflow-x: auto">
+		<table class="table table-condensed table-bordered noselection" id="scheduleTable">
+			<%=schOut %>
+		</table>
+	</div>
+</div>	
+
+<script>
+	var letChangeButtons = true;
+
+	$(document).ready(function() {
+		moment.locale('<%=context.getLocaleString()%>');
+		
+		$('#datepicker').datetimepicker({
+			format: 'YYYY-MM-DD',
+			locale: '<%=context.getLocaleString()%>'
+        });
+
+		changeDatesOnButtons(0);
+		
+		$("a[id^='sd']").click(function(e) {
+			$("a[id^='sd']").removeClass('btn-info').addClass('btn-default');
+			$(this).removeClass('btn-default').addClass('btn-info');
+			dt = $(this).attr('id').substring(2, 12);
+			letChangeButtons = false;
+			$('#datepicker').data('DateTimePicker').date(dt);
+
+			select();
+		});
+		
+		$('#datepicker').on("dp.change", function(e) {
+			newDate = e.date;
+			$.cookie("dateSelected", newDate.year() + "-" + (newDate.month() + 1) + "-" + newDate.date());
+			
+			if (letChangeButtons) {
+				$("a[id^='sd']").each(function (i) {
+					dt = new moment(newDate);
+	 				dt.add(i, "days");
+		 			$(this).attr("id", "sd" + dt.year() + "-" + (dt.month() + 1) + "-" + dt.date());
+		 			$(this).text(dt.date() + " " + moment.months()[dt.month()]);
+		 		}); 
+				$("a[id^='sd']").removeClass('btn-info').addClass('btn-default');
+				$("a[id^='sd']").first().removeClass('btn-default').addClass('btn-info');
+				
+				select();
+			}
+			letChangeButtons = true;
+		});
+	
+	 	$("#nextDateBtn").click(function(e) { changeDatesOnButtons(<%=datesPerPage-datesPerPage+1 %>); });
+	 	$("#prevDateBtn").click(function(e) { changeDatesOnButtons(-<%=datesPerPage-datesPerPage+1 %>); });
+	 	$("#todayDateBtn").click(function(e) { changeDatesOnButtons(0); });
+	 	
+	 	select();
+	 	
+	 	ds = $.cookie("dateSelected");
+		if (ds != null && ds != "")
+			$('#datepicker').data("DateTimePicker").date(ds);
+	 });
+	
+	function changeDatesOnButtons(modifier) {
+		$("a[id^='sd']").each(function (i) {
+			dt = new Date();
+ 			if (modifier != 0) {
+ 				dt.setTime(Date.parse($(this).attr('id').substring(2, 12)));
+	 			dt.setDate(dt.getDate() + modifier);
+ 			} else
+ 				dt.setDate(dt.getDate() + i);
+ 			var od = $(this).attr("id");
+ 			var nd = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
+ 			$(this).attr("id", "sd" + nd);
+ 			$(this).text(dt.getDate() + " " + moment.months()[dt.getMonth()]);
+ 		}); 
+		if (modifier == 0) {
+ 			$("a[id^='sd']").removeClass('btn-info').addClass('btn-default');
+			$("a[id^='sd']").first().removeClass('btn-default').addClass('btn-info');
+		}
+		
+		letChangeButtons = false;
+		dt = $("a[id^='sd'].btn-info").attr('id').substring(2, 12);
+		$('#datepicker').data('DateTimePicker').date(dt);
+		
+		select();
+		letChangeButtons = true;
+	}
+
+	function select() {
+		dateSelected = $("a[id^='sd'].btn-info").attr('id').substring(2, 12);
+  		
+// 		$.get('BBRSchedule', {
+// 				date: dateSelected,
+// 				proc: procSelected,
+// 				pos: posSelected
+// 			}, 
+// 			function (responseText) {
+// 				obj = $.parseJSON(responseText);
+				
+// 				if (obj === undefined || obj == null) return;
+				
+// 				arr = obj.list;
+// 				specs = obj.specs;
+// 				procLength = obj.procLength;
+				
+// 				var spc = new Object();
+// 				var sch = new Array(specs.length);
+// 				var schVis = new Array(specs.length);
+				
+// 				for (j = 0; j < specs.length; j++) {
+// 					sch[j] = new Array(47);
+// 					schVis[j] = new Array(47);
+// 					spc[specs[j][0]] = j;
+// 				}
+				
+// 				for (i = 0; i <= 47; i++)
+// 					for (j = 0; j < specs.length; j++)
+// 						sch[j][i] = "o"; 
+
+// 				$("td.occupied").html("<small>&nbsp;</small>")
+// 					.removeClass('occupied')
+// 					.removeClass("start-cell")
+// 					.removeClass("end-cell")
+// 					.removeClass("middle-cell")
+// 					.removeClass("single-cell");
+// 				$("td.order").html("<small>&nbsp;</small>")
+// 					.removeClass('order')
+// 					.removeClass("start-cell")
+// 					.removeClass("end-cell")
+// 					.removeClass("middle-cell")
+// 					.removeClass("single-cell");
+
+// 				for (i = 0; i < specs.length; i++) {
+// 					if (specs[i][3] == true)
+// 						for (m = specs[i][1]; m < specs[i][2]; m++) {
+// 							sch[spc[specs[i][0]]][m] = 0;
+// 						}
+// 				}
+
+// 				for (i = 0; i < arr.length; i++) {
+// 					start = arr[i][0];
+// 					end = arr[i][0] + arr[i][2] - 1;
+// 					for (m = start; m <= end; m++) {
+// 						specCode = arr[i][1];
+// 						if (specCode !== undefined)
+// 							specIndex = spc[specCode];
+// 						if (specIndex !== undefined) {
+// 							if (m == start && m == end)
+// 								sch[specIndex][m] = "single";
+// 							else if (m == start)
+// 								sch[specIndex][m] = "start";
+// 							else if (m == end)
+// 								sch[specIndex][m] = "end";
+// 							else 
+// 								sch[specIndex][m] = "middle";
+							
+// 							schVis[specIndex][m] = i;
+// 						}
+// 					}
+// 				}
+				
+<%-- 				<% if (mode.equals("manager-view") || mode.equals("manager-edit")) { %> --%>
+// 				$("td.clickable").off("click").tooltip('destroy').removeClass('clickable');
+<%-- 				<% } %> --%>
+<%-- 				<% if (mode.isEmpty() || mode.equals("general-edit") || mode.equals("manager-edit")) { %>	 --%>
+// 			 	$("#scheduleTable td").on("click", function(e) {setTime($(e.target));});
+<%-- 				<% } %>	  --%>
+				
+// 				for (i = 0; i <= 23; i++)
+// 					for (j = 0; j < specs.length; j++) {
+// 						for (k = 0; k <= 1; k++) {
+// 							schVal = sch[j][i*2 + k];
+// 							if (schVal.length > 0) {
+// 								e = $("#sp"+specs[j][0]+"_oc"+i+"_"+(3*k)+"0");
+// 								if (e.length > 0) {
+// 									if (schVal != "o") {
+// 										//e.addClass('occupied');
+// 										e.addClass('order');
+// 										arrIndex = schVis[j][i*2 + k];
+// 										e.addClass(schVal + "-cell");
+// 										e.html("<div class='"+schVal+"-cell visit-status-"+arr[arrIndex][6]+"'></div>");
+<%-- 									<% if (mode.equals("manager-view") || mode.equals("manager-edit")) { %> --%>
+// 										e.addClass('clickable');
+// 										title = arr[arrIndex][3] + ", " + arr[arrIndex][4];
+// 										e.prop("title", title);
+// 										e.data("visitId", arr[arrIndex][5]);
+// 										e.data("toggle", "tooltip");
+// 										e.tooltip({container: 'small'});
+// 										e.on('click', function(ev) {
+// 											window.location.href = "manager-visit-edit.jsp?id=" + $(this).data("visitId");
+// 										})
+<%-- 									<% } %> --%>
+// 									} else
+// 										e.addClass('occupied');
+// 								}
+// 							}
+// 						}
+// 					}
+// 				setTime(null);
+// 			});
+	}
+	
+	function setTime(obj) {
+		if (obj == null) {
+			if (specSelected >= 0)
+				obj = $("#sp"+specSelected+"_oc"+timeSelected.replace(":", "_"));
+		}
+
+		if (!obj) return;
+		
+		objId = obj.attr('id');
+		
+		if (!objId) return;
+		
+ 		timeSelected = objId.substring(objId.length - 5, objId.length).replace('_', ':');
+ 		timeSelected = timeSelected.replace('c', '0');
+ 		specSelected = objId.substring(2, objId.length - 8);
+ 		if (specSelected == "")
+ 			specSelected = objId.substring(2, objId.length - 7);
+
+ 		if (!obj.hasClass('occupied')) {
+ 	 		$("td.selected").removeClass('selected');
+ 	 		//$("td.conflict").addClass('selected');
+ 	 		$("td.conflict").removeClass('conflict');
+	 		
+ 	 		for (i = 1; i <= procLength; i++) {
+ 	 	 		if (obj.hasClass('occupied') || obj.hasClass('order'))
+ 	 	 			obj.addClass('conflict');
+ 	 	 		else
+ 	 	 			obj.addClass('selected');
+ 	 			obj = obj.next();
+ 	 		}
+		}
+ 		dateSelected = $("a[id^='sd'].btn-info").attr('id').substring(2, 12);
+ 		dtString = dateSelected + " " + timeSelected;
+ 	 	$("#timeScheduledinput").val(dtString);
+ 	 	$("#specinput").val(specSelected);
+	}	
+
+</script>
