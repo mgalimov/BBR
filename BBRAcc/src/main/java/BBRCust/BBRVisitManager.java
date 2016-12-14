@@ -1004,8 +1004,10 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
         		BBRVisitManager vmgr = new BBRVisitManager();
         		BBRVisit v = vmgr.findById(visitId);
-			    visitWhere = "   and visit.id <> " + v.getId() + 
-			    		     "   and coalesce(visit.realTime, visit.timeScheduled) <= '" + df.format(v.getRealTime()) + "'";
+        		if (v != null){
+        			visitWhere += "   and visit.id <> " + v.getId();
+        			visitWhere += "   and coalesce(visit.realTime, visit.timeScheduled) <= '" + df.format(v.getRealTime()) + "'";
+        		}
 
         	} catch (Exception ex1) {
         	}

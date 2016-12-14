@@ -18,14 +18,12 @@
 	    	}).done(function (data) {
 	    		if (data != "") {
 		    		d = $.parseJSON(data);
-// 		    		$("#visitsNumberinput").val(d[0]);
 		    		$("#openPreviousVisitsButton").text("${context.gs('LBL_PREVIOUS_VISITS')} : " + d[0]);
 		    		if (d[1] != "") {
 		    			$('#alertText').text(d[1]);
 		    			$('#alertMessage').removeClass('hide');
 		    		}
 	    		} else {
-// 	    			$("#visitsNumberinput").val("0");
 	    			$("#openPreviousVisitsButton").text("${context.gs('LBL_PREVIOUS_VISITS')} : 0");
 	    		}
 	    	});
@@ -44,7 +42,6 @@
 				<t:card-item label="LBL_REAL_TIME" type="datetime" field="realTime" timeStepping="30" defaultValue="now" isRequired="required" />
 				<t:card-item label="LBL_USER_NAME" type="text" field="userName" />
 				<t:card-item label="LBL_PHONE" type="text" field="userContacts" />
-<%-- 				<t:card-item label="LBL_VISITS_NUMBER" type="text" field="visitsNumber" isDisabled="readonly" defaultValue="" calculated="true"/> --%>
 				<t:card-item label="LBL_COMMENT" type="text" field="comment" />
 				<t:card-item label="LBL_POS" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes"/>
 				<t:card-item label="LBL_SPEC" type="reference" field="spec" referenceFieldTitle="name" referenceMethod="BBRSpecialists" isRequired="required" />
