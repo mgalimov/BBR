@@ -54,9 +54,9 @@
 					 "</small></td>";
 	
 	schOut += "<thead><tr>" + specOut;
-	for (int i = 1; i < datesPerPage; i++) {
+	for (int i = 0; i < datesPerPage; i++) {
 		calendar.add(Calendar.DATE, 1);
-		schOut += "<td><a href='#' role='button' class='btn btn-default btn-sm' id='sd" + i + "' data-date='" + sf.format(calendar.getTime()) + "'></a></td>";
+		schOut += "<th style='width: 80px' class='text-center'><nobr><small><span id='sd" + i + "' data-date='" + sf.format(calendar.getTime()) + "'></span></small></nobr></th>";
 	}
 	schOut += "</tr></thead><tbody>";
 
@@ -78,19 +78,19 @@
 %>
 
 <div class="row">
-	<div class="form-group col-md-4 col-sm-4">
-		<div class='input-group date' id='datepicker' style='width:100%'>
-        	<input type='text' class="form-control" />
-   			<span class="input-group-addon">
-				<span class="glyphicon glyphicon-calendar"></span>
-			</span>
-       </div>
-	</div>
+		<div class="form-group col-md-4 col-sm-4">
+			<div class='input-group date' id='datepicker' style='width:100%'>
+	        	<input type='text' class="form-control" />
+	   			<span class="input-group-addon">
+					<span class="glyphicon glyphicon-calendar"></span>
+				</span>
+	       </div>
+		</div>
 </div>
 
 <div class="row">
-	<div class="panel col-md-10" style="overflow-x: auto">
-		<table class="table table-condensed table-bordered noselection" id="scheduleTable">
+	<div class="table-responsive col-md-10">
+		<table class="table table-bordered  table-condensed noselection" id="scheduleTable">
 			<%=schOut %>
 		</table>
 	</div>
@@ -109,31 +109,18 @@
 
 		changeDatesOnButtons(0);
 		
-		$("a[id^='sd']").click(function(e) {
-			$("a[id^='sd']").removeClass('btn-info').addClass('btn-default');
-			$(this).removeClass('btn-default').addClass('btn-info');
-			dt = $(this).attr('id').substring(2, 12);
-			letChangeButtons = false;
-			$('#datepicker').data('DateTimePicker').date(dt);
-
-			select();
-		});
-		
 		$('#datepicker').on("dp.change", function(e) {
 			newDate = e.date;
 			$.cookie("dateSelected", newDate.year() + "-" + (newDate.month() + 1) + "-" + newDate.date());
 			
 			if (letChangeButtons) {
-				$("a[id^='sd']").each(function (i) {
+				$("span[id^='sd']").each(function (i) {
 					dt = new moment(newDate);
 	 				dt.add(i, "days");
-		 			$(this).attr("id", "sd" + dt.year() + "-" + (dt.month() + 1) + "-" + dt.date());
+		 			$(this).attr("data-date",  dt.year()+ "-" + (dt.month() + 1) + "-" + dt.date())
 		 			$(this).text(dt.date() + " " + moment.months()[dt.month()]);
-		 		}); 
-				$("a[id^='sd']").removeClass('btn-info').addClass('btn-default');
-				$("a[id^='sd']").first().removeClass('btn-default').addClass('btn-info');
-				
-				select();
+		 		});
+				updateTurns();
 			}
 			letChangeButtons = true;
 		});
@@ -142,188 +129,61 @@
 	 	$("#prevDateBtn").click(function(e) { changeDatesOnButtons(-<%=datesPerPage-datesPerPage+1 %>); });
 	 	$("#todayDateBtn").click(function(e) { changeDatesOnButtons(0); });
 	 	
-	 	select();
-	 	
 	 	ds = $.cookie("dateSelected");
 		if (ds != null && ds != "")
 			$('#datepicker').data("DateTimePicker").date(ds);
 	 });
 	
 	function changeDatesOnButtons(modifier) {
-		$("a[id^='sd']").each(function (i) {
-			dt = new Date();
- 			if (modifier != 0) {
- 				dt.setTime(Date.parse($(this).attr('id').substring(2, 12)));
-	 			dt.setDate(dt.getDate() + modifier);
- 			} else
- 				dt.setDate(dt.getDate() + i);
- 			var od = $(this).attr("id");
- 			var nd = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
- 			$(this).attr("id", "sd" + nd);
- 			$(this).text(dt.getDate() + " " + moment.months()[dt.getMonth()]);
+		var dt;
+		if (modifier != 0)
+			dt = new moment($("span[id='sd0']").attr('data-date'));
+		else
+			dt = new moment(new Date());
+		
+		$("span[id^='sd']").each(function (i) {
+			var ndt = moment(dt);
+			ndt.add(modifier + i, "days");
+ 			var nd = ndt.year() + "-" + (ndt.month() + 1) + "-" + ndt.date();
+ 			var od = $(this).attr("data-date");
+ 			$("span[id^='sp'][data-date='" + od + "']").attr("data-date", nd);
+ 			$(this).attr("data-date", nd);
+ 			$(this).text(ndt.date() + " " + moment.months()[ndt.month()]);
  		}); 
-		if (modifier == 0) {
- 			$("a[id^='sd']").removeClass('btn-info').addClass('btn-default');
-			$("a[id^='sd']").first().removeClass('btn-default').addClass('btn-info');
-		}
 		
 		letChangeButtons = false;
-		dt = $("a[id^='sd'].btn-info").attr('id').substring(2, 12);
+		dt = $("span[id='sd0']").attr('data-date');
 		$('#datepicker').data('DateTimePicker').date(dt);
 		
-		select();
+		updateTurns();
+		
 		letChangeButtons = true;
 	}
-
-	function select() {
-		dateSelected = $("a[id^='sd'].btn-info").attr('id').substring(2, 12);
-  		
-// 		$.get('BBRSchedule', {
-// 				date: dateSelected,
-// 				proc: procSelected,
-// 				pos: posSelected
-// 			}, 
-// 			function (responseText) {
-// 				obj = $.parseJSON(responseText);
-				
-// 				if (obj === undefined || obj == null) return;
-				
-// 				arr = obj.list;
-// 				specs = obj.specs;
-// 				procLength = obj.procLength;
-				
-// 				var spc = new Object();
-// 				var sch = new Array(specs.length);
-// 				var schVis = new Array(specs.length);
-				
-// 				for (j = 0; j < specs.length; j++) {
-// 					sch[j] = new Array(47);
-// 					schVis[j] = new Array(47);
-// 					spc[specs[j][0]] = j;
-// 				}
-				
-// 				for (i = 0; i <= 47; i++)
-// 					for (j = 0; j < specs.length; j++)
-// 						sch[j][i] = "o"; 
-
-// 				$("td.occupied").html("<small>&nbsp;</small>")
-// 					.removeClass('occupied')
-// 					.removeClass("start-cell")
-// 					.removeClass("end-cell")
-// 					.removeClass("middle-cell")
-// 					.removeClass("single-cell");
-// 				$("td.order").html("<small>&nbsp;</small>")
-// 					.removeClass('order')
-// 					.removeClass("start-cell")
-// 					.removeClass("end-cell")
-// 					.removeClass("middle-cell")
-// 					.removeClass("single-cell");
-
-// 				for (i = 0; i < specs.length; i++) {
-// 					if (specs[i][3] == true)
-// 						for (m = specs[i][1]; m < specs[i][2]; m++) {
-// 							sch[spc[specs[i][0]]][m] = 0;
-// 						}
-// 				}
-
-// 				for (i = 0; i < arr.length; i++) {
-// 					start = arr[i][0];
-// 					end = arr[i][0] + arr[i][2] - 1;
-// 					for (m = start; m <= end; m++) {
-// 						specCode = arr[i][1];
-// 						if (specCode !== undefined)
-// 							specIndex = spc[specCode];
-// 						if (specIndex !== undefined) {
-// 							if (m == start && m == end)
-// 								sch[specIndex][m] = "single";
-// 							else if (m == start)
-// 								sch[specIndex][m] = "start";
-// 							else if (m == end)
-// 								sch[specIndex][m] = "end";
-// 							else 
-// 								sch[specIndex][m] = "middle";
-							
-// 							schVis[specIndex][m] = i;
-// 						}
-// 					}
-// 				}
-				
-<%-- 				<% if (mode.equals("manager-view") || mode.equals("manager-edit")) { %> --%>
-// 				$("td.clickable").off("click").tooltip('destroy').removeClass('clickable');
-<%-- 				<% } %> --%>
-<%-- 				<% if (mode.isEmpty() || mode.equals("general-edit") || mode.equals("manager-edit")) { %>	 --%>
-// 			 	$("#scheduleTable td").on("click", function(e) {setTime($(e.target));});
-<%-- 				<% } %>	  --%>
-				
-// 				for (i = 0; i <= 23; i++)
-// 					for (j = 0; j < specs.length; j++) {
-// 						for (k = 0; k <= 1; k++) {
-// 							schVal = sch[j][i*2 + k];
-// 							if (schVal.length > 0) {
-// 								e = $("#sp"+specs[j][0]+"_oc"+i+"_"+(3*k)+"0");
-// 								if (e.length > 0) {
-// 									if (schVal != "o") {
-// 										//e.addClass('occupied');
-// 										e.addClass('order');
-// 										arrIndex = schVis[j][i*2 + k];
-// 										e.addClass(schVal + "-cell");
-// 										e.html("<div class='"+schVal+"-cell visit-status-"+arr[arrIndex][6]+"'></div>");
-<%-- 									<% if (mode.equals("manager-view") || mode.equals("manager-edit")) { %> --%>
-// 										e.addClass('clickable');
-// 										title = arr[arrIndex][3] + ", " + arr[arrIndex][4];
-// 										e.prop("title", title);
-// 										e.data("visitId", arr[arrIndex][5]);
-// 										e.data("toggle", "tooltip");
-// 										e.tooltip({container: 'small'});
-// 										e.on('click', function(ev) {
-// 											window.location.href = "manager-visit-edit.jsp?id=" + $(this).data("visitId");
-// 										})
-<%-- 									<% } %> --%>
-// 									} else
-// 										e.addClass('occupied');
-// 								}
-// 							}
-// 						}
-// 					}
-// 				setTime(null);
-// 			});
-	}
 	
-	function setTime(obj) {
-		if (obj == null) {
-			if (specSelected >= 0)
-				obj = $("#sp"+specSelected+"_oc"+timeSelected.replace(":", "_"));
-		}
-
-		if (!obj) return;
-		
-		objId = obj.attr('id');
-		
-		if (!objId) return;
-		
- 		timeSelected = objId.substring(objId.length - 5, objId.length).replace('_', ':');
- 		timeSelected = timeSelected.replace('c', '0');
- 		specSelected = objId.substring(2, objId.length - 8);
- 		if (specSelected == "")
- 			specSelected = objId.substring(2, objId.length - 7);
-
- 		if (!obj.hasClass('occupied')) {
- 	 		$("td.selected").removeClass('selected');
- 	 		//$("td.conflict").addClass('selected');
- 	 		$("td.conflict").removeClass('conflict');
-	 		
- 	 		for (i = 1; i <= procLength; i++) {
- 	 	 		if (obj.hasClass('occupied') || obj.hasClass('order'))
- 	 	 			obj.addClass('conflict');
- 	 	 		else
- 	 	 			obj.addClass('selected');
- 	 			obj = obj.next();
- 	 		}
-		}
- 		dateSelected = $("a[id^='sd'].btn-info").attr('id').substring(2, 12);
- 		dtString = dateSelected + " " + timeSelected;
- 	 	$("#timeScheduledinput").val(dtString);
- 	 	$("#specinput").val(specSelected);
-	}	
-
+	function updateTurns() {
+		var sd = $("span[id='sd0']").attr('data-date');
+		var ed = moment(sd).add(<%=datesPerPage%>-1, 'days');
+		$.ajax({
+			url: 'BBRTurns',
+			method: 'get',
+			data: {
+				operation: 'getTurns',
+				posId: <%=posId%>,
+				startDate: sd,
+				endDate: ed.year() + "-" + (ed.month() + 1) + "-" + ed.date()
+			}
+		}).done(function (data) {
+			if (data == "")
+				return;
+			turns = $.parseJSON(data);
+			$("td[id^='sp']").html("<a href='#' class='btn btn-default btn-small'>+</a>");
+			for (i = 0; i < turns.data.length; i++) {
+				turn = turns.data[i];
+				$("td[id^='sp" + turn.specialist.id + "'][data-date='" + turn.date + "']").text("!!!");
+			}
+			$("td[id^='sp'] a").click(function () {
+				alert('cokoo!');
+			});
+		});
+	}
 </script>

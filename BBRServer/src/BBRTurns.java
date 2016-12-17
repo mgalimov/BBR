@@ -6,8 +6,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import BBR.BBRDataSet;
 import BBR.BBRErrors;
 import BBR.BBRUtil;
+import BBRAcc.BBRPoS;
+import BBRAcc.BBRPoSManager;
 import BBRAcc.BBRUser.BBRUserRole;
 import BBRClientApp.BBRContext;
 import BBRClientApp.BBRParams;
@@ -100,7 +103,31 @@ public class BBRTurns extends BBRBasicServlet<BBRTurn, BBRTurnManager> {
 		} else
 		if (operation.equals("toggleFutureTurns")) {
 			context.set("turnsList", null);
-		}
+		} else
+		if (operation.equals("getTurns")) {
+			String posId = params.get("posId");
+			BBRPoS pos = null;
+			BBRPoSManager pmgr = new BBRPoSManager();
+			if (posId != null && posId != "")
+				pos = pmgr.findById(Long.parseLong(posId));
+			if (pos == null)
+				return "";
+			if (context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER ||
+				(context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN && context.user.getPos().getId() == pos.getId()) ||
+				(context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN && context.user.getShop().getId() == pos.getShop().getId()))
+			{
+				String startDate = params.get("startDate");
+				String endDate = params.get("endDate");
+				try {
+					BBRDataSet<BBRTurn> turns = manager.list("", "", 
+								"specialist.pos.id = " + pos.getId() + " and date >= '"+startDate+"' and date <= '"+endDate+"'");
+					return turns.toJson();
+				} catch (Exception ex) {
+					return "";
+				}
+			} else
+				return "";
+		} 
 		
 		return "";
 	}

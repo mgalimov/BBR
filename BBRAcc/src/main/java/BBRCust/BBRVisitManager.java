@@ -46,7 +46,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        visit.setProcedure(procedure);
 	        visit.setSpec(spec);
 	        visit.setUserName(userName);
-	        visit.setUserContacts(userContacts);
+	        visit.setUserContacts(simplifyContacts(userContacts));
 	        visit.setStatus(BBRVisitStatus.VISSTATUS_APPROVED);
 			visit.setDiscountPercent(0);
 			visit.setDiscountAmount(0);
@@ -159,7 +159,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        visit.setProcedure(procedure);
 	        visit.setSpec(spec);
 	        visit.setUserName(userName);
-	        visit.setUserContacts(userContacts);
+	        visit.setUserContacts(simplifyContacts(userContacts));
 	        visit.setStatus(BBRVisitStatus.VISSTATUS_PERFORMED);
 	        visit.setLength(length);
 			visit.setDiscountPercent(discountPercent);
@@ -685,10 +685,10 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		Query query = session.createQuery("select userName, userContacts, max(coalesce(visit.realTime, visit.timeScheduled)) as lastVisitDate"+ 
 		                                  "  from BBRVisit visit " +  
 										  " where userName = :userName" + 
-		                                  "   and userContacts = :userContacts" +
+		                                  "   and userContacts like :userContacts" +
 										  " group by userName, userContacts").
 		                                  setParameter("userName", userName).
-		                                  setParameter("userContacts", userContacts);
+		                                  setParameter("userContacts", maskContacts(userContacts));
        
         Object[] line = (Object[])query.uniqueResult();
 		BBRUtil.commitTran(tr);
@@ -703,7 +703,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	}
 
 	public BBRDataSet<BBRVisit> listVisitsByNameAndContacts(String userName, String userContacts, BBRShop shop, BBRPoS pos, Date startDate, Date endDate, int pageNumber, int pageSize, String orderBy) {
-		String where = "userName = '" + userName + "' and userContacts='" + userContacts + "'";
+		String where = "userName = '" + userName + "' and userContacts like '" + maskContacts(userContacts) + "'";
 		String whereF = getFilterWhere(shop, pos, startDate, endDate, pageNumber);
 		if (!whereF.isEmpty())
 			where = "(" + where + ") and " + whereF;
@@ -747,13 +747,13 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
     		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
     		BBRVisitManager vmgr = new BBRVisitManager();
     		BBRVisit v = vmgr.findById(visitId);
-		    visitWhere = " and id <> " + v.getId() + 
-		    		     " and coalesce(realTime, timeScheduled) <= '" + df.format(v.getRealTime()) + "'";
+		    visitWhere = " and (id <> " + v.getId() + ")"+ 
+		    		     " and (coalesce(realTime, timeScheduled) <= '" + df.format(v.getRealTime()) + "')";
 
     	} catch (Exception ex1) {
     	}
     	
-		where = " userContacts = '" + userContacts + "' " +
+		where = " userContacts like '" + maskContacts(userContacts) + "' " +
                 " and pos.id = " + posId.toString() + 
                 visitWhere + 
 				" and status in (" + BBRVisitStatus.VISSTATUS_APPROVED + "," + BBRVisitStatus.VISSTATUS_PERFORMED + ")";		
@@ -1014,7 +1014,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
     		Query query = session.createQuery(
     				"select count(*)" + 
                     "  from BBRVisit visit " +  
-    			    " where userContacts = '" + userContacts + "' " +
+    			    " where userContacts like '" + maskContacts(userContacts) + "' " +
                     "   and pos.id = " + posId.toString() + 
                     visitWhere + 
     				"   and status in (" + BBRVisitStatus.VISSTATUS_APPROVED + "," + BBRVisitStatus.VISSTATUS_PERFORMED + ")"); 
@@ -1036,5 +1036,30 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 				return true;
 		}
 		return false;
+	}
+	
+	public String maskContacts(String userContacts) {
+		userContacts = simplifyContacts(userContacts);
+		
+		if (userContacts.startsWith("7"))
+			userContacts = "%" + userContacts.substring(1);
+		
+		return userContacts;
+	}
+	
+	public String simplifyContacts(String userContacts) {
+		if (userContacts.startsWith("8"))
+			userContacts = "7" + userContacts.substring(1);
+		
+		String result = "";
+		byte z0 = (byte)'0';
+		byte z9 = (byte)'9';
+		for (int i = 0; i < userContacts.length(); i++) {
+			byte c = (byte)userContacts.charAt(i); 
+			if (c >= z0 && c <= z9)
+				result += (char)c;
+		}
+			
+		return result;
 	}
 }

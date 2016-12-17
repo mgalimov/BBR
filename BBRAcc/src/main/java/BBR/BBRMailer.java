@@ -46,6 +46,13 @@ public class BBRMailer {
 	public static int smsServerPort = 3700;
 
 	public static void send(String address, String subject, String text) {
+		if (address == null || address.trim().equals(""))
+			return;
+		if (subject == null || subject.trim().equals(""))
+			return;
+		if (text == null || text.trim().equals(""))
+			return;
+
         final String username = mailServerUserName;
         final String password = mailServerPassword;
 

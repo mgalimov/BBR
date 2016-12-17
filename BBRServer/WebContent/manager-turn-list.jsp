@@ -40,6 +40,7 @@
 
 <t:wrapper title="LBL_SPEC_TURNS_TITLE" titleModifier="${titleMod}">
 	<jsp:body>
+		<t:card-schedule-spec-turns posId="1"/>
 		<t:grid method="BBRTurns" editPage="manager-turn-edit.jsp" createPage="manager-turn-create.jsp" 
 				title="LBL_SPEC_TURNS_TITLE" titleModifier="${titleMod}" customToolbar="true">
 			<t:toolbar-group>

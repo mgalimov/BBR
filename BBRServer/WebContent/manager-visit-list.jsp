@@ -17,7 +17,7 @@
 	String titleMod = "";
 	
 	String t = params.get("t");
-	if (t != null && !t.isEmpty()) {
+	if (t != null && !t.trim().isEmpty()) {
 		if (t.equals("user")) {
 			String[] userNC = params.get("query").split(BBRUtil.recordDivider);
 			context.set("visitsUserNC", userNC);
@@ -72,11 +72,13 @@
 			context.set("visitsDatePos", null);
 			context.set("visitsUserNC", null);
 			context.set("visitsPosId", null);
+			context.set("visitsPrevious", null);
 		}
 	} else {
 		context.set("visitsUserNC", null);
 		context.set("visitsPosId", null);
 		context.set("visitsDatePos", null);
+		context.set("visitsPrevious", null);
 	}
 
 	request.setAttribute("titleMod", titleMod);
