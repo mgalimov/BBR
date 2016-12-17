@@ -33,18 +33,31 @@ public class BBRTurns extends BBRBasicServlet<BBRTurn, BBRTurnManager> {
 		String date = params.get("date");
 		String startTime = params.get("startTime");
 		String endTime = params.get("endTime");
-
+		
+		Date sTime, eTime;
+		
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
 		SimpleDateFormat tf = new SimpleDateFormat(BBRUtil.fullTimeFormat);
 		
 		BBRSpecialistManager smgr = new BBRSpecialistManager();
-		BBRSpecialist spec = smgr.findById(Long.parseLong(specId)); 
+		BBRSpecialist spec = smgr.findById(Long.parseLong(specId));
+		
+		if (startTime == null || startTime.trim().isEmpty())
+			sTime = spec.getStartWorkHour();
+		else
+			sTime = tf.parse(startTime);
+
+		if (endTime == null || endTime.trim().isEmpty())
+			eTime = spec.getEndWorkHour();
+		else
+			eTime = tf.parse(endTime);
+
 		
 		Long id = Long.parseLong(manager.createAndStoreTurn(
 					spec, 
 					df.parse(date),
-					tf.parse(startTime), 
-					tf.parse(endTime)));
+					sTime, 
+					eTime));
 			
 		if (id == null)
 			throw new Exception(BBRErrors.ERR_TURN_CROSSES);

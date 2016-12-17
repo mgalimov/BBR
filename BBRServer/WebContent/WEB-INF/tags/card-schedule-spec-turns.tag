@@ -56,7 +56,7 @@
 	schOut += "<thead><tr>" + specOut;
 	for (int i = 0; i < datesPerPage; i++) {
 		calendar.add(Calendar.DATE, 1);
-		schOut += "<th style='width: 80px' class='text-center'><nobr><small><span id='sd" + i + "' data-date='" + sf.format(calendar.getTime()) + "'></span></small></nobr></th>";
+		schOut += "<th style='width: 90px' class='text-center'><nobr><small><span id='sd" + i + "' data-date='" + sf.format(calendar.getTime()) + "'></span></small></nobr></th>";
 	}
 	schOut += "</tr></thead><tbody>";
 
@@ -66,7 +66,7 @@
 		String sid = spec.getId().toString(); 
 		calendar.setTime(dateSelected);
 		for (int i = 1; i <= datesPerPage; i++) {
-			schOut += "<td id='sp"+ sid + "_" + i + "' data-date='"+sf.format(calendar.getTime()) + "'><small>&nbsp;</small></td>";
+			schOut += "<td id='sp"+ sid + "_" + i + "' data-spec='"+sid+"' data-date='"+sf.format(calendar.getTime()) + "' class='text-center nobr' nowrap='nowrap'></td>";
 			calendar.add(Calendar.DATE, 1);
 		}
 		schOut += "</tr>";
@@ -146,7 +146,7 @@
 			ndt.add(modifier + i, "days");
  			var nd = ndt.year() + "-" + (ndt.month() + 1) + "-" + ndt.date();
  			var od = $(this).attr("data-date");
- 			$("span[id^='sp'][data-date='" + od + "']").attr("data-date", nd);
+ 			$("td[id^='sp'][id$='_" + (i + 1) + "']").attr("data-date", nd);
  			$(this).attr("data-date", nd);
  			$(this).text(ndt.date() + " " + moment.months()[ndt.month()]);
  		}); 
@@ -176,13 +176,43 @@
 			if (data == "")
 				return;
 			turns = $.parseJSON(data);
-			$("td[id^='sp']").html("<a href='#' class='btn btn-default btn-small'>+</a>");
+			
+			$("td[id^='sp']").html("<a href='#' class='btn btn-default btn-xs' data-op='add'>+</a>");
+			
 			for (i = 0; i < turns.data.length; i++) {
 				turn = turns.data[i];
-				$("td[id^='sp" + turn.specialist.id + "'][data-date='" + turn.date + "']").text("!!!");
+				$("td[id^='sp" + turn.specialist.id + "'][data-date='" + turn.date + "']").html("<a href='#' class='btn btn-link btn-xs' data-op='edit' data-id='"+turn.id+"'>"+turn.startTime+"&ndash;"+turn.endTime+"</a><a href='#' class='btn btn-warning btn-xs' data-op='del' data-id='"+turn.id+"'>x</a>");
 			}
+			
 			$("td[id^='sp'] a").click(function () {
-				alert('cokoo!');
+				var op = $(this).attr("data-op");
+				var el = $(this).parent();
+				
+				var d = el.attr("data-date");
+				var s = el.attr("data-spec");
+				if (op == "add") {
+					$.get('BBRTurns', {
+					     specialist : s,
+					     date : d,
+					     operation : 'create'
+					  }).done(function() {
+						  updateTurns();
+					  })					
+				}
+				if (op == "edit") {
+					var id = $(this).attr("data-id");
+					window.location.href = "manager-turn-edit.jsp?id=" + id;					
+				}
+				if (op == "del") {
+					var id = $(this).attr("data-id");
+					$.get('BBRTurns', {
+						     id : id,
+						     operation : 'delete'
+						  }).done(function() {
+							  updateTurns();
+						  })
+				}
+
 			});
 		});
 	}
