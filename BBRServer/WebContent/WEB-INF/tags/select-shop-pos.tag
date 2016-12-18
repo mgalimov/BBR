@@ -1,7 +1,5 @@
 <%@ tag language="java" pageEncoding="UTF-8" description="Card Item"%>
 <%@ attribute name="field" required="true" %>
-<%@ attribute name="referenceMethod" %>
-<%@ attribute name="referenceFieldTitle" %>
 <%@ attribute name="isRequired" %>
 <%@ attribute name="isDisabled" %>
 <%@ attribute name="isHidden" %>
@@ -18,7 +16,7 @@
 		<c:set var="isDis" value="disabled" />
 	</c:if>
 
-	<select class="selectized" style="display: none" id="${ft}input" ${isRequired}  ${isDis}></select>
+	<select class="selectized" style="display: none" id="${ft}input" ${isRequired} ${isDis}></select>
 	
 	<script>
 	$(document).ready(function () {

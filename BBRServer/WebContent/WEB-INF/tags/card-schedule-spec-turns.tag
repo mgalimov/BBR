@@ -45,7 +45,7 @@
 	calendar.setTime(dateSelected);
 	
 	String schOut = "";
-	String specOut = "<td><small>" +
+	String specOut = "<td style='width:100px;' nowrap='nowrap'><small>" +
 					 "  	<div class='btn-group btn-group-justified' role='group'>" +
 					 "			<button class='btn btn-link' id='prevDateBtn' type='button'><span class='glyphicon glyphicon-chevron-left'></span></button>" +
 					 "			<button class='btn btn-link' id='todayDateBtn' type='button'><span class='glyphicon glyphicon-time'></span></button>" +
@@ -77,24 +77,28 @@
 	Map<String, Integer> months = calendar.getDisplayNames(Calendar.MONTH, Calendar.LONG, context.getLocale());
 %>
 
-<div class="row">
-		<div class="form-group col-md-4 col-sm-4">
-			<div class='input-group date' id='datepicker' style='width:100%'>
-	        	<input type='text' class="form-control" />
-	   			<span class="input-group-addon">
-					<span class="glyphicon glyphicon-calendar"></span>
-				</span>
-	       </div>
-		</div>
-</div>
-
-<div class="row">
-	<div class="table-responsive col-md-10">
-		<table class="table table-bordered  table-condensed noselection" id="scheduleTable">
-			<%=schOut %>
-		</table>
+<form class="form-inline">
+	<div class="form-group col-md-4 col-sm-4" style="margin-bottom: 0; vertical-align: middle;">
+		<div class='input-group date' id='datepicker' style='width:100%'>
+	       	<input type='text' class="form-control" />
+	  			<span class="input-group-addon">
+				<span class="glyphicon glyphicon-calendar"></span>
+			</span>
+	      </div>
 	</div>
-</div>	
+
+	<t:select-shop-pos field="shoppos" />
+
+	<div class="form-group">
+	   	<button type='button' class="btn btn-primary" id="applyBtn">${context.gs("LBL_DATERANGE_APPLY_BTN")}</button>
+	</div>
+</form>
+
+<div class="table-responsive col-md-10">
+	<table class="table table-bordered  table-condensed noselection" id="scheduleTable">
+		<%=schOut %>
+	</table>
+</div>
 
 <script>
 	var letChangeButtons = true;
@@ -214,6 +218,28 @@
 				}
 
 			});
+		});
+		
+		$shopposfirstLoad = true;
+		var el = $("#shopposinput")[0].selectize;
+		el.load(shopposLoadData);
+		el.on("load", function () {
+			if ($shopposfirstLoad) {
+				var el = $("#shopposinput")[0].selectize;
+				var firstOptionIndex = Object.keys(el.options)[0];
+				for (i = 0; i < Object.keys(el.options).length; i++) {
+					var s = Object.keys(el.options)[i];
+					if (s.charAt(0) == "s") {
+						firstOptionIndex = Object.keys(el.options)[i];
+						break;
+					}
+				}
+				
+	    		el.addItem(el.options[firstOptionIndex].id);
+	    		el.refreshItems();
+	    		$("#applyBtn").click();
+	    		$shopposfirstLoad = false;
+			}
 		});
 	}
 </script>

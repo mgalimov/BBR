@@ -40,23 +40,32 @@
 
 <t:wrapper title="LBL_SPEC_TURNS_TITLE" titleModifier="${titleMod}">
 	<jsp:body>
-		<t:card-schedule-spec-turns posId="1"/>
-		<t:grid method="BBRTurns" editPage="manager-turn-edit.jsp" createPage="manager-turn-create.jsp" 
-				title="LBL_SPEC_TURNS_TITLE" titleModifier="${titleMod}" customToolbar="true">
-			<t:toolbar-group>
-				<t:toolbar-item label="LBL_GRID_CREATE_RECORD_BTN" id="create" icon="glyphicon-plus"></t:toolbar-item>	
-				<t:toolbar-item label="LBL_GRID_EDIT_RECORD_BTN" id="edit" icon="glyphicon-pencil" accent="btn-info"></t:toolbar-item>	
-				<t:toolbar-item label="LBL_GRID_DELETE_RECORD_BTN" id="delete" icon="glyphicon-trash" accent="btn-warning"></t:toolbar-item>
-			</t:toolbar-group>
-			<t:toolbar-group>	
-				<t:toolbar-item label="LBL_TOGGLE_ALL_TURNS" id="toggleAllTurnsBtn" />
-				<t:toolbar-item label="LBL_TOGGLE_FUTURE_TURNS" id="toggleFutureTurnsBtn" />
-			</t:toolbar-group>
-			<t:grid-item label="LBL_SPECIALIST" field="specialist.name" sort="asc"/>
-			<t:grid-item label="LBL_DATE" field="date" sort="desc"/>
-			<t:grid-item label="LBL_START_TIME" field="startTime" type="time" />
-			<t:grid-item label="LBL_END_TIME" field="endTime" type="time" />
-		</t:grid>
+		<div class="btn-group" role="group" aria-label="...">
+		  <button type="button" class="btn btn-default active" id="showGridBtn">${context.gs("LBL_TURNS_GRID_TITLE")}</button>
+		  <button type="button" class="btn btn-default" id="showListBtn">${context.gs("LBL_TURNS_LIST_TITLE")}</button>
+		</div>
+		<div id="gridDiv">
+			<h3>${context.gs("LBL_SPEC_TURNS_TITLE").concat(titleMod)}</h3>
+			<t:card-schedule-spec-turns posId="1"/>
+		</div>
+		<div class="hide" id="listDiv">
+			<t:grid method="BBRTurns" editPage="manager-turn-edit.jsp" createPage="manager-turn-create.jsp" 
+					title="LBL_SPEC_TURNS_TITLE" titleModifier="${titleMod}" customToolbar="true">
+				<t:toolbar-group>
+					<t:toolbar-item label="LBL_GRID_CREATE_RECORD_BTN" id="create" icon="glyphicon-plus"></t:toolbar-item>	
+					<t:toolbar-item label="LBL_GRID_EDIT_RECORD_BTN" id="edit" icon="glyphicon-pencil" accent="btn-info"></t:toolbar-item>	
+					<t:toolbar-item label="LBL_GRID_DELETE_RECORD_BTN" id="delete" icon="glyphicon-trash" accent="btn-warning"></t:toolbar-item>
+				</t:toolbar-group>
+				<t:toolbar-group>	
+					<t:toolbar-item label="LBL_TOGGLE_ALL_TURNS" id="toggleAllTurnsBtn" />
+					<t:toolbar-item label="LBL_TOGGLE_FUTURE_TURNS" id="toggleFutureTurnsBtn" />
+				</t:toolbar-group>
+				<t:grid-item label="LBL_SPECIALIST" field="specialist.name" sort="asc"/>
+				<t:grid-item label="LBL_DATE" field="date" sort="desc"/>
+				<t:grid-item label="LBL_START_TIME" field="startTime" type="time" />
+				<t:grid-item label="LBL_END_TIME" field="endTime" type="time" />
+			</t:grid>
+		</div>
 	</jsp:body>
 </t:wrapper>
 
@@ -71,6 +80,21 @@ $(document).ready(function (){
 	$("#toggleFutureTurnsBtn").click(function () {
 		clickHandler("toggleFutureTurns", "#toggleFutureTurnsBtn");
 	})
+	
+	$("#showGridBtn").click(function () {
+		$("#gridDiv").removeClass("hide");
+		$("#listDiv").addClass("hide");
+		$("#showGridBtn").addClass("active");
+		$("#showListBtn").removeClass("active");
+	})
+
+	$("#showListBtn").click(function () {
+		$("#listDiv").removeClass("hide");
+		$("#gridDiv").addClass("hide");
+		$("#showListBtn").addClass("active");
+		$("#showGridBtn").removeClass("active");
+	})
+
 });  
 
 function clickHandler(operation, btn) {
