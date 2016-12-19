@@ -52,7 +52,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				String userContacts = params.get("userContacts");
 				String comment = params.get("comment");
 				
-				Long posId = Long.parseLong(params.get("pos"));
+				Long posId = Long.parseLong(params.get("shoppos"));
 				BBRPoSManager mgrPoS = new BBRPoSManager();
 				BBRPoS pos = mgrPoS.findById(posId);
 				

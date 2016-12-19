@@ -152,7 +152,7 @@
 	    </div>
 	</div>
     <div class="col-md-2 col-sm-2" style="display: inline">
-    	<t:select-shop-pos field="shoppos" />
+    	<t:select-shop-pos field="shoppos" treatAsField="true"/>    	
     </div> 
 </div>
 <% } %>
@@ -164,49 +164,6 @@
 	</div>
 </div>
 <% } %>
-
-<div class="row">
-	<% if (mode.equals("manager-view") || mode.equals("manager-edit")) { %>
-	<div class="form-group col-md-8 col-sm-8">
-		<div class="btn-group" role="group" aria-label="...">
-			<button class='btn btn-default' id='openVisits' type="button">
-				<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> <%=context.gs("LBL_OPEN_VISITS_BTN") %>
-			</button>
-			<button class='btn btn-default' id='openAllUnapprovedVisits' type="button">
-				<span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> <%=context.gs("LBL_OPEN_ALL_UNAPPROVED_VISITS_BTN") %>
-			</button>
-			<button class='btn btn-default' id='openAllVisits' type="button">
-				<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> <%=context.gs("LBL_OPEN_ALL_VISITS_BTN") %>
-			</button>
-		</div>
-	</div>
-			
-		<script>
-			$(document).ready(function() {
-				$("#openVisits").click(function(){
-					dt = $("a[id^='sd'].btn-info").attr('id').substring(2, 12);
-					pos = $("#shopposinput").val();
-					if (pos.charAt(0) != "s")
-						window.location.href = "manager-visit-list.jsp?t=datepos&query="+dt+"@@"+pos; 
-				});
-
-				$("#openAllUnapprovedVisits").click(function(){
-					pos = $("#shopposinput").val();
-					if (pos.charAt(0) != "s")
-						window.location.href = "manager-visit-list.jsp?t=unapproved&query="+pos; 
-				});
-
-				$("#openAllVisits").click(function(){
-					dt = $("a[id^='sd'].btn-info").attr('id').substring(2, 12);
-					pos = $("#shopposinput").val();
-					if (pos.charAt(0) != "s")
-						window.location.href = "manager-visit-list.jsp?t=all&query="+dt+"@@"+pos; 
-				});
-
-			});
-		</script>
-	<% } %>
-</div>
 
 <div class="row">
 	<div class="hidden-xs">
@@ -230,7 +187,7 @@
 <div class="row">
 	<p/>
 	<div class="table-responsive col-md-10" style="overflow-x: auto">
-		<table class="table table-condensed table-bordered noselection table-striped" id="scheduleTable">
+		<table class="table table-condensed table-bordered noselection" id="scheduleTable">
 			<%=schOut %>
 		</table>
 	</div>
@@ -380,12 +337,12 @@
 	function select() {
 		dateSelected = $("a[id^='sd'].btn-info").attr('id').substring(2, 12);
  		procSelected = $("#procedureinput").val();
- 		if ($("#posinput").length) 
- 			posSelected = $("#posinput").val();
+ 		if ($("#shopposinput").length) 
+ 			posSelected = $("#shopposinput").val();
  		else
  			posSelected = "";
  		
- 		if (posSelected == "")
+ 		if (posSelected == "" || posSelected.charAt(0) == "s")
  			return;
  		
  		$("#timeScheduledinput").val(dateSelected + " ");
@@ -464,7 +421,9 @@
 				$("td.clickable").off("click").tooltip('destroy').removeClass('clickable');
 				<% } %>
 				<% if (mode.isEmpty() || mode.equals("general-edit") || mode.equals("manager-edit")) { %>	
-			 	$("#scheduleTable td").on("click", function(e) {setTime($(e.target));});
+			 	$("#scheduleTable td").on("click", function(e) {
+			 		setTime($(e.target));
+			 	});
 				<% } %>	 
 				
 				for (i = 0; i <= 23; i++)
@@ -540,7 +499,7 @@
 
 <% if (mode.equals("manager-edit")) { %>	
 	procedureSetConstrains = function () {
-		return $("#shopposinput").val();
+		return getUrlParameter("posId");
 	}
 <%
 }

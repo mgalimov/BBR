@@ -4,6 +4,7 @@
 <%@ attribute name="isDisabled" %>
 <%@ attribute name="isHidden" %>
 <%@ attribute name="isShopsOnly" %>
+<%@ attribute name="treatAsField" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -15,7 +16,16 @@
 	<c:if test="${isDisabled.equals('readonly')}">
 		<c:set var="isDis" value="disabled" />
 	</c:if>
-
+	
+	<c:if test="${treatAsField.equals('true')}">
+		<c:set var="itemids" scope="request" value="${itemids}
+					${ft}input,"/>
+		<c:set var="itemReq" scope="request" value="${itemReq}
+					${ft}:${ft}String,"/>
+		<c:set var="itemVal" scope="request" value="${itemVal}
+					${ft}String = $('#${ft}input').val();"/>
+	</c:if>
+	
 	<select class="selectized" style="display: none" id="${ft}input" ${isRequired} ${isDis}></select>
 	
 	<script>
