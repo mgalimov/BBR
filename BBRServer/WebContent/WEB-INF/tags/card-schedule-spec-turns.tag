@@ -53,10 +53,10 @@
 					 "		</div>" +
 					 "</small></td>";
 	
-	schOut += "<thead><tr>" + specOut;
+	schOut += "<thead><tr >" + specOut;
 	for (int i = 0; i < datesPerPage; i++) {
 		calendar.add(Calendar.DATE, 1);
-		schOut += "<th style='width: 90px' class='text-center'><nobr><small><span id='sd" + i + "' data-date='" + sf.format(calendar.getTime()) + "'></span></small></nobr></th>";
+		schOut += "<th style='width: 90px; vertical-align: middle;' class='text-center' ><nobr><small><span id='sd" + i + "' data-date='" + sf.format(calendar.getTime()) + "'></span></small></nobr></th>";
 	}
 	schOut += "</tr></thead><tbody>";
 
@@ -91,7 +91,7 @@
 </form>
 
 <div class="table-responsive col-md-10">
-	<table class="table table-bordered  table-condensed noselection" id="scheduleTable">
+	<table class="table table-bordered  table-condensed noselection table-striped" id="scheduleTable">
 		<%=schOut %>
 	</table>
 </div>

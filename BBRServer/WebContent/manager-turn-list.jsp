@@ -50,7 +50,7 @@
 				d = pmgr.list("", "id", "shop.id = " + context.user.getShop().getId().toString());
 			else
 				if (context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER)
-					if (posId.startsWith("s"))
+					if (posId != null && posId.startsWith("s"))
 						d = pmgr.list("", "id", "shop.id = " + posId.substring(1));
 					else
 						d = pmgr.list();

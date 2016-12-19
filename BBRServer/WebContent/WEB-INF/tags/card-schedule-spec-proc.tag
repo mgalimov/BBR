@@ -141,35 +141,31 @@
 %>
 
 <% if (mode.equals("manager-edit") || mode.equals("manager-view")) { %>
-	<div class="row">
-		<div class="col-md-10">
-			<t:card-item label="LBL_SELECT_POS" type="reference" field="pos" referenceFieldTitle="title" referenceMethod="BBRPoSes" isRequired="required"></t:card-item>
-		</div>
+<label for="dapepicker">${context.gs("LBL_SET_DATE_TIME_TITLE")}</label>
+<div class="row">
+	<div class="form-group col-md-4 col-sm-4" style="margin-bottom: 0; vertical-align: middle; display: inline;">
+		<div class='input-group date' id='datepicker' style='width:100%; margin-top: 4px;'>
+	       	<input type='text' class="form-control" />
+	  			<span class="input-group-addon">
+				<span class="glyphicon glyphicon-calendar"></span>
+			</span>
+	    </div>
 	</div>
+    <div class="col-md-2 col-sm-2" style="display: inline">
+    	<t:select-shop-pos field="shoppos" />
+    </div> 
+</div>
 <% } %>
 	
-<% if (mode.isEmpty() || mode.equals("general-edit") || mode.equals("manager-edit")) { %>	
-	<div class="row">
-		<div class="col-md-10">
-			<t:card-item label="LBL_SELECT_PROCEDURE" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures" isRequired="required"/>
-		</div>
+<% if (mode.isEmpty() || mode.equals("general-edit") || mode.equals("manager-edit")) { %>
+<div class="row">	
+	<div class="form-group col-md-4 col-sm-4">
+		<t:card-item label="LBL_SELECT_PROCEDURE" type="reference" field="procedure" referenceFieldTitle="title" referenceMethod="BBRProcedures" isRequired="required"/>
 	</div>
+</div>
 <% } %>
 
 <div class="row">
-	<div class="form-group col-md-12 col-sm-12 col-xs-12">
-		<label>${context.gs('LBL_SET_DATE_TIME_TITLE')}</label>
-	</div>
-
-	<div class="form-group col-md-3 col-sm-3">
-		<div class='input-group date' id='datepicker' style='width:100%'>
-        	<input type='text' class="form-control" />
-   			<span class="input-group-addon">
-				<span class="glyphicon glyphicon-calendar"></span>
-			</span>
-       </div>
-	</div>
-	
 	<% if (mode.equals("manager-view") || mode.equals("manager-edit")) { %>
 	<div class="form-group col-md-8 col-sm-8">
 		<div class="btn-group" role="group" aria-label="...">
@@ -189,19 +185,22 @@
 			$(document).ready(function() {
 				$("#openVisits").click(function(){
 					dt = $("a[id^='sd'].btn-info").attr('id').substring(2, 12);
-					pos = $("#posinput").val();
-					window.location.href = "manager-visit-list.jsp?t=datepos&query="+dt+"@@"+pos; 
+					pos = $("#shopposinput").val();
+					if (pos.charAt(0) != "s")
+						window.location.href = "manager-visit-list.jsp?t=datepos&query="+dt+"@@"+pos; 
 				});
 
 				$("#openAllUnapprovedVisits").click(function(){
-					pos = $("#posinput").val();
-					window.location.href = "manager-visit-list.jsp?t=unapproved&query="+pos; 
+					pos = $("#shopposinput").val();
+					if (pos.charAt(0) != "s")
+						window.location.href = "manager-visit-list.jsp?t=unapproved&query="+pos; 
 				});
 
 				$("#openAllVisits").click(function(){
 					dt = $("a[id^='sd'].btn-info").attr('id').substring(2, 12);
-					pos = $("#posinput").val();
-					window.location.href = "manager-visit-list.jsp?t=all&query="+dt+"@@"+pos; 
+					pos = $("#shopposinput").val();
+					if (pos.charAt(0) != "s")
+						window.location.href = "manager-visit-list.jsp?t=all&query="+dt+"@@"+pos; 
 				});
 
 			});
@@ -231,7 +230,7 @@
 <div class="row">
 	<p/>
 	<div class="table-responsive col-md-10" style="overflow-x: auto">
-		<table class="table table-condensed table-bordered noselection" id="scheduleTable">
+		<table class="table table-condensed table-bordered noselection table-striped" id="scheduleTable">
 			<%=schOut %>
 		</table>
 	</div>
@@ -310,18 +309,6 @@
 		});
 	
 	 	$("#procedureinput").on("change", select);
-	 	el = $("#posinput");
-	 	if (el.length) {
-			els=el[0].selectize;
-			els.addOption({id: <%=pos.getId()%>, title: '<%=pos.getTitle()%>'});
-			els.addItem(<%=pos.getId()%>);
-			els.load(posLoadInitialData);
-			els.refreshOptions(false);
-			els.refreshItems();
-	 		el.on("change", function() {
-	 			reloadWithNewParam("posId=" + $("#posinput").val());
-	 		});
-	 	}
 
 	 	$("#nextDateBtn").click(function(e) { changeDatesOnButtons(<%=datesPerPage-datesPerPage+1 %>); });
 	 	$("#prevDateBtn").click(function(e) { changeDatesOnButtons(-<%=datesPerPage-datesPerPage+1 %>); });
@@ -332,6 +319,38 @@
 	 	ds = $.cookie("dateSelected");
 		if (ds != null && ds != "")
 			$('#datepicker').data("DateTimePicker").date(ds);
+		
+		$shopposfirstLoad = true;
+		var el = $("#shopposinput")[0].selectize;
+		el.load(shopposLoadData);
+		el.on("load", function () {
+			if ($shopposfirstLoad) {
+				var el = $("#shopposinput")[0].selectize;
+				var firstOptionIndex = "${posId}";
+				if (firstOptionIndex == "") {
+					firstOptionIndex = Object.keys(el.options)[0];
+					for (i = 0; i < Object.keys(el.options).length; i++) {
+						var s = Object.keys(el.options)[i];
+						if (s.charAt(0) == "s") {
+							firstOptionIndex = Object.keys(el.options)[i];
+							break;
+						}
+					}
+				}
+				el.addItem(el.options[firstOptionIndex].id);
+				el.refreshItems();
+				$shopposfirstLoad = false;
+			}
+		});
+		el.on("change", function () {
+			if ($shopposfirstLoad)
+				return;
+			var posId = $("#shopposinput").val();
+			if (posId.charAt(0) == "s")
+				return;
+			reloadWithNewParam("posId=" + posId);
+		})
+
 	 });
 	
 	function changeDatesOnButtons(modifier) {
@@ -521,7 +540,7 @@
 
 <% if (mode.equals("manager-edit")) { %>	
 	procedureSetConstrains = function () {
-		return $("#posinput").val();
+		return $("#shopposinput").val();
 	}
 <%
 }
