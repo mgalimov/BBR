@@ -1,3 +1,7 @@
+<%@page import="BBR.BBRDataSet"%>
+<%@page import="BBRAcc.BBRPoSManager"%>
+<%@page import="BBRAcc.BBRPoS"%>
+<%@page import="BBRAcc.BBRUser.BBRUserRole"%>
 <%@ page import="BBRClientApp.BBRContext"%>
 <%@ page import="BBR.BBRUtil"%>
 <%@ page import="BBRClientApp.BBRParams"%>
@@ -13,7 +17,10 @@
 	BBRParams params = new BBRParams(request.getQueryString());	
 	String titleMod = "";
 	String t = params.get("t");
+	String posId = params.get("posId");
 
+	request.setAttribute("show", "grid");
+	
 	context.set("spec", null);
 	if (t != null && !t.isEmpty()) {
 		if (t.equals("spec")) {
@@ -25,10 +32,38 @@
 				BBRSpecialist spec = smgr.findById(Long.parseLong(specId));
 				if (spec != null) {
 					titleMod = BBRUtil.visualTitleDelimiter + spec.getName();
+					request.setAttribute("show", "list");
+					if (posId == null || posId.trim().isEmpty())
+						posId = spec.getPos().getId().toString();
 				}
 			}
 		}
 	}
+	
+	if (posId == null || posId.trim().isEmpty() || posId.startsWith("s")) {
+		if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
+			posId = context.user.getPos().getId().toString();
+		else {
+			BBRDataSet<BBRPoS> d = null;
+			BBRPoSManager pmgr = new BBRPoSManager();
+			if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN) 
+				d = pmgr.list("", "id", "shop.id = " + context.user.getShop().getId().toString());
+			else
+				if (context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER)
+					if (posId.startsWith("s"))
+						d = pmgr.list("", "id", "shop.id = " + posId.substring(1));
+					else
+						d = pmgr.list();
+			if (d != null && d.data.size() > 0) {
+				BBRPoS pos = (BBRPoS)(d.data.get(0));
+				posId = pos.getId().toString();
+			} else
+				posId = "";
+
+		}
+	}
+	
+	request.setAttribute("posId", posId);
 	
 	request.setAttribute("titleMod", titleMod);
 	
@@ -40,13 +75,13 @@
 
 <t:wrapper title="LBL_SPEC_TURNS_TITLE" titleModifier="${titleMod}">
 	<jsp:body>
-		<div class="btn-group" role="group" aria-label="...">
-		  <button type="button" class="btn btn-default active" id="showGridBtn">${context.gs("LBL_TURNS_GRID_TITLE")}</button>
-		  <button type="button" class="btn btn-default" id="showListBtn">${context.gs("LBL_TURNS_LIST_TITLE")}</button>
-		</div>
+		<ul class="nav nav-pills">
+		  <li role="presentation" id="showGridBtn"><a href="#">${context.gs("LBL_TURNS_GRID_TITLE")}</a></li>
+		  <li role="presentation" id="showListBtn"><a href="#">${context.gs("LBL_TURNS_LIST_TITLE")}</a></li>
+		</ul>
 		<div id="gridDiv">
 			<h3>${context.gs("LBL_SPEC_TURNS_TITLE").concat(titleMod)}</h3>
-			<t:card-schedule-spec-turns posId="1"/>
+			<t:card-schedule-spec-turns posId="${posId}"/>
 		</div>
 		<div class="hide" id="listDiv">
 			<t:grid method="BBRTurns" editPage="manager-turn-edit.jsp" createPage="manager-turn-create.jsp" 
@@ -94,6 +129,11 @@ $(document).ready(function (){
 		$("#showListBtn").addClass("active");
 		$("#showGridBtn").removeClass("active");
 	})
+	
+	if ("${show}" == "grid")
+		$("#showGridBtn").click();
+	else
+		$("#showListBtn").click();
 
 });  
 

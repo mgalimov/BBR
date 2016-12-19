@@ -210,15 +210,14 @@
 </div>
 
 <div class="row">
-	<div class="col-md-2 col-sm-2 hidden-xs">
-		<div class="btn-group btn-group-justified" role="group">
+	<div class="hidden-xs">
+		<div class="btn-group" role="group">
 			<button class='btn btn-link' id='prevDateBtn' type="button"><span class="glyphicon glyphicon-chevron-left"></span></button>
 			<button class='btn btn-link' id='todayDateBtn' type="button"><span class="glyphicon glyphicon-time"></span></button>
 			<button class='btn btn-link' id='nextDateBtn' type="button"><span class="glyphicon glyphicon-chevron-right"></span></button>
 		</div>
-	</div>
-	<div class="col-md-9 col-sm-9 hidden-xs" >
-		<div class="btn-group btn-group-justified" role="group">
+
+		<div class="btn-group " role="group">
 		<%
 			out.println("<a href='#' role='button' class='btn btn-info btn-sm' id='sd" + sf.format(calendar.getTime()) + "'></a>");
 			for (int i = 1; i < datesPerPage; i++) {
@@ -230,7 +229,8 @@
 	</div>
 </div>
 <div class="row">
-	<div class="panel col-md-10" style="overflow-x: auto">
+	<p/>
+	<div class="table-responsive col-md-10" style="overflow-x: auto">
 		<table class="table table-condensed table-bordered noselection" id="scheduleTable">
 			<%=schOut %>
 		</table>

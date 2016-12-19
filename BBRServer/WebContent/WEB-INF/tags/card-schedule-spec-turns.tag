@@ -62,7 +62,7 @@
 
 	for (BBRSpecialist spec : slist.data) {
 		schOut += "<tr>";
-		schOut += "<td><small>" + spec.getName() + ", " + spec.getPosition() + "</small></td>";
+		schOut += "<td><small><a href='manager-spec-edit.jsp?id=" + spec.getId() + "'>" + spec.getName() + ", " + spec.getPosition() + "</a></small></td>";
 		String sid = spec.getId().toString(); 
 		calendar.setTime(dateSelected);
 		for (int i = 1; i <= datesPerPage; i++) {
@@ -79,7 +79,7 @@
 
 <form class="form-inline">
 	<div class="form-group col-md-4 col-sm-4" style="margin-bottom: 0; vertical-align: middle;">
-		<div class='input-group date' id='datepicker' style='width:100%'>
+		<div class='input-group date' id='datepicker' style='width:100%; margin-top: 4px;'>
 	       	<input type='text' class="form-control" />
 	  			<span class="input-group-addon">
 				<span class="glyphicon glyphicon-calendar"></span>
@@ -88,10 +88,6 @@
 	</div>
 
 	<t:select-shop-pos field="shoppos" />
-
-	<div class="form-group">
-	   	<button type='button' class="btn btn-primary" id="applyBtn">${context.gs("LBL_DATERANGE_APPLY_BTN")}</button>
-	</div>
 </form>
 
 <div class="table-responsive col-md-10">
@@ -226,20 +222,29 @@
 		el.on("load", function () {
 			if ($shopposfirstLoad) {
 				var el = $("#shopposinput")[0].selectize;
-				var firstOptionIndex = Object.keys(el.options)[0];
-				for (i = 0; i < Object.keys(el.options).length; i++) {
-					var s = Object.keys(el.options)[i];
-					if (s.charAt(0) == "s") {
-						firstOptionIndex = Object.keys(el.options)[i];
-						break;
+				var firstOptionIndex = "${posId}";
+				if (firstOptionIndex == "") {
+					firstOptionIndex = Object.keys(el.options)[0];
+					for (i = 0; i < Object.keys(el.options).length; i++) {
+						var s = Object.keys(el.options)[i];
+						if (s.charAt(0) == "s") {
+							firstOptionIndex = Object.keys(el.options)[i];
+							break;
+						}
 					}
 				}
-				
 	    		el.addItem(el.options[firstOptionIndex].id);
 	    		el.refreshItems();
-	    		$("#applyBtn").click();
 	    		$shopposfirstLoad = false;
 			}
 		});
+		el.on("change", function () {
+			if ($shopposfirstLoad)
+				return;
+			var posId = $("#shopposinput").val();
+			if (posId.charAt(0) == "s")
+				return;
+			reloadWithNewParam("posId=" + posId);
+		})
 	}
 </script>
