@@ -58,6 +58,8 @@
 			}
 		}
 	if (pos == null) return;
+	posId = pos.getId().toString();
+	request.setAttribute("newPosId", posId);
 	
 	Date dateSelected = new Date();
 
@@ -99,36 +101,36 @@
 	schOut += "<thead><tr>" + specOut;
 	if (startWorkMin > 0) {
 		if (hh < 10) hs = "0" + hh; else hs = "" + hh;
-		schOut += "<th><small>" + hs + ":30</small></th>";
+		schOut += "<th>" + hs + ":30</th>";
 		hh++;
 	}
 	for (Integer h = hh; h <= endWorkHour - 1; h++) {
 		if (h < 10) hs = "0" + h; else hs = "" + h;
-		schOut += "<th colspan='2'><small>" + hs + ":00</small></th>";
+		schOut += "<th colspan='2'>" + hs + ":00</th>";
 	}
 	if (endWorkMin > 0) {
 		hh = endWorkHour;
 		if (hh < 10) hs = "0" + hh; else hs = "" + hh;
-		schOut += "<th><small>" + hs + ":30</small></th>";
+		schOut += "<th>" + hs + ":30</th>";
 	}
 	schOut += "</tr></thead><tbody>";
 
 	for (BBRSpecialist spec : slist.data) {
 		hh = startWorkHour;
 		schOut += "<tr>";
-		schOut += "<td><small>" + spec.getName() + ", " + spec.getPosition() + "</small></td>";
+		schOut += "<td><a href='manager-spec-edit.jsp?id=" + spec.getId() + "'>" + spec.getName() + ", " + spec.getPosition() + "</a></td>";
 		String sid = spec.getId().toString(); 
 		if (startWorkMin > 0) {
-			schOut += "<td id='sp"+ sid + "_oc" + hh + "_30'><small>&nbsp;</small></td>";
+			schOut += "<td id='sp"+ sid + "_oc" + hh + "_30'>&nbsp;</td>";
 			hh++;
 		}
 		for (Integer h = hh; h <= endWorkHour - 1; h++) {
-			schOut += "<td id='sp"+ sid + "_oc" + h + "_00'><small>&nbsp;</small></td>";
-			schOut += "<td id='sp"+ sid + "_oc" + h + "_30'><small>&nbsp;</small></td>";
+			schOut += "<td id='sp"+ sid + "_oc" + h + "_00'>&nbsp;</td>";
+			schOut += "<td id='sp"+ sid + "_oc" + h + "_30'>&nbsp;</td>";
 		}
 		if (endWorkMin > 0) {
 			hh = endWorkHour;
-			schOut += "<td id='sp"+ sid + "_oc" + hh + "_00'><small>&nbsp;</small></td>";
+			schOut += "<td id='sp"+ sid + "_oc" + hh + "_00'>&nbsp;</td>";
 		}
 		schOut += "</tr>";
 	}
@@ -187,7 +189,7 @@
 <div class="row">
 	<p/>
 	<div class="table-responsive col-md-10" style="overflow-x: auto">
-		<table class="table table-condensed table-bordered noselection" id="scheduleTable">
+		<table class="table table-condensed table-bordered noselection small" id="scheduleTable">
 			<%=schOut %>
 		</table>
 	</div>
@@ -283,7 +285,7 @@
 		el.on("load", function () {
 			if ($shopposfirstLoad) {
 				var el = $("#shopposinput")[0].selectize;
-				var firstOptionIndex = "${posId}";
+				var firstOptionIndex = "${newPosId}";
 				if (firstOptionIndex == "") {
 					firstOptionIndex = Object.keys(el.options)[0];
 					for (i = 0; i < Object.keys(el.options).length; i++) {
@@ -342,7 +344,10 @@
  		else
  			posSelected = "";
  		
- 		if (posSelected == "" || posSelected.charAt(0) == "s")
+ 		if (posSelected == "")
+ 			posSelected = "${newPosId}";
+ 		
+ 		if (!posSelected || posSelected == "" || posSelected.charAt(0) == "s")
  			return;
  		
  		$("#timeScheduledinput").val(dateSelected + " ");
@@ -499,7 +504,14 @@
 
 <% if (mode.equals("manager-edit")) { %>	
 	procedureSetConstrains = function () {
-		return getUrlParameter("posId");
+		var posId = $("#shopposinput").val();
+		
+		if (posId == "")
+			posId = "${newPosId}";
+			
+		if (!posId || posId == "")
+			return "";
+		return posId;
 	}
 <%
 }

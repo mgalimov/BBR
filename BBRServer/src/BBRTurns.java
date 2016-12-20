@@ -47,12 +47,17 @@ public class BBRTurns extends BBRBasicServlet<BBRTurn, BBRTurnManager> {
 		else
 			sTime = tf.parse(startTime);
 
+		if (sTime == null)
+			sTime = spec.getPos().getStartWorkHour();
+		
 		if (endTime == null || endTime.trim().isEmpty())
 			eTime = spec.getEndWorkHour();
 		else
 			eTime = tf.parse(endTime);
 
-		
+		if (eTime == null)
+			eTime = spec.getPos().getEndWorkHour();
+
 		Long id = Long.parseLong(manager.createAndStoreTurn(
 					spec, 
 					df.parse(date),

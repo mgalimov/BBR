@@ -52,7 +52,7 @@
 %>
 <t:light-wrapper title="LBL_PLAN_VISIT_TITLE">
 <jsp:body>
-	<div class="col-xs-12 col-sm-8 col-md-6 col-lg-6">
+	<div class="container col-md-6 col-xs-12 col-sm-12 col-lg-6">
 		<t:modal  cancelButtonLabel="BTN_CONFIRM_CANCEL_VISIT_CANCEL" 
 				  processButtonLabel="BTN_CONFIRM_CANCEL_VISIT_PROCESS" 
 				  title="LBL_CONFIRM_CANCEL_VISIT_TITLE" 
@@ -69,33 +69,32 @@
 		  <a href="#" class="btn btn-default" id="procBtn">${context.gs("LBL_GET_BY_PROC")}</a>
 		  <a href="#" class="btn btn-default" id="checkBtn">${context.gs("LBL_CHECK_BOOKING")}</a>
 		</div>
-		<p/>
+		<div class="row">&nbsp;</div>
 		<div class="row">
 			<div class="alert alert-warning alert-dismissable hide" id="alertMessage">
     			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     			<div id="alertText"></div>
 			</div>
 		</div>
-			<div class="row">
-				<div class='input-group input-spec date hide col-md-6 col-xs-5 col-sm-5 col-lg-6' id='dateInputDiv'>	
-					<input id='dateInput' type='text' class='form-control' />
-					<span class='input-group-addon'>
-						<span class='glyphicon glyphicon-calendar'/></span>
-					</span>
-				</div>
-				<div class='input-group input-spec date hide col-md-3 col-xs-4 col-sm-3 col-lg-2' id='dateBtnsDiv'>
-					<div class="btn-group" role="group" aria-label="...">
-						<button class="btn btn-default" title='${context.gs("LBL_TODAY")}' id="todayBtn">
-							&nbsp;&nbsp;<span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp;
-						</button>
-						<button class="btn btn-default" title='${context.gs("LBL_NEXT_DAY")}' id="nextDayBtn">
-							&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>&nbsp;
-						</button>
-					</div>
+		<div class="row">
+			<div class='input-group input-spec hide' id='dateInputDiv' style='width: 69%'>	
+				<input id='dateInput' type='text' class='form-control' />
+				<span class='input-group-addon'>
+					<span class='glyphicon glyphicon-calendar'/></span>
+				</span>
+			</div>
+			<div class='input-group input-spec hide' id='dateBtnsDiv'  style='width: 30%;'>
+				<div class="btn-group" role="group" aria-label="...">
+					<button class="btn btn-default" title='${context.gs("LBL_TODAY")}' id="todayBtn">
+						&nbsp;&nbsp;<span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp;
+					</button>
+					<button class="btn btn-default" title='${context.gs("LBL_NEXT_DAY")}' id="nextDayBtn">
+						&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>&nbsp;
+					</button>
 				</div>
 			</div>
+		</div>
 		<div class="row">
-			<p/>
 			<div class="form-group hide" id="nameGroup">
 				<label for="nameInput">${context.gs("LBL_YOUR_NAME")}</label>
 				<input type="text" id="nameInput" class="form-control" required/>
@@ -118,8 +117,11 @@
       			</div>
 			</div>
 			<a href="#" class="btn btn-primary hide" id="finishBtn">${context.gs("BTN_FINISH_BOOKING")}</a>
-			<div id="mainTab">
-			</div>
+		</div>
+		<div class="row">&nbsp;</div>
+		<div id="mainTab" class="row">
+		</div>
+		<div class="row">
 			<a href="#" class="btn btn-primary hide" id="closeBtn">${context.gs("BTN_CLOSE_BOOKING")}</a>
 			<a href="#" class="btn btn-warning hide" id="cancelBookingBtn">${context.gs("BTN_CANCEL_BOOKING")}</a>
 		</div>

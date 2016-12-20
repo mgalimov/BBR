@@ -45,24 +45,24 @@
 	calendar.setTime(dateSelected);
 	
 	String schOut = "";
-	String specOut = "<td style='width:100px;' nowrap='nowrap'><small>" +
+	String specOut = "<td style='width:100px;' nowrap='nowrap'>" +
 					 "  	<div class='btn-group btn-group-justified' role='group'>" +
 					 "			<button class='btn btn-link' id='prevDateBtn' type='button'><span class='glyphicon glyphicon-chevron-left'></span></button>" +
 					 "			<button class='btn btn-link' id='todayDateBtn' type='button'><span class='glyphicon glyphicon-time'></span></button>" +
 					 "			<button class='btn btn-link' id='nextDateBtn' type='button'><span class='glyphicon glyphicon-chevron-right'></span></button>" +
 					 "		</div>" +
-					 "</small></td>";
+					 "</td>";
 	
 	schOut += "<thead><tr >" + specOut;
 	for (int i = 0; i < datesPerPage; i++) {
 		calendar.add(Calendar.DATE, 1);
-		schOut += "<th style='width: 90px; vertical-align: middle;' class='text-center' ><nobr><small><span id='sd" + i + "' data-date='" + sf.format(calendar.getTime()) + "'></span></small></nobr></th>";
+		schOut += "<th style='width: 90px; vertical-align: middle;' class='text-center' ><nobr><span id='sd" + i + "' data-date='" + sf.format(calendar.getTime()) + "'></span></nobr></th>";
 	}
 	schOut += "</tr></thead><tbody>";
 
 	for (BBRSpecialist spec : slist.data) {
 		schOut += "<tr>";
-		schOut += "<td><small><a href='manager-spec-edit.jsp?id=" + spec.getId() + "'>" + spec.getName() + ", " + spec.getPosition() + "</a></small></td>";
+		schOut += "<td><a href='manager-spec-edit.jsp?id=" + spec.getId() + "'>" + spec.getName() + ", " + spec.getPosition() + "</a></td>";
 		String sid = spec.getId().toString(); 
 		calendar.setTime(dateSelected);
 		for (int i = 1; i <= datesPerPage; i++) {
@@ -91,7 +91,7 @@
 </form>
 
 <div class="table-responsive col-md-10">
-	<table class="table table-bordered  table-condensed noselection table-striped" id="scheduleTable">
+	<table class="table table-bordered  table-condensed noselection table-striped small" id="scheduleTable">
 		<%=schOut %>
 	</table>
 </div>
@@ -107,8 +107,6 @@
 			locale: '<%=context.getLocaleString()%>'
         });
 
-		changeDatesOnButtons(0);
-		
 		$('#datepicker').on("dp.change", function(e) {
 			newDate = e.date;
 			$.cookie("dateSelected", newDate.year() + "-" + (newDate.month() + 1) + "-" + newDate.date());
@@ -117,7 +115,10 @@
 				$("span[id^='sd']").each(function (i) {
 					dt = new moment(newDate);
 	 				dt.add(i, "days");
-		 			$(this).attr("data-date",  dt.year()+ "-" + (dt.month() + 1) + "-" + dt.date())
+	 				var nd = dt.year()+ "-" + (dt.month() + 1) + "-" + dt.date();
+	 	 			var od = $(this).attr("data-date");
+	 	 			$("td[id^='sp'][id$='_" + (i + 1) + "']").attr("data-date", nd);
+		 			$(this).attr("data-date",  nd)
 		 			$(this).text(dt.date() + " " + moment.months()[dt.month()]);
 		 		});
 				updateTurns();
@@ -132,6 +133,8 @@
 	 	ds = $.cookie("dateSelected");
 		if (ds != null && ds != "")
 			$('#datepicker').data("DateTimePicker").date(ds);
+		else
+			changeDatesOnButtons(0);
 	 });
 	
 	function changeDatesOnButtons(modifier) {
