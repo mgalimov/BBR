@@ -9,7 +9,7 @@
 	<head>
 	    <meta charset="utf-8">
 	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	    <title>
 	    	<c:out value="${context.gs(title)}"/>
 	    	<c:out value="${titleModifier}"/>
@@ -20,13 +20,10 @@
 
 	    <!-- Bootstrap -->
 	    <link href="css/bootstrap.min.css" rel="stylesheet">
-	
-	    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-	    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	    <!--[if lt IE 9]>
-	      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-	      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-	    <![endif]-->
+  	    <!-- Font Awesome -->
+	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+	    <!-- Ionicons -->
+	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 	
 	    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	    <script src="js/jquery-1.11.2.min.js"></script>
@@ -68,16 +65,16 @@
 		<script src="js/fileinput.min.js"></script>
 		
 		<!-- Admin LTE -->
-		<link rel="stylesheet" href="css/AdminLTE.min.css">
+		<link rel="stylesheet" href="css/AdminLTE.css">
 		<link rel="stylesheet" href="css/_all-skins.min.css">
 		<script src="js/app.js"></script>
+		<script src="js/jquery.slimscroll.min.js"></script>
   	</head>
-  	<body>
- 		<t:top-menu  title="${context.gs('LBL_CONTROL_PANEL')} ${context.gs(title)} ${titleModifier}"/>
-<%--  		<t:side-menu />  --%>
-   		<div class="container-fluid">
-  			<div class="row">
-		  		
+  	<body class="skin-yellow fixed">
+   		<div class="wrapper">
+	 		<t:top-menu  title="${context.gs('LBL_CONTROL_PANEL')} ${context.gs(title)} ${titleModifier}"/>
+ 			<t:side-menu /> 
+  			<div class="content-wrapper">
 	  			<div class="main">
 	  				<jsp:doBody/>
 	  			</div>

@@ -6,11 +6,14 @@
 
 <% BBRContext context = BBRContext.getContext(request); %> 
 
-<header class="header">
+<header class="main-header">
   <a href="${context.getWelcomePage()}" class="logo">
     ${context.gs('LBL_APPLICATION_NAME')}
   </a>
   <nav class="navbar navbar-static-top" role="navigation">
+  	<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+    </a>
     <div class="navbar-custom-menu">
       <ul class="nav navbar-nav">
         <li class="dropdown tasks-menu">
@@ -46,32 +49,23 @@
        		<span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
-            <li class="user-header">
-              <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-              <p>
-                Alexander Pierce - Web Developer
-                <small>Member since Nov. 2012</small>
-              </p>
-            </li>
-            <!-- Menu Body -->
-            <li class="user-body">
-            </li>
             <!-- Menu Footer-->
             <li class="user-footer">
-            <ul>
-				    <li><a href="general-user-profile.jsp">
-				    	<% out.println(context.gs("LBL_USER_PROFILE_BTN"));%></a></li>
-				    <li class="divider"></li>
-				    <li><a href="#" id="signOutLink">
+                <div class="pull-left">
+					<a href="general-user-profile.jsp" class="btn btn-default btn-flat">
+				    	<% out.println(context.gs("LBL_USER_PROFILE_BTN"));%></a>
+				</div>
+				<div class="pull-left">
+					<a href="#" id="signOutLink" class="btn btn-default btn-flat">
 	         		<% if (context.user != null) 
 	         				out.println(context.gs("LBL_SIGN_OUT_BTN"));
 	         		   else 
-	         		   		out.println(context.gs("LBL_SIGN_IN_BTN"));%></a></li>
-            </ul>
+	         		   		out.println(context.gs("LBL_SIGN_IN_BTN"));%></a>
+	         	</div>
             </li>
           </ul>
-			</li>
-			</ul>
+		</li>
+	  </ul>
     </div>
   </nav>
 </header>

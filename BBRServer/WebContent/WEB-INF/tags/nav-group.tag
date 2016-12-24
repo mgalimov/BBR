@@ -9,6 +9,10 @@
    request.setAttribute("allowed", context.isPageAllowed(level));%>
 
 <c:if test="${allowed}">
-	<h4 class="nav">${context.gs(title)}</h4>
-    <jsp:doBody/>
+	<li class="treeview">
+        <a href="#"><span>${context.gs(title)}</span> <i class="fa fa-angle-left pull-right"></i></a>
+        <ul class="treeview-menu">
+		    <jsp:doBody/>
+		</ul>
+	</li>
 </c:if>

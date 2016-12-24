@@ -78,13 +78,13 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class='input-group input-spec hide' id='dateInputDiv' style='width: 69%'>	
+			<div class='input-group input-spec hide' id='dateInputDiv' style='width: 64%'>	
 				<input id='dateInput' type='text' class='form-control' />
 				<span class='input-group-addon'>
 					<span class='glyphicon glyphicon-calendar'/></span>
 				</span>
 			</div>
-			<div class='input-group input-spec hide' id='dateBtnsDiv'  style='width: 30%;'>
+			<div class='input-group input-spec hide' id='dateBtnsDiv'  style='width: 35%;'>
 				<div class="btn-group" role="group" aria-label="...">
 					<button class="btn btn-default" title='${context.gs("LBL_TODAY")}' id="todayBtn">
 						&nbsp;&nbsp;<span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp;

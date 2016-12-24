@@ -1,7 +1,15 @@
 <%@ tag language="java" pageEncoding="UTF-8" description="Navigation"%>
 
-<nav id="navmenu" class="navmenu navmenu-default navmenu-fixed-left offcanvas-md" role="navigation">
-	<ul class="nav navmenu-nav">
-   		<jsp:doBody/>
-   	</ul>
-</nav>
+<aside class="main-sidebar">
+	<section class="sidebar">
+		<ul class="sidebar-menu">
+	   		<jsp:doBody/>
+		</ul>
+	</section>>
+</aside>
+
+<script>
+	$(document).ready(function () {
+		$("li.active").parents("li.treeview").addClass("active");
+	});
+</script>

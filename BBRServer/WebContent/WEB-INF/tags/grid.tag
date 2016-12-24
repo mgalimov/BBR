@@ -24,10 +24,6 @@
 	<c:set var="paging" value="true"/>
 </c:if>
 
-
-
-<!-- http://www.onjava.com/pub/a/onjava/excerpt/jserverpages3_ch11/ -->
-
 <h3>${context.gs(title).concat(titleModifier)}</h3>
 		
 <t:modal  cancelButtonLabel="LBL_GRID_CONFIRM_DELETION_CANCEL_BTN" 
@@ -67,7 +63,6 @@
 	  			</button>
 		  </span>
 		  </c:if>
-
 	  </div>
   </div>
   
@@ -85,7 +80,7 @@
   </div>
  </c:if>
   
-  <div class="panel-body">
+  <div class="panel-body" style="overflow-x: scroll">
 	  <table id="grid" class="table table-stripped table-bordered no-footer noselection">
 			<jsp:doBody/>
 			<thead>

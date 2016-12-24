@@ -18,12 +18,9 @@
    request.setAttribute("itemId", this.hashCode());%>
 
 <c:if test="${allowed}">
-	<li role="presentation" class="${aclass}">
-		<a href="${href}">
-			<c:if test="${badge.equals('true')}">
-				<span class="badge pull-right" id="${itemId}"></span>
-			</c:if>
-			<c:out value="${context.gs(title)}"/>
+	<li class="${aclass}">
+		<a href="${href}"><c:if test="${badge.equals('true')}"><span class="badge pull-right" id="${itemId}"></span></c:if>
+			${context.gs(title)}
 		</a>
 	</li>
 </c:if>
