@@ -15,7 +15,7 @@
    if (request.getRequestURI().contains(href))
 	   aclass = "active";
    request.setAttribute("aclass", aclass);
-   request.setAttribute("itemId", this.hashCode());%>
+   request.setAttribute("itemId", badgeMethod + "_badge");%>
 
 <c:if test="${allowed}">
 	<li class="${aclass}">
@@ -32,9 +32,9 @@
 			data: {operation: "badge"}})
 	 	.done(function(data){
 	 		if (data == "")
-	 			$("#${itemId}").addClass("hidden");
+	 			$("[id^=${itemId}]").addClass("hidden");
 	 		else
-	 			$("#${itemId}").text(data);
+	 			$("[id^=${itemId}]").text(data);
 	 		setTimeout(${badgeMethod}TimerFunc, 60000);
 	 	});		
 	}

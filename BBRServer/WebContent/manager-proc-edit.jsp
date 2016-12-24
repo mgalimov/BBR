@@ -7,6 +7,7 @@
 		<t:card title="LBL_EDIT_PROCEDURE_TITLE" gridPage="manager-proc-list.jsp" method="BBRProcedures">
 			<t:card-item label="LBL_POS" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes" />
 			<t:card-item label="LBL_TITLE" type="text" field="title" isRequired="required" />
+			<t:card-item label="LBL_PROC_GROUP" type="text" field="procGroup" isRequired="required" />
 			<t:card-item label="LBL_PROC_LENGTH" type="text" field="length" isRequired="required" defaultValue="0.5"/>
 			<t:card-item label="LBL_PROC_PRICE" type="text" field="price" />
 			<t:card-item label="LBL_CURRENCY" type="text" field="pos.currency" isDisabled="readonly"/>

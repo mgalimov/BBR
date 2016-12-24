@@ -373,11 +373,6 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				return "";
 			}
 		}
-		String myVisits = (String)context.get("visitsMy");
-		if (myVisits != null && !myVisits.isEmpty() && context.user != null)
-			return manager.list(context.user.getId(), context.filterShop, context.filterPoS, context.filterStartDate, context.filterEndDate,
-							    pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns)).toJson();
-		
 		try {
 			if (context.filterPoS == null && context.filterShop == null) {
 				if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
@@ -563,14 +558,11 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			where = "(" + where +") and";
 		Date dt = BBRUtil.now(context.getTimeZone());
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
-		where += "(status = " + BBRVisitStatus.VISSTATUS_INITIALIZED + ") and (timeScheduled >= '" + df.format(BBRUtil.getStartOfDay(dt)) + "')";
-
-		String count1 = manager.count(where).toString();
-		
-        where += " and (timeScheduled <= '" + df.format(BBRUtil.getEndOfDay(dt)) + "')";
+		where += "(status in (" + BBRVisitStatus.VISSTATUS_INITIALIZED + "," + BBRVisitStatus.VISSTATUS_APPROVED + "," + BBRVisitStatus.VISSTATUS_PERFORMED + ")) ";
+        where += " and (coalesce(realTime,timeScheduled) >= '" + df.format(BBRUtil.getStartOfDay(dt)) + "') and (coalesce(realTime, timeScheduled) <= '" + df.format(BBRUtil.getEndOfDay(dt)) + "')";
 		String count2 = manager.count(where).toString();
 	
-		return count2 + " / " + count1;
+		return count2;
 	}
 
 }

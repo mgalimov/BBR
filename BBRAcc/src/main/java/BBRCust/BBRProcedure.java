@@ -40,6 +40,9 @@ public class BBRProcedure extends BBRDataElement {
 	@Column(name="PHOTO")
 	private Blob photo;
 	
+	@Column(name="PROC_GRP")
+	private String procGroup;
+	
 	BBRProcedure() {
 	}
 
@@ -97,5 +100,13 @@ public class BBRProcedure extends BBRDataElement {
 
 	public void setPhoto(Blob photo) {
 		this.photo = photo;
+	}
+
+	public String getProcGroup() {
+		return procGroup;
+	}
+
+	public void setProcGroup(String group) {
+		this.procGroup = group;
 	}
 }

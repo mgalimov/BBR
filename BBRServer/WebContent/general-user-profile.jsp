@@ -13,7 +13,7 @@
 <t:wrapper title="LBL_USER_PROFILE_TITLE">
 <jsp:body>
  	<t:card title="LBL_USER_PROFILE_TITLE" gridPage="general-user-profile.jsp" method="BBRUserProfile">
- 		<t:card-item type="info" field="userName" label="LBL_USER_NAME" />
+ 		<t:card-item type="text" field="userName" label="LBL_USER_NAME" isDisabled="readonly"/>
  		<t:card-item type="select" field="language" label="LBL_LANGUAGE" options="OPT_LANGUAGE" />
  		<div class="form-group">
  			<label for="_timeZoneinput">${context.gs("LBL_TIMEZONE")}</label>

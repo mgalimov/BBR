@@ -6,6 +6,7 @@
 				title="LBL_PROCEDURES_TITLE" paging="false">
 			<t:grid-item label="LBL_POS" field="pos.title"/>
 			<t:grid-item label="LBL_TITLE" field="title" sort="asc"/>
+			<t:grid-item label="LBL_PROC_GROUP" field="procGroup"/>
 			<t:grid-item label="LBL_PROC_LENGTH" field="length"/>
 			<t:grid-item label="LBL_PROC_PRICE" field="price"/>
 			<t:grid-item label="LBL_CURRENCY" field="pos.currency"/>

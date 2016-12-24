@@ -12,9 +12,6 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 
-<script src="//api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
-<script src="js/bbr-maps.js" type="text/javascript"></script>
-
 <%
 	BBRContext context = BBRContext.getContext(request);
 	BBRParams params = new BBRParams(request.getQueryString());
@@ -320,14 +317,32 @@
 			d = $.parseJSON(data);
 			var html = "";
 			n = 0;
+			var prgr = "";
 			for (i = 0; i < d.recordsTotal; i++) {
 				proc = d.data[i];
 				if (proc.status == 1) {
+					if (proc.procGroup != prgr) {
+						prgr = proc.procGroup;
+						if (prgr != "")
+							html += "</div></div>";
+						html += "<div><a href='#' data-type='gheader' class='list-group-item'><h4 class='media-heading'>" + prgr + "</h4></a><div data-type='group' class='hide'>";
+					}
+					
 					media = "<div class='media'><div class='media-left pull-left media-middle' style='padding-right: 10px;'><img class='media-object' src='images/tool.png' alt='"+proc.title+"'></div><div class='media-body'><h4 class='media-heading'>" + proc.title + "</h4>" + procLength(proc.length) + ", ${context.gs('LBL_PRICE_FROM')} " + proc.price + " " + proc.pos.currency + "</div></div>";
 					html += "<a href='#' class='list-group-item' id='procA" + proc.id + "' data-type='procedure' data-id='" + proc.id + "' data-name='" + proc.title + "'>" + media + "</a>";
 				}
 			}
+			if (prgr != "")
+				html += "</div></div>";
 			$("#mainTab").html(html);
+			$("[data-type$=gheader]").click(function () {
+				var el = $(this).next();
+				if (el.hasClass("hide"))
+					el.removeClass("hide");
+				else
+					el.addClass("hide");
+			});
+			$("[data-type$=gheader]").first().click();
 			$("[data-type$=procedure]").click(function () {
 				procId = $(this).attr('data-id');
 				procName = $(this).attr('data-name');

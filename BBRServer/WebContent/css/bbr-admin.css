@@ -306,3 +306,7 @@ h4.nav {
 th {
 	vertical-align: top !important;
 }
+
+.dataTables_wrapper > .row {
+	overflow-x: auto;
+} 

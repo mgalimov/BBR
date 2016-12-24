@@ -70,7 +70,7 @@
 		<script src="js/app.js"></script>
 		<script src="js/jquery.slimscroll.min.js"></script>
   	</head>
-  	<body class="skin-yellow fixed">
+  	<body class="skin-green fixed">
    		<div class="wrapper">
 	 		<t:top-menu  title="${context.gs('LBL_CONTROL_PANEL')} ${context.gs(title)} ${titleModifier}"/>
  			<t:side-menu /> 

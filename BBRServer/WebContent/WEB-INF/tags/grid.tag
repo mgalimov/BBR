@@ -80,7 +80,7 @@
   </div>
  </c:if>
   
-  <div class="panel-body" style="overflow-x: scroll">
+  <div class="panel-body">
 	  <table id="grid" class="table table-stripped table-bordered no-footer noselection">
 			<jsp:doBody/>
 			<thead>

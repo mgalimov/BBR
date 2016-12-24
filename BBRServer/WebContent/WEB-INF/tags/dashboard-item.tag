@@ -3,6 +3,8 @@
 <%@ attribute name="type" required="true" %>
 <%@ attribute name="method" required="true" %>
 <%@ attribute name="indicator" required="true" %>
+<%@ attribute name="icon" %>
+<%@ attribute name="color" %>
 <%@ attribute name="options" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
@@ -13,8 +15,15 @@
         "/>
 
 <div class="dashboard">
-	<h4>${context.gs(title)}</h4>
-	<div id="${indicator}_${type}_chart"></div>
+	<div class="info-box">
+  		<span class="info-box-icon bg-${color}">
+  			<span class="glyphicon glyphicon-${icon}" aria-hidden="true"></span>
+  		</span>
+  		<div class="info-box-content">
+    		<span class="info-box-text">${context.gs(title)}</span>
+    		<span class="info-box-number" id="${indicator}_${type}_chart"></span>
+  		</div>
+	</div>
 </div>
 <c:set var="chartoptions" scope="page" value=""/>
 <c:set var="chartpackage" scope="page" value=""/>
@@ -73,7 +82,7 @@
 			if ("${type}" == "singleValue") {
 				if (data == "")
 					data = "${context.gs('MSG_NO_NEW_DATA')}";
-				$("#${indicator}_${type}_chart").html("<div class='singleValue'>" + data + "</div>");
+				$("#${indicator}_${type}_chart").html(data);
 			} else {
 				if (data == "")
 					dt = {cols:[{label:"X",type:"string"},{label:"Y",type:"number"}], rows:[]};

@@ -25,6 +25,7 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 	protected String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		String title = params.get("title");
 		String posId = params.get("pos");
+		String group = params.get("procGroup");
 		BBRPoSManager mgr = new BBRPoSManager();
 		BBRPoS pos = mgr.findById(Long.parseLong(posId));
 		if (pos != null) {						
@@ -39,7 +40,7 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 				priceFloat = Float.parseFloat(price);
 			
 			String status = params.get("status");
-			manager.createAndStoreProcedure(title, pos, lengthFloat, priceFloat, (int) Long.parseLong(status));
+			manager.createAndStoreProcedure(title, pos, lengthFloat, priceFloat, (int) Long.parseLong(status), group);
 		}
 		return "";
 	}
@@ -48,6 +49,7 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 	protected BBRProcedure beforeUpdate(BBRProcedure proc, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		String title = params.get("title");
 		String posId = params.get("pos");
+		String group = params.get("procGroup");
 		BBRPoSManager mgr = new BBRPoSManager();
 		BBRPoS pos = mgr.findById(Long.parseLong(posId));
 		if (pos != null) {						
@@ -67,6 +69,7 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 	        proc.setLength(lengthFloat);
 	        proc.setPrice(priceFloat);
 	        proc.setStatus((int) Long.parseLong(status));
+	        proc.setProcGroup(group);
 	        return proc;
 		}
 		return null;		
@@ -114,7 +117,7 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 				String where = " pos.id = " + pos.getId() + " and status = " + BBRProcedureStatus.PROCSTATUS_APPROVED;
 
 				try {
-					respText = manager.list(query, manager.getTitleField(), where).toJson();
+					respText = manager.list(query, "procGroup, " + manager.getTitleField(), where).toJson();
 				} catch (Exception ex) {
 					respText = "";
 				}
