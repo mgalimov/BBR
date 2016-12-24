@@ -23,6 +23,7 @@ import BBRAcc.BBRPoSManager;
 import BBRAcc.BBRShop;
 import BBRAcc.BBRUser;
 import BBRCust.BBRSpecialist.BBRSpecialistState;
+import BBRCust.BBRVisit.BBRVisitSource;
 import BBRCust.BBRVisit.BBRVisitStatus;
 import BBRCust.BBRVisit;
 
@@ -35,7 +36,9 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		classTitle = "Visit";	
 	}
 
-	public BBRVisit scheduleVisit(boolean notification, BBRPoS pos, BBRUser user, Date timeScheduled, BBRProcedure procedure, BBRSpecialist spec, String userName, String userContacts, String comment) {
+	public BBRVisit scheduleVisit(boolean notification, BBRPoS pos, BBRUser user, 
+								  Date timeScheduled, BBRProcedure procedure, BBRSpecialist spec, 
+								  String userName, String userContacts, String comment, int source) {
 		boolean tr = BBRUtil.beginTran();
         try {
 	        Session session = BBRUtil.getSession();
@@ -43,6 +46,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        visit.setPos(pos);
 	        visit.setUser(user);
 	        visit.setTimeScheduled(timeScheduled);
+	        visit.setRealTime(timeScheduled);
 	        visit.setProcedure(procedure);
 	        visit.setSpec(spec);
 	        visit.setUserName(userName);
@@ -54,6 +58,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 			visit.setAmountToSpecialist(0);
 			visit.setAmountToMaterials(0);
 			visit.setComment(comment);
+			visit.setSource(source);
 			visit.setBookingCode(generateNewBookingCode());
 	        if (procedure != null) {
 	        	visit.setLength(procedure.getLength());
@@ -168,6 +173,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 			visit.setAmountToSpecialist(amountToSpecialist);
 			visit.setAmountToMaterials(amountToMaterials);
 			visit.setComment(comment);
+			visit.setSource(BBRVisitSource.INTERNAL);
 			visit.setProcedures(procedures);
 			
 			if (procedure != null) {

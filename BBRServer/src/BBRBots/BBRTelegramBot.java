@@ -27,6 +27,7 @@ import BBRCust.BBRProcedure.BBRProcedureStatus;
 import BBRCust.BBRProcedureManager;
 import BBRCust.BBRSpecialist;
 import BBRCust.BBRVisit;
+import BBRCust.BBRVisit.BBRVisitSource;
 import BBRCust.BBRVisitManager;
 
 public class BBRTelegramBot extends TelegramLongPollingBot {
@@ -532,7 +533,7 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
 			resp = "Не удалось записать вас к мастеру. Попробуйте другое время.";
 			BBRChatStatuses.setStatus(chatId, BBRChatStatus.CHAT_STEP_TIME_BEFORE);
 		} else {
-			BBRVisit visit = mgr.scheduleVisit(true, pos, null, time, proc, spec, name, phone, "из Telegram");
+			BBRVisit visit = mgr.scheduleVisit(true, pos, null, time, proc, spec, name, phone, "", BBRVisitSource.BOT_TELEGRAM);
 			
 			SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 			resp = "Спасибо, " + name + "!\n\n" + 

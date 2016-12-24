@@ -49,6 +49,7 @@
 				<t:card-item label="LBL_ADDITIONAL_PROCEDURES" field="procedures" type="reference" referenceFieldTitle="title" referenceMethod="BBRProcedures" multiple="true" isRequired="required"/>
 				<t:card-item label="LBL_BOOKING_CODE" type="text" field="bookingCode" isDisabled="readonly" />
 				<t:card-item label="LBL_LENGTH" type="text" field="length" isRequired="required" />
+				<t:card-item label="LBL_VISIT_SOURCE" field="source" type="select" options="OPT_VISIT_SOURCE" isDisabled="readonly" />
 				<t:card-item label="LBL_VISIT_STATUS" field="status" type="select" options="OPT_VISIT_STATUS" isDisabled="readonly" defaultValue="3"/>
 			</t:card-tab>
 			<t:card-tab label="LBL_MONEY_TAB" id="moneyTab" combined="true">

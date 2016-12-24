@@ -94,6 +94,7 @@
 			<t:grid-item label="LBL_CONTACT_INFO" field="userContacts"/>
 			<t:grid-item label="LBL_SPEC" field="spec.name"/>
 			<t:grid-item label="LBL_VISIT_STATUS" field="status" type="select" options="OPT_VISIT_STATUS"/>
+			<t:grid-item label="LBL_VISIT_SOURCE" field="source" type="select" options="OPT_VISIT_SOURCE"/>
 			<t:grid-item label="LBL_LENGTH" field="length"/>
 			<t:grid-item label="LBL_FINAL_PRICE" field="finalPrice"/>
 			<t:grid-item label="LBL_DISCOUNT_PERCENT" field="discountPercent"/>

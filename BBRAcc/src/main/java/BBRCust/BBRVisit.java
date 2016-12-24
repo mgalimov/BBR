@@ -81,6 +81,9 @@ public class BBRVisit extends BBRDataElement {
 	@Column(name="BOOKING_CODE")
 	private String bookingCode = "";
 	
+	@Column(name="SOURCE")
+	private int source = 0;
+	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "VISIT_PROC", joinColumns = {
 			@JoinColumn(name = "VISIT_ID")
@@ -264,4 +267,26 @@ public class BBRVisit extends BBRDataElement {
 		this.procedures = procedures;
 	}
 
+	public int getSource() {
+		return source;
+	}
+
+	public void setSource(int source) {
+		this.source = source;
+	}
+
+	public static class BBRVisitSource {
+		public static final int INTERNAL = 0;
+		public static final int INTERNET = 10;
+		public static final int API = 15;
+		public static final int BOT_TELEGRAM = 20;
+		public static final int BOT_WHATSAPP = 21;
+		public static final int BOT_VIBER = 22;
+		public static final int BOT_FB = 23;
+		public static final int BOT_VK = 24;
+		public static final int BOT_OTHER = 29;
+		public static final int APP_IOS = 30;
+		public static final int APP_ANDROID = 31;
+		public static final int APP_OTHER = 39;
+	}
 }

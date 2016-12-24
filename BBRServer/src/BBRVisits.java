@@ -20,6 +20,7 @@ import BBRCust.BBRProcedure;
 import BBRCust.BBRProcedureManager;
 import BBRCust.BBRSpecialist;
 import BBRCust.BBRSpecialistManager;
+import BBRCust.BBRVisit.BBRVisitSource;
 import BBRCust.BBRVisitManager;
 import BBRCust.BBRVisit;
 import BBRCust.BBRVisit.BBRVisitStatus;
@@ -84,7 +85,8 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 													spec, 
 													userName,
 													userContacts,
-													comment);
+													comment,
+													BBRVisitSource.INTERNAL);
 				
 				context.planningVisit.setStatus(BBRVisitStatus.VISSTATUS_APPROVED);
 				manager.update(context.planningVisit);
@@ -156,7 +158,8 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 							context.planningVisit.getSpec(), 
 							context.planningVisit.getUserName(),
 							context.planningVisit.getUserContacts(),
-							"");
+							"",
+							BBRVisitSource.INTERNET);
 				}
 	
 				context.setLastVisitStep(++visitStep);
@@ -483,7 +486,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				}
 				
 				BBRVisit visit = manager.scheduleVisit(true, pos, null, timeScheduled, 
-						         proc, spec, userName, userContacts, comment);
+						         proc, spec, userName, userContacts, comment, BBRVisitSource.INTERNET);
 				return visit.toJson();
 						
 			} catch (Exception ex) {
