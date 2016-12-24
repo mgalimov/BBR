@@ -137,6 +137,7 @@ public class BBRDataManager<T extends BBRDataElement> {
     		BBRUtil.commitTran(tr);
     		return result;
     	} catch (Exception ex) {
+    		BBRUtil.log.error(ex.getMessage());
     		BBRUtil.rollbackTran(tr);
     		return null;
     	}

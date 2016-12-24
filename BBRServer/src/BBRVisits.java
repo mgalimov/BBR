@@ -411,10 +411,10 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				((context.user.getRole() == BBRUserRole.ROLE_VISITOR) && (obj.getUser().getId() == context.user.getId())))
 				return obj.toJson();
 			else
-				return context.gs(BBRErrors.ERR_RECORD_NOTFOUND, manager.getClassTitle());
+				return context.gs(BBRErrors.ERR_RECORD_NOTFOUND, manager.getClassTitle() + "1");
 		}
 		else
-			return context.gs(BBRErrors.ERR_RECORD_NOTFOUND, manager.getClassTitle());
+			return context.gs(BBRErrors.ERR_RECORD_NOTFOUND, manager.getClassTitle() + "2");
 	}
 	
 	@Override
