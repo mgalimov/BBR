@@ -52,7 +52,8 @@
 %>
 <t:light-wrapper title="LBL_PLAN_VISIT_TITLE">
 <jsp:body>
-	<div class="container col-md-6 col-xs-12 col-sm-12 col-lg-6">
+	<div class="container-fluid"> 
+	<div class="col-md-6 col-xs-12 col-sm-12 col-lg-6">
 		<t:modal  cancelButtonLabel="BTN_CONFIRM_CANCEL_VISIT_CANCEL" 
 				  processButtonLabel="BTN_CONFIRM_CANCEL_VISIT_PROCESS" 
 				  title="LBL_CONFIRM_CANCEL_VISIT_TITLE" 
@@ -125,6 +126,7 @@
 			<a href="#" class="btn btn-primary hide" id="closeBtn">${context.gs("BTN_CLOSE_BOOKING")}</a>
 			<a href="#" class="btn btn-warning hide" id="cancelBookingBtn">${context.gs("BTN_CANCEL_BOOKING")}</a>
 		</div>
+	</div>
 	</div>
 </jsp:body>
 </t:light-wrapper>

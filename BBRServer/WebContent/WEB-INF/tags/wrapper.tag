@@ -66,12 +66,18 @@
 		<!-- File Upload -->
 		<link rel="stylesheet" href="css/fileinput.min.css">
 		<script src="js/fileinput.min.js"></script>
+		
+		<!-- Admin LTE -->
+		<link rel="stylesheet" href="css/AdminLTE.min.css">
+		<link rel="stylesheet" href="css/_all-skins.min.css">
+		<script src="js/app.js"></script>
   	</head>
   	<body>
- 		<t:top-menu  title="${context.gs('LBL_CONTROL_PANEL')} ${context.gs(title)} ${titleModifier}"/> 
+ 		<t:top-menu  title="${context.gs('LBL_CONTROL_PANEL')} ${context.gs(title)} ${titleModifier}"/>
+<%--  		<t:side-menu />  --%>
    		<div class="container-fluid">
   			<div class="row">
-		  		<t:side-menu />
+		  		
 	  			<div class="main">
 	  				<jsp:doBody/>
 	  			</div>

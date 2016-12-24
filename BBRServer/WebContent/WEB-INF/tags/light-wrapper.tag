@@ -5,7 +5,7 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <!DOCTYPE html>
-<html>
+<html style="height:100%">
 	<head>
 	    <meta charset="utf-8">
 	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -45,9 +45,7 @@
 	    <script src="js/bbr-utils.js"></script>
 	    <link href="css/bbr-admin.css" rel="stylesheet">	
   	</head>
-  	<body style="padding-top: 0px !important; padding-left: 0px !important">
-  		<div class="container-fluid">
- 				<jsp:doBody/>
-  		</div>
+  	<body style="padding-top: 0px !important; padding-left: 0px !important; min-height:100%">
+		<jsp:doBody/>
 	</body>
 </html>

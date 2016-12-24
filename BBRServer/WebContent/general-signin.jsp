@@ -17,7 +17,7 @@
 	request.setAttribute("lastError", lastError);
 %>
 
-<t:wrapper title="LBL_SIGN_IN_TITLE">
+<t:light-wrapper title="LBL_SIGN_IN_TITLE">
 
 <jsp:body>
     <script>
@@ -32,7 +32,9 @@
         
     </script>  
    
-    <div class="container-fluid col-md-6" id="signFormPanel">	
+    <div class="row" style="height:100%" id="signFormPanel">
+    <div class="col-md-6 col-sm-10 col-xs-12 col-lg-6 col-md-offset-3 col-sm-offset-1 col-lg-offset-3">
+    	
 		<div class="alert alert-warning alert-dismissable" id="alertMessage">
 		    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 		    <div id="welcomeText">${lastError}</div>
@@ -102,9 +104,10 @@
 			</div>
 		 </form>
 		</div>
+	</div>
     </div>
 </jsp:body>
-</t:wrapper>
+</t:light-wrapper>
 
 <script>
 	$(document).ready(function () {
