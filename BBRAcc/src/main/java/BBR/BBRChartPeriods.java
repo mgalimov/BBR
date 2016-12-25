@@ -53,7 +53,7 @@ public class BBRChartPeriods {
     }
 
     public static String periodFunction(String field, String altField, int detail) {
-    	String fld = "nullif(" + field + ", " + altField + ")";
+    	String fld = "coalesce(" + field + ", " + altField + ")";
 		return periodFunction(fld, detail);
     }
 

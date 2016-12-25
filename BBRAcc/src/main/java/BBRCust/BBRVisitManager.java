@@ -812,7 +812,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		boolean tr = BBRUtil.beginTran();
 		Session session = BBRUtil.getSession();
 		
-		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 		String pf = BBRChartPeriods.periodFunction("timeScheduled", "realTime", detail);
 	
 		String where = "";
@@ -824,12 +824,10 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		
 		Query query = session.createQuery("select " + pf + ", count(*) as visits" + 
 		                                  "  from BBRVisit " +  
-										  " where ((timeScheduled >= '"+df.format(BBRUtil.getStartOfDay(startDate))+"' " + 
-		                                  "     and timeScheduled <= '"+df.format(BBRUtil.getEndOfDay(endDate))+"') or " +
-										  "        (realTime >= '"+df.format(BBRUtil.getStartOfDay(startDate))+"' " + 
-		                                  "     and realTime <= '"+df.format(BBRUtil.getEndOfDay(endDate))+"'))" +
-										  "   and (status = " + BBRVisitStatus.VISSTATUS_PERFORMED + 
-										  "        or status = " + BBRVisitStatus.VISSTATUS_APPROVED + ")" + 
+										  " where coalesce(realTime, timeScheduled) >= '"+df.format(BBRUtil.getStartOfDay(startDate))+"' " + 
+		                                  "   and coalesce(realTime, timeScheduled) <= '"+df.format(BBRUtil.getEndOfDay(endDate))+"' " +
+										  "   and status in (" + BBRVisitStatus.VISSTATUS_PERFORMED + "," +
+										  						 BBRVisitStatus.VISSTATUS_APPROVED + ")" + 
 										  where +
 										  " group by " + pf + 
 										  " order by coalesce(realTime, timeScheduled) asc");
@@ -850,7 +848,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		boolean tr = BBRUtil.beginTran();
 		Session session = BBRUtil.getSession();
 		
-		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 		String pf = BBRChartPeriods.periodFunction("timeScheduled", "realTime", detail);
 		
 		String where = "";
@@ -862,12 +860,10 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		
 		Query query = session.createQuery("select " + pf + ", sum(finalPrice) as income" + 
 		                                  "  from BBRVisit " +  
-										  " where ((timeScheduled >= '"+df.format(BBRUtil.getStartOfDay(startDate))+"' " + 
-		                                  "     and timeScheduled <= '"+df.format(BBRUtil.getEndOfDay(endDate))+"') or " +
-										  "        (realTime >= '"+df.format(BBRUtil.getStartOfDay(startDate))+"' " + 
-		                                  "     and realTime <= '"+df.format(BBRUtil.getEndOfDay(endDate))+"'))" +
-										  "   and (status = " + BBRVisitStatus.VISSTATUS_PERFORMED + 
-										  "        or status = " + BBRVisitStatus.VISSTATUS_APPROVED + ")" + 
+										  " where coalesce(realTime, timeScheduled) >= '"+df.format(BBRUtil.getStartOfDay(startDate))+"' " + 
+		                                  "   and coalesce(realTime, timeScheduled) <= '"+df.format(BBRUtil.getEndOfDay(endDate))+"' " +
+										  "   and status in (" + BBRVisitStatus.VISSTATUS_PERFORMED + "," + 
+										  						 BBRVisitStatus.VISSTATUS_APPROVED + ")" + 
 										  where +
 										  " group by " + pf + 
 										  " order by coalesce(realTime, timeScheduled) asc");
@@ -1062,7 +1058,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		BBRPoS pos = pmgr.findById(posId);
 		if (pos != null) {
 			Long p = pos.getPrizeVisitNumber(); 
-			if (p != null && p > 0 && (l+1)%p == 0)
+			if (p != null && p > 0 && l > 0 && (l+1)%p == 0)
 				return true;
 		}
 		return false;

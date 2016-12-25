@@ -263,6 +263,7 @@
 	        		filterPoS: posId 
 	        	}
 			}).success(function (d) {
+				table.ajax.reload();
 				table.draw();
 			}).error(function () {
 			});

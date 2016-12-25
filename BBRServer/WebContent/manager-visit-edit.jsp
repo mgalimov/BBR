@@ -32,9 +32,9 @@
 		
 		<t:card title="LBL_EDIT_VISIT_TITLE" gridPage="source" method="BBRVisits" showTabs="true">
 			<t:toolbar-group spaceBefore="true">
-				<t:toolbar-item label="LBL_APPROVE_VISIT" id="approveButton" accent="btn-success" condition="obj.status==0 || obj.status==2" spaceBefore="true" />
-				<t:toolbar-item label="LBL_CANCEL_VISIT" id="cancelVisitButton" accent="btn-default" condition="obj.status<=1"/>
-				<t:toolbar-item label="LBL_CLOSE_VISIT" id="closeVisitButton" accent="btn-primary" condition="obj.status<=1"/>
+<%-- 				<t:toolbar-item label="LBL_APPROVE_VISIT" id="approveButton" accent="btn-success" condition="obj.status==0 || obj.status==2" spaceBefore="true" /> --%>
+				<t:toolbar-item label="LBL_CANCEL_VISIT" id="cancelVisitButton" accent="btn-default" condition="obj.status<=1" icon="glyphicon-remove-circle"/>
+<%-- 				<t:toolbar-item label="LBL_CLOSE_VISIT" id="closeVisitButton" accent="btn-primary" condition="obj.status<=1"/> --%>
 			</t:toolbar-group>
 			<t:toolbar-item label="LBL_PREVIOUS_VISITS" id="openPreviousVisitsButton" accent="btn-default" spaceBefore="true"/>
 			<t:card-tab label="LBL_MAIN_VISIT_TAB" id="mainTab" isActive="true" combined="true">
@@ -113,9 +113,9 @@
 			performOperation('cancelVisit');
 		});
 		
-		$("#closeVisitButton").click(function() {
-			performOperation('close');
-		});
+// 		$("#closeVisitButton").click(function() {
+// 			performOperation('close');
+// 		});
 
 		function performOperation(operation) {
 			idParam = getUrlParameter('id');
