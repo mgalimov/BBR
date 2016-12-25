@@ -19,46 +19,48 @@
 	<c:set var="hideClass" value="hide"/>
 </c:if>
 
-	<h3>${context.gs(title).concat(titleModifier)}</h3>
-	<div class="${hideClass}">
-		<form class="form-inline pull-right">
-		<span class="glyphicon glyphicon-globe"></span>&nbsp;
-		<t:select-shop-pos field="shoppos" />&nbsp;&nbsp;&nbsp;&nbsp;
-
+<h3>${context.gs(title).concat(titleModifier)}</h3>
+<div class="${hideClass} container-fluid" style="padding-right: 0px;">
+	<form class="form-inline pull-right">
+		<span class="glyphicon glyphicon-globe hidden-xs"></span>
+		<span class="hidden-xs" style="padding-right:5px"></span>
+		<t:select-shop-pos field="shoppos" />
+		<span class="hidden-xs" style="padding-right:10px"></span>
 		<div class="form-group">
-			<span class="glyphicon glyphicon-calendar"></span>&nbsp;
-	       	<input type='text' class="form-control" name="baseDatePicker" id="baseDatePicker"/>
+			<span class="glyphicon glyphicon-calendar hidden-xs"></span>
+			<span class="hidden-xs" style="padding-right:5px"></span>
+			<input type='text' class="form-control" name="baseDatePicker" id="baseDatePicker" />
 		</div>
-
 		<div class="form-group" style="width: 90px">
-	       	<select id="detailSelect" name="detailSelect" class="selectized" style="display: none">
-	       		<option value="1">${context.gs("OPT_DATE_DETAIL_HOUR")}</option>
-	       		<option value="2">${context.gs("OPT_DATE_DETAIL_DAY")}</option>
-	       		<option value="3" selected="selected">${context.gs("OPT_DATE_DETAIL_WEEK")}</option>
-	       		<option value="4">${context.gs("OPT_DATE_DETAIL_MONTH")}</option>
-	       		<option value="5">${context.gs("OPT_DATE_DETAIL_YEAR")}</option>
-	       	</select>
-	    </div>
-	    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	    <div class="checkbox">
-	    	<label>
-	      		<input type="checkbox" id="compareToCheckbox"> ${context.gs("LBL_DATERANGE_APPLY_COMPARE_TO")}
-	    	</label>
-  		</div>
-  		&nbsp;
+			<select id="detailSelect" name="detailSelect" class="selectized"
+				style="display: none">
+				<option value="1">${context.gs("OPT_DATE_DETAIL_HOUR")}</option>
+				<option value="2">${context.gs("OPT_DATE_DETAIL_DAY")}</option>
+				<option value="3" selected="selected">${context.gs("OPT_DATE_DETAIL_WEEK")}</option>
+				<option value="4">${context.gs("OPT_DATE_DETAIL_MONTH")}</option>
+				<option value="5">${context.gs("OPT_DATE_DETAIL_YEAR")}</option>
+			</select>
+		</div>
+		<span class="hidden-md hidden-sm hidden-xs" style="padding-right:20px"></span>
+		<div class="checkbox hidden-md hidden-sm hidden-xs">
+			<label class="hidden-md hidden-sm hidden-xs"> <input type="checkbox" id="compareToCheckbox" class="hidden-md hidden-sm hidden-xs">
+				${context.gs("LBL_DATERANGE_APPLY_COMPARE_TO")}
+			</label>
+		</div>
+		<span class="hidden-md hidden-sm hidden-xs" style="padding-right:5px"></span>
+		<div class="form-group hidden-md hidden-sm hidden-xs">
+			<input type='text' class="form-control hidden-md hidden-sm hidden-xs" name="compareToDatePicker"
+				id="compareToDatePicker" disabled="disabled" />
+		</div>
+		<span class="hidden-md hidden-sm hidden-xs" style="padding-right:10px"></span>
 		<div class="form-group">
-	       	<input type='text' class="form-control" name="compareToDatePicker" id="compareToDatePicker" disabled="disabled" />
-	    </div>
-	    &nbsp;&nbsp;&nbsp;
-	    <div class="form-group">
-	       	<button type='button' class="btn btn-primary" id="applyBtn">${context.gs("LBL_DATERANGE_APPLY_BTN")}</button>
-	    </div>
-	 </form>
-		<div style="margin-top:40px;">&nbsp;</div>
-	</div>
+			<button type='button' class="btn btn-primary" id="applyBtn">
+			${context.gs("LBL_DATERANGE_APPLY_BTN")}</button>
+		</div>
+	</form>
+</div>
 
-	
-    <jsp:doBody/>
+<jsp:doBody/>
 
 <script>
 	var periods = null;

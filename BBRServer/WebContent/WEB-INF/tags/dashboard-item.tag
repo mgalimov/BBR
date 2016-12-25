@@ -13,16 +13,21 @@
 
 <c:set var="items" scope="request" value="${items}${indicator}${type}chart();
         "/>
+<c:set var="infoboxmargin" value="style='margin-left: 0px;'" />
 
 	<div class="info-box">
-  		<span class="info-box-icon bg-${color}">
-  			<span class="glyphicon glyphicon-${icon}" aria-hidden="true"></span>
-  		</span>
-  		<div class="info-box-content">
-    		<span class="info-box-text">${context.gs(title)}</span>
-    		<span class="info-box-number" id="${indicator}_${type}_chart"></span>
-  		</div>
+<c:if test="${icon!=null&&!icon.isEmpty()}">
+		<span class="info-box-icon bg-${color}">
+			<span class="glyphicon glyphicon-${icon}" aria-hidden="true"></span>
+		</span>
+	<c:set var="infoboxmargin" value="" />
+</c:if>
+		<div class="info-box-content" ${infoboxmargin}>
+	 		<span class="info-box-text">${context.gs(title)}</span>
+	 		<span class="info-box-number" id="${indicator}_${type}_chart"></span>
+		</div>
 	</div>
+
 <c:set var="chartoptions" scope="page" value=""/>
 <c:set var="chartpackage" scope="page" value=""/>
 
@@ -87,7 +92,9 @@
 				else
 					dt = $.parseJSON(data);
 				var gdt = new google.visualization.DataTable(dt);
-				var chart = new google.visualization.${typefunc}(document.getElementById("${indicator}_${type}_chart"));
+				var el = document.getElementById("${indicator}_${type}_chart");
+				$(el).addClass("dashboard");
+				var chart = new google.visualization.${typefunc}(el);
 				var options = {
 						legend: "none",
 						${chartoptions}

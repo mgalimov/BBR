@@ -3,5 +3,5 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <% BBRContext context = BBRContext.getContext(request); %>
-<h3 class="panel-title">${context.gs(title)}</h3>
+<h4>${context.gs(title)}</h4>
 <jsp:doBody/>

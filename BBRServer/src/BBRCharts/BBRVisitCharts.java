@@ -1,6 +1,7 @@
 package BBRCharts;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -73,15 +74,45 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 				where = "(" + where +") and";
 			Date dt = BBRUtil.now(context.getTimeZone());
 			SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
-			where += "(status in (" + BBRVisitStatus.VISSTATUS_INITIALIZED + ", " + 
-			                          BBRVisitStatus.VISSTATUS_APPROVED +", " + 
+			where += "(status in (" + BBRVisitStatus.VISSTATUS_APPROVED +", " + 
 					                  BBRVisitStatus.VISSTATUS_PERFORMED + "))" + 
-			         " and (timeScheduled >= '" + df.format(BBRUtil.getStartOfDay(dt)) + "')" + 
-					 " and (timeScheduled <= '" + df.format(BBRUtil.getEndOfDay(dt)) + "')";
+			         " and (coalesce(realTime, timeScheduled) >= '" + df.format(BBRUtil.getStartOfDay(dt)) + "')" + 
+					 " and (coalesce(realTime, timeScheduled) <= '" + df.format(BBRUtil.getEndOfDay(dt)) + "')";
 			String count = manager.count(where).toString();
 		
-			return count + " посещений сегодня";
+			return count;
 		}
+
+		if (indicator.equals("tomorrowVisits")) {
+			BBRContext context = BBRContext.getContext(request);
+			BBRVisitManager manager = new BBRVisitManager();
+			String where = "";
+			if (context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER)
+				return "0";
+			
+			if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
+				if (context.user.getPos() != null)
+					where = manager.wherePos(context.user.getPos().getId());
+			if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
+				if (context.user.getShop() != null)
+					where = manager.whereShop(context.user.getShop().getId());
+			if (!where.equals("")) 
+				where = "(" + where +") and";
+			Date dt = BBRUtil.now(context.getTimeZone());
+			Calendar c = Calendar.getInstance();
+			c.setTime(dt);
+			c.add(Calendar.DAY_OF_YEAR, 1);
+			dt = c.getTime();
+			SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+			where += "(status in (" + BBRVisitStatus.VISSTATUS_APPROVED +", " + 
+					                  BBRVisitStatus.VISSTATUS_PERFORMED + "))" + 
+			         " and (coalesce(realTime, timeScheduled) >= '" + df.format(BBRUtil.getStartOfDay(dt)) + "')" + 
+					 " and (coalesce(realTime, timeScheduled) <= '" + df.format(BBRUtil.getEndOfDay(dt)) + "')";
+			String count = manager.count(where).toString();
+		
+			return count;
+		}
+
 		
 		if (indicator.equals("visitsByPeriod")) {
 			return visitsByPeriod(type, options, period, shop, pos);
