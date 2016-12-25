@@ -1,5 +1,6 @@
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -373,6 +374,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				return "";
 			}
 		}
+		
 		try {
 			if (context.filterPoS == null && context.filterShop == null) {
 				if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
@@ -380,6 +382,14 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				else
 					if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
 						context.filterPoS = context.user.getPos();
+			}
+			
+			if (context.filterEndDate == null) {
+				context.filterEndDate = BBRUtil.now(context.getTimeZone());
+				Calendar c = Calendar.getInstance();
+				c.setTime(context.filterEndDate);
+				c.add(Calendar.MONTH, -1);
+				context.filterStartDate = c.getTime();
 			}
 				
 			if (context.filterPoS != null || context.filterShop != null)

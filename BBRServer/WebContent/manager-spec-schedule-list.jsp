@@ -22,7 +22,7 @@
 		<t:card title="LBL_SPEC_SCHEDULE" gridPage="manager-visit-create.jsp" method="BBRVisits" showFooter="false" showToolbar="true">
 			<t:toolbar-group>
 				<t:toolbar-item label="LBL_OPEN_VISITS_BTN" id="openVisits" icon="glyphicon-calendar"/>
-				<t:toolbar-item label="LBL_OPEN_ALL_UNAPPROVED_VISITS_BTN" id="openAllUnapprovedVisits" icon="glyphicon-question-sign"/>
+<%-- 				<t:toolbar-item label="LBL_OPEN_ALL_UNAPPROVED_VISITS_BTN" id="openAllUnapprovedVisits" icon="glyphicon-question-sign"/> --%>
 				<t:toolbar-item label="LBL_OPEN_ALL_VISITS_BTN" id="openAllVisits" icon="glyphicon-list-alt"/>
 			</t:toolbar-group>
 			<t:card-schedule-spec-proc posId="${posId}"/>

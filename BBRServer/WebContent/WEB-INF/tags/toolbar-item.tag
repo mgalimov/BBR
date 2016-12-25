@@ -19,7 +19,7 @@
 	<c:set var="spaceStart" value="&nbsp;&nbsp;" scope="page"/>
 </c:if>
 
-<c:set var="buttonDef" value="<button type='button' class='btn ${accent}' id='${id}'>\n<span class='glyphicon ${icon}' aria-hidden='true'></span>\n${context.gs(label)}\n</button>\n"/>
+<c:set var="buttonDef" value="<button type='button' class='btn ${accent}' id='${id}'>\n<span class='glyphicon ${icon}' aria-hidden='true'></span>\n<span class='hidden-xs'>${context.gs(label)}</span>\n</button>\n"/>
 <c:set var="itemToolbar" scope="request" value="${itemToolbar}${spaceStart}${buttonDef}"/>
 
 <c:if test="${condition != null}">

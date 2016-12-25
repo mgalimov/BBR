@@ -610,14 +610,15 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		public String id;
 		public String userName;
 		public String userContacts;
-		public Date lastVisitDate;
+		public Long visitCount;
 		
 		BBRVisitor() {
 		}
 	}
 	
 	@SuppressWarnings({ "unchecked", "unused" })
-	public BBRDataSet<BBRVisitor> listVisitors(int pageNumber, int pageSize, String orderBy, BBRPoS pos, BBRShop shop, Integer days) {
+	public BBRDataSet<BBRVisitor> listVisitors(int pageNumber, int pageSize, String orderBy, 
+			BBRPoS pos, BBRShop shop, Date startDate, Date endDate) {
 		boolean tr = BBRUtil.beginTran();
         
 		Session session = BBRUtil.getSession();
@@ -629,27 +630,23 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
        			orderBy = "order by " + orderBy.trim();
 		}
        
-		String where = "";
+		String where = "where status in (" + BBRVisitStatus.VISSTATUS_APPROVED + "," + 
+		                      BBRVisitStatus.VISSTATUS_INITIALIZED + ")";
 		
 		if (pos != null)
-			where += "where pos.id = " + pos.getId() + " ";
+			where += " and pos.id = " + pos.getId() + " ";
 		else
 			if (shop != null)
-				where += "where pos.shop.id = " + shop.getId() + " ";
+				where += " and pos.shop.id = " + shop.getId() + " ";
 		
-		String having = "";
-		if (days != null && days > 0) {
-			Calendar c = Calendar.getInstance();
-			c.setTime(BBRUtil.now(pos.getTimeZone()));
-			c.add(Calendar.DATE, -days);
-			SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
-			having = " having max(timeScheduled) > '" + df.format(c.getTime()) + "' ";
-		}
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+		where += " and coalesce(realTime, timeScheduled) >= '" + df.format(BBRUtil.getStartOfDay(startDate)) + "'" +
+		         " and coalesce(realTime, timeScheduled) <= '" + df.format(BBRUtil.getEndOfDay(endDate)) + "'";
 		
 		String groupBy = " group by userName, userContacts ";
 		
-		String qry = "select userName, userContacts, max(realTime) as lastVisitDate from BBRVisit " + 
-		             where + groupBy + having + orderBy;
+		String qry = "select userName, userContacts, count(*) as visitCount from BBRVisit " + 
+		             where + groupBy + orderBy;
 
 		int count = session.createQuery(qry).list().size();
 		Query query = session.createQuery(qry);
@@ -671,7 +668,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
     	   BBRVisitor visitor = new BBRVisitor();
     	   visitor.userName = (String) line[0];
     	   visitor.userContacts = (String) line[1];
-    	   visitor.lastVisitDate = (Date) line[2];
+    	   visitor.visitCount = (Long) line[2];
     	   visitor.id = visitor.userName + BBRUtil.recordDivider + visitor.userContacts; 
     	   listVisitors.add(visitor);
        }
@@ -688,7 +685,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		if (userName == null || userName.isEmpty())
 			return null;
 
-		Query query = session.createQuery("select userName, userContacts, max(coalesce(visit.realTime, visit.timeScheduled)) as lastVisitDate"+ 
+		Query query = session.createQuery("select userName, userContacts, count(*) as visitCount"+ 
 		                                  "  from BBRVisit visit " +  
 										  " where userName = :userName" + 
 		                                  "   and userContacts like :userContacts" +
@@ -702,7 +699,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
   	    BBRVisitor visitor = new BBRVisitor();
 		visitor.userName = (String) line[0];
 		visitor.userContacts = (String) line[1];
-		visitor.lastVisitDate = (Date) line[2];
+		visitor.visitCount = (Long) line[2];
 		visitor.id = visitor.userName + BBRUtil.recordDivider + visitor.userContacts; 
        
 		return visitor;
@@ -1023,6 +1020,33 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
     			    " where userContacts like '" + maskContacts(userContacts) + "' " +
                     "   and pos.id = " + posId.toString() + 
                     visitWhere + 
+    				"   and status in (" + BBRVisitStatus.VISSTATUS_APPROVED + "," + BBRVisitStatus.VISSTATUS_PERFORMED + ")"); 
+        	Long count = (Long)query.uniqueResult();
+        	BBRUtil.commitTran(tr);
+        	return count;
+        } catch (Exception ex) {
+        	BBRUtil.rollbackTran(tr);
+        }
+        return 0L;
+	}
+
+	public Long getVisitsNumber(Date date, Long posId, Long shopId) {
+        Session session = BBRUtil.getSession();
+        boolean tr = BBRUtil.beginTran();
+        SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+        try {
+        	String where = "";
+        	if (posId != null)
+        		where = " pos.id = " + posId.toString();
+        	else
+        		if (shopId != null)
+        			where = " pos.shop.id = " + shopId.toString();
+    		Query query = session.createQuery(
+    				"select count(*)" + 
+                    "  from BBRVisit visit " +  
+    			    " where " + where + 
+                    "   and (coalesce(realTime, timeScheduled) >= '" + df.format(BBRUtil.getStartOfDay(date)) + "')" + 
+                    "   and (coalesce(realTime, timeScheduled) <= '" + df.format(BBRUtil.getEndOfDay(date)) + "')" + 
     				"   and status in (" + BBRVisitStatus.VISSTATUS_APPROVED + "," + BBRVisitStatus.VISSTATUS_PERFORMED + ")"); 
         	Long count = (Long)query.uniqueResult();
         	BBRUtil.commitTran(tr);

@@ -5,10 +5,9 @@
 	BBRContext context = BBRContext.getContext(request);
 	request.setAttribute("userName", context.user.getFirstName() + " " + context.user.getLastName());
 %>
-<t:wrapper title="LBL_CONTROL_PANEL">
+<t:wrapper title="LBL_MAIN_VALUES_DASHBOARD">
 	<jsp:body>
-  		<t:dashboard title="LBL_CONTROL_PANEL" hidePanel="true">
-		  		<t:dashboard-item type="singleValue" title="LBL_NEW_VISITS" method="BBRVisitCharts" indicator="newVisits" color="green" icon="dashboard"/>
+  		<t:dashboard title="LBL_MAIN_VALUES_DASHBOARD" hidePanel="true">
 		  		<t:dashboard-item type="singleValue" title="LBL_TODAY_VISITS" method="BBRVisitCharts" indicator="todayVisits" color="red" icon="dashboard"/>
 		  		<t:dashboard-item type="singleValue" title="LBL_TOMORROW_VISITS" method="BBRVisitCharts" indicator="tomorrowVisits" color="blue" icon="dashboard"/>
 		</t:dashboard>

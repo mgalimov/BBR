@@ -6,7 +6,7 @@
 			<t:toolbar-item label="LBL_VISITOR_SHOW_MORE_BTN" id="showMoreButton" accent="btn-info"/> 
 			<t:card-item label="LBL_USER_NAME" field="userName"  isDisabled="readonly" type="text"/>
 			<t:card-item label="LBL_CONTACT_INFO" field="userContacts"  isDisabled="readonly" type="text"/>
-			<t:card-item label="LBL_LAST_VISIT_DATE" field="lastVisitDate" isDisabled="readonly" type="text"/>
+			<t:card-item label="LBL_VISIT_COUNT" field="visitCount" isDisabled="readonly" type="text"/>
 		</t:card>
 		
 		<script>

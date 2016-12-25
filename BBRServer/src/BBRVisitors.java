@@ -1,3 +1,4 @@
+import java.util.Calendar;
 import java.util.Hashtable;
 
 import javax.servlet.annotation.WebServlet;
@@ -28,6 +29,7 @@ public class BBRVisitors extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 								Hashtable<Integer, Hashtable<String, String>> sortingFields, 
 								BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		BBRContext context = BBRContext.getContext(request);
+
 		
 		BBRPoS pos = null;
 		BBRShop shop = null;
@@ -39,10 +41,18 @@ public class BBRVisitors extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
 				shop = context.user.getShop();
 		
-		Integer days = (Integer)context.get("VisitorsDays");
-		
-		if (context.user != null)
-			return manager.listVisitors(pageNumber, pageSize, BBRContext.getOrderBy(sortingFields, columns), pos, shop, days).toJson();
+		if (context.user != null) {
+			if (context.filterEndDate == null) {
+				context.filterEndDate = BBRUtil.now(context.getTimeZone());
+				Calendar c = Calendar.getInstance();
+				c.setTime(context.filterEndDate);
+				c.add(Calendar.MONTH, -1);
+				context.filterStartDate = c.getTime();
+			}
+			return manager.listVisitors(pageNumber, pageSize, 
+					BBRContext.getOrderBy(sortingFields, columns), pos, shop, 
+					context.filterStartDate, context.filterEndDate).toJson();
+		}
 		else
 			return "";
 	}
@@ -69,21 +79,22 @@ public class BBRVisitors extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 	@Override
 	protected String processOperation(String operation, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		BBRContext context = BBRContext.getContext(request);
-		Integer days = -1;
-		if (operation.equals("toggle30Days")) {
-			days = 30;
-		} else
-			if (operation.equals("toggle120Days")) {
-				days = 120;
-			} else
-				if (operation.equals("toggle360Days")) {
-					days = 360;
-				} else
-					if (operation.equals("toggleAll")) {
-						days = 0;
-					}
-		if (days > -1)
-			context.set("VisitorsDays", days);
+		context.filterEndDate = BBRUtil.now(context.getTimeZone());
+		Calendar c = Calendar.getInstance();
+		c.setTime(context.filterEndDate);
+		
+		if (operation.equals("toggle30Days"))
+			c.add(Calendar.MONTH, -1);
+		else
+			if (operation.equals("toggle120Days")) 
+				c.add(Calendar.MONTH, -4);
+			else
+				if (operation.equals("toggle360Days"))
+					c.add(Calendar.YEAR, -1);
+				else
+					c.set(1970, 01, 01);
+		context.filterStartDate = c.getTime();
+		
 		return "";
 	}
 }
