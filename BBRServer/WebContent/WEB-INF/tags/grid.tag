@@ -45,13 +45,13 @@
 		  	  <c:if test="${customToolbar != true}">
 		  	  	<div class='btn-group' role='group'>
 					<button type="button" class="btn btn-default" id="create">
-					  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ${context.gs('LBL_GRID_CREATE_RECORD_BTN')}
+					  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span class="hidden-xs">${context.gs('LBL_GRID_CREATE_RECORD_BTN')}</span>
 					</button>
 					<button type="button" class="btn btn-info" id="edit">
-					  <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> ${context.gs('LBL_GRID_EDIT_RECORD_BTN')}
+					  <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span><span class="hidden-xs">${context.gs('LBL_GRID_EDIT_RECORD_BTN')}</span>
 					</button>
 					<button type="button" class="btn btn-warning" id="delete">
-					  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> ${context.gs('LBL_GRID_DELETE_RECORD_BTN')}
+					  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span><span class="hidden-xs">${context.gs('LBL_GRID_DELETE_RECORD_BTN')}</span>
 					</button>
 				</div>
 			  </c:if>
@@ -67,7 +67,7 @@
   </div>
   
  <c:if test="${standardFilters != false}">
-  <div class="collapse filterPanel" id="filterPanel">
+  <div class="collapse filterPanel clearfix" id="filterPanel">
   	<div class="pull-right">
 	  	<form class="form-inline">
 	  		<t:select-shop-pos field="shoppos" isShopsOnly="${standardFiltersShopsOnly}"/>&nbsp;

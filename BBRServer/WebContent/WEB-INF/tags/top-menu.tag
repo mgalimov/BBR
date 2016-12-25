@@ -55,7 +55,7 @@
         <% } %>
      	<li class="dropdown user user-menu">
 		 	<a href="<%=shopposLink%>">
-	 	   		<span class="glyphicon glyphicon-globe hidden-xs" aria-hidden="true"></span>
+	 	   		<span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
 	 	   		<span class="hidden-xs">
 					<%=shopposTitle%>
 	         	</span>
@@ -65,9 +65,11 @@
         <li class="dropdown user user-menu">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
       		<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-       		<% if (context.user != null)
-       				out.println(context.user.getFirstName() + " " + context.user.getLastName()); %>
-       		<span class="caret"></span>
+      		<span class="hidden-xs">
+	       		<% if (context.user != null)
+	       				out.println(context.user.getFirstName() + " " + context.user.getLastName()); %>
+	       		<span class="caret"></span>
+       		</span>
           </a>
           <ul class="dropdown-menu">
             <!-- Menu Footer-->

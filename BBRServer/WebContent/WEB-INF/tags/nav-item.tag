@@ -20,7 +20,7 @@
 <c:if test="${allowed}">
 	<li class="${aclass}">
 		<a href="${href}"><c:if test="${badge.equals('true')}"><span class="badge pull-right" id="${itemId}"></span></c:if>
-			${context.gs(title)}
+			<i class="fa fa-circle-thin"></i><span class="small">${context.gs(title)}</span>
 		</a>
 	</li>
 </c:if>

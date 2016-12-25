@@ -14,7 +14,6 @@
 <c:set var="items" scope="request" value="${items}${indicator}${type}chart();
         "/>
 
-<div class="dashboard">
 	<div class="info-box">
   		<span class="info-box-icon bg-${color}">
   			<span class="glyphicon glyphicon-${icon}" aria-hidden="true"></span>
@@ -24,7 +23,6 @@
     		<span class="info-box-number" id="${indicator}_${type}_chart"></span>
   		</div>
 	</div>
-</div>
 <c:set var="chartoptions" scope="page" value=""/>
 <c:set var="chartpackage" scope="page" value=""/>
 

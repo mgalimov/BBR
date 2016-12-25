@@ -19,10 +19,9 @@
 	<c:set var="hideClass" value="hide"/>
 </c:if>
 
-<div class="row">
 	<h3>${context.gs(title).concat(titleModifier)}</h3>
 	<div class="${hideClass}">
-	<form class="form-inline pull-right">
+		<form class="form-inline pull-right">
 		<span class="glyphicon glyphicon-globe"></span>&nbsp;
 		<t:select-shop-pos field="shoppos" />&nbsp;&nbsp;&nbsp;&nbsp;
 
@@ -55,16 +54,11 @@
 	       	<button type='button' class="btn btn-primary" id="applyBtn">${context.gs("LBL_DATERANGE_APPLY_BTN")}</button>
 	    </div>
 	 </form>
+		<div style="margin-top:40px;">&nbsp;</div>
 	</div>
-</div> 
 
-<div class="row">
-	&nbsp;
-</div>
-
-<div class="row">
+	
     <jsp:doBody/>
-</div>
 
 <script>
 	var periods = null;

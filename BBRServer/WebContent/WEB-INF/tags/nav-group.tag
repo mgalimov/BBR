@@ -2,6 +2,7 @@
 		import="BBRClientApp.BBRContext"%>
 <%@ attribute name="title" required="true" %>
 <%@ attribute name="level" required="true" %>
+<%@ attribute name="faicon" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 
@@ -10,7 +11,7 @@
 
 <c:if test="${allowed}">
 	<li class="treeview">
-        <a href="#"><span>${context.gs(title)}</span> <i class="fa fa-angle-left pull-right"></i></a>
+        <a href="#"><i class="fa fa-${faicon}"></i><span class="small">${context.gs(title)}</span> <i class="fa fa-angle-left pull-right"></i></a>
         <ul class="treeview-menu">
 		    <jsp:doBody/>
 		</ul>

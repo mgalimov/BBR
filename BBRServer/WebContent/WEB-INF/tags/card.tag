@@ -44,11 +44,11 @@
 	  <c:if test="${showToolbar == true || showToolbar == null}">
 		  <div class="panel-heading" id="toolbar">
 	  		<c:if test="${showFooter == true || showFooter == null}">
-	  			<button type="button" class="btn btn-default" id="saveChangesTop"><c:if test="${buttonSave == null}"><span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span></c:if><c:if test="${buttonSave != null}">${context.gs(buttonSave)}</c:if></button>
+	  			<button type="button" class="btn btn-default" id="saveChangesTop"><c:if test="${buttonSave == null}"><span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span></c:if><c:if test="${buttonSave != null}"><span class="hidden-xs">${context.gs(buttonSave)}</span></c:if></button>
 	  		</c:if>
 		    <span id="toolbarpanel"></span>		  	
 	  		<c:if test="${showFooter == true || showFooter == null}">
-		  		<button type="button" class="btn btn-link pull-right" id="cancelChangesTop"><c:if test="${buttonCancel == null}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></c:if><c:if test="${buttonCancel != null}">${context.gs(buttonCancel)}</c:if></button>
+		  		<button type="button" class="btn btn-link pull-right" id="cancelChangesTop"><c:if test="${buttonCancel == null}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></c:if><c:if test="${buttonCancel != null}"><span class="hidden-xs">${context.gs(buttonCancel)}</span></c:if></button>
 	  		</c:if>
 		  </div>
 	  </c:if>

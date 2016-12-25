@@ -6,6 +6,11 @@
  * Main content
  */
 
+.main {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
 @media (min-width: 768px) {
   .main {
     padding-right: 40px;
@@ -208,6 +213,11 @@ h4.nav {
 } 
 
 /* Filter */
+
+.filterPanel {
+	padding-left: 0px;
+	padding-right: 0px;
+}
 
 @media (max-width: 767px) {
 	.filterPanel .pull-right {
