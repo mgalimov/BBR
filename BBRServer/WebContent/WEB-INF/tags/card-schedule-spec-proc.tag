@@ -168,14 +168,14 @@
 <% } %>
 
 <div class="row">
-	<div class="hidden-xs">
+	<div>
 		<div class="btn-group" role="group">
 			<button class='btn btn-link' id='prevDateBtn' type="button"><span class="glyphicon glyphicon-chevron-left"></span></button>
 			<button class='btn btn-link' id='todayDateBtn' type="button"><span class="glyphicon glyphicon-time"></span></button>
 			<button class='btn btn-link' id='nextDateBtn' type="button"><span class="glyphicon glyphicon-chevron-right"></span></button>
 		</div>
-
-		<div class="btn-group " role="group">
+	
+		<div class="btn-group hidden-xs" role="group">
 		<%
 			out.println("<a href='#' role='button' class='btn btn-info btn-sm' id='sd" + sf.format(calendar.getTime()) + "'></a>");
 			for (int i = 1; i < datesPerPage; i++) {

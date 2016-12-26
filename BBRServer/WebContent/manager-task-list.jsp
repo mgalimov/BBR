@@ -22,11 +22,11 @@
 				createPage="manager-task-create.jsp" title="LBL_TASKS_TITLE" 
 				customToolbar="true">
 			<t:toolbar-group>
-				<t:toolbar-item label="LBL_OPEN_BTN" id="edit" accent="btn-info"></t:toolbar-item>
+				<t:toolbar-item label="LBL_OPEN_BTN" id="edit" accent="btn-info" icon="glyphicon-open"></t:toolbar-item>
 			</t:toolbar-group>
 			<t:toolbar-group>
 				<t:toolbar-item label="LBL_TOGGLE_ALL_BTN" id="viewAll" icon="glyphicon-tasks"></t:toolbar-item>
-				<t:toolbar-item label="LBL_TOGGLE_INCOMPLETE_BTN" id="viewIncomplete" icon="glyphicon-tasks"></t:toolbar-item>
+				<t:toolbar-item label="LBL_TOGGLE_INCOMPLETE_BTN" id="viewIncomplete" icon="glyphicon-star"></t:toolbar-item>
 			</t:toolbar-group>
 			<t:grid-button label="" icon="glyphicon-ok" condition="state != 2"/>
 			<t:grid-button label="" icon="glyphicon-remove" condition="state != 2"/>

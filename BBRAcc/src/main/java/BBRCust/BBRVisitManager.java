@@ -75,7 +75,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		        try {
 			        BBRTaskManager tmgr = new BBRTaskManager();
 			        Date dt = BBRUtil.now(visit.getPos().getTimeZone());
-			        tmgr.createAndStoreTask("Подтвердите запись!", 
+			        tmgr.createAndStoreTask("Позвоните клиенту, подтвердите запись", 
 			        						null, 
 			        						pos, 
 			        						dt, 
@@ -618,7 +618,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	
 	@SuppressWarnings({ "unchecked", "unused" })
 	public BBRDataSet<BBRVisitor> listVisitors(int pageNumber, int pageSize, String orderBy, 
-			BBRPoS pos, BBRShop shop, Date startDate, Date endDate) {
+			BBRPoS pos, BBRShop shop, Date startDate, Date endDate, String contacts) {
 		boolean tr = BBRUtil.beginTran();
         
 		Session session = BBRUtil.getSession();
@@ -642,6 +642,9 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 		where += " and coalesce(realTime, timeScheduled) >= '" + df.format(BBRUtil.getStartOfDay(startDate)) + "'" +
 		         " and coalesce(realTime, timeScheduled) <= '" + df.format(BBRUtil.getEndOfDay(endDate)) + "'";
+		
+		if (contacts != null && !contacts.isEmpty())
+			where += " and userContacts like '%" + maskContacts(contacts) + "%'";
 		
 		String groupBy = " group by userName, userContacts ";
 		

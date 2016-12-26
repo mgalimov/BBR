@@ -8,8 +8,8 @@
 <t:wrapper title="LBL_MAIN_VALUES_DASHBOARD">
 	<jsp:body>
   		<t:dashboard title="LBL_MAIN_VALUES_DASHBOARD" hidePanel="true">
-		  		<t:dashboard-item type="singleValue" title="LBL_TODAY_VISITS" method="BBRVisitCharts" indicator="todayVisits" color="red" icon="dashboard"/>
-		  		<t:dashboard-item type="singleValue" title="LBL_TOMORROW_VISITS" method="BBRVisitCharts" indicator="tomorrowVisits" color="blue" icon="dashboard"/>
+		  		<t:dashboard-item type="singleValue" title="LBL_TODAY_VISITS" method="BBRVisitCharts" indicator="todayVisits" color="red" icon="dashboard" href="manager-spec-schedule-list.jsp"/>
+		  		<t:dashboard-item type="singleValue" title="LBL_TOMORROW_VISITS" method="BBRVisitCharts" indicator="tomorrowVisits" color="blue" icon="dashboard"  href="manager-spec-schedule-list.jsp"/>
 		</t:dashboard>
 	</jsp:body>
 </t:wrapper>

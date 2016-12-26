@@ -6,6 +6,7 @@
 <%@ attribute name="icon" %>
 <%@ attribute name="color" %>
 <%@ attribute name="options" %>
+<%@ attribute name="href" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -15,6 +16,9 @@
         "/>
 <c:set var="infoboxmargin" value="style='margin-left: 0px;'" />
 
+<c:if test="${href!=null&&!href.isEmpty()}">
+	<a href="${href}">
+</c:if>
 	<div class="info-box">
 <c:if test="${icon!=null&&!icon.isEmpty()}">
 		<span class="info-box-icon bg-${color}">
@@ -27,6 +31,9 @@
 	 		<span class="info-box-number" id="${indicator}_${type}_chart"></span>
 		</div>
 	</div>
+<c:if test="${href!=null&&!href.isEmpty()}">
+	</a>
+</c:if>
 
 <c:set var="chartoptions" scope="page" value=""/>
 <c:set var="chartpackage" scope="page" value=""/>

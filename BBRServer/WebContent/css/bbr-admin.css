@@ -275,12 +275,6 @@ h4.nav {
 	width: 100%;
 }
 
-@media (max-width: 767px) {
-	.pull-right {
-		float: none !important;
-	}
-}
-
 .pic-crop {
     width: 50px;
     height: 50px;

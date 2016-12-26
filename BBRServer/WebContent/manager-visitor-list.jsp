@@ -15,6 +15,14 @@
 				<t:toolbar-item label="LBL_LAST_120_DAYS" id="view120Days" icon="glyphicon-star"/>
 				<t:toolbar-item label="LBL_LAST_360_DAYS" id="view360Days" icon="glyphicon-time"/>
 				<t:toolbar-item label="LBL_VIEW_ALL_VISITORS" id="viewAll" icon="glyphicon-tasks"/>
+				<div class='form-inline'>
+					<div class="input-group">
+						<input class="form-control" type="text" id="visitorContacts" placeholder='${context.gs("LBL_CONTACT_INFO")}'/>
+						<span class="input-group-btn">
+							<button class="btn btn-default" id="searchContactsBtn"><span class='glyphicon glyphicon-search' aria-hidden='true'></span></button>
+						</span>
+					</div>
+				</div>
 			</t:toolbar-group>
 			<t:grid-item label="LBL_USER_NAME" field="userName"/>
 			<t:grid-item label="LBL_CONTACT_INFO" field="userContacts"/>
@@ -24,19 +32,32 @@
 		<script>
 		$(document).ready(function() {
 			$("#view30Days").on("click", function() {
+				$("#visitorContacts").val("");
 				clickHandler('toggle30Days', "#view30Days");
 			});
 
 			$("#view120Days").on("click", function() {
+				$("#visitorContacts").val("");
 				clickHandler('toggle120Days', "#view120Days");
 			});
 
 			$("#view360Days").on("click", function() {
+				$("#visitorContacts").val("");
 				clickHandler('toggle360Days', "#view360Days");
 			});
 
 			$("#viewAll").on("click", function() {
+				$("#visitorContacts").val("");
 				clickHandler('toggleAll', "#viewAll");
+			});
+			
+			$("#searchContactsBtn").on("click", function() {
+				searchContact();
+			});
+			
+			$("#visitorContacts").keypress(function(e) {
+				if (e.which == 13)
+					searchContact();
 			});
 			
 			$("#view30Days").click();
@@ -55,6 +76,25 @@
 	        	$(".active").removeClass("active");
 	        	$(btn).addClass("active");			
 	        });			
+		}
+		
+		function searchContact() {
+			var contacts = $("#visitorContacts").val();
+			if (contacts.trim() != "")
+				$.ajax({
+		        	url: 'BBRVisitors',
+		        	data: {
+		        		operation: 'searchContacts',
+		        		contacts: contacts
+		        	}
+		        }).success(function (d) {
+		        	table = $("#grid").DataTable();
+		        	table.ajax.reload();
+		        	table.draw();
+		        	$(".active").removeClass("active");
+		        	$(btn).addClass("active");			
+		        });			
+
 		}
 
 		</script>

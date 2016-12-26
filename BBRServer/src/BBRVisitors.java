@@ -49,9 +49,14 @@ public class BBRVisitors extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				c.add(Calendar.MONTH, -1);
 				context.filterStartDate = c.getTime();
 			}
+			
+			String filterContacts = "";
+			if (context.get("searchContacts") != null)
+				filterContacts = (String)context.get("searchContacts");
+			
 			return manager.listVisitors(pageNumber, pageSize, 
 					BBRContext.getOrderBy(sortingFields, columns), pos, shop, 
-					context.filterStartDate, context.filterEndDate).toJson();
+					context.filterStartDate, context.filterEndDate, filterContacts).toJson();
 		}
 		else
 			return "";
@@ -79,22 +84,44 @@ public class BBRVisitors extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 	@Override
 	protected String processOperation(String operation, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		BBRContext context = BBRContext.getContext(request);
-		context.filterEndDate = BBRUtil.now(context.getTimeZone());
-		Calendar c = Calendar.getInstance();
-		c.setTime(context.filterEndDate);
 		
-		if (operation.equals("toggle30Days"))
-			c.add(Calendar.MONTH, -1);
-		else
+		if (operation.startsWith("toggle")) {
+			context.filterEndDate = BBRUtil.now(context.getTimeZone());
+			Calendar c = Calendar.getInstance();
+			c.setTime(context.filterEndDate);
+			
+			if (operation.equals("toggle30Days"))
+				c.add(Calendar.MONTH, -1);
+			else
 			if (operation.equals("toggle120Days")) 
 				c.add(Calendar.MONTH, -4);
 			else
-				if (operation.equals("toggle360Days"))
-					c.add(Calendar.YEAR, -1);
-				else
-					c.set(1970, 01, 01);
-		context.filterStartDate = c.getTime();
-		
+			if (operation.equals("toggle360Days"))
+				c.add(Calendar.YEAR, -1);
+			else
+			if (operation.equals("toggleAll")) {
+				c.set(2999, 01, 01);
+				context.filterEndDate = c.getTime();
+				c.set(1970, 01, 01);
+			}
+	
+			context.filterStartDate = c.getTime();
+			context.set("searchContacts", null);
+		} else
+		if (operation.equals("searchContacts")) {
+			Calendar c = Calendar.getInstance();
+			c.setTime(context.filterEndDate);
+			c.set(2999, 01, 01);
+			context.filterEndDate = c.getTime();
+			c.set(1970, 01, 01);
+			context.filterStartDate = c.getTime();
+			String contacts = params.get("contacts");
+			
+			if (contacts != null && !contacts.isEmpty()) {
+				context.set("searchContacts", contacts);
+			} else
+				context.set("searchContacts", null);
+		}
 		return "";
 	}
 }
