@@ -65,7 +65,7 @@
 		<div class="row">
 		  <a href="#" class="btn btn-default" id="specBtn">${context.gs("LBL_GET_BY_SPEC")}</a>
 		  <a href="#" class="btn btn-default" id="procBtn">${context.gs("LBL_GET_BY_PROC")}</a>
-		  <a href="#" class="btn btn-default" id="checkBtn">${context.gs("LBL_CHECK_BOOKING")}</a>
+		  <a href="#" class="btn btn-default hide" id="checkBtn">${context.gs("LBL_CHECK_BOOKING")}</a>
 		</div>
 		<div class="row">&nbsp;</div>
 		<div class="row">
@@ -285,14 +285,17 @@
 				$("#dateInputDiv").removeClass("hide");
 				$("#dateBtnsDiv").removeClass("hide");
 				$("#mainTab").html("");
-				fillTime();
+				fillProc(null, specId);//fillTime();
 			})
 		});
 	}
 		
-	function fillProc() {
-		specId = "";
-		specName = "";
+	function fillProc(e, spId) {
+		if (!spId || spId == "")
+		{
+			specId = "";
+			specName = "";
+		}
 		$("#procBtn").removeClass("btn-default").addClass("btn-primary");
 		$("#specBtn").removeClass("btn-primary").addClass("btn-default");
 		$("#checkBtn").removeClass("btn-primary").addClass("btn-default");
@@ -311,6 +314,7 @@
 			url: "BBRProcedures",
 			data: {
 				operation: "limitedreference",
+				specId: spId,
 				constrains: ${posId}
 			}
 		}).done(function (data) {
@@ -337,8 +341,12 @@
 			$("#mainTab").html(html);
 			$("[data-type$=gheader]").click(function () {
 				var el = $(this).next();
-				if (el.hasClass("hide"))
+				if (el.hasClass("hide")) {
 					el.removeClass("hide");
+					$("html, body").animate({
+			        	scrollTop: el.children().last().offset().top 
+			    	}, 200);
+				}
 				else
 					el.addClass("hide");
 			});

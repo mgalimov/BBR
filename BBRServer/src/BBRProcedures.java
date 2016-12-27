@@ -12,6 +12,8 @@ import BBRClientApp.BBRParams;
 import BBRCust.BBRProcedure;
 import BBRCust.BBRProcedure.BBRProcedureStatus;
 import BBRCust.BBRProcedureManager;
+import BBRCust.BBRSpecialist;
+import BBRCust.BBRSpecialistManager;
 
 @WebServlet("/BBRProcedures")
 public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureManager> {
@@ -104,6 +106,7 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 	protected String processOperation(String operation, BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		if (operation.equals("limitedreference")) {
 			String constrains = params.get("constrains");
+			String specId = params.get("specId");
 			String query = params.get("q");
 			String respText = "";
 			
@@ -115,7 +118,17 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 
 			if (pos != null) {
 				String where = " pos.id = " + pos.getId() + " and status = " + BBRProcedureStatus.PROCSTATUS_APPROVED;
-
+				
+				if (specId != null && !specId.isEmpty()) {
+					BBRSpecialistManager smgr = new BBRSpecialistManager();
+					BBRSpecialist s = smgr.findById(Long.parseLong(specId));
+					String procIds = "";
+					for (BBRProcedure pr : s.getProcedures())
+						procIds += "," + pr.getId();
+					procIds = procIds.substring(1);
+					where += " and id in (" + procIds + ")";
+				}
+				
 				try {
 					respText = manager.list(query, "procGroup, " + manager.getTitleField(), where).toJson();
 				} catch (Exception ex) {

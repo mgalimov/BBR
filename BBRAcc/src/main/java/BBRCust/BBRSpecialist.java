@@ -93,7 +93,6 @@ public class BBRSpecialist extends BBRDataElement {
 		return position;
 	}
 
-
 	public BBRPoS getPos() {
 		return pos;
 	}
