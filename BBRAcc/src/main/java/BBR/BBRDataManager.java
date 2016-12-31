@@ -154,7 +154,7 @@ public class BBRDataManager<T extends BBRDataElement> {
 	   		
 	   		if (queryTerm != null && !queryTerm.equals("")) {
 	   			queryTerm.replaceAll("\\s", "%");
-	   			where = titleField + "like '%" + queryTerm + "%' " + where;
+	   			where = titleField + " like '%" + queryTerm + "%' " + where;
 	   		}
 	   		
 	        if (!where.equals("") && !where.trim().startsWith("where"))

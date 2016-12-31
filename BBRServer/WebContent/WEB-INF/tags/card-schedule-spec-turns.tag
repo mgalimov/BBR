@@ -115,7 +115,13 @@
 				$("span[id^='sd']").each(function (i) {
 					dt = new moment(newDate);
 	 				dt.add(i, "days");
-	 				var nd = dt.year()+ "-" + (dt.month() + 1) + "-" + dt.date();
+	 				var month = dt.month() + 1;
+	 				if (month <= 9)
+	 					month = "0" + month;
+	 				var d = dt.date();
+	 				if (d <= 9)
+	 					d = "0" + d;
+	 				var nd = dt.year()+ "-" + month + "-" + d;
 	 	 			var od = $(this).attr("data-date");
 	 	 			$("td[id^='sp'][id$='_" + (i + 1) + "']").attr("data-date", nd);
 		 			$(this).attr("data-date",  nd)
@@ -147,7 +153,13 @@
 		$("span[id^='sd']").each(function (i) {
 			var ndt = moment(dt);
 			ndt.add(modifier + i, "days");
- 			var nd = ndt.year() + "-" + (ndt.month() + 1) + "-" + ndt.date();
+			var month = ndt.month() + 1;
+			if (month <= 9)
+				month = "0" + month;
+			var d = ndt.date();
+			if (d <= 9)
+				d = "0" + d;
+ 			var nd = ndt.year() + "-" + month + "-" + d;
  			var od = $(this).attr("data-date");
  			$("td[id^='sp'][id$='_" + (i + 1) + "']").attr("data-date", nd);
  			$(this).attr("data-date", nd);
