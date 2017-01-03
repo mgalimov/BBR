@@ -210,9 +210,9 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 				data.addCol("Visits to compare", BBRChartDataTypes.BBR_CHART_NUMBER);
 				listComp = mgr.getVisitsByWeekDays(period.compareToStartDate, period.compareToEndDate, period.detail, pos, shop);
 				List<Object[]> nlist = new ArrayList<Object[]>();
-				for (int i = 0; i < list.size(); i++)
+				for (int i = 0; i < listComp.size(); i++)
 				{
-					Object[] o = (Object[])list.get(i);
+					Object[] o = (Object[])listComp.get(i);
 					String s = weekdays[(int)o[0]-1];
 					o[0] = s;
 					nlist.add(o);
