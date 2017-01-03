@@ -199,7 +199,7 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 			for (int i = 0; i < list.size(); i++)
 			{
 				Object[] o = (Object[])list.get(i);
-				String s = weekdays[(int)o[0]];
+				String s = weekdays[(int)o[0]-1];
 				o[0] = s;
 				rlist.add(o);
 			}
@@ -213,7 +213,7 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 				for (int i = 0; i < list.size(); i++)
 				{
 					Object[] o = (Object[])list.get(i);
-					String s = weekdays[(int)o[0]];
+					String s = weekdays[(int)o[0]-1];
 					o[0] = s;
 					nlist.add(o);
 				}

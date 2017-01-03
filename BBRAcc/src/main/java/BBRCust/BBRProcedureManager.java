@@ -38,13 +38,12 @@ public class BBRProcedureManager extends BBRDataManager<BBRProcedure>{
    			if (where.equals(""))
    				where = " where";
    			else
-   				where += " and";	
+   				where += " and ";	
    			where += " pos.id = " + pos.getId();		
-   		}
-
+   		} else
    		if (shop != null) {
    			if (where.equals(""))
-   				where = " where";
+   				where = " where ";
    			else
    				where += " and";	
    			where += " pos.shop.id = " + shop.getId();		
