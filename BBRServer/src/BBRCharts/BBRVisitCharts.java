@@ -1,6 +1,7 @@
 package BBRCharts;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -95,6 +96,10 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 			return incomeByPeriod(type, options, period, shop, pos);
 		}
 
+		if (indicator.equals("visitsByWeekDays")) {
+			return visitsByWeekDays(type, options, period, shop, pos);
+		}
+		
 		if (indicator.equals("test")) {
 			String[][] cols = {
 					{"Employee Name"},
@@ -175,5 +180,52 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 		}
 	}
 
+	protected String visitsByWeekDays(String type, String options,
+			BBRChartPeriods period, BBRShop shop, BBRPoS pos) {
+		try {
+			BBRChartData data = new BBRChartData();
+			
+			String[][] cols = {
+					{"Days", BBRChartDataTypes.BBR_CHART_STRING},
+					{"Visits", BBRChartDataTypes.BBR_CHART_NUMBER}
+			};
+			data.addCols(cols);
+			
+			String[] weekdays = {"Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"};
+			BBRVisitManager mgr = new BBRVisitManager();
+			List<Object[]> list = mgr.getVisitsByWeekDays(period.startDate, period.endDate, period.detail, pos, shop);
+			
+			List<Object[]> rlist = new ArrayList<Object[]>();
+			for (int i = 0; i < list.size(); i++)
+			{
+				Object[] o = (Object[])list.get(i);
+				String s = weekdays[(int)o[0]];
+				o[0] = s;
+				rlist.add(o);
+			}
+			list = rlist;
+			
+			List<Object[]> listComp = null;
+			if (period.compareToEndDate != null) {
+				data.addCol("Visits to compare", BBRChartDataTypes.BBR_CHART_NUMBER);
+				listComp = mgr.getVisitsByWeekDays(period.compareToStartDate, period.compareToEndDate, period.detail, pos, shop);
+				List<Object[]> nlist = new ArrayList<Object[]>();
+				for (int i = 0; i < list.size(); i++)
+				{
+					Object[] o = (Object[])list.get(i);
+					String s = weekdays[(int)o[0]];
+					o[0] = s;
+					nlist.add(o);
+				}
+				listComp = nlist;
+			}
+			
+			data.importList(list, listComp, period);
+			
+			return data.toJson();
+		} catch (Exception ex) {
+			return "";
+		}
+	}
 }
 

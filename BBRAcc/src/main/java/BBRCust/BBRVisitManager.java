@@ -878,6 +878,37 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	}
 
 	@SuppressWarnings("unchecked")
+	public List<Object[]> getVisitsByWeekDays(Date startDate, Date endDate, int detail, BBRPoS pos, BBRShop shop) {
+		boolean tr = BBRUtil.beginTran();
+		Session session = BBRUtil.getSession();
+		
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+		
+		String where = "";
+		if (pos != null)
+			where = " and pos.id = " + pos.getId();
+		else
+			if (shop != null)
+				where = "and pos.shop.id = " + shop.getId();
+		
+		Query query = session.createQuery("select DAYOFWEEK(coalesce(realTime, timeScheduled)), count(*) as visits" + 
+		                                  "  from BBRVisit " +  
+										  " where coalesce(realTime, timeScheduled) >= '"+df.format(BBRUtil.getStartOfDay(startDate))+"' " + 
+		                                  "   and coalesce(realTime, timeScheduled) <= '"+df.format(BBRUtil.getEndOfDay(endDate))+"' " +
+										  "   and status in (" + BBRVisitStatus.VISSTATUS_PERFORMED + "," +
+										  						 BBRVisitStatus.VISSTATUS_APPROVED + ")" + 
+										  where +
+										  " group by DAYOFWEEK(coalesce(realTime, timeScheduled))" + 
+										  " order by DAYOFWEEK(coalesce(realTime, timeScheduled)) asc");
+
+		List<Object[]> list = query.list();
+		BBRUtil.commitTran(tr);
+		
+		return list;
+	}
+
+	
+	@SuppressWarnings("unchecked")
 	public BBRSpecialist findSpecByTimeAndProc(Date timeScheduled, BBRProcedure proc, BBRPoS pos) {
 		if (pos == null) return null;
 		if (proc == null) return null;

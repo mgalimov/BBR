@@ -72,18 +72,32 @@
        		</span>
           </a>
           <ul class="dropdown-menu">
-            <!-- Menu Footer-->
+          	<li class="user-header">
+          		<img src="images/barb.png" class="img-circle"/>
+          		<p>
+	       		<% if (context.user != null)
+	       				out.println(context.user.getFirstName() + " " + context.user.getLastName()); %>
+          		</p>
+          	</li>
+          	<li class="user-body hide">
+          		<div class="row">
+	          		<div class="col-xs-4 text-center small"><a href="#">Test</a></div>
+	          		<div class="col-xs-4 text-center small"><a href="#">Test</a></div>
+	          		<div class="col-xs-4 text-center small"><a href="#">Test</a></div>
+          		</div>
+          	</li>
             <li class="user-footer">
                 <div class="pull-left">
 					<a href="general-user-profile.jsp" class="btn btn-default btn-flat">
-				    	<% out.println(context.gs("LBL_USER_PROFILE_BTN"));%></a>
+				    	<small><% out.println(context.gs("LBL_USER_PROFILE_BTN"));%></small></a>
 				</div>
-				<div class="pull-left">
+				<div class="pull-right">
 					<a href="#" id="signOutLink" class="btn btn-default btn-flat">
+	         		<small>
 	         		<% if (context.user != null) 
 	         				out.println(context.gs("LBL_SIGN_OUT_BTN"));
 	         		   else 
-	         		   		out.println(context.gs("LBL_SIGN_IN_BTN"));%></a>
+	         		   		out.println(context.gs("LBL_SIGN_IN_BTN"));%></small></a>
 	         	</div>
             </li>
           </ul>

@@ -9,6 +9,7 @@
 	  		<t:dashboard-item type="line" title="LBL_DASHBOARD_VISITS" method="BBRVisitCharts" indicator="visitsByPeriod"/>
 <%-- 	  		<t:dashboard-item type="line" title="LBL_DASHBOARD_VISITS" method="BBRVisitCharts" indicator="visitsByPeriod"/> --%>
 	  		<t:dashboard-item type="line" title="LBL_DASHBOARD_INCOME" method="BBRVisitCharts" indicator="incomeByPeriod"/>
+	  		<t:dashboard-item type="bar" title="LBL_DASHBOARD_VISITS" method="BBRVisitCharts" indicator="visitsByWeekDays"/>
 		</t:dashboard>
 	</jsp:body>
 </t:wrapper>

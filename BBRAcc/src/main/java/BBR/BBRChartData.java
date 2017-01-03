@@ -156,7 +156,7 @@ public class BBRChartData extends BBRDataElement {
 		List<Object[]> rlist = new ArrayList<Object[]>();
 		
 		int i = 0;
-		while (calendar.getTime().before(endDate)) {
+		while (calendar.getTime().before(endDate) || calendar.getTime().equals(endDate)) {
 			Date dt = null;
 
 			Calendar cdr = Calendar.getInstance();
