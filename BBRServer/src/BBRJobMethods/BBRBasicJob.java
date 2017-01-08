@@ -4,6 +4,7 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+import BBR.BBRUtil;
 import BBRAcc.BBRJob;
 import BBRAcc.BBRJobManager;
 
@@ -30,6 +31,9 @@ public class BBRBasicJob implements Job {
 		try {
 			jm.update(j);
 		} catch (Exception e) {
+			BBRUtil.log.error(e.getMessage());
+			BBRUtil.log.error(e.getStackTrace());
+
 			throw new JobExecutionException("Can't execute job");
 		}
 	}

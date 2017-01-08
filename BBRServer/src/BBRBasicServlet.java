@@ -93,6 +93,8 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 				respText = processOperation(operation, params, request, response);
 			}
 		} catch (Exception ex) {
+			BBRUtil.log.error(ex.getMessage());
+			BBRUtil.log.error(ex.getStackTrace());
 			respText = ex.getMessage();
 			if (context != null)
 				respText = context.gs(respText);
@@ -179,6 +181,8 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 					}
 					respText = "{\"draw\":" + drawIndex + "," + respText.substring(1);
 				} catch (Exception ex) {
+					BBRUtil.log.error(ex.getMessage());
+					BBRUtil.log.error(ex.getStackTrace());
 					respText = context.gs(ex.getMessage());
 					response.setStatus(700);
 				}

@@ -127,6 +127,8 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
 	            try {
 	                sendMessage(send);
 	            } catch (TelegramApiException e) {
+	    			BBRUtil.log.error(e.getMessage());
+	    			BBRUtil.log.error(e.getStackTrace());
 	            }
 	        }
 	        

@@ -18,7 +18,6 @@
 				<t:card-item label="LBL_URLID" field="urlID" type="text"/>
 				<t:card-item label="LBL_EMAIL_NOTIFICATION" field="email" type="text"/>
 				<t:card-item label="LBL_SMS_NOTIFICATION" field="sms" type="text"/>
-				<t:card-item label="LBL_PRIZE_VISIT_NUMBER" field="prizeVisitNumber" type="number"/>
 			</t:card-tab>
 		</t:card>
 	</jsp:body>

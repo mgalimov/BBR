@@ -60,6 +60,9 @@ public class BBRVisit extends BBRDataElement {
 	@Column(name="FINAL_PRICE")
 	private float finalPrice = 0;
 
+	@Column(name="PROMO")
+	private BBRPromo promo;
+	
 	@Column(name="DISCOUNT_PERCENT")
 	private float discountPercent = 0;
 
@@ -288,5 +291,13 @@ public class BBRVisit extends BBRDataElement {
 		public static final int APP_IOS = 30;
 		public static final int APP_ANDROID = 31;
 		public static final int APP_OTHER = 39;
+	}
+
+	public BBRPromo getPromo() {
+		return promo;
+	}
+
+	public void setPromo(BBRPromo promo) {
+		this.promo = promo;
 	}
 }

@@ -19,6 +19,8 @@ import BBRClientApp.BBRContext;
 import BBRClientApp.BBRParams;
 import BBRCust.BBRProcedure;
 import BBRCust.BBRProcedureManager;
+import BBRCust.BBRPromo;
+import BBRCust.BBRPromoManager;
 import BBRCust.BBRSpecialist;
 import BBRCust.BBRSpecialistManager;
 import BBRCust.BBRVisit.BBRVisitSource;
@@ -532,14 +534,30 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				} catch (Exception ex2) {
 					return "";
 				}
+
+				SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
+				BBRPromoManager promgr = new BBRPromoManager();
+				BBRPromo promo = promgr.findFreeVisitPromo(posId, BBRUtil.now(context.getTimeZone()));
 				
-				Long l = manager.getVisitsNumber(userContacts, visitId, posId);
+				Date date;
+				Boolean bOT = false;
+				if (promo != null)
+					date = promo.getStartDate();
+				else {
+					bOT = true;
+					date = new Date(0);
+				}
+				
+				Long l = manager.getVisitsNumber(userContacts, visitId, posId, date);
 				String prizeString = "";
 				try {
-					if (manager.isPrizeVisit(l, posId))
+					if (promgr.isPrizeVisit(promo, l))
 						prizeString = context.gs("MSG_PRIZE_VISIT");
 					String d[] = new String[2];
-					d[0] = l.toString();
+					if (bOT)
+						d[0] = l.toString() + " " + context.gs("MSG_FROM_BEGINNING_OF_TIME");
+					else
+						d[0] = l.toString() + " " + context.gs("MSG_FROM") + " " + df.format(date);
 					d[1] = prizeString;
 					return BBRUtil.gson().toJson(d);
 				} catch (Exception ex) {

@@ -44,6 +44,7 @@
         <mapping class="BBRAcc.BBRJob"/>
         <mapping class="BBRCust.BBRSpecialist"/>
         <mapping class="BBRCust.BBRProcedure"/>
+        <mapping class="BBRCust.BBRPromo"/>
         <mapping class="BBRCust.BBRVisit"/>
         <mapping class="BBRCust.BBRTask"/>
 		<mapping class="BBRCust.BBRTurn"/>

@@ -54,6 +54,7 @@
 			</t:card-tab>
 			<t:card-tab label="LBL_MONEY_TAB" id="moneyTab" combined="true">
 				<t:card-item label="LBL_FINAL_PRICE" type="text" field="finalPrice" isRequired="required" />
+				<t:card-item label="LBL_PROMO" type="reference" field="promo" referenceFieldTitle="title" referenceMethod="BBRPromos" isDisabled="readonly" />
 				<t:card-item label="LBL_DISCOUNT_PERCENT" type="text" field="discountPercent" defaultValue="0" isRequired="required"/>
 				<t:card-item label="LBL_DISCOUNT_AMOUNT" type="text" field="discountAmount" defaultValue="0" isRequired="required"/>
 				<t:card-item label="LBL_PRICE_PAID" type="text" field="pricePaid"  isRequired="required"/>

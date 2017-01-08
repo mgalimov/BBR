@@ -22,6 +22,7 @@
 		<t:nav-item href="manager-spec-list.jsp" title="LBL_SPECS_MENU" />
 		<t:nav-item href="manager-turn-list.jsp" title="LBL_TURNS_MENU" />
 		<t:nav-item href="manager-proc-list.jsp" title="LBL_PROCEDURES_MENU" />
+		<t:nav-item href="manager-promo-list.jsp" title="LBL_PROMOS_MENU" />
 		<t:nav-item href="manager-task-list.jsp" title="LBL_TASKS_MENU" badge="true" badgeMethod="BBRTasks"/>
 		<t:nav-item href="manager-visitor-list.jsp" title="LBL_VISITORS_LIST_MENU"/>
 		<t:nav-item href="manager-spec-schedule-list.jsp" title="LBL_SPEC_SCHEDULE_MENU" badge="true" badgeMethod="BBRVisits"/>

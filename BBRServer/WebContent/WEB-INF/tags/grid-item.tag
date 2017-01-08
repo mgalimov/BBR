@@ -4,6 +4,7 @@
 <%@ attribute name="sort" %>
 <%@ attribute name="type" %>
 <%@ attribute name="options" %>
+<%@ attribute name="referenceTitleField" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 	
@@ -47,6 +48,17 @@
 	"/>
 </c:if>
 
+<c:if test="${type.equals('multiple')}">
+	<c:set var="items" scope="request" value="${items.concat(', render: 
+		function(data, type, row, meta)	{
+			var s = \"\";
+			data.forEach(function (el) {
+				s += \", \" + el.').concat(referenceTitleField).concat('; 
+			});
+			return s.substring(2);
+		}
+	')}"/>
+</c:if>
 
 <c:set var="items" scope="request" value="${items.concat('}')}"/>
 

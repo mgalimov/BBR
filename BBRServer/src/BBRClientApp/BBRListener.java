@@ -18,6 +18,7 @@ import org.telegram.telegrambots.TelegramApiException;
 import org.telegram.telegrambots.TelegramBotsApi;
 
 import BBR.BBRDataSet;
+import BBR.BBRUtil;
 import BBRAcc.BBRJob;
 import BBRAcc.BBRJobManager;
 import BBRBots.BBRTelegramBot;
@@ -74,9 +75,11 @@ public class BBRListener implements ServletContextListener {
     				}
     				sched.start();
     			} catch (SchedulerException e) {
-
+    				BBRUtil.log.error(e.getMessage());
+    				BBRUtil.log.error(e.getStackTrace());
     			} catch (ExceptionInInitializerError e) {
-    				
+    				BBRUtil.log.error(e.getMessage());
+    				BBRUtil.log.error(e.getStackTrace());
     			}
     	    	
     	    	String host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
@@ -85,6 +88,8 @@ public class BBRListener implements ServletContextListener {
 	    	        try {
 	    	            telegramBotsApi.registerBot(new BBRTelegramBot());
 	    	        } catch (TelegramApiException e) {
+	    				BBRUtil.log.error(e.getMessage());
+	    				BBRUtil.log.error(e.getStackTrace());
 	    	        }
     	    	}
     		}

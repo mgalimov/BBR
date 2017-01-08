@@ -52,6 +52,8 @@ public class BBRBase extends HttpServlet  {
 			} else
 				respText = processOperation(operation, params, request, response);
 		} catch (Exception ex) {
+			BBRUtil.log.error(ex.getMessage());
+			BBRUtil.log.error(ex.getStackTrace());
 			respText = ex.getMessage();
 			if (context != null)
 				respText = context.gs(respText);
@@ -73,6 +75,8 @@ public class BBRBase extends HttpServlet  {
 			String operation = params.get("operation");
 			respText = processOperation(operation, params, request, response);
 		} catch (Exception ex) {
+			BBRUtil.log.error(ex.getMessage());
+			BBRUtil.log.error(ex.getStackTrace());
 			respText = ex.getMessage();
 			if (context != null)
 				respText = context.gs(respText);

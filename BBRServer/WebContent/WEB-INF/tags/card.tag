@@ -23,19 +23,18 @@
 <c:set var="imageItemIds" scope="request" value="${''}"/>
 <c:set var="cardMethod" scope="request" value="${method}"/>
 
+<div class="container-fluid"  id="editForm">
+<h3>${context.gs(title)}</h3>
 <t:modal  cancelButtonLabel="LBL_CANCEL_CHANGES_KEEP_EDITING_BTN" 
 		  processButtonLabel="LBL_CANCEL_CHANGES_CANCEL_BTN" 
 		  title="LBL_CANCEL_CHANGES_TITLE" 
 		  id="sureToCancelChanges">
 </t:modal>
 
-<div class="alert alert-warning alert-dismissable hide" id="alertMessage">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+<div class="alert alert-warning hide" id="alertMessage">
+    <button type="button" class="close" aria-label="Close" id="alertCloseBtn"><span aria-hidden="true">&times;</span></button>
     <div id="alertText"></div>
 </div>
-
-<div class="container-fluid"  id="editForm">
-<h3>${context.gs(title)}</h3>
 <form role="form">
 	<div class="panel panel-default">
 	  <c:if test="${showTabs == true}">
@@ -210,6 +209,9 @@
 		$('#saveChangesTop').click(saveChangesBtnClick);
 		$('#cancelChanges').click(cancelChangesBtnClick);
 		$('#cancelChangesTop').click(cancelChangesBtnClick);
+		$('#alertCloseBtn').click(function () {
+			$('#alertMessage').addClass("hide");			
+		});
  	});
  	
  	$(window).bind('beforeunload', function () {

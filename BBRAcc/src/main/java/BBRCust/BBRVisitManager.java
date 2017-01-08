@@ -41,6 +41,8 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 								  String userName, String userContacts, String comment, int source) {
 		boolean tr = BBRUtil.beginTran();
         try {
+        	BBRPromoManager promgr = new BBRPromoManager();
+        	
 	        Session session = BBRUtil.getSession();
 	        BBRVisit visit = new BBRVisit();
 	        visit.setPos(pos);
@@ -66,6 +68,13 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        }
 	        if (visit.getLength() < minimalLength)
 	        	visit.setLength(minimalLength);
+
+	        BBRPromo promo = promgr.findBestApplicablePromo(visit);
+	        if (promo != null) {
+				visit.setPromo(promo);
+				visit.setDiscountPercent(promo.getDiscount());
+	        }
+
 	        session.save(visit);
 	        BBRUtil.commitTran(tr);
 	        
@@ -149,6 +158,8 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 									 String comment, Set<BBRProcedure> procedures) {
 		boolean tr = BBRUtil.beginTran();
         try {
+        	BBRPromoManager promgr = new BBRPromoManager();
+        	
 	        Session session = BBRUtil.getSession();
 	        BBRVisit visit = new BBRVisit();
 	        
@@ -183,6 +194,12 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        }
 	        if (visit.getLength() < minimalLength)
 	        	visit.setLength(minimalLength);
+	        
+	        BBRPromo promo = promgr.findBestApplicablePromo(visit);
+	        if (promo != null) {
+				visit.setPromo(promo);
+				visit.setDiscountPercent(promo.getDiscount());
+	        }
 	        session.save(visit);
 	        
 	        BBRUtil.commitTran(tr);
@@ -1028,18 +1045,19 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		}
 	}
 
-	public Long getVisitsNumber(String userContacts, Long visitId, Long posId) {
+	public Long getVisitsNumber(String userContacts, Long visitId, Long posId, Date date) {
         Session session = BBRUtil.getSession();
         boolean tr = BBRUtil.beginTran();
         try {
         	String visitWhere = "";
+        	SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
+        	SimpleDateFormat dff = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
         	try {
-        		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
         		BBRVisitManager vmgr = new BBRVisitManager();
         		BBRVisit v = vmgr.findById(visitId);
         		if (v != null){
         			visitWhere += "   and visit.id <> " + v.getId();
-        			visitWhere += "   and coalesce(visit.realTime, visit.timeScheduled) <= '" + df.format(v.getRealTime()) + "'";
+        			visitWhere += "   and coalesce(visit.realTime, visit.timeScheduled) <= '" + dff.format(BBRUtil.getEndOfDay(v.getRealTime())) + "'";
         		}
 
         	} catch (Exception ex1) {
@@ -1048,7 +1066,8 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
     				"select count(*)" + 
                     "  from BBRVisit visit " +  
     			    " where userContacts like '" + maskContacts(userContacts) + "' " +
-                    "   and pos.id = " + posId.toString() + 
+                    "   and pos.id = " + posId.toString() +
+                    "   and coalesce(visit.realTime, visit.timeScheduled) >= '" + df.format(date) + "'" +
                     visitWhere + 
     				"   and status in (" + BBRVisitStatus.VISSTATUS_APPROVED + "," + BBRVisitStatus.VISSTATUS_PERFORMED + ")"); 
         	Long count = (Long)query.uniqueResult();
@@ -1085,17 +1104,6 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         	BBRUtil.rollbackTran(tr);
         }
         return 0L;
-	}
-
-	public boolean isPrizeVisit(Long l, Long posId) {
-		BBRPoSManager pmgr = new BBRPoSManager();
-		BBRPoS pos = pmgr.findById(posId);
-		if (pos != null) {
-			Long p = pos.getPrizeVisitNumber(); 
-			if (p != null && p > 0 && l > 0 && (l+1)%p == 0)
-				return true;
-		}
-		return false;
 	}
 	
 	public String maskContacts(String userContacts) {
