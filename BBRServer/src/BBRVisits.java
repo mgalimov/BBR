@@ -564,6 +564,54 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 					return "";
 				}
 			}
+		} else
+		if (operation.equals("getDiscount")) {
+			String sProcIds = params.get("procIds");
+			String sVisitId = params.get("visitId");
+			String sTimeScheduled = params.get("timeScheduled");
+			String sRealTime = params.get("realTime");
+			
+			SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+			Date timeScheduled = null;
+			Date realTime = null;
+			try {
+				timeScheduled = df.parse(sTimeScheduled);
+				realTime = df.parse(sRealTime);
+			} catch (Exception ex3) {
+			}
+			
+			Long visitId = null;
+			if (!sVisitId.isEmpty()) {
+				try {
+					visitId = Long.parseLong(sVisitId);
+				} catch (Exception ex2) {
+					return "";
+				}
+			}
+
+			BBRVisit visit = manager.findById(visitId);
+			BBRProcedureManager prmgr = new BBRProcedureManager();
+			if (visit != null) {
+				Set<BBRProcedure> procedures = new HashSet<BBRProcedure>();
+				for (String sProcId : sProcIds.split(",")) {
+					try {
+						Long procId = Long.parseLong(sProcId);
+						BBRProcedure proc = prmgr.findById(procId);
+						if (proc != null)
+							procedures.add(proc);
+					} catch (Exception ex2) {
+					}
+				}
+				visit.setProcedures(procedures);
+				if (timeScheduled != null)
+					visit.setTimeScheduled(timeScheduled);
+				if (realTime != null)
+					visit.setRealTime(realTime);
+			}
+			
+			BBRPromoManager promgr = new BBRPromoManager();
+			BBRPromo promo = promgr.findBestApplicablePromo(visit);
+			return promo.toJson();	
 		}
 		return "";
 	};

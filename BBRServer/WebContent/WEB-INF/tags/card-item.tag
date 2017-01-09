@@ -268,8 +268,18 @@
 				</select>
 				
 				<c:if test="${!calculated.equals('true')}">
-					<c:set var="itemSet" scope="request" value="${itemSet}
-			            $('#${ft}input')[0].selectize.addItem([obj.${field}]);"/>
+					<c:if test="${multiple.equals('true')}">
+						<c:set var="itemSet" scope="request" value="${itemSet}
+						el = $('#${ft}input')[0].selectize;
+						el.clear();
+				        if (obj.${field}.length > 0) 
+				          for (i = 0; i < obj.${field}.length; i++)
+				           	el.addItem([obj.${field}[i]]);"/>
+					</c:if>
+					<c:if test="${!multiple.equals('true')}">
+						<c:set var="itemSet" scope="request" value="${itemSet}
+				            $('#${ft}input')[0].selectize.addItem([obj.${field}]);"/>
+					</c:if>
 				</c:if>
 						
 				<script>

@@ -171,7 +171,6 @@ public class BBRPromos extends BBRBasicServlet<BBRPromo, BBRPromoManager> {
 	@Override
 	protected BBRPromo beforeUpdate(BBRPromo promo, BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		promo = analyzeParams(promo, params, request, response);
-		manager.checkParams(promo);
 		return promo;		
 	}
 

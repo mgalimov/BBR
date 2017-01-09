@@ -2,7 +2,6 @@ package BBRCust;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.hibernate.Session;
@@ -23,7 +22,8 @@ public class BBRPromoManager extends BBRDataManager<BBRPromo>{
 		classTitle = "Promo";	
 	}
 	
-	public void checkParams(BBRPromo promo) throws Exception {
+	@Override
+	public boolean checkBeforeUpdate(BBRPromo promo) throws Exception {
 		if (promo.getShop() == null)
 			throw new Exception(BBRErrors.ERR_SHOP_MUST_BE_SPECIFIED);
 		if (promo.getPoses() == null)
@@ -34,10 +34,15 @@ public class BBRPromoManager extends BBRDataManager<BBRPromo>{
 			throw new Exception(BBRErrors.ERR_PROMO_PROCEDURES_OR_SOURCES_NOT_SPECIFIED);
 		if (promo.getPromoType() == BBRPromoType.PROMOTYPE_DISCOUNT && promo.getDiscount() <= 0.00001)
 			throw new Exception(BBRErrors.ERR_PROMO_DISCOUNT_NOT_SPECIFIED);
+		
+		if (promo.getPromoType() == BBRPromoType.PROMOTYPE_FREE_VISIT)
+			promo.setDiscount(100);
+		
+		return true;
 	}
-
+	
 	public void createAndStorePromo(BBRPromo promo) throws Exception {
-		checkParams(promo);
+		checkBeforeUpdate(promo);
         boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();
         session.save(promo);
@@ -115,6 +120,8 @@ public class BBRPromoManager extends BBRDataManager<BBRPromo>{
 			}
 		}
 			
+		if (promo != null)
+			promo.setDiscount(100);
 		return promo;
 	}
 
@@ -166,12 +173,13 @@ public class BBRPromoManager extends BBRDataManager<BBRPromo>{
 					yes = true;
 					for (BBRProcedure proc : p.getProcedures()) {
 						boolean localyes = false;
-						for (BBRProcedure procToCompare : visit.getProcedures()) {
-							if (proc.getId() == procToCompare.getId()) {
-								localyes = true;
-								break;
+						if (visit.getProcedures() != null)
+							for (BBRProcedure procToCompare : visit.getProcedures()) {
+								if (proc.getId() == procToCompare.getId()) {
+									localyes = true;
+									break;
+								}
 							}
-						}
 						if (!localyes && visit.getProcedure() != null && proc.getId() == visit.getProcedure().getId())
 							localyes = true;
 						
@@ -180,7 +188,8 @@ public class BBRPromoManager extends BBRDataManager<BBRPromo>{
 							break;
 						}
 					}
-				}
+				} else
+					yes = true;
 				
 				if (yes && p.getSources() != null && !p.getSources().isEmpty()) {
 					boolean localyes = false;
