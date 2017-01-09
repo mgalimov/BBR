@@ -36,15 +36,34 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		classTitle = "Visit";	
 	}
 
+	@Override
+	public boolean checkBeforeUpdate(BBRVisit visit) throws Exception {
+        if (visit.getProcedure() != null) {
+        	visit.setLength(visit.getProcedure().getLength());
+	        visit.setFinalPrice(visit.getProcedure().getPrice());
+        }
+        if (visit.getLength() < minimalLength)
+        	visit.setLength(minimalLength);
+
+        BBRPromoManager promgr = new BBRPromoManager();
+        BBRPromo promo = promgr.findBestApplicablePromo(visit);
+        
+		visit.setPromo(promo);
+		if (promo != null) {	
+			visit.setDiscountPercent(promo.getDiscount());
+        } else
+        	visit.setDiscountPercent(0);
+		return true;
+	}
+	
 	public BBRVisit scheduleVisit(boolean notification, BBRPoS pos, BBRUser user, 
 								  Date timeScheduled, BBRProcedure procedure, BBRSpecialist spec, 
 								  String userName, String userContacts, String comment, int source) {
 		boolean tr = BBRUtil.beginTran();
         try {
-        	BBRPromoManager promgr = new BBRPromoManager();
-        	
 	        Session session = BBRUtil.getSession();
 	        BBRVisit visit = new BBRVisit();
+	        
 	        visit.setPos(pos);
 	        visit.setUser(user);
 	        visit.setTimeScheduled(timeScheduled);
@@ -62,21 +81,12 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 			visit.setComment(comment);
 			visit.setSource(source);
 			visit.setBookingCode(generateNewBookingCode());
-	        if (procedure != null) {
-	        	visit.setLength(procedure.getLength());
-		        visit.setFinalPrice(procedure.getPrice());
-	        }
-	        if (visit.getLength() < minimalLength)
-	        	visit.setLength(minimalLength);
-
-	        BBRPromo promo = promgr.findBestApplicablePromo(visit);
-	        if (promo != null) {
-				visit.setPromo(promo);
-				visit.setDiscountPercent(promo.getDiscount());
-	        }
-
-	        session.save(visit);
-	        BBRUtil.commitTran(tr);
+			if (checkBeforeUpdate(visit)) {
+				session.save(visit);
+	        	BBRUtil.commitTran(tr);
+			} else {
+				BBRUtil.rollbackTran(tr);
+			}
 	        
 	        if (notification) {
 	        	boolean t = BBRUtil.beginTran();
@@ -158,8 +168,6 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 									 String comment, Set<BBRProcedure> procedures) {
 		boolean tr = BBRUtil.beginTran();
         try {
-        	BBRPromoManager promgr = new BBRPromoManager();
-        	
 	        Session session = BBRUtil.getSession();
 	        BBRVisit visit = new BBRVisit();
 	        
@@ -187,23 +195,14 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 			visit.setSource(BBRVisitSource.INTERNAL);
 			visit.setProcedures(procedures);
 			
-			if (procedure != null) {
-				if (visit.getLength() == null || visit.getLength() <= 0.1)
-					visit.setLength(procedure.getLength());
-		        visit.setFinalPrice(procedure.getPrice());
-	        }
-	        if (visit.getLength() < minimalLength)
-	        	visit.setLength(minimalLength);
-	        
-	        BBRPromo promo = promgr.findBestApplicablePromo(visit);
-	        if (promo != null) {
-				visit.setPromo(promo);
-				visit.setDiscountPercent(promo.getDiscount());
-	        }
-	        session.save(visit);
-	        
-	        BBRUtil.commitTran(tr);
-	        return visit;
+			if (checkBeforeUpdate(visit)) {
+				session.save(visit);
+	        	BBRUtil.commitTran(tr);
+			} else {
+				BBRUtil.rollbackTran(tr);
+			}
+
+			return visit;
         } catch (Exception ex) {
         	BBRUtil.rollbackTran(tr);
         	return null;

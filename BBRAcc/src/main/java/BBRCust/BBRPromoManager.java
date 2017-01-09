@@ -30,7 +30,7 @@ public class BBRPromoManager extends BBRDataManager<BBRPromo>{
 			throw new Exception(BBRErrors.ERR_POS_MUST_BE_SPECIFIED);
 		if (promo.getPromoType() == BBRPromoType.PROMOTYPE_FREE_VISIT && promo.getVisitsNumber() <= 1)
 			throw new Exception(BBRErrors.ERR_PROMO_VISITS_NUMBER_NOT_SPECIFIED);
-		if (promo.getPromoType() == BBRPromoType.PROMOTYPE_DISCOUNT && (promo.getProcedures() == null || promo.getSources() == null))
+		if (promo.getPromoType() == BBRPromoType.PROMOTYPE_DISCOUNT && (promo.getProcedures() == null && promo.getSources() == null))
 			throw new Exception(BBRErrors.ERR_PROMO_PROCEDURES_OR_SOURCES_NOT_SPECIFIED);
 		if (promo.getPromoType() == BBRPromoType.PROMOTYPE_DISCOUNT && promo.getDiscount() <= 0.00001)
 			throw new Exception(BBRErrors.ERR_PROMO_DISCOUNT_NOT_SPECIFIED);
@@ -142,8 +142,13 @@ public class BBRPromoManager extends BBRDataManager<BBRPromo>{
 		
 		BBRPromo promo = findFreeVisitPromo(visit.getPos().getId(), date);
 
-		if (promo != null)
-			return promo;
+		if (promo != null) {
+			BBRVisitManager vmgr = new BBRVisitManager();
+			Long visitsNumber = vmgr.getVisitsNumber(date, visit.getPos().getId(), null);
+			if (isPrizeVisit(promo, visitsNumber))
+				return promo;
+			promo = null;
+		}
 		
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
 		String where = "startDate <= '" + df.format(date) + "'" + 
@@ -157,19 +162,36 @@ public class BBRPromoManager extends BBRDataManager<BBRPromo>{
 			for (BBRPromo p : l.data) {
 				boolean yes = false;
 				
-				Set<BBRProcedure> prset = visit.getProcedures();
-				if (prset == null)
-					prset = new HashSet<BBRProcedure>();
-				prset.add(visit.getProcedure());
+				if (p.getProcedures() != null && !p.getProcedures().isEmpty()) {
+					yes = true;
+					for (BBRProcedure proc : p.getProcedures()) {
+						boolean localyes = false;
+						for (BBRProcedure procToCompare : visit.getProcedures()) {
+							if (proc.getId() == procToCompare.getId()) {
+								localyes = true;
+								break;
+							}
+						}
+						if (!localyes && visit.getProcedure() != null && proc.getId() == visit.getProcedure().getId())
+							localyes = true;
+						
+						if (!localyes) {
+							yes = false;
+							break;
+						}
+					}
+				}
 				
-				if (p.getProcedures() != null)
-					if (p.getProcedures().containsAll(prset) &&
-						prset.containsAll(p.getProcedures()))
-						yes = true;
-				
-				if (yes && p.getSources() != null)
-					if (!p.getSources().contains(visit.getSource()))
-						yes = false; 
+				if (yes && p.getSources() != null && !p.getSources().isEmpty()) {
+					boolean localyes = false;
+					for (int src : p.getSources()) {
+						if (src == visit.getSource()) {
+							localyes = true;
+							break;
+						}
+					}
+					yes = localyes; 
+				}
 				
 				if (yes)
 					if (promo == null)

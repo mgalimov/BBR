@@ -60,7 +60,7 @@ public class BBRVisit extends BBRDataElement {
 	@Column(name="FINAL_PRICE")
 	private float finalPrice = 0;
 
-	@Column(name="PROMO")
+	@ManyToOne(fetch=FetchType.EAGER)
 	private BBRPromo promo;
 	
 	@Column(name="DISCOUNT_PERCENT")
