@@ -209,37 +209,49 @@
 	        		$("#lengthinput").val(len)
 	        		$("#finalPriceinput").val(pr);
 	        		onChange();
+	        		
+	        		if (i == procIds.length) {
+	        			var ts = $("#timeScheduledinput").val();
+	        			var rt = $("#realTimeinput").val();
+	        			
+	        			if (rt && rt != null && rt != "")
+	        				dt = rt;
+	        			else
+	        				dt = ts;
+	        			
+	        			if (moment(dt).add(len, 'hours').isAfter()) {
+	        				id = getUrlParameter('id');
+	        				if (!id || id == 'new')
+	        					id = "";
+	        				
+	        				$.ajax({
+	        		        	url: 'BBRVisits',
+	        		        	data: {
+	        		        		operation: "getDiscount",
+	        		        		visitId: id,
+	        		        		timeScheduled: ts,
+	        		        		realTime: rt,
+	        		        		procIds: procIds
+	        		        	}
+	        	        	}).done(function (data) {
+	        	        		promo = $.parseJSON(data);
+	        	        		el = $("#promoinput")[0].selectize;
+	        	        		el.clear();
+	        	        		if (promo) {
+	        	        			$("#discountPercentinput").val(promo.discount);
+	        	            		el.addOption({id: promo.id, title: promo.title});
+	        	            		el.refreshOptions(false);
+	        	            		el.addItem(promo.id);
+	        	            		el.refreshItems();
+	        	        		}
+	        	        		else
+	        	        			$("#discountPercentinput").val(0);
+	        	        		onChange();
+	        	        	});
+	        			}
+	        		}
 	        	});	
 			}
-			
-			id = getUrlParameter('id');
-			if (!id || id == 'new')
-				id = "";
-			
-			$.ajax({
-	        	url: 'BBRVisits',
-	        	data: {
-	        		operation: "getDiscount",
-	        		visitId: id,
-	        		timeScheduled: $("#timeScheduledinput").val(),
-	        		realTime: $("#realTimeinput").val(),
-	        		procIds: procIds
-	        	}
-        	}).done(function (data) {
-        		promo = $.parseJSON(data);
-        		el = $("#promoinput")[0].selectize;
-        		el.clear();
-        		if (promo) {
-        			$("#discountPercentinput").val(promo.discount);
-            		el.addOption({id: promo.id, title: promo.title});
-            		el.refreshOptions(false);
-            		el.addItem(promo.id);
-            		el.refreshItems();
-        		}
-        		else
-        			$("#discountPercentinput").val(0);
-        		onChange();
-        	});	
 		}
 		
 		$("#userContactsinput").on("change", onUserContactsChange);

@@ -611,7 +611,11 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			
 			BBRPromoManager promgr = new BBRPromoManager();
 			BBRPromo promo = promgr.findBestApplicablePromo(visit);
-			return promo.toJson();	
+			
+			if (promo == null)
+				return "";
+			else
+				return promo.toJson();	
 		}
 		return "";
 	};

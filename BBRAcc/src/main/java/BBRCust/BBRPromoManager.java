@@ -151,7 +151,7 @@ public class BBRPromoManager extends BBRDataManager<BBRPromo>{
 
 		if (promo != null) {
 			BBRVisitManager vmgr = new BBRVisitManager();
-			Long visitsNumber = vmgr.getVisitsNumber(date, visit.getPos().getId(), null);
+			Long visitsNumber = vmgr.getVisitsNumber(vmgr.maskContacts(visit.getUserContacts()), visit.getId(), visit.getPos().getId(), null);
 			if (isPrizeVisit(promo, visitsNumber))
 				return promo;
 			promo = null;
