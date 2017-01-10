@@ -7,6 +7,7 @@ import java.sql.Blob;
 import java.util.List;
 
 import org.hibernate.Hibernate;
+import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -136,11 +137,16 @@ public class BBRDataManager<T extends BBRDataElement> {
     		T result = (T) session.createQuery("from " + typeName + " as t where t.id = '" + id.toString() + "'").uniqueResult();
     		BBRUtil.commitTran(tr);
     		return result;
-    	} catch (Exception ex) {
-    		BBRUtil.log.error(ex.getMessage());
-    		BBRUtil.rollbackTran(tr);
-    		return null;
-    	}
+		} catch (JDBCException ex) {
+			BBRUtil.log.error(ex.getMessage());
+			BBRUtil.log.error(ex.getSQL());
+			BBRUtil.rollbackTran(tr);
+			return null;
+		} catch (Exception ex) {
+			BBRUtil.log.error(ex.getMessage());
+			BBRUtil.rollbackTran(tr);
+			return null;
+	    }
     }
     
     @SuppressWarnings({ "unchecked", "unused" })

@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import org.hibernate.JDBCException;
+
 import BBR.BBRDataElement;
 import BBR.BBRDataManager;
 import BBR.BBRDataSet;
@@ -92,6 +94,14 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 			} else	{
 				respText = processOperation(operation, params, request, response);
 			}
+		} catch (JDBCException ex) {
+			BBRUtil.log.error(ex.getMessage());
+			BBRUtil.log.error(ex.getSQL());
+			BBRUtil.log.error(ex.getStackTrace());
+			respText = ex.getMessage();
+			if (context != null)
+				respText = context.gs(respText);
+			response.setStatus(errorResponseCode);
 		} catch (Exception ex) {
 			BBRUtil.log.error(ex.getMessage());
 			BBRUtil.log.error(ex.getStackTrace());
@@ -180,6 +190,12 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 						respText = ds.toJson();
 					}
 					respText = "{\"draw\":" + drawIndex + "," + respText.substring(1);
+				} catch (JDBCException ex) {
+					BBRUtil.log.error(ex.getMessage());
+					BBRUtil.log.error(ex.getSQL());
+					BBRUtil.log.error(ex.getStackTrace());
+					respText = context.gs(ex.getMessage());
+					response.setStatus(700);
 				} catch (Exception ex) {
 					BBRUtil.log.error(ex.getMessage());
 					BBRUtil.log.error(ex.getStackTrace());

@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hibernate.JDBCException;
+
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRPoSManager;
 import BBRAcc.BBRShop;
@@ -51,6 +53,14 @@ public class BBRBase extends HttpServlet  {
 				context.filterPoS = pos;
 			} else
 				respText = processOperation(operation, params, request, response);
+		} catch (JDBCException ex) {
+			BBRUtil.log.error(ex.getMessage());
+			BBRUtil.log.error(ex.getSQL());
+			BBRUtil.log.error(ex.getStackTrace());
+			respText = ex.getMessage();
+			if (context != null)
+				respText = context.gs(respText);
+			response.setStatus(errorResponseCode);
 		} catch (Exception ex) {
 			BBRUtil.log.error(ex.getMessage());
 			BBRUtil.log.error(ex.getStackTrace());
@@ -74,6 +84,14 @@ public class BBRBase extends HttpServlet  {
 			BBRParams params = new BBRParams(request.getQueryString());
 			String operation = params.get("operation");
 			respText = processOperation(operation, params, request, response);
+		} catch (JDBCException ex) {
+			BBRUtil.log.error(ex.getMessage());
+			BBRUtil.log.error(ex.getSQL());
+			BBRUtil.log.error(ex.getStackTrace());
+			respText = ex.getMessage();
+			if (context != null)
+				respText = context.gs(respText);
+			response.setStatus(errorResponseCode);
 		} catch (Exception ex) {
 			BBRUtil.log.error(ex.getMessage());
 			BBRUtil.log.error(ex.getStackTrace());
