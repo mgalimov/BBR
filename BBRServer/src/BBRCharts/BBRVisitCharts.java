@@ -191,17 +191,24 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 			};
 			data.addCols(cols);
 			
-			String[] weekdays = {"Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"};
+			String[] weekdays = {"Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"};
 			BBRVisitManager mgr = new BBRVisitManager();
 			List<Object[]> list = mgr.getVisitsByWeekDays(period.startDate, period.endDate, period.detail, pos, shop);
 			
-			List<Object[]> rlist = new ArrayList<Object[]>();
+			List<Object[]> rlist = new ArrayList<Object[]>(7);
+			for (int i = 0; i < 7; i++) {
+				Object[] o = {weekdays[i], 0};
+				rlist.add(o);
+			}
 			for (int i = 0; i < list.size(); i++)
 			{
 				Object[] o = (Object[])list.get(i);
-				String s = weekdays[(int)o[0]-1];
-				o[0] = s;
-				rlist.add(o);
+				int wd = i - 1;
+				if (wd < 0)
+					wd = 6;
+				Object[] o1 = rlist.get(wd);
+				o1[1] = o[1];
+				rlist.set(wd, o1);
 			}
 			list = rlist;
 			
@@ -209,14 +216,22 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 			if (period.compareToEndDate != null) {
 				data.addCol("Visits to compare", BBRChartDataTypes.BBR_CHART_NUMBER);
 				listComp = mgr.getVisitsByWeekDays(period.compareToStartDate, period.compareToEndDate, period.detail, pos, shop);
-				List<Object[]> nlist = new ArrayList<Object[]>();
+				List<Object[]> nlist = new ArrayList<Object[]>(7);
+				for (int i = 0; i < 7; i++) {
+					Object[] o = {"", 0};
+					nlist.add(o);
+				}
 				for (int i = 0; i < listComp.size(); i++)
 				{
 					Object[] o = (Object[])listComp.get(i);
-					String s = weekdays[(int)o[0]-1];
-					o[0] = s;
-					nlist.add(o);
+					int wd = i - 1;
+					if (wd < 0)
+						wd = 6;
+					Object[] o1 = nlist.get(wd);
+					o1[1] = o[1];
+					nlist.set(wd, o1);
 				}
+								
 				listComp = nlist;
 			}
 			
