@@ -51,6 +51,7 @@ public abstract class BBRBasicChartServlet extends HttpServlet {
 				periods.compareToStartDate = df.parse(params.get("periods[compareToStartDate]"));
 			if (params.get("periods[compareToEndDate]") != null && !params.get("periods[compareToEndDate]").isEmpty())
 				periods.compareToEndDate = df.parse(params.get("periods[compareToEndDate]"));
+			periods.alignDates();
 		
 			BBRPoS pos = null;
 			BBRShop shop = null;

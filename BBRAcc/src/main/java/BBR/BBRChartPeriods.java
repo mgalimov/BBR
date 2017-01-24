@@ -16,17 +16,67 @@ public class BBRChartPeriods {
 		this.detail = detail;
 		this.compareToStartDate = compareToStartDate;
 		this.compareToEndDate = compareToEndDate;
+		alignDates();
 	}
 	
 	public BBRChartPeriods (Date startDate, Date endDate, Integer detail) {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.detail = detail;
+		alignDates();
 	}
 
 	public BBRChartPeriods (Date startDate, Date endDate) {
 		this.startDate = startDate;
 		this.endDate = endDate;
+		alignDates();
+	}
+	
+	public void alignDates() {
+		Calendar c = Calendar.getInstance();
+		if (detail == BBRChartDetail.BBR_CHART_DETAIL_WEEK) {
+			if (startDate != null && endDate != null) {
+				c.setTime(startDate);
+				if (c.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
+					c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+				startDate = c.getTime();
+				c.setTime(endDate);
+				if (c.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY)
+					c.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+				endDate = c.getTime();
+			}
+			
+			if (compareToStartDate != null && compareToEndDate != null) {
+				c.setTime(compareToStartDate);
+				if (c.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
+					c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+				compareToStartDate = c.getTime();
+				c.setTime(compareToEndDate);
+				if (c.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY)
+					c.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+				compareToEndDate = c.getTime();
+			}
+		}		
+
+		if (detail == BBRChartDetail.BBR_CHART_DETAIL_MONTH) {
+			if (startDate != null && endDate != null) {
+				c.setTime(startDate);
+				c.set(Calendar.DAY_OF_MONTH, 1);
+				startDate = c.getTime();
+				c.setTime(endDate);
+				c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+				endDate = c.getTime();
+			}
+			
+			if (compareToStartDate != null && compareToEndDate != null) {
+				c.setTime(compareToStartDate);
+				c.set(Calendar.DAY_OF_MONTH, 1);
+				compareToStartDate = c.getTime();
+				c.setTime(compareToEndDate);
+				c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+				compareToEndDate = c.getTime();
+			}
+		}		
 	}
 	
 	public BBRChartPeriods () {
