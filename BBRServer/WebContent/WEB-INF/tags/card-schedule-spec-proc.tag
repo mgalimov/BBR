@@ -200,6 +200,7 @@
 	<div class="col-md-10">
 		<t:card-item label="LBL_YOUR_NAME" type="text" field="userName" isRequired="required"/>
 		<t:card-item label="LBL_YOUR_PHONE" type="text" field="userContacts" isRequired="required" />
+		<div class="alert alert-info hide" role="alert" id="visitsNumber"></div>
 	</div>
 </div>
 <% } %>
@@ -310,6 +311,33 @@
 			reloadWithNewParam("posId=" + posId);
 		})
 
+		$("#userContactsinput").on("change", function () {
+	 		if ($("#shopposinput").length) 
+	 			posSelected = $("#shopposinput").val();
+	 		else
+	 			posSelected = "";
+	 		
+	 		if (posSelected == "")
+	 			posSelected = "${newPosId}";
+
+			$.ajax({
+	        	url: 'BBRVisits',
+	        	data: {
+	        		operation: 'getVisitsNumber',
+	        		userContacts: $('#userContactsinput').val(),
+	        		posId: posSelected
+	        	}
+	    	}).done(function (data) {
+	    		if (data != null && data != "") {
+	    			var d = $.parseJSON(data);
+	    			$("#visitsNumber").removeClass("hide");
+	    			$("#visitsNumber").text("${context.gs('LBL_PREVIOUS_VISITS')} : " + d[0]);
+	    		} else {
+	    			$("#visitsNumber").addClass("hide");
+	    			$("#visitsNumber").text("");
+	    		}
+	    	});
+		});
 	 });
 	
 	function changeDatesOnButtons(modifier) {

@@ -511,18 +511,18 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				return "";
 		} else
 		if (operation.equals("getVisitsNumber")) {
-			String userContacts = params.get("userContacts").trim(); 
-			String sPosId = params.get("posId").trim();
-			String sVisitId = params.get("visitId").trim();
+			String userContacts = params.get("userContacts"); 
+			String sPosId = params.get("posId");
+			String sVisitId = params.get("visitId");
 			
 			BBRContext context = BBRContext.getContext(request);
-			if (userContacts.equals(""))
+			if (userContacts == null || userContacts.trim().equals(""))
 				return "";
 			else {
 				Long visitId = null;
 				Long posId = null;
 				
-				if (sVisitId != "") {
+				if (sVisitId != null && sVisitId.trim() != "") {
 					try {
 						visitId = Long.parseLong(sVisitId);
 					} catch (Exception ex2) {

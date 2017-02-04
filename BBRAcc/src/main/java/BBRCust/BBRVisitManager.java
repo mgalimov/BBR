@@ -215,7 +215,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
    			
         String where = " where user.id=" + userId.toString() + "";
         
-		String whereF = getFilterWhere(shop, pos, startDate, endDate, pageNumber);
+		String whereF = getFilterWhere(shop, pos, startDate, endDate);
 		if (!whereF.isEmpty())
 			where += "(" + where + ") and " + whereF;
 		
@@ -696,7 +696,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		return ds;
   }
 
-	public BBRVisitor findVisitor(String userName, String userContacts) {
+	public BBRVisitor findVisitor(String userName, String userContacts, BBRShop shop, BBRPoS pos, Date startDate, Date endDate) {
 		boolean tr = BBRUtil.beginTran();
         
 		Session session = BBRUtil.getSession();
@@ -704,10 +704,17 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		if (userName == null || userName.isEmpty())
 			return null;
 
+		String whereF = getFilterWhere(shop, pos, startDate, endDate);
+		if (!whereF.isEmpty())
+			whereF = " and " + whereF;
+		
 		Query query = session.createQuery("select userName, userContacts, count(*) as visitCount"+ 
 		                                  "  from BBRVisit visit " +  
 										  " where userName = :userName" + 
 		                                  "   and userContacts like :userContacts" +
+										  "	  and status in (" + BBRVisitStatus.VISSTATUS_APPROVED + 
+										  					"," + BBRVisitStatus.VISSTATUS_PERFORMED+ ")" +
+										  whereF +
 										  " group by userName, userContacts").
 		                                  setParameter("userName", userName).
 		                                  setParameter("userContacts", maskContacts(userContacts));
@@ -725,8 +732,9 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	}
 
 	public BBRDataSet<BBRVisit> listVisitsByNameAndContacts(String userName, String userContacts, BBRShop shop, BBRPoS pos, Date startDate, Date endDate, int pageNumber, int pageSize, String orderBy) {
-		String where = "userName = '" + userName + "' and userContacts like '" + maskContacts(userContacts) + "'";
-		String whereF = getFilterWhere(shop, pos, startDate, endDate, pageNumber);
+		String where = "userName = '" + userName + "' " + 
+				 	   " and userContacts like '" + maskContacts(userContacts) + "'";
+		String whereF = getFilterWhere(shop, pos, startDate, endDate);
 		if (!whereF.isEmpty())
 			where = "(" + where + ") and " + whereF;
 		return list(pageNumber, pageSize, where, orderBy);
@@ -752,7 +760,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		
 		String where = "pos.id = " + pos.getId() + " and status = " + BBRVisitStatus.VISSTATUS_INITIALIZED;
 		
-		String whereF = getFilterWhere(null, pos, startDate, endDate, pageNumber);
+		String whereF = getFilterWhere(null, pos, startDate, endDate);
 		if (!whereF.isEmpty())
 			where += "(" + where + ") and " + whereF;
 
@@ -783,7 +791,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		return list(pageNumber, pageSize, where, orderBy);
 	}
 
-	private String getFilterWhere(BBRShop shop, BBRPoS pos, Date startDate, Date endDate, int pageNumber) {
+	private String getFilterWhere(BBRShop shop, BBRPoS pos, Date startDate, Date endDate) {
 		String where = "";
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 		
@@ -822,7 +830,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	}
 	
 	public BBRDataSet<BBRVisit> listAllVisitsByFilter(BBRShop shop, BBRPoS pos, Date startDate, Date endDate, int pageNumber, int pageSize, String orderBy) {
-		return list(pageNumber, pageSize, getFilterWhere(shop, pos, startDate, endDate, pageNumber), orderBy);
+		return list(pageNumber, pageSize, getFilterWhere(shop, pos, startDate, endDate), orderBy);
 	}
 
 	// Charts

@@ -9,6 +9,7 @@ import BBR.BBRErrors;
 import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRShop;
+import BBRAcc.BBRUser;
 import BBRAcc.BBRUser.BBRUserRole;
 import BBRClientApp.BBRContext;
 import BBRClientApp.BBRParams;
@@ -73,7 +74,20 @@ public class BBRVisitors extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			userC = userNC[1];
 		}
 		
-		BBRVisitManager.BBRVisitor obj = (BBRVisitManager.BBRVisitor)manager.findVisitor(userN, userC);
+		BBRShop shop = context.filterShop;
+		BBRPoS pos = context.filterPoS;
+		if (shop == null && pos == null) {
+			BBRUser user = context.user;
+			int role = user.getRole();
+			if (role == BBRUserRole.ROLE_SHOP_ADMIN)
+				shop = user.getShop();
+			else
+				if (role == BBRUserRole.ROLE_POS_ADMIN || role == BBRUserRole.ROLE_POS_SPECIALIST)
+					pos = user.getPos();
+		}
+		
+		BBRVisitManager.BBRVisitor obj = (BBRVisitManager.BBRVisitor)manager.findVisitor(userN, userC, 
+							shop, pos, context.filterStartDate, context.filterEndDate);
 		
 		if (obj != null)
 			return obj.toJson();

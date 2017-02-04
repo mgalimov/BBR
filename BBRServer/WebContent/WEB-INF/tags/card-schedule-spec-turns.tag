@@ -76,24 +76,35 @@
 	
 	Map<String, Integer> months = calendar.getDisplayNames(Calendar.MONTH, Calendar.LONG, context.getLocale());
 %>
-
-<form class="form-inline">
-	<div class="form-group col-md-4 col-sm-4" style="margin-bottom: 0; vertical-align: middle;">
-		<div class='input-group date' id='datepicker' style='width:100%; margin-top: 4px;'>
-	       	<input type='text' class="form-control" />
-	  			<span class="input-group-addon">
-				<span class="glyphicon glyphicon-calendar"></span>
-			</span>
-	      </div>
+<div class="panel">
+  <div class="panel-heading" id="toolbar">
+  	<div class="btn-toolbar" role="toolbar">
+  		<button type="button" class="btn btn-default" id="print">
+			<span class="glyphicon glyphicon-print" aria-hidden="true"></span>
+			<span class="hidden-xs">${context.gs('BTN_PRINT_SCHEDULE')}</span>
+		</button>
 	</div>
-
-	<t:select-shop-pos field="shoppos" />
-</form>
-
-<div class="table-responsive col-md-10">
-	<table class="table table-bordered  table-condensed noselection table-striped small" id="scheduleTable">
-		<%=schOut %>
-	</table>
+  </div>
+  <div class="panel-body">
+		<form class="form-inline">
+			<div class="form-group col-md-4 col-sm-4" style="margin-bottom: 0; vertical-align: middle;">
+				<div class='input-group date' id='datepicker' style='width:100%; margin-top: 4px;'>
+			       	<input type='text' class="form-control" />
+			  			<span class="input-group-addon">
+						<span class="glyphicon glyphicon-calendar"></span>
+					</span>
+			      </div>
+			</div>
+		
+			<t:select-shop-pos field="shoppos" />
+		</form>
+		
+		<div class="table-responsive col-md-10">
+			<table class="table table-bordered  table-condensed noselection table-striped small" id="scheduleTable">
+				<%=schOut %>
+			</table>
+		</div>
+	</div>
 </div>
 
 <script>
@@ -261,5 +272,25 @@
 				return;
 			reloadWithNewParam("posId=" + posId);
 		})
+		
+		$("#print").click(function () {
+			var sd = $("span[id='sd0']").attr('data-date');
+			sd = moment(sd).startOf('month');
+			var ed = moment(sd).endOf('month');
+			$.ajax({
+				url: 'BBRTurns',
+				method: 'get',
+				data: {
+					operation: 'getTurns',
+					posId: <%=posId%>,
+					startDate: sd.year() + "-" + (sd.month() + 1) + "-" + sd.date(),
+					endDate: ed.year() + "-" + (ed.month() + 1) + "-" + ed.date()
+				}
+			}).done(function (data) {
+				if (data == "")
+					return;
+				turns = $.parseJSON(data);
+			});
+		});
 	}
 </script>
