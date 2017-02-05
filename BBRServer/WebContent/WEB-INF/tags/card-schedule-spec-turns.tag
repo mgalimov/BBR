@@ -79,9 +79,13 @@
 <div class="panel">
   <div class="panel-heading" id="toolbar">
   	<div class="btn-toolbar" role="toolbar">
-  		<button type="button" class="btn btn-default" id="print">
+  		<button type="button" class="btn btn-default" id="printCalendar">
 			<span class="glyphicon glyphicon-print" aria-hidden="true"></span>
-			<span class="hidden-xs">${context.gs('BTN_PRINT_SCHEDULE')}</span>
+			<span class="hidden-xs" id="printCalendarText">${context.gs('BTN_PRINT_CALENDAR')}</span>
+		</button>
+  		<button type="button" class="btn btn-default" id="printTable">
+			<span class="glyphicon glyphicon-print" aria-hidden="true"></span>
+			<span class="hidden-xs" id="printTableText">${context.gs('BTN_PRINT_SCHEDULE')}</span>
 		</button>
 	</div>
   </div>
@@ -105,9 +109,6 @@
 			</table>
 		</div>
 	</div>
-</div>
-
-<div id="printPanel" class="hide" style="position: absolute; width: 100%; height: 100%; top: 0px; left: 0px; z-index: -1000;">
 </div>
 
 <script>
@@ -192,6 +193,9 @@
 	function updateTurns() {
 		var sd = $("span[id='sd0']").attr('data-date');
 		var ed = moment(sd).add(<%=datesPerPage%>-1, 'days');
+		$("#printCalendarText").text("${context.gs('BTN_PRINT_CALENDAR')} (" + moment(sd).format("MMMM YYYY") + ")");
+		$("#printTableText").text("${context.gs('BTN_PRINT_SCHEDULE')} (" + moment(sd).format("MMMM YYYY") + ")");
+
 		$.ajax({
 			url: 'BBRTurns',
 			method: 'get',
@@ -276,39 +280,14 @@
 			reloadWithNewParam("posId=" + posId);
 		})
 		
-		$("#print").click(function () {
+		$("#printCalendar").click(function () {
 			var sd = $("span[id='sd0']").attr('data-date');
-			sd = moment(sd).startOf('month');
-			var ed = moment(sd).endOf('month');
-			$.ajax({
-				url: 'BBRTurns',
-				method: 'get',
-				data: {
-					operation: 'getTurns',
-					posId: <%=posId%>,
-					startDate: sd.year() + "-" + (sd.month() + 1) + "-" + sd.date(),
-					endDate: ed.year() + "-" + (ed.month() + 1) + "-" + ed.date()
-				}
-			}).done(function (data) {
-				if (data == "")
-					return;
-				turns = $.parseJSON(data);
-				html = "<table>";
-				var d = moment(sd);
-				while (!d.isSame(ed, 'day')) {
-					html += "<td>" + d.format("YYYY-MM-DD") + "</td>"
-					for (i = 0; i < turns.data.length; i++) {
-						if (moment(turns.data[i].date).isSame(d, 'day')) {
-							html += "<div>" + turns.data[i].specialist.name + ": " + 
-								    turns.data[i].startTime + " - " + turns.data[i].endTime + "</div>";
-						}; 
-					}
-					d.add(1, "day");
-				}
-				html += "</table>";
-				$("#printPanel").removeClass("hide");
-				$("#printPanel").html(html);
-			});
+			window.open("manager-schedule-print.jsp?type=calendar&posId=<%=posId%>&startDate=" + sd, "_blank");
+		});
+
+		$("#printTable").click(function () {
+			var sd = moment($("span[id='sd0']").attr('data-date')).startOf("month");
+			window.open("manager-schedule-print.jsp?type=table&posId=<%=posId%>&startDate=" + sd.format("YYYY-MM-DD"), "_blank");
 		});
 	}
 </script>
