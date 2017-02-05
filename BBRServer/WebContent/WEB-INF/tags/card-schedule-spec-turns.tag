@@ -107,6 +107,9 @@
 	</div>
 </div>
 
+<div id="printPanel" class="hide" style="position: absolute; width: 100%; height: 100%; top: 0px; left: 0px; z-index: -1000;">
+</div>
+
 <script>
 	var letChangeButtons = true;
 
@@ -290,6 +293,21 @@
 				if (data == "")
 					return;
 				turns = $.parseJSON(data);
+				html = "<table>";
+				var d = moment(sd);
+				while (!d.isSame(ed, 'day')) {
+					html += "<td>" + d.format("YYYY-MM-DD") + "</td>"
+					for (i = 0; i < turns.data.length; i++) {
+						if (moment(turns.data[i].date).isSame(d, 'day')) {
+							html += "<div>" + turns.data[i].specialist.name + ": " + 
+								    turns.data[i].startTime + " - " + turns.data[i].endTime + "</div>";
+						}; 
+					}
+					d.add(1, "day");
+				}
+				html += "</table>";
+				$("#printPanel").removeClass("hide");
+				$("#printPanel").html(html);
 			});
 		});
 	}
