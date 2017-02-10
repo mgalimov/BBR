@@ -14,12 +14,16 @@
 		return;
 	}
 	
+	int picNum = (int)(Math.ceil(Math.random() * 16) + 1);
+	
 	request.setAttribute("lastError", lastError);
+	request.setAttribute("bk", String.format("%03d", picNum) + ".jpg");
 %>
 
 <t:login-wrapper title="LBL_SIGN_IN_TITLE">
 <jsp:body>
-<body class="hold-transition login-page">
+
+<body class="hold-transition login-page" style="background-image: url(bks/${bk}); background-repeat: no-repeat; background-size: cover;">
     <script>
         $(document).ready(function() {                        
 	        if ('${lastError}' == '') 
