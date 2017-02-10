@@ -31,10 +31,10 @@
         });
     </script>
     <div class="login-box">
-    	<div class="login-box-logo" style="text-align: center">
-    		<h2><img src="images/barbiny50px.png" /></h2>
-    	</div>
-		<div class="login-box-body">
+		<div class="login-box-body" style="background: rgba(255,255,255,0.5);">
+			<div style="text-align: center; padding-bottom: 10px;">
+				<img src="images/barbiny50px.png" />
+			</div>
 			<div class="alert alert-warning alert-dismissable" id="alertMessage">
 			    <button type="button" class="close" data-dismiss="alert"
 						aria-label="Close">
