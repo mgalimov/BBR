@@ -23,7 +23,7 @@
 <t:login-wrapper title="LBL_SIGN_IN_TITLE">
 <jsp:body>
 
-<body class="hold-transition login-page" style="background-image: url(bks/${bk}); background-repeat: no-repeat; background-size: cover;">
+<body class="hold-transition login-page" style="background-image: url(bks/${bk}); background-repeat: no-repeat; background-size: cover; background-position: center;">
     <script>
         $(document).ready(function() {                        
 	        if ('${lastError}' == '') 
