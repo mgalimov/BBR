@@ -66,14 +66,17 @@ public class BBRContext {
 			if (candidate == null) {
 				lastSignInError = gs(BBRErrors.ERR_USER_NOTFOUND);
 			} else {
-				if (candidate.comparePasswordTo(BBRUserManager.encodePassword(password))) {
-					user = candidate;
-					setLocale(user.getLanguage());
-					this.timeZone = timeZone;
-					lastSignInError = "";
-				} else {
-					lastSignInError = gs(BBRErrors.ERR_INCORRECT_PASSWORD);
-				}
+				if (!candidate.getApproved()) {
+					lastSignInError = gs(BBRErrors.ERR_USER_NOTFOUND);
+				} else
+					if (candidate.comparePasswordTo(BBRUserManager.encodePassword(password))) {
+						user = candidate;
+						setLocale(user.getLanguage());
+						this.timeZone = timeZone;
+						lastSignInError = "";
+					} else {
+						lastSignInError = gs(BBRErrors.ERR_INCORRECT_PASSWORD);
+					}
 			}
 		}
 		
@@ -103,14 +106,17 @@ public class BBRContext {
 			if (candidate == null) {
 				lastSignInError = gs(BBRErrors.ERR_USER_NOTFOUND);
 			} else {
-				if (candidate.comparePasswordTo(pwdhash)) {
-					user = candidate;
-					setLocale(user.getLanguage());
-					this.timeZone = timeZone;
-					lastSignInError = "";
-				} else {
-					lastSignInError = gs(BBRErrors.ERR_INCORRECT_PASSWORD);
-				}
+				if (!candidate.getApproved()) {
+					lastSignInError = gs(BBRErrors.ERR_USER_NOTFOUND);
+				} else
+					if (candidate.comparePasswordTo(pwdhash)) {
+						user = candidate;
+						setLocale(user.getLanguage());
+						this.timeZone = timeZone;
+						lastSignInError = "";
+					} else {
+						lastSignInError = gs(BBRErrors.ERR_INCORRECT_PASSWORD);
+					}
 			}
 			
 		}

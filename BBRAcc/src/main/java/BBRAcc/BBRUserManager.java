@@ -33,7 +33,7 @@ public class BBRUserManager extends BBRDataManager<BBRUser> {
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setEncodedPassword(encodePassword(password));
-        user.setApproved(false);
+        user.setApproved(true);
         user.setRole(role);
         user.setShop(shop);
         user.setPos(pos);
@@ -44,7 +44,6 @@ public class BBRUserManager extends BBRDataManager<BBRUser> {
         return user;
     }
     
-
 	public BBRUser findUserByEmail(String email) {
         boolean tr = BBRUtil.beginTran();
         BBRUser result = (BBRUser) BBRUtil.getSession().createQuery("from BBRUser as user where user.email = '" + email + "'").uniqueResult();
@@ -80,5 +79,14 @@ public class BBRUserManager extends BBRDataManager<BBRUser> {
 			password = password + (char)(rand.nextInt(94)+33); 
 		return password;
 	}
+
+    public String wherePos(Long posId) {
+    	return "pos.id = " + posId;
+    };
+    
+    public String whereShop(Long shopId) {
+    	return "((shop.id = " + shopId + ") or (coalesce(shop.id, pos.shop.id) = " + shopId + "))";
+    };
+    
 
 }
