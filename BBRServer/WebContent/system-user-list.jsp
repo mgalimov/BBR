@@ -8,7 +8,7 @@
 			<t:grid-item label="LBL_LAST_NAME" field="lastName"/>
 			<t:grid-item label="LBL_SHOP" field="shop.title"/>
 			<t:grid-item label="LBL_POS" field="pos.title"/>
-			<t:grid-item label="LBL_APPROVED" field="approved"/>
+			<t:grid-item label="LBL_APPROVED" field="approved" type="select" options="OPT_USER_APPROVED" />
 			<t:grid-item label="LBL_ROLE" field="role" type="select" options="OPT_ROLES"/>
 		</t:grid>
 	</jsp:body>

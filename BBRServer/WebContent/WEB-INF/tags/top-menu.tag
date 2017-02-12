@@ -73,7 +73,7 @@
           </a>
           <ul class="dropdown-menu">
           	<li class="user-header">
-          		<img src="images/barb.png" class="img-circle"/>
+          		<img src="BBRUsers?operation=pic&fld=photo&id=<%=context.user.getId()%>" class="img-circle"/>
           		<p>
 	       		<% if (context.user != null)
 	       				out.println(context.user.getFirstName() + " " + context.user.getLastName()); %>

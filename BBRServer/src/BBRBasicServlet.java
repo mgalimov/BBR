@@ -317,12 +317,13 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 		return "";
 	}
 
-	// TODO: check access rights
 	protected String getPicture(String id, BBRParams params, HttpServletRequest request,
 			HttpServletResponse response) {
 		ServletOutputStream out = null;
 		
 		try {
+			if (!checkRightsForPic(id, params, request, response))
+				throw new Exception(BBRErrors.ERR_INSUFFICIENT_RIGHTS);
 			String fieldName = params.get("fld");
 			Long oId = Long.parseLong(id);
 			out = response.getOutputStream();
@@ -345,5 +346,10 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 		}
 		    
 		return "";
+	}
+
+	protected boolean checkRightsForPic(String id, BBRParams params,
+			HttpServletRequest request, HttpServletResponse response) {
+		return true;
 	}
 }

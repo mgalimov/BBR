@@ -3,9 +3,11 @@ package BBRAcc;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Blob;
 
 import javax.persistence.*;
 
+import jdk.nashorn.internal.objects.annotations.Getter;
 import BBR.BBRDataElement;
 import BBR.BBRDataSet;
 
@@ -53,6 +55,12 @@ public class BBRUser extends BBRDataElement {
 	@Column(name="ROLE")	
 	private int role = 0;
 
+	@Column(name="PHOTO", columnDefinition="LONGBLOB")
+	private Blob photo;
+
+	@Column(name="PHOTOEXT")
+	private String photoExt;
+	
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -138,5 +146,21 @@ public class BBRUser extends BBRDataElement {
 	
 	public String getLanguage() {
 		return language;
+	}
+
+	public Blob getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(Blob photo) {
+		this.photo = photo;
+	}
+
+	public String getPhotoExt() {
+		return photoExt;
+	}
+
+	public void setPhotoExt(String photoExt) {
+		this.photoExt = photoExt;
 	}
 }

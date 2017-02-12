@@ -1,5 +1,4 @@
-import java.util.Hashtable;
-
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +15,7 @@ import BBRClientApp.BBRContext;
 import BBRClientApp.BBRParams;
 
 @WebServlet("/BBRUsers")
+@MultipartConfig
 public class BBRUsers extends BBRBasicServlet<BBRUser, BBRUserManager> {
 	private static final long serialVersionUID = 1L;
        
@@ -23,9 +23,10 @@ public class BBRUsers extends BBRBasicServlet<BBRUser, BBRUserManager> {
         super(BBRUserManager.class);
     }
 
-    protected BBRUser check(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    protected BBRUser check(BBRUser user, BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		BBRContext context = BBRContext.getContext(request);
-		BBRUser user = new BBRUser();
+		if (user == null)
+			user = new BBRUser();
 
 		String email = params.get("email");
 		String firstName = params.get("firstName");
@@ -81,7 +82,7 @@ public class BBRUsers extends BBRBasicServlet<BBRUser, BBRUserManager> {
     
 	@Override
 	protected String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		BBRUser user = check(params, request, response);
+		BBRUser user = check(null, params, request, response);
 		String password = params.get("password");
 		manager.createAndStoreUser(user.getEmail(), user.getFirstName(), user.getLastName(), 
 				password, user.getRole(), user.getShop(), user.getPos());
@@ -90,34 +91,31 @@ public class BBRUsers extends BBRBasicServlet<BBRUser, BBRUserManager> {
 
 	@Override
 	protected BBRUser beforeUpdate(BBRUser user, BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		return check(params, request, response);
+		return check(user, params, request, response);
 	}
-
+	
 	@Override
-	protected String getData(int pageNumber, int pageSize,
-			Hashtable<Integer, Hashtable<String, String>> fields,
-			Hashtable<Integer, Hashtable<String, String>> sortingFields,
-			BBRParams params, HttpServletRequest request,
-			HttpServletResponse response) {
+	protected boolean checkRightsForPic(String id, BBRParams params,
+			HttpServletRequest request, HttpServletResponse response) {
 		BBRContext context = BBRContext.getContext(request);
-		String where = "";
-		if (context.user != null) {
-			if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN
-					|| context.user.getRole() == BBRUserRole.ROLE_POS_SPECIALIST)
-				if (context.user.getPos() != null)
-					where = manager.wherePos(context.user.getPos().getId());
-			if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
-				if (context.user.getShop() != null)
-					where = manager.whereShop(context.user.getShop().getId());
-			if (context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER)
-				if (context.filterPoS != null)
-					where = manager.wherePos(context.filterPoS.getId());
-				else if (context.filterShop != null)
-					where = manager.whereShop(context.filterShop.getId());
+		
+		if (context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER)
+			return true;
+		
+		if ((context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN || 
+			 context.user.getRole() == BBRUserRole.ROLE_POS_SPECIALIST || 
+			 context.user.getRole() == BBRUserRole.ROLE_VISITOR) && 
+			 context.user.getId() == Long.parseLong(id))
+			return true;
+		
+		if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN) {
+			BBRUser user = new BBRUserManager().findById(Long.parseLong(id));
+			if (user != null && user.getShop() != null && user.getShop().getId() == context.user.getShop().getId())
+				return true;
+			if (user != null && user.getPos() != null && user.getPos().getShop().getId() == context.user.getShop().getId())
+				return true;
 		}
-
-		return manager.list(pageNumber, pageSize, where,
-				BBRContext.getOrderBy(sortingFields, fields)).toJson();
+		
+		return false;
 	}
-
 }

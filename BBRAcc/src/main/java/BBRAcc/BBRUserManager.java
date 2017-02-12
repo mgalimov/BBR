@@ -85,7 +85,7 @@ public class BBRUserManager extends BBRDataManager<BBRUser> {
     };
     
     public String whereShop(Long shopId) {
-    	return "((shop.id = " + shopId + ") or (coalesce(shop.id, pos.shop.id) = " + shopId + "))";
+    	return "(shop.id = " + shopId + " or pos.id = " + shopId + ")";
     };
     
 
