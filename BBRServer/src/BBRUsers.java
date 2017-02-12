@@ -84,9 +84,9 @@ public class BBRUsers extends BBRBasicServlet<BBRUser, BBRUserManager> {
 	protected String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		BBRUser user = check(null, params, request, response);
 		String password = params.get("password");
-		manager.createAndStoreUser(user.getEmail(), user.getFirstName(), user.getLastName(), 
+		user = manager.createAndStoreUser(user.getEmail(), user.getFirstName(), user.getLastName(), 
 				password, user.getRole(), user.getShop(), user.getPos());
-		return "";
+		return user.getId().toString();
 	}
 
 	@Override

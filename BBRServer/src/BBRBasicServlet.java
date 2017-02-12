@@ -139,21 +139,27 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 				try {
 					if (filePart != null) {
 						String fname = getPartAttrName(filePart, "name");
+						String ext = "";
 						id = fname.split("#")[0];
 						name = fname.split("#")[1];
 						name = name.substring(0, name.length() - 5);
-
+	
 						fname = getPartAttrName(filePart, "filename");
-						int i = fname.lastIndexOf('.');
-						String ext = fname.substring(i); 
-					
-						fname =  manager.getClassTitle() + "_" + id + ext;
-					    in = filePart.getInputStream();
-					    
+						if (!fname.isEmpty()) {
+							int i = fname.lastIndexOf('.');
+							ext = fname.substring(i); 
+						
+							fname =  manager.getClassTitle() + "_" + id + ext;
+						    in = filePart.getInputStream();
+						} else {
+							in = null;
+						}
+						
 						Long oId = Long.parseLong(id);
 						manager.setBlobFieldValue(oId, name, in);
 						manager.setStringFieldValue(oId, name + "Ext", ext);
-						BBRUtil.log.info("Successfully saved image: " + fname);
+							
+						//BBRUtil.log.info("Successfully saved image: " + fname);
 					}
 				} catch (Exception ex) {
 					BBRUtil.log.error("Cannot read / write image: " + manager.getClassTitle() + ", " + id + ", " + name);

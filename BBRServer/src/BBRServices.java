@@ -25,11 +25,11 @@ public class BBRServices extends BBRBasicServlet<BBRService, BBRServiceManager> 
 			int status = (int)Integer.parseInt(params.get("status"));
 			Boolean demo = Boolean.parseBoolean(params.get("demo"));
 			Boolean basic = Boolean.parseBoolean(params.get("basic"));
-			manager.createAndStoreService(title, status, demo, basic);
+			BBRService service = manager.createAndStoreService(title, status, demo, basic);
+			return service.getId().toString();
 		} catch (Exception ex) {
 			throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
 		}
-		return "";
 	}
 
 	@Override

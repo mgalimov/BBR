@@ -21,7 +21,7 @@ public class BBRTaskManager extends BBRDataManager<BBRTask>{
 		classTitle = "Task";	
 	}
 
-	public void createAndStoreTask(String title, BBRUser performer, BBRPoS pos, Date createdAt, Date deadline,
+	public BBRTask createAndStoreTask(String title, BBRUser performer, BBRPoS pos, Date createdAt, Date deadline,
 								   String text, String objectType, Long objectId) {
         boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();
@@ -43,6 +43,7 @@ public class BBRTaskManager extends BBRDataManager<BBRTask>{
     	session.save(task);
 
         BBRUtil.commitTran(tr);
+        return task;
     }
 	
 	public BBRDataSet<BBRTask> list(String queryTerm, String sortBy, BBRUser performer) {

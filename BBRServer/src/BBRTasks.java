@@ -44,7 +44,8 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 				deadline = createdAt;
 			}
 			String text = params.get("text");
-			manager.createAndStoreTask(title, performer, null, createdAt, deadline, text, null, null);
+			BBRTask task = manager.createAndStoreTask(title, performer, null, createdAt, deadline, text, null, null);
+			return task.getId().toString();
 		}
 		return "";
 	}

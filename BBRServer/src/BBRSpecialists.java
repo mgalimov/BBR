@@ -73,7 +73,8 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 			} else
 				throw new Exception(BBRErrors.ERR_PROC_NOTSPECIFIED);
 			
-			manager.createAndStoreSpecialist(name, position, dailyAmount, procedurePercent, null, pos, status, startWH, endWH, procedures);
+			BBRSpecialist spec = manager.createAndStoreSpecialist(name, position, dailyAmount, procedurePercent, null, pos, status, startWH, endWH, procedures);
+			return spec.getId().toString();
 		}
 		return "";
 	}

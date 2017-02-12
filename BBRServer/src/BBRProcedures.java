@@ -30,6 +30,7 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 		String group = params.get("procGroup");
 		BBRPoSManager mgr = new BBRPoSManager();
 		BBRPoS pos = mgr.findById(Long.parseLong(posId));
+		BBRProcedure proc = null;
 		if (pos != null) {						
 			String length = params.get("length");
 			float lengthFloat = (float) 0.5;
@@ -42,9 +43,9 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 				priceFloat = Float.parseFloat(price);
 			
 			String status = params.get("status");
-			manager.createAndStoreProcedure(title, pos, lengthFloat, priceFloat, (int) Long.parseLong(status), group);
+			proc = manager.createAndStoreProcedure(title, pos, lengthFloat, priceFloat, (int) Long.parseLong(status), group);
 		}
-		return "";
+		return proc.getId().toString();
 	}
 
 	@Override

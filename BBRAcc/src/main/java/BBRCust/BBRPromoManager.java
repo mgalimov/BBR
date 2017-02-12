@@ -41,12 +41,14 @@ public class BBRPromoManager extends BBRDataManager<BBRPromo>{
 		return true;
 	}
 	
-	public void createAndStorePromo(BBRPromo promo) throws Exception {
+	public BBRPromo createAndStorePromo(BBRPromo promo) throws Exception {
 		checkBeforeUpdate(promo);
         boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();
         session.save(promo);
         BBRUtil.commitTran(tr);
+        
+        return promo;
 	}
 	
 	public void createAndStorePromo(String title, BBRShop shop, Set<BBRPoS> poses, 

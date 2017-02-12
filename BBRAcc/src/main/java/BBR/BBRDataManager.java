@@ -247,11 +247,13 @@ public class BBRDataManager<T extends BBRDataElement> {
 	    		Method m = obj.getClass().getMethod("set" + fieldName.substring(0,1).toUpperCase() + fieldName.substring(1), java.sql.Blob.class);
 	    		OutputStream out = blob.setBinaryStream(1);
 	    		
-	    		byte[] b = new byte[1024];
-	    		int n = 0; 
-	            while ((n = in.read(b)) != -1) { 
-	                out.write(b, 0, n); 
-	            }
+	    		if (in != null) {
+		    		byte[] b = new byte[1024];
+		    		int n = 0; 
+		            while ((n = in.read(b)) != -1) { 
+		                out.write(b, 0, n); 
+		            }
+	    		}
 	            out.close();
 	    		m.invoke(obj, blob);
 	    		BBRUtil.getSession().merge(obj);

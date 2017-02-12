@@ -142,15 +142,13 @@
 					<input type="file" name="${ft}input" id="${ft}input" class="file-loading" multiple/>
 				</div>
 				<c:set var="imageItemIds" scope="request" value="${imageItemIds}${ft}input,"/>
-				
-<%-- 				<c:set var="imgData" value="obj.${field}.replace('\\\\','/')" /> --%>
 				<c:if test="${defaultValue != null}">
 					<c:set var="imgData" value="'${cardMethod}?operation=pic&id='+idParam+'&fld=${defaultValue}'" />
 				</c:if>
 				<c:if test="${defaultValue == null && !calculated.equals('true')}">
 					<c:set var="imgData" value="'${cardMethod}?operation=pic&id='+idParam+'&fld=${field}'" />
 				</c:if>
-				<c:set var="itemSet" scope="request" value="${itemSet}
+				<c:set var="itemFunc" value="
 					$('#${ft}input').fileinput({
 						overwriteInitial: true,
 						showCaption: false,
@@ -171,6 +169,8 @@
 						initialPreviewFileType: 'image'
 					});
 					"/>
+				<c:set var="itemSet" scope="request" value="${itemSet}${itemFunc}"/>
+				<c:set var="itemPreload" scope="request" value="${itemPreload}${itemFunc}"/>
 			</c:when>
 
 			<c:when test="${type.equals('number')}">

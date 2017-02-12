@@ -17,7 +17,7 @@ public class BBRTurnManager extends BBRDataManager<BBRTurn>{
 		classTitle = "Turn";	
 	}
 
-	public String createAndStoreTurn(BBRSpecialist specialist, Date date, Date startTime, Date endTime) {
+	public BBRTurn createAndStoreTurn(BBRSpecialist specialist, Date date, Date startTime, Date endTime) {
         try {
         	BBRTurn turn = new BBRTurn();
         	turn.setId(null);
@@ -27,7 +27,7 @@ public class BBRTurnManager extends BBRDataManager<BBRTurn>{
 		        Session session = BBRUtil.getSession();
 		        session.save(turn);
 		        BBRUtil.commitTran(tr);
-		        return turn.getId().toString();
+		        return turn;
 	        } else 
 	        	return null;
         } catch (Exception ex) {

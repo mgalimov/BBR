@@ -23,7 +23,7 @@ public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
 		classTitle = "Specialist";	
 	}
 
-	public void createAndStoreSpecialist(String name, String position, Float dailyAmount, Float procedurePercent, 
+	public BBRSpecialist createAndStoreSpecialist(String name, String position, Float dailyAmount, Float procedurePercent, 
 										 BBRUser user, BBRPoS pos, int status,
 										 Date startWorkHour, Date endWorkHour, Set<BBRProcedure> procedures) {
         boolean tr = BBRUtil.beginTran();
@@ -43,6 +43,8 @@ public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
         session.save(spec);
 
         BBRUtil.commitTran(tr);
+        
+        return spec;
     }
 	
     @SuppressWarnings({ "unchecked", "unused" })

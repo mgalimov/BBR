@@ -12,7 +12,7 @@ public class BBRJobManager extends BBRDataManager<BBRJob>{
 		classTitle = "Job";	
 	}
 	
-	public void createAndStoreJob(String title, Date nextRun, String runConditions, String runMethod) {
+	public BBRJob createAndStoreJob(String title, Date nextRun, String runConditions, String runMethod) {
         boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();
 
@@ -25,5 +25,7 @@ public class BBRJobManager extends BBRDataManager<BBRJob>{
         session.save(job);
 
         BBRUtil.commitTran(tr);
+        
+        return job;
     }    
 }

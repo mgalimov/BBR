@@ -25,6 +25,7 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 
 	@Override
 	protected String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		BBRPoS pos = null;
 		String shopId = params.get("shop");
 		String title = params.get("title");
 		String locationDescription = params.get("locationDescription");
@@ -42,7 +43,7 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 		BBRShopManager shopMgr = new BBRShopManager();
 		BBRShop shop = shopMgr.findById(Long.parseLong(shopId));
 		if (shop != null) 
-			manager.createAndStorePoS(
+			pos = manager.createAndStorePoS(
 					shop, 
 					title, 
 					locationDescription, 
@@ -55,7 +56,7 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 					email,
 					sms
 					);
-		return "";
+		return pos.getId().toString();
 	}
 
 	@Override

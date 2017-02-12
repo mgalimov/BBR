@@ -21,8 +21,8 @@ public class BBRShops extends BBRBasicServlet<BBRShop, BBRShopManager> {
 		String title = params.get("title");
 		String country = params.get("country");
 		String timeZone = params.get("timeZone");
-		manager.createAndStoreShop(title, country, timeZone);
-		return "";
+		BBRShop shop = manager.createAndStoreShop(title, country, timeZone);
+		return shop.getId().toString();
 	}
 
 	@Override

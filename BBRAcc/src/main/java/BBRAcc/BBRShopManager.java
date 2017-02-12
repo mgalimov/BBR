@@ -16,7 +16,7 @@ public class BBRShopManager extends BBRDataManager<BBRShop>{
 		classTitle = "Shop";	
 	}
 	
-	public void createAndStoreShop(String title, String country, String timeZone) {
+	public BBRShop createAndStoreShop(String title, String country, String timeZone) {
         boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();
 
@@ -27,6 +27,8 @@ public class BBRShopManager extends BBRDataManager<BBRShop>{
         session.save(shop);
 
         BBRUtil.commitTran(tr);
+        
+        return shop;
     }
 	
     @SuppressWarnings("unchecked")

@@ -53,10 +53,11 @@ public class BBRSubscriptions extends
 					.createAndStoreServiceSubscription(service, shop, startDate);
 			if (ss == null)
 				throw new Exception();
+			
+			return ss.getId().toString();
 		} catch (Exception ex) {
 			throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
 		}
-		return "";
 	}
 
 	@Override

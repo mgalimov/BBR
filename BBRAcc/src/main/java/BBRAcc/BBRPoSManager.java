@@ -20,7 +20,7 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 		classTitle = "Point of service";	
 	}
 	
-	public void createAndStorePoS(BBRShop shop, String title, String locationDescription, 
+	public BBRPoS createAndStorePoS(BBRShop shop, String title, String locationDescription, 
 								  BBRGPS locationGPS, Date startWorkHour, Date endWorkHour,
 								  String currency, String timeZone, String urlID, String email, String sms) throws Exception {
 		boolean tr = BBRUtil.beginTran();
@@ -43,6 +43,8 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
         session.save(pos);
 
         BBRUtil.commitTran(tr);
+        
+        return pos;
     }
 	
 	@Override
