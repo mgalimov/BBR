@@ -81,7 +81,6 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 
 	@SuppressWarnings({ "unchecked", "unused" })
 	public BBRDataSet<BBRPoS> listLocal(BBRGPS locationGPS, Double radius) {
-		//TODO: throw Exceptions
 		if (radius > 100.0 || radius <= 0.5) return null;
 		
 		if (locationGPS == null) {
