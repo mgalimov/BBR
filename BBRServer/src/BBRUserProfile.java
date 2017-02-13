@@ -1,3 +1,4 @@
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,6 +9,7 @@ import BBRClientApp.BBRContext;
 import BBRClientApp.BBRParams;
 
 @WebServlet("/BBRUserProfile")
+@MultipartConfig
 public class BBRUserProfile extends BBRBasicServlet<BBRUser, BBRUserManager> {
 	private static final long serialVersionUID = 1L;
        

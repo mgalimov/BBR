@@ -335,11 +335,13 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 			out = response.getOutputStream();
 			manager.getBlobFieldValue(oId, fieldName, out);
 			String ext = manager.getStringFieldValue(oId, fieldName + "Ext");
-			
-			if (ext.startsWith(".jp"))
-				response.setContentType("image/jpeg");
+			if (ext == null)
+				response.setContentType("image");
 			else
-				response.setContentType("image/" + ext.substring(1));
+				if (ext.startsWith(".jp"))
+					response.setContentType("image/jpeg");
+				else
+					response.setContentType("image/" + ext.substring(1));
 		} catch (Exception ex) {
 			BBRUtil.log.error(ex.getMessage());
 		} finally {

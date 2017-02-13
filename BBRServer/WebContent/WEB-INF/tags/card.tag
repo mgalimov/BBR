@@ -172,7 +172,8 @@
 		              		operation: op
 		            	}, 
 		              	function(responseText) { 
-		            		idParam = responseText;
+		            		if (responseText != "")
+		            			idParam = responseText;
 		            		var fdata = new FormData();
 		            		var fids = '${imageItemIds}';
 		            		$.each(fids.split(','), function(i, fid) {
