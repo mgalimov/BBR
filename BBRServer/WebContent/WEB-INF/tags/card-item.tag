@@ -168,6 +168,14 @@
 						
 						initialPreviewFileType: 'image'
 					});
+					
+					filechanged[${ft}input] = false;
+					${ft}inputchange = function() {
+						filechanged['${ft}input'] = true;
+					}
+					
+					$('#${ft}input').on('change', ${ft}inputchange);
+					$('#${ft}input').on('filecleared', ${ft}inputchange);
 					"/>
 				<c:set var="itemSet" scope="request" value="${itemSet}${itemFunc}"/>
 				<c:set var="itemPreload" scope="request" value="${itemPreload}${itemFunc}"/>

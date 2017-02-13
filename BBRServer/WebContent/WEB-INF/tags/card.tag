@@ -87,6 +87,7 @@
 	var saved = false;
 	var needToGoToGrid = true;
 	var obj;
+	var filechanged = [];
 
 	function saveChanges() {
 		needToGoToGrid = false;
@@ -177,7 +178,7 @@
 		            		var fdata = new FormData();
 		            		var fids = '${imageItemIds}';
 		            		$.each(fids.split(','), function(i, fid) {
-		            			if (fid != "") {
+		            			if (fid != "" && filechanged[fid]) {
 		            				file = $('#' + fid).prop('files')[0]; 
 		            		    	fdata.append(idParam + "#" + fid, file);
 		            			}
