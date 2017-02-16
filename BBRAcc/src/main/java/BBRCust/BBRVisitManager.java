@@ -1140,7 +1140,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
     			            " where " + where2 + 
 		                    "   and (coalesce(v2.realTime, v2.timeScheduled) <= '" + df.format(BBRUtil.getEndOfDay(endDate)) + "')" + 
 		    				"   and v2.status in (" + BBRVisitStatus.VISSTATUS_APPROVED + "," + BBRVisitStatus.VISSTATUS_PERFORMED + ")" +
-    				        "   and v2.userContacts = v1.userContacts)";
+    				        "   and v2.userContacts = visit.userContacts)";
         	
     		Query query = session.createQuery(squery); 
         	Long count1 = (Long)query.uniqueResult();
