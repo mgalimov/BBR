@@ -50,7 +50,17 @@ public class BBRVisitorCharts extends BBRBasicChartServlet {
 			data.addCols(cols);
 			
 			BBRVisitManager mgr = new BBRVisitManager();
-			Long[] arr = mgr.getVisitorsNewVsReturned(period.startDate, period.endDate, pos.getId(), shop.getId());
+			
+			Long posId = null;
+			Long shopId = null;
+			
+			if (pos != null)
+				posId = pos.getId();
+			if (shop != null)
+				shopId = shop.getId();
+			
+				
+			Long[] arr = mgr.getVisitorsNewVsReturned(period.startDate, period.endDate, posId, shopId);
 			
 			data.addRow((Object[])arr);
 			
