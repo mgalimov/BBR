@@ -1,15 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"
 		 import="BBRClientApp.BBRContext" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
-
-<t:wrapper title="LBL_DASHBOARD_TITLE">
+<%
+	BBRContext context = BBRContext.getContext(request);
+	request.setAttribute("userName", context.user.getFirstName() + " " + context.user.getLastName());
+%>
+<t:wrapper title="LBL_MAIN_VALUES_DASHBOARD">
 	<jsp:body>
-		<t:dashboard title="LBL_DASHBOARD_TITLE">
-<%-- 	  		<t:dashboard-item type="pie" title="LBL_DASHBOARD_VISITS" method="BBRVisitCharts" indicator="visitsByPeriod"/> --%>
-	  		<t:dashboard-item type="line" title="LBL_DASHBOARD_VISITS" method="BBRVisitCharts" indicator="visitsByPeriod"/>
-<%-- 	  		<t:dashboard-item type="line" title="LBL_DASHBOARD_VISITS" method="BBRVisitCharts" indicator="visitsByPeriod"/> --%>
-	  		<t:dashboard-item type="line" title="LBL_DASHBOARD_INCOME" method="BBRVisitCharts" indicator="incomeByPeriod"/>
-	  		<t:dashboard-item type="bar" title="LBL_DASHBOARD_VISITS" method="BBRVisitCharts" indicator="visitsByWeekDays"/>
+  		<t:dashboard title="LBL_MAIN_VALUES_DASHBOARD" hidePanel="true">
+		  		<t:dashboard-item type="singleValue" title="LBL_TODAY_VISITS" method="BBRVisitCharts" indicator="todayVisits" color="red" icon="dashboard" href="manager-spec-schedule-list.jsp"/>
+		  		<t:dashboard-item type="singleValue" title="LBL_TOMORROW_VISITS" method="BBRVisitCharts" indicator="tomorrowVisits" color="blue" icon="dashboard"  href="manager-spec-schedule-list.jsp"/>
 		</t:dashboard>
 	</jsp:body>
 </t:wrapper>

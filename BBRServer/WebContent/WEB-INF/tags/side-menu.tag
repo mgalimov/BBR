@@ -4,9 +4,9 @@
 
 <t:nav>
 	<t:nav-group title="LBL_DASHBOARD_MENU" level="manager" faicon="dashboard">
-		<t:nav-item href="admin-dashboard.jsp" title="LBL_DASHBOARD_ADMIN_MENU"/>
-		<t:nav-item href="system-dashboard.jsp" title="LBL_DASHBOARD_SYSTEM_MENU" />
 		<t:nav-item href="manager-dashboard.jsp" title="LBL_DASHBOARD_MANAGER_MENU" />
+		<t:nav-item href="system-dashboard.jsp" title="LBL_DASHBOARD_SYSTEM_MENU" />
+		<t:nav-item href="admin-dashboard.jsp" title="LBL_DASHBOARD_ADMIN_MENU"/>
 	</t:nav-group>
 	<t:nav-group title="LBL_SYSTEM_ADMINISTRATION_MENU" level="system" faicon="cogs">
 		<t:nav-item href="system-user-list.jsp" title="LBL_USERS_MENU" />

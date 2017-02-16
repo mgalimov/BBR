@@ -1112,6 +1112,51 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         }
         return 0L;
 	}
+
+	public Long[] getVisitorsNewVsReturned(Date startDate, Date endDate, Long posId, Long shopId) {
+        Session session = BBRUtil.getSession();
+        boolean tr = BBRUtil.beginTran();
+        SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+        try {
+        	String where = "";
+        	String where2 = "";
+        	if (posId != null) {
+        		where = " pos.id = " + posId.toString();
+        		where2 = " v2.pos.id = " + posId.toString();
+        	}
+        	else
+        		if (shopId != null) {
+        			where = " pos.shop.id = " + shopId.toString();
+        			where2 = " v2.pos.shop.id = " + shopId.toString();
+        		}
+        	
+        	String squery = "select count(*)" + 
+                    "  from BBRVisit visit " +  
+    			    " where " + where + 
+                    "   and (coalesce(realTime, timeScheduled) >= '" + df.format(BBRUtil.getStartOfDay(startDate)) + "')" + 
+                    "   and (coalesce(realTime, timeScheduled) <= '" + df.format(BBRUtil.getEndOfDay(endDate)) + "')" + 
+    				"   and status in (" + BBRVisitStatus.VISSTATUS_APPROVED + "," + BBRVisitStatus.VISSTATUS_PERFORMED + ")" +
+                    "   and 1 = (select count(*) from BBRVisit v2 "+
+    			            " where " + where2 + 
+		                    "   and (coalesce(v2.realTime, v2.timeScheduled) <= '" + df.format(BBRUtil.getEndOfDay(endDate)) + "')" + 
+		    				"   and v2.status in (" + BBRVisitStatus.VISSTATUS_APPROVED + "," + BBRVisitStatus.VISSTATUS_PERFORMED + ")" +
+    				        "   and v2.userContacts = v1.userContacts)";
+        	
+    		Query query = session.createQuery(squery); 
+        	Long count1 = (Long)query.uniqueResult();
+        	query = session.createQuery(squery.replace("1 =", "1 <")); 
+        	
+        	Long count2 = (Long)query.uniqueResult();
+        	BBRUtil.commitTran(tr);
+        	
+        	Long[] arr = {count1, count2}; 
+        	
+        	return arr;
+        } catch (Exception ex) {
+        	BBRUtil.rollbackTran(tr);
+        }
+        return null;
+	}
 	
 	public String maskContacts(String userContacts) {
 		userContacts = simplifyContacts(userContacts);

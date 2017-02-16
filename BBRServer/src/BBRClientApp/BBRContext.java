@@ -163,7 +163,7 @@ public class BBRContext {
 			return "system-dashboard.jsp";
 
 		if (user.getRole() == BBRUser.BBRUserRole.ROLE_SHOP_ADMIN)
-			return "admin-dashboard.jsp";
+			return "manager-dashboard.jsp";
 
 		if (user.getRole() == BBRUser.BBRUserRole.ROLE_POS_ADMIN)
 			return "manager-dashboard.jsp";

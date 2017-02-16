@@ -38,22 +38,24 @@ public class BBRChartPeriods {
 			if (startDate != null && endDate != null) {
 				c.setTime(startDate);
 				if (c.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
-					c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+					c.add(Calendar.DAY_OF_MONTH, Calendar.MONDAY - c.get(Calendar.DAY_OF_WEEK));
+				
 				startDate = c.getTime();
 				c.setTime(endDate);
 				if (c.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY)
-					c.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+					c.add(Calendar.DAY_OF_MONTH, Calendar.SUNDAY + 7 - c.get(Calendar.DAY_OF_WEEK));
 				endDate = c.getTime();
 			}
 			
 			if (compareToStartDate != null && compareToEndDate != null) {
 				c.setTime(compareToStartDate);
 				if (c.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
-					c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+					c.add(Calendar.DAY_OF_MONTH, Calendar.MONDAY - c.get(Calendar.DAY_OF_WEEK));
+
 				compareToStartDate = c.getTime();
 				c.setTime(compareToEndDate);
 				if (c.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY)
-					c.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+					c.add(Calendar.DAY_OF_MONTH, Calendar.SUNDAY + 7 - c.get(Calendar.DAY_OF_WEEK));
 				compareToEndDate = c.getTime();
 			}
 		}		

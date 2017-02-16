@@ -70,8 +70,8 @@
   <div class="collapse filterPanel clearfix" id="filterPanel">
   	<div class="pull-right">
 	  	<form class="form-inline">
-	  		<t:select-shop-pos field="shoppos" isShopsOnly="${standardFiltersShopsOnly}"/>&nbsp;
-	  		<input type='text' class='form-control' id='periodPicker'/>
+	  		<t:select-shop-pos field="shoppos" isShopsOnly="${standardFiltersShopsOnly}"/>
+	  		<input type='text' class='form-control' id='periodPicker' style='margin-left: 10px; width: 200px;'/>
 	  		<button type="button" class="btn btn-primary" id="applyFilters">
 			  	${context.gs('LBL_DATERANGE_APPLY_BTN')}
 			</button>

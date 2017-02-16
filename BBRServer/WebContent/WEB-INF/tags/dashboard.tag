@@ -29,7 +29,7 @@
 		<div class="form-group">
 			<span class="glyphicon glyphicon-calendar hidden-xs"></span>
 			<span class="hidden-xs" style="padding-right:5px"></span>
-			<input type='text' class="form-control" name="baseDatePicker" id="baseDatePicker" />
+			<input type='text' class="form-control" name="baseDatePicker" id="baseDatePicker" style='width: 200px;'/>
 		</div>
 		<div class="form-group" style="width: 90px">
 			<select id="detailSelect" name="detailSelect" class="selectized"
@@ -50,7 +50,7 @@
 		<span class="hidden-md hidden-sm hidden-xs" style="padding-right:5px"></span>
 		<div class="form-group hidden-md hidden-sm hidden-xs">
 			<input type='text' class="form-control hidden-md hidden-sm hidden-xs" name="compareToDatePicker"
-				id="compareToDatePicker" disabled="disabled" />
+				id="compareToDatePicker" disabled="disabled"  style='width: 200px;'/>
 		</div>
 		<span class="hidden-md hidden-sm hidden-xs" style="padding-right:10px"></span>
 		<div class="form-group">
