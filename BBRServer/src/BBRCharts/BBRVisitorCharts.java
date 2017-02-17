@@ -1,26 +1,16 @@
 package BBRCharts;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import BBR.BBRChartData;
-import BBR.BBRUtil;
 import BBR.BBRChartData.BBRChartDataTypes;
 import BBR.BBRChartPeriods;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRShop;
-import BBRAcc.BBRUser.BBRUserRole;
-import BBRClientApp.BBRContext;
 import BBRClientApp.BBRParams;
 import BBRCust.BBRVisitManager;
-import BBRCust.BBRVisit.BBRVisitStatus;
 
 @WebServlet("/BBRVisitorCharts")
 public class BBRVisitorCharts extends BBRBasicChartServlet {
@@ -44,8 +34,8 @@ public class BBRVisitorCharts extends BBRBasicChartServlet {
 			BBRChartData data = new BBRChartData();
 			
 			String[][] cols = {
-					{"Types", BBRChartDataTypes.BBR_CHART_STRING},
-					{"Visitors", BBRChartDataTypes.BBR_CHART_NUMBER}
+					{"Типы", BBRChartDataTypes.BBR_CHART_STRING},
+					{"Посетители", BBRChartDataTypes.BBR_CHART_NUMBER}
 			};
 			data.addCols(cols);
 			
@@ -62,7 +52,10 @@ public class BBRVisitorCharts extends BBRBasicChartServlet {
 				
 			Long[] arr = mgr.getVisitorsNewVsReturned(period.startDate, period.endDate, posId, shopId);
 			
-			data.addRow((Object[])arr);
+			Object[][] o = {{"Новые", arr[0]}, {"Повторные", arr[1]}};
+			
+			data.addRow(o[0]);
+			data.addRow(o[1]);
 			
 			return data.toJson();
 		} catch (Exception ex) {
