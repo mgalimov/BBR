@@ -29,7 +29,7 @@
 				<t:toolbar-item label="LBL_TOGGLE_INCOMPLETE_BTN" id="viewIncomplete" icon="glyphicon-star"></t:toolbar-item>
 			</t:toolbar-group>
 			<t:grid-button label="" icon="glyphicon-ok" condition="state != 2"/>
-			<t:grid-button label="" icon="glyphicon-remove" condition="state != 2"/>
+<%-- 			<t:grid-button label="" icon="glyphicon-remove" condition="state != 2"/> --%>
 			<t:grid-item label="LBL_TITLE" field="title"/>
 			<t:grid-item label="LBL_POS" field="pos.title"/>
 			<t:grid-item label="LBL_PERFORMER" field="performer"/>
@@ -53,25 +53,6 @@
 		        	url: 'BBRTasks',
 		        	data: {
 		        		operation: 'approve',
-		        		taskId: data.id
-		        	}
-		        }).success(function(d) {
-					table.draw();
-		        });
-			});
-		});
-
-		$(document).ready(function() {
-			$('#grid tbody').on("click", "[data-btncolumn=2]", function(event) {
-				tr = $(this).closest('tr');
-				table = $("#grid").DataTable();
-		        row = table.row(tr);
-		        data = row.data(); 
-		        
-		        $.ajax({
-		        	url: 'BBRTasks',
-		        	data: {
-		        		operation: 'disapprove',
 		        		taskId: data.id
 		        	}
 		        }).success(function(d) {

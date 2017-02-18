@@ -136,11 +136,11 @@ public class BBRTasks extends BBRBasicServlet<BBRTask, BBRTaskManager> {
 			BBRTask task = manager.findById(taskId);
 			if (task != null) {
 				task.setState(BBRTaskState.TASKSTATE_COMPLETED);
-				BBRVisit visit = manager.getVisit(task);
-				if (visit != null) {
-					BBRVisitManager mgr = new BBRVisitManager();
-					mgr.cancel(visit);
-				}
+//				BBRVisit visit = manager.getVisit(task);
+//				if (visit != null) {
+//					BBRVisitManager mgr = new BBRVisitManager();
+//					mgr.cancel(visit);
+//				}
 				manager.update(task);
 			}
 			res = "";
