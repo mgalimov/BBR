@@ -103,7 +103,7 @@
 				$(el).addClass("dashboard");
 				var chart = new google.visualization.${typefunc}(el);
 				var options = {
-						legend: "none",
+						legend: "right",
 						${chartoptions}
 				};
 		        chart.draw(gdt, options);

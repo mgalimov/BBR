@@ -1140,6 +1140,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
     			            " where " + where2 + 
 		                    "   and (coalesce(v2.realTime, v2.timeScheduled) <= '" + df.format(BBRUtil.getEndOfDay(endDate)) + "')" + 
 		    				"   and v2.status in (" + BBRVisitStatus.VISSTATUS_APPROVED + "," + BBRVisitStatus.VISSTATUS_PERFORMED + ")" +
+		                    "   and v2.id <> visit.id" +
     				        "   and v2.userContacts = visit.userContacts)";
         	
     		Query query = session.createQuery(squery); 
@@ -1181,5 +1182,35 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		}
 			
 		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getVisitsBySources(Date startDate, Date endDate, BBRPoS pos, BBRShop shop) {
+		boolean tr = BBRUtil.beginTran();
+		Session session = BBRUtil.getSession();
+		
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+	
+		String where = "";
+		if (pos != null)
+			where = " and pos.id = " + pos.getId();
+		else
+			if (shop != null)
+				where = "and pos.shop.id = " + shop.getId();
+		
+		Query query = session.createQuery("select (case when source = 1 then 0 else source end) as src, count(*) as visits" + 
+		                                  "  from BBRVisit " +  
+										  " where coalesce(realTime, timeScheduled) >= '"+df.format(BBRUtil.getStartOfDay(startDate))+"' " + 
+		                                  "   and coalesce(realTime, timeScheduled) <= '"+df.format(BBRUtil.getEndOfDay(endDate))+"' " +
+										  "   and status in (" + BBRVisitStatus.VISSTATUS_PERFORMED + "," +
+										  						 BBRVisitStatus.VISSTATUS_APPROVED + ")" + 
+										  where +
+										  " group by (case when source = 1 then 0 else source end)" + 
+										  " order by source asc");
+
+		List<Object[]> list = query.list();
+		BBRUtil.commitTran(tr);
+		
+		return list;
 	}
 }

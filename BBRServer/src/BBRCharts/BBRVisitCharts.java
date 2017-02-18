@@ -99,7 +99,11 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 		if (indicator.equals("visitsByWeekDays")) {
 			return visitsByWeekDays(type, options, period, shop, pos);
 		}
-		
+
+		if (indicator.equals("visitsBySources")) {
+			return visitsBySources(type, options, period, shop, pos);
+		}
+
 		if (indicator.equals("test")) {
 			String[][] cols = {
 					{"Employee Name"},
@@ -126,8 +130,8 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 			BBRChartData data = new BBRChartData();
 			
 			String[][] cols = {
-					{"Date", BBRChartDataTypes.BBR_CHART_STRING},
-					{"Visits", BBRChartDataTypes.BBR_CHART_NUMBER}
+					{"Даты", BBRChartDataTypes.BBR_CHART_STRING},
+					{"Посещения", BBRChartDataTypes.BBR_CHART_NUMBER}
 			};
 			data.addCols(cols);
 			
@@ -156,8 +160,8 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 			BBRChartData data = new BBRChartData();
 			
 			String[][] cols = {
-					{"Date", BBRChartDataTypes.BBR_CHART_STRING},
-					{"Income", BBRChartDataTypes.BBR_CHART_NUMBER}
+					{"Даты", BBRChartDataTypes.BBR_CHART_STRING},
+					{"Доход", BBRChartDataTypes.BBR_CHART_NUMBER}
 			};
 			data.addCols(cols);
 			
@@ -186,8 +190,8 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 			BBRChartData data = new BBRChartData();
 			
 			String[][] cols = {
-					{"Days", BBRChartDataTypes.BBR_CHART_STRING},
-					{"Visits", BBRChartDataTypes.BBR_CHART_NUMBER}
+					{"Даты", BBRChartDataTypes.BBR_CHART_STRING},
+					{"Посещения", BBRChartDataTypes.BBR_CHART_NUMBER}
 			};
 			data.addCols(cols);
 			
@@ -242,5 +246,41 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 			return "";
 		}
 	}
+	
+	protected String visitsBySources(String type, String options,
+			BBRChartPeriods period, BBRShop shop, BBRPoS pos) {
+		try {
+			BBRChartData data = new BBRChartData();
+			
+			String[][] cols = {
+					{"Источник", BBRChartDataTypes.BBR_CHART_STRING},
+					{"Посещения", BBRChartDataTypes.BBR_CHART_NUMBER}
+			};
+			data.addCols(cols);
+			
+			BBRVisitManager mgr = new BBRVisitManager();
+			List<Object[]> list = mgr.getVisitsBySources(period.startDate, period.endDate, pos, shop);
+	
+			for (Object[] el : list) {
+				switch ((int)el[0]) {
+				case 0: {
+					el[0] = "Программа";
+					break;
+				}
+				case 10: {
+					el[0] = "Интернет";
+					break;
+				}
+				}
+			}
+			
+			data.importList(list, null, period);
+			
+			return data.toJson();
+		} catch (Exception ex) {
+			return "";
+		}
+	}
+
 }
 
