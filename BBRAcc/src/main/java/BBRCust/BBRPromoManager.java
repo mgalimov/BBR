@@ -127,7 +127,7 @@ public class BBRPromoManager extends BBRDataManager<BBRPromo>{
 		return promo;
 	}
 
-	public boolean isPrizeVisit(BBRPromo promo, Long visitsNumber) {
+	public boolean isPrizeVisit(BBRPromo promo, Long visitsNumber, Set<BBRProcedure> procedures) {
 		if (promo != null 
 				&& promo.getStatus() == BBRPromoStatus.PROMOSTATUS_APPROVED 
 				&& promo.getPromoType() == BBRPromoType.PROMOTYPE_FREE_VISIT) {
@@ -153,7 +153,11 @@ public class BBRPromoManager extends BBRDataManager<BBRPromo>{
 
 		if (promo != null) {
 			BBRVisitManager vmgr = new BBRVisitManager();
-			Long visitsNumber = vmgr.getVisitsNumber(vmgr.maskContacts(visit.getUserContacts()), visit.getId(), visit.getPos().getId(), null);
+			Long visitsNumber = vmgr.getVisitsNumber(vmgr.maskContacts(visit.getUserContacts()), 
+					visit.getId(), 
+					visit.getPos().getId(), 
+					null,
+					promo.getProcedures());
 			if (isPrizeVisit(promo, visitsNumber))
 				return promo;
 			promo = null;

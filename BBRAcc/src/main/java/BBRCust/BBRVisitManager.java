@@ -1052,7 +1052,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		}
 	}
 
-	public Long getVisitsNumber(String userContacts, Long visitId, Long posId, Date date) {
+	public Long getVisitsNumber(String userContacts, Long visitId, Long posId, Date date, Set<BBRProcedure> procedures) {
         Session session = BBRUtil.getSession();
         boolean tr = BBRUtil.beginTran();
         try {
@@ -1069,6 +1069,15 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 
         	} catch (Exception ex1) {
         	}
+        	
+        	String procs = "";
+        	for (BBRProcedure p : procedures) {
+        		procs += "," + p.getId();
+        	}
+        	if (procs.length() > 0)
+        		procs = procs.substring(1);
+        	
+        	
     		Query query = session.createQuery(
     				"select count(*)" + 
                     "  from BBRVisit visit " +  
@@ -1076,7 +1085,8 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
                     "   and pos.id = " + posId.toString() +
                     "   and coalesce(visit.realTime, visit.timeScheduled) >= '" + df.format(date) + "'" +
                     visitWhere + 
-    				"   and status in (" + BBRVisitStatus.VISSTATUS_APPROVED + "," + BBRVisitStatus.VISSTATUS_PERFORMED + ")"); 
+    				"   and status in (" + BBRVisitStatus.VISSTATUS_APPROVED + "," + BBRVisitStatus.VISSTATUS_PERFORMED + ")" +
+                    "   and procedure in (" +procs + ")"); 
         	Long count = (Long)query.uniqueResult();
         	BBRUtil.commitTran(tr);
         	return count;
