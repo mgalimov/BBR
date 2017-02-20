@@ -264,12 +264,16 @@
 				$("a[id^='sd']").first().removeClass('btn-default').addClass('btn-info');
 				
 				select();
+				getVisitsNumber();
 			}
 			letChangeButtons = true;
 		});
 	
-	 	$("#procedureinput").on("change", select);
-
+	 	$("#procedureinput").on("change", function () {
+	 		select();
+	 		getVisitsNumber();
+	 	});
+	 	
 	 	$("#nextDateBtn").click(function(e) { changeDatesOnButtons(<%=datesPerPage-datesPerPage+1 %>); });
 	 	$("#prevDateBtn").click(function(e) { changeDatesOnButtons(-<%=datesPerPage-datesPerPage+1 %>); });
 	 	$("#todayDateBtn").click(function(e) { changeDatesOnButtons(0); });
@@ -311,33 +315,7 @@
 			reloadWithNewParam("posId=" + posId);
 		})
 
-		$("#userContactsinput").on("change", function () {
-	 		if ($("#shopposinput").length) 
-	 			posSelected = $("#shopposinput").val();
-	 		else
-	 			posSelected = "";
-	 		
-	 		if (posSelected == "")
-	 			posSelected = "${newPosId}";
-
-			$.ajax({
-	        	url: 'BBRVisits',
-	        	data: {
-	        		operation: 'getVisitsNumber',
-	        		userContacts: $('#userContactsinput').val(),
-	        		posId: posSelected
-	        	}
-	    	}).done(function (data) {
-	    		if (data != null && data != "") {
-	    			var d = $.parseJSON(data);
-	    			$("#visitsNumber").removeClass("hide");
-	    			$("#visitsNumber").text("${context.gs('LBL_PREVIOUS_VISITS')} : " + d[0]);
-	    		} else {
-	    			$("#visitsNumber").addClass("hide");
-	    			$("#visitsNumber").text("");
-	    		}
-	    	});
-		});
+		$("#userContactsinput").on("change", getVisitsNumber);
 	 });
 	
 	function changeDatesOnButtons(modifier) {
@@ -530,6 +508,35 @@
  	 	$("#specinput").val(specSelected);
 	}
 
+	function getVisitsNumber() {
+ 		if ($("#shopposinput").length) 
+ 			posSelected = $("#shopposinput").val();
+ 		else
+ 			posSelected = "";
+ 		
+ 		if (posSelected == "")
+ 			posSelected = "${newPosId}";
+
+		$.ajax({
+        	url: 'BBRVisits',
+        	data: {
+        		operation: 'getVisitsNumber',
+        		userContacts: $('#userContactsinput').val(),
+        		posId: posSelected,
+        		procedureId: $('#procedureinput').val() 
+        	}
+    	}).done(function (data) {
+    		if (data != null && data != "") {
+    			var d = $.parseJSON(data);
+    			$("#visitsNumber").removeClass("hide");
+    			$("#visitsNumber").text("${context.gs('LBL_PREVIOUS_VISITS')} " + d[1] + " : " + d[0] + ". " + d[2]);
+    		} else {
+    			$("#visitsNumber").addClass("hide");
+    			$("#visitsNumber").text("");
+    		}
+    	});
+	}
+	
 <% if (mode.equals("manager-edit")) { %>	
 	procedureSetConstrains = function () {
 		var posId = $("#shopposinput").val();

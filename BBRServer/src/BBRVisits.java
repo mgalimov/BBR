@@ -514,6 +514,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			String userContacts = params.get("userContacts"); 
 			String sPosId = params.get("posId");
 			String sVisitId = params.get("visitId");
+			String sProcedureId = params.get("procedureId");
 			
 			BBRContext context = BBRContext.getContext(request);
 			if (userContacts == null || userContacts.trim().equals(""))
@@ -521,6 +522,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 			else {
 				Long visitId = null;
 				Long posId = null;
+				Long procId = null;
 				
 				if (sVisitId != null && sVisitId.trim() != "") {
 					try {
@@ -535,30 +537,46 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 					return "";
 				}
 
+				try {
+					procId = Long.parseLong(sProcedureId);
+				} catch (Exception ex2) {
+					return "";
+				}
+				
 				SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
 				BBRPromoManager promgr = new BBRPromoManager();
 				BBRPromo promo = promgr.findFreeVisitPromo(posId, BBRUtil.now(context.getTimeZone()));
 				
+				BBRProcedureManager procmgr = new BBRProcedureManager();
+				BBRProcedure proc = procmgr.findById(procId);
+				
 				Date date;
 				Boolean bOT = false;
-				if (promo != null)
+				if (promo != null) {
 					date = promo.getStartDate();
-				else {
+				} else {
 					bOT = true;
 					date = new Date(0);
 				}
 				
-				Long l = manager.getVisitsNumber(userContacts, visitId, posId, date);
+        		BBRVisitManager vmgr = new BBRVisitManager();
+        		BBRVisit visit = vmgr.findById(visitId);
+				
+				Long l = manager.getVisitsNumber(userContacts, visit, posId, date, promo);
 				String prizeString = "";
 				try {
-					if (promgr.isPrizeVisit(promo, l))
+					if (promgr.isPrizeVisit(promo, l, proc))
 						prizeString = context.gs("MSG_PRIZE_VISIT");
-					String d[] = new String[2];
-					if (bOT)
+					String d[] = new String[3];
+					if (bOT) {
 						d[0] = l.toString() + " " + context.gs("MSG_FROM_BEGINNING_OF_TIME");
-					else
+						d[1] = "";
+					} else {
 						d[0] = l.toString() + " " + context.gs("MSG_FROM") + " " + df.format(date);
-					d[1] = prizeString;
+						d[1] = promo.getTitle();
+					}
+					
+					d[2] = prizeString;
 					return BBRUtil.gson().toJson(d);
 				} catch (Exception ex) {
 					return "";

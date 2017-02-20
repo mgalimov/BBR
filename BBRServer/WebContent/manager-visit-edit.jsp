@@ -13,14 +13,15 @@
 	        		operation: 'getVisitsNumber',
 	        		userContacts: $('#userContactsinput').val(),
 	        		posId: $("#posinput").val(),
-	        		visitId: obj.id
+	        		visitId: obj.id,
+	        		procedureId: $('#procedureinput').val()
 	        	}
 	    	}).done(function (data) {
 	    		if (data != "") {
 		    		d = $.parseJSON(data);
-		    		$("#openPreviousVisitsButton").text("${context.gs('LBL_PREVIOUS_VISITS')} : " + d[0]);
-		    		if (d[1] != "") {
-		    			$('#alertText').text(d[1]);
+		    		$("#openPreviousVisitsButton").text("${context.gs('LBL_PREVIOUS_VISITS')} (" + d[1] + ") : " + d[0]);
+		    		if (d[2] != "") {
+		    			$('#alertText').text(d[2]);
 		    			$('#alertMessage').removeClass('hide');
 		    		}
 	    		} else {
@@ -234,19 +235,21 @@
 	        		        		procIds: procIds
 	        		        	}
 	        	        	}).done(function (data) {
-	        	        		promo = $.parseJSON(data);
-	        	        		el = $("#promoinput")[0].selectize;
-	        	        		el.clear();
-	        	        		if (promo) {
-	        	        			$("#discountPercentinput").val(promo.discount);
-	        	            		el.addOption({id: promo.id, title: promo.title});
-	        	            		el.refreshOptions(false);
-	        	            		el.addItem(promo.id);
-	        	            		el.refreshItems();
+	        	        		if (data != "") {
+		        	        		promo = $.parseJSON(data);
+		        	        		el = $("#promoinput")[0].selectize;
+		        	        		el.clear();
+		        	        		if (promo) {
+		        	        			$("#discountPercentinput").val(promo.discount);
+		        	            		el.addOption({id: promo.id, title: promo.title});
+		        	            		el.refreshOptions(false);
+		        	            		el.addItem(promo.id);
+		        	            		el.refreshItems();
+		        	        		}
+		        	        		else
+		        	        			$("#discountPercentinput").val(0);
+		        	        		onChange();
 	        	        		}
-	        	        		else
-	        	        			$("#discountPercentinput").val(0);
-	        	        		onChange();
 	        	        	});
 	        			}
 	        		}

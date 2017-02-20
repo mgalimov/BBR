@@ -777,8 +777,11 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
     		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
     		BBRVisitManager vmgr = new BBRVisitManager();
     		BBRVisit v = vmgr.findById(visitId);
+    		Date dt = v.getRealTime();
+    		if (dt == null)
+    			dt = v.getTimeScheduled();
 		    visitWhere = " and (id <> " + v.getId() + ")"+ 
-		    		     " and (coalesce(realTime, timeScheduled) <= '" + df.format(v.getRealTime()) + "')";
+		    		     " and (coalesce(realTime, timeScheduled) <= '" + df.format(dt) + "')";
 
     	} catch (Exception ex1) {
     	}
@@ -1052,7 +1055,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		}
 	}
 
-	public Long getVisitsNumber(String userContacts, Long visitId, Long posId, Date date, Set<BBRProcedure> procedures) {
+	public Long getVisitsNumber(String userContacts, BBRVisit excludingVisit, Long posId, Date date, BBRPromo promo) {
         Session session = BBRUtil.getSession();
         boolean tr = BBRUtil.beginTran();
         try {
@@ -1060,22 +1063,26 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         	SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
         	SimpleDateFormat dff = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
         	try {
-        		BBRVisitManager vmgr = new BBRVisitManager();
-        		BBRVisit v = vmgr.findById(visitId);
-        		if (v != null){
-        			visitWhere += "   and visit.id <> " + v.getId();
-        			visitWhere += "   and coalesce(visit.realTime, visit.timeScheduled) <= '" + dff.format(BBRUtil.getEndOfDay(v.getRealTime())) + "'";
+        		if (excludingVisit != null){
+        			visitWhere += "   and visit.id <> " + excludingVisit.getId();
+        			visitWhere += "   and coalesce(visit.realTime, visit.timeScheduled) <= '" + dff.format(excludingVisit.getRealTime()) + "'";
         		}
 
         	} catch (Exception ex1) {
         	}
         	
+        	String promoWhere = "";
         	String procs = "";
-        	for (BBRProcedure p : procedures) {
-        		procs += "," + p.getId();
+
+        	if (promo != null) {
+        		if (promo.getProcedures() != null)
+		        	for (BBRProcedure p : promo.getProcedures()) {
+		        		procs += "," + p.getId();
+		        	}
+	        	if (procs.length() > 0)
+	        		procs = procs.substring(1);
+	        	// promoWhere = " and coalesce(promo.id, -1) <> " + promo.getId();
         	}
-        	if (procs.length() > 0)
-        		procs = procs.substring(1);
         	
         	
     		Query query = session.createQuery(
@@ -1086,6 +1093,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
                     "   and coalesce(visit.realTime, visit.timeScheduled) >= '" + df.format(date) + "'" +
                     visitWhere + 
     				"   and status in (" + BBRVisitStatus.VISSTATUS_APPROVED + "," + BBRVisitStatus.VISSTATUS_PERFORMED + ")" +
+                    promoWhere +
                     "   and procedure in (" +procs + ")"); 
         	Long count = (Long)query.uniqueResult();
         	BBRUtil.commitTran(tr);

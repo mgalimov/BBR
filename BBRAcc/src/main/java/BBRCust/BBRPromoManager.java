@@ -127,12 +127,25 @@ public class BBRPromoManager extends BBRDataManager<BBRPromo>{
 		return promo;
 	}
 
-	public boolean isPrizeVisit(BBRPromo promo, Long visitsNumber, Set<BBRProcedure> procedures) {
+	public boolean isPrizeVisit(BBRPromo promo, Long visitsNumber, BBRProcedure visitProcedure) {
 		if (promo != null 
 				&& promo.getStatus() == BBRPromoStatus.PROMOSTATUS_APPROVED 
 				&& promo.getPromoType() == BBRPromoType.PROMOTYPE_FREE_VISIT) {
 			Integer p = promo.getVisitsNumber(); 
-			if (p != null && p > 0 && visitsNumber > 0 && visitsNumber % p == 0)
+			
+			boolean isProc = false;
+			if (promo.getProcedures() != null) {
+				if (visitProcedure != null)
+					for (BBRProcedure proc : promo.getProcedures()) {
+						if (proc.getId() == visitProcedure.getId()) {
+							isProc = true;
+							break;
+						}
+					}
+			} else
+				isProc = true;
+			
+			if (p != null && p > 0 && visitsNumber > 0 && ((visitsNumber + 1) % (p + 1)) == 0 && isProc)
 				return true;
 		}
 		return false;
@@ -153,12 +166,12 @@ public class BBRPromoManager extends BBRDataManager<BBRPromo>{
 
 		if (promo != null) {
 			BBRVisitManager vmgr = new BBRVisitManager();
-			Long visitsNumber = vmgr.getVisitsNumber(vmgr.maskContacts(visit.getUserContacts()), 
-					visit.getId(), 
-					visit.getPos().getId(), 
-					null,
-					promo.getProcedures());
-			if (isPrizeVisit(promo, visitsNumber))
+			Long visitsNumber = vmgr.getVisitsNumber(visit.getUserContacts(), 
+													 visit, 
+													 visit.getPos().getId(), 
+													 promo.getStartDate(),
+													 promo);
+			if (isPrizeVisit(promo, visitsNumber, visit.getProcedure()))
 				return promo;
 			promo = null;
 		}
