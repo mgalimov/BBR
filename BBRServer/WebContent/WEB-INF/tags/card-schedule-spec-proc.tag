@@ -8,6 +8,7 @@
 <%@tag import="BBRAcc.BBRUser.BBRUserRole"%>
 <%@tag import="BBR.BBRDataSet"%>
 <%@tag import="BBR.BBRUtil"%>
+<%@tag import="BBRClientApp.BBRParams"%>
 
 <%@ attribute name="posId" %>
 
@@ -22,6 +23,37 @@
 	int datesPerPage = 7;
 
 	BBRContext context = BBRContext.getContext(request);
+	
+	BBRParams params = new BBRParams(request.getQueryString());
+	String sDate = params.get("date");
+	Date initialDate = BBRUtil.now(context.getTimeZone());
+	SimpleDateFormat adf = new SimpleDateFormat(BBRUtil.fullDateFormat);
+	
+	Cookie[] cookies = request.getCookies();
+	for (int i = 0; i < cookies.length; i++) {
+		if (cookies[i].getName().equals("dateSelected")) {
+			try {
+				initialDate = adf.parse(cookies[i].getValue());
+				break;
+			} catch (Exception ex) {
+				break;
+			}
+		}
+	}
+	
+	if (sDate != null && sDate != "") {
+		if (sDate.equals("now"))
+			initialDate = BBRUtil.now(context.getTimeZone());
+		else
+			if (sDate.equals("tomorrow")) {
+				Calendar c = Calendar.getInstance();
+				c.setTime(BBRUtil.now(context.getTimeZone()));
+				c.add(Calendar.DATE, 1);
+				initialDate = c.getTime();
+			}
+			else
+				initialDate = adf.parse(sDate);
+	}
 	
 	BBRPoS pos = null;
 	
@@ -61,8 +93,6 @@
 	posId = pos.getId().toString();
 	request.setAttribute("newPosId", posId);
 	
-	Date dateSelected = new Date();
-
 	SimpleDateFormat df = new SimpleDateFormat("dd MMMM");
 	SimpleDateFormat sf = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
 	
@@ -139,7 +169,7 @@
 	
 	Map<String, Integer> months = calendar.getDisplayNames(Calendar.MONTH, Calendar.LONG, context.getLocale());
 	
-	calendar.setTime(dateSelected);
+	calendar.setTime(initialDate);
 %>
 
 <% if (mode.equals("manager-edit") || mode.equals("manager-view")) { %>
@@ -280,7 +310,8 @@
 	 	
 	 	select();
 	 	
-	 	ds = $.cookie("dateSelected");
+	 	ds = "<%=adf.format(initialDate)%>";
+
 		if (ds != null && ds != "")
 			$('#datepicker').data("DateTimePicker").date(ds);
 		
