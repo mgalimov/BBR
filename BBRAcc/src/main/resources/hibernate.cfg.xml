@@ -48,6 +48,9 @@
         <mapping class="BBRCust.BBRVisit"/>
         <mapping class="BBRCust.BBRTask"/>
 		<mapping class="BBRCust.BBRTurn"/>
+		<mapping class="BBRCust.BBRStockItem"/>
+		<mapping class="BBRCust.BBRStockItemGroup"/>
+		<mapping class="BBRCust.BBRStockItemAcc"/>
     </session-factory>
 
 </hibernate-configuration>

@@ -164,7 +164,7 @@ public class BBRPromos extends BBRBasicServlet<BBRPromo, BBRPromoManager> {
 	@Override
 	protected String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		BBRPromo promo = analyzeParams(null, params, request, response);
-		promo = manager.createAndStorePromo(promo);
+		promo = manager.create(promo);
 		return promo.getId().toString();
 	}
 

@@ -41,7 +41,7 @@ public class BBRPromoManager extends BBRDataManager<BBRPromo>{
 		return true;
 	}
 	
-	public BBRPromo createAndStorePromo(BBRPromo promo) throws Exception {
+	public BBRPromo create(BBRPromo promo) throws Exception {
 		checkBeforeUpdate(promo);
         boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();
@@ -51,7 +51,7 @@ public class BBRPromoManager extends BBRDataManager<BBRPromo>{
         return promo;
 	}
 	
-	public void createAndStorePromo(String title, BBRShop shop, Set<BBRPoS> poses, 
+	public void create(String title, BBRShop shop, Set<BBRPoS> poses, 
 									int promoType, Date startDate, Date endDate, 
 									Set<BBRProcedure> procedures, Set<Integer> sources, float discount, 
 									int visitsNumber, int status) throws Exception {
@@ -68,7 +68,7 @@ public class BBRPromoManager extends BBRDataManager<BBRPromo>{
         promo.setStatus(status);
         promo.setVisitsNumber(visitsNumber);
         
-        createAndStorePromo(promo);
+        create(promo);
     }
 
 	public BBRDataSet<BBRPromo> list(String query, String titleField, BBRPoS pos, BBRShop shop) {

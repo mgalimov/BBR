@@ -50,7 +50,7 @@ public class BBRSubscriptions extends
 			}
 
 			BBRServiceSubscription ss = manager
-					.createAndStoreServiceSubscription(service, shop, startDate);
+					.create(service, shop, startDate);
 			if (ss == null)
 				throw new Exception();
 			

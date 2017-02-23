@@ -20,7 +20,7 @@ public class BBRServiceSubscriptionManager extends BBRDataManager<BBRServiceSubs
 		classTitle = "service subscription";	
 	}
 
-	public BBRServiceSubscription createAndStoreServiceSubscription(BBRService service, BBRShop shop, Date startDate) throws Exception {
+	public BBRServiceSubscription create(BBRService service, BBRShop shop, Date startDate) throws Exception {
 		if (shop == null) return null;
 		
 		boolean tr = BBRUtil.beginTran();
@@ -50,7 +50,7 @@ public class BBRServiceSubscriptionManager extends BBRDataManager<BBRServiceSubs
 	        session.save(ss);
 	        
 	        BBRTaskManager tmgr = new BBRTaskManager();
-	        tmgr.createAndStoreTask("Approve new subscription", null, null, new Date(), new Date(), 
+	        tmgr.create("Approve new subscription", null, null, new Date(), new Date(), 
 	        		"Approve new subscription", BBRServiceSubscription.class.getName(), ss.getId());	
 		} else {
 	        BBRUtil.commitTran(tr);

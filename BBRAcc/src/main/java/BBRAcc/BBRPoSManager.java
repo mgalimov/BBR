@@ -20,7 +20,7 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 		classTitle = "Point of service";	
 	}
 	
-	public BBRPoS createAndStorePoS(BBRShop shop, String title, String locationDescription, 
+	public BBRPoS create(BBRShop shop, String title, String locationDescription, 
 								  BBRGPS locationGPS, Date startWorkHour, Date endWorkHour,
 								  String currency, String timeZone, String urlID, String email, String sms) throws Exception {
 		boolean tr = BBRUtil.beginTran();

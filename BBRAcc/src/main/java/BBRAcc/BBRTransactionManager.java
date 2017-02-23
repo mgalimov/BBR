@@ -17,7 +17,7 @@ public class BBRTransactionManager extends BBRDataManager<BBRTransaction> {
 		classTitle = "transaction";	
 	}
 
-	public BBRTransaction createAndStoreTransaction(BBRServiceSubscription serviceSubscription,
+	public BBRTransaction create(BBRServiceSubscription serviceSubscription,
 											 char type, Date date, Float amount, String currency) throws Exception {
 		if (serviceSubscription == null) return null;
 		if (serviceSubscription.getShop() == null) return null;
@@ -47,7 +47,7 @@ public class BBRTransactionManager extends BBRDataManager<BBRTransaction> {
 	}
 
 	public BBRTransaction add(BBRServiceSubscription serviceSubscription, Float amount, String currency) throws Exception {
-		return createAndStoreTransaction(serviceSubscription, 'A', new Date(), amount, currency);
+		return create(serviceSubscription, 'A', new Date(), amount, currency);
 	}
 
 	public BBRTransaction add(BBRServiceSubscription serviceSubscription, Float amount) throws Exception {
@@ -55,7 +55,7 @@ public class BBRTransactionManager extends BBRDataManager<BBRTransaction> {
 	}
 	
 	public BBRTransaction subtract(BBRServiceSubscription serviceSubscription, Float amount, String currency) throws Exception {
-		return createAndStoreTransaction(serviceSubscription, 'S', new Date(), amount, currency);
+		return create(serviceSubscription, 'S', new Date(), amount, currency);
 	}
 
 	public BBRTransaction subtract(BBRServiceSubscription serviceSubscription, Float amount) throws Exception {

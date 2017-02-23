@@ -38,7 +38,7 @@ public class BBRJobs extends BBRBasicServlet<BBRJob, BBRJobManager> {
 			nextRun = null;
 		}
 		
-		BBRJob job = manager.createAndStoreJob(title, nextRun, runConditions, runMethod);
+		BBRJob job = manager.create(title, nextRun, runConditions, runMethod);
 		BBRListener.reschedule();
 		return job.getId().toString();
 	}

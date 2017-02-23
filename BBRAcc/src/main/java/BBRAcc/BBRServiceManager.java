@@ -15,7 +15,7 @@ public class BBRServiceManager extends BBRDataManager<BBRService> {
 		classTitle = "service";	
 	}
 
-	public BBRService createAndStoreService(String title, int status, Boolean demo, Boolean basic) throws Exception {
+	public BBRService create(String title, int status, Boolean demo, Boolean basic) throws Exception {
 		boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();
 

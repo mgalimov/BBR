@@ -16,7 +16,7 @@ public class BBRShopManager extends BBRDataManager<BBRShop>{
 		classTitle = "Shop";	
 	}
 	
-	public BBRShop createAndStoreShop(String title, String country, String timeZone) {
+	public BBRShop create(String title, String country, String timeZone) {
         boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();
 

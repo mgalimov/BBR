@@ -19,7 +19,7 @@ public class BBRServicePriceManager extends BBRDataManager<BBRServicePrice> {
 		classTitle = "service subscription";	
 	}
 
-	public BBRServicePrice createAndStoreServicePrice(BBRService service, String country, Date startDate, Date endDate,
+	public BBRServicePrice create(BBRService service, String country, Date startDate, Date endDate,
 														Float price, String currency, Float creditLimit) throws Exception {
 		if (service == null) return null;
         if (startDate == null) return null;

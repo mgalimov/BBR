@@ -94,7 +94,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		        try {
 			        BBRTaskManager tmgr = new BBRTaskManager();
 			        Date dt = BBRUtil.now(visit.getPos().getTimeZone());
-			        tmgr.createAndStoreTask("Позвоните клиенту, подтвердите запись", 
+			        tmgr.create("Позвоните клиенту, подтвердите запись", 
 			        						null, 
 			        						pos, 
 			        						dt, 
@@ -163,7 +163,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		return code;
 	}
 
-	public BBRVisit createAndStoreVisit(BBRPoS pos, BBRUser user, Date realTime, BBRProcedure procedure, BBRSpecialist spec, String userName, String userContacts,
+	public BBRVisit create(BBRPoS pos, BBRUser user, Date realTime, BBRProcedure procedure, BBRSpecialist spec, String userName, String userContacts,
 									 float length, float discountPercent, float discountAmount, float pricePaid, float amountToSpecialist, float amountToMaterials,
 									 String comment, Set<BBRProcedure> procedures) {
 		boolean tr = BBRUtil.beginTran();

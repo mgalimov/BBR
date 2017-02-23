@@ -51,7 +51,7 @@ public class BBRServicePrices extends BBRBasicServlet<BBRServicePrice, BBRServic
 			Float price = Float.parseFloat(params.get("price"));
 			Float creditLimit = Float.parseFloat(params.get("creditLimit"));
 			
-			sprice = manager.createAndStoreServicePrice(service, country, startDate, endDate, price, currency, creditLimit);
+			sprice = manager.create(service, country, startDate, endDate, price, currency, creditLimit);
 			return sprice.getId().toString();
 		} catch (Exception ex) {
 			throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);

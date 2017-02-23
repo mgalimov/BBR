@@ -19,7 +19,7 @@ public class BBRUserManager extends BBRDataManager<BBRUser> {
 		classTitle = "User";	
 	}
 
-	public BBRUser createAndStoreUser(String email, String firstName, String lastName, 
+	public BBRUser create(String email, String firstName, String lastName, 
 									  String password, int role, BBRShop shop, BBRPoS pos) throws Exception {
         boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();

@@ -43,7 +43,7 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 				priceFloat = Float.parseFloat(price);
 			
 			String status = params.get("status");
-			proc = manager.createAndStoreProcedure(title, pos, lengthFloat, priceFloat, (int) Long.parseLong(status), group);
+			proc = manager.create(title, pos, lengthFloat, priceFloat, (int) Long.parseLong(status), group);
 		}
 		return proc.getId().toString();
 	}

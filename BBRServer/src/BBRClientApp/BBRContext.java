@@ -141,7 +141,7 @@ public class BBRContext {
 		}
 			
 		try {
-			BBRUser candidate = mgr.createAndStoreUser(email, firstName, lastName, password, BBRUserRole.ROLE_VISITOR, null, null);
+			BBRUser candidate = mgr.create(email, firstName, lastName, password, BBRUserRole.ROLE_VISITOR, null, null);
 			user = candidate;
 			setLocale(user.getLanguage());
 			lastSignInError = "";

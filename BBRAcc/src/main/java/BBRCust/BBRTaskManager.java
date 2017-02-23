@@ -21,7 +21,7 @@ public class BBRTaskManager extends BBRDataManager<BBRTask>{
 		classTitle = "Task";	
 	}
 
-	public BBRTask createAndStoreTask(String title, BBRUser performer, BBRPoS pos, Date createdAt, Date deadline,
+	public BBRTask create(String title, BBRUser performer, BBRPoS pos, Date createdAt, Date deadline,
 								   String text, String objectType, Long objectId) {
         boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();

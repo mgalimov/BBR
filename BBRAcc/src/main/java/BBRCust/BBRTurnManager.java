@@ -17,7 +17,7 @@ public class BBRTurnManager extends BBRDataManager<BBRTurn>{
 		classTitle = "Turn";	
 	}
 
-	public BBRTurn createAndStoreTurn(BBRSpecialist specialist, Date date, Date startTime, Date endTime) {
+	public BBRTurn create(BBRSpecialist specialist, Date date, Date startTime, Date endTime) {
         try {
         	BBRTurn turn = new BBRTurn();
         	turn.setId(null);

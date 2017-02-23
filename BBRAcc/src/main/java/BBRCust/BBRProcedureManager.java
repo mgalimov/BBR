@@ -15,7 +15,7 @@ public class BBRProcedureManager extends BBRDataManager<BBRProcedure>{
 		classTitle = "Procedure";	
 	}
 
-	public BBRProcedure createAndStoreProcedure(String title, BBRPoS pos, float length, float price, int status, String group) {
+	public BBRProcedure create(String title, BBRPoS pos, float length, float price, int status, String group) {
         boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();
 

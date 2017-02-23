@@ -43,7 +43,7 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 		BBRShopManager shopMgr = new BBRShopManager();
 		BBRShop shop = shopMgr.findById(Long.parseLong(shopId));
 		if (shop != null) 
-			pos = manager.createAndStorePoS(
+			pos = manager.create(
 					shop, 
 					title, 
 					locationDescription, 

@@ -58,7 +58,7 @@ public class BBRTurns extends BBRBasicServlet<BBRTurn, BBRTurnManager> {
 		if (eTime == null)
 			eTime = spec.getPos().getEndWorkHour();
 
-		Long id = manager.createAndStoreTurn(
+		Long id = manager.create(
 					spec, 
 					df.parse(date),
 					sTime, 

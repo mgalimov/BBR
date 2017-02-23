@@ -203,7 +203,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 						float amountToSpecialist = BBRUtil.convertF(params.get("amountToSpecialist"));
 						float amountToMaterials = BBRUtil.convertF(params.get("amountToMaterials"));
 						String comment = params.get("comment");
-						context.planningVisit = manager.createAndStoreVisit(pos, 
+						context.planningVisit = manager.create(pos, 
 								null, 
 								realTime, 
 								proc, 
