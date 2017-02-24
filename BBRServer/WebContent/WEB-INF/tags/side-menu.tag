@@ -18,6 +18,11 @@
 		<t:nav-item href="admin-pos-list.jsp" title="LBL_POSES_MENU" />
 		<t:nav-item href="admin-user-list.jsp" title="LBL_SHOP_USERS_MENU" />
 		<t:nav-item href="admin-subscription-list.jsp" title="LBL_SUBSCR_MENU" />
+		<t:nav-item href="admin-subscription-list.jsp" title="LBL_SUBSCR_MENU" />
+	</t:nav-group>
+	<t:nav-group title="LBL_MAIN_REFS_MENU" level="admin" faicon="book">
+		<t:nav-item href="admin-stock-group-list.jsp" title="LBL_STOCK_GROUPS_MENU" />
+		<t:nav-item href="admin-stock-item-list.jsp" title="LBL_STOCK_ITEMS_MENU" />
 	</t:nav-group>
 	<t:nav-group title="LBL_POS_MANAGEMENT_MENU" level="manager" faicon="globe">
 		<t:nav-item href="manager-spec-list.jsp" title="LBL_SPECS_MENU" />

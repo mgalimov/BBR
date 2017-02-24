@@ -8,7 +8,7 @@ import BBR.BBRDataElement;
 import BBRAcc.BBRPoS;
 
 @Entity
-@Table(name="stockitemacc")
+@Table(name="stockitemtrans")
 public class BBRStockItemTran extends BBRDataElement {
 	
 	@Id
@@ -16,7 +16,7 @@ public class BBRStockItemTran extends BBRDataElement {
 	@Column(name="TRAN_ID")
 	private Long id;
 	
-	@Column(name="ITEM")
+	@ManyToOne(fetch=FetchType.EAGER)
 	private BBRStockItem item;
 	
 	@ManyToOne(fetch=FetchType.EAGER)

@@ -28,4 +28,9 @@ public class BBRStockItemManager extends BBRDataManager<BBRStockItem>{
         BBRUtil.commitTran(tr);
         return item;
     }
+	
+	@Override
+    public String whereShop(Long shopId) {
+    	return "group.shop.id = " + shopId;
+    };
 }
