@@ -3,7 +3,8 @@
 <t:wrapper title="LBL_STOCK_ITEMS_TITLE">
 	<jsp:body>
 		<t:grid method="BBRStockItems" editPage="admin-stock-item-edit.jsp" createPage="admin-stock-item-edit.jsp" 
-				title="LBL_STOCK_ITEMS_TITLE">
+				title="LBL_STOCK_ITEMS_TITLE" standardFilters="false">
+			<t:grid-filter label="LBL_GROUP" type="reference" field="group" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRStockItemGroups"/> 
 			<t:grid-item label="LBL_TITLE" field="title" sort="asc"/>
 			<t:grid-item label="LBL_GROUP" field="group.title"/>
 			<t:grid-item label="LBL_DESCRIPTION" field="description"/>

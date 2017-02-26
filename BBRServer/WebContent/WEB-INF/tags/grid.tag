@@ -19,6 +19,8 @@
 <c:set var="itemToolbar" scope="request" value="${''}"/>
 <c:set var="filterStartDate" scope="request" value="${context.getFilterStartDate()}" />
 <c:set var="filterEndDate" scope="request" value="${context.getFilterEndDate()}" />
+<c:set var="itemPreload" scope="request" value="${''}"/>
+<c:set var="itemVals" scope="request" value="${''}"/>
 
 <c:if test="${!paging.equals('false')}">
 	<c:set var="paging" value="true"/>
@@ -189,7 +191,24 @@
 	    	j = $.toJSON(o);
 	    	setCookie(p + "-order", j, {expires: 7*24*60});
 	    });
-	    
+
+	    ${itemPreload}
+
+		$("[id$='input']").on("change", function() {
+			$.ajax({
+				url: 'BBRBase',
+	        	data: {
+	        		operation: 'setGridFilter',
+	        		filter: {
+	        			${itemVals.length() > 3 ? itemVals.substring(3) : ""}
+	        		}
+	        	}
+			}).success(function (d) {
+				table.ajax.reload();
+				table.draw();
+			}).error(function () {
+			});
+		});
 <c:if test="${standardFilters != false}">	    
 		moment.locale('${context.getLocaleString()}');
 

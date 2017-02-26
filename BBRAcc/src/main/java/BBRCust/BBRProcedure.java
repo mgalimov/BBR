@@ -43,6 +43,9 @@ public class BBRProcedure extends BBRDataElement {
 	@Column(name="PROC_GRP")
 	private String procGroup;
 	
+	@ManyToOne(fetch=FetchType.EAGER)
+	BBRProcedureGroup procedureGroup;
+	
 	BBRProcedure() {
 	}
 

@@ -113,4 +113,28 @@ public class BBRParams {
 		return res;
 	}
 
+	public Hashtable<String, String> getList(String param) {
+		Hashtable<String, String> res = new Hashtable<String, String>();
+		
+		for (String key : parameters.keySet()) {
+			if (key.startsWith(param + "[")) {
+				String k = "";
+				boolean b = false;
+				boolean e = false;
+				int j;
+				for (j = 0; (j < key.length()) && !e; j++) {
+					if (key.charAt(j) == ']')
+						e = true;
+					if (b && !e)
+						k += key.charAt(j);
+					if (key.charAt(j) == '[')
+						b = true;
+				}
+				res.put(k, parameters.get(key));
+			}
+		}
+		
+		return res;
+	}
+
 }

@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Hashtable;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -51,6 +52,10 @@ public class BBRBase extends HttpServlet  {
 				context.filterEndDate = endDate;
 				context.filterShop = shop;
 				context.filterPoS = pos;
+			} else
+			if (operation.equals("setGridFilter")) {
+				Hashtable<String, String> filter = params.getList("filter");
+				context.set("filter", filter);
 			} else
 				respText = processOperation(operation, params, request, response);
 		} catch (JDBCException ex) {
