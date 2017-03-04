@@ -4,6 +4,7 @@
 <%@ attribute name="type" required="true" %>
 <%@ attribute name="referenceMethod" %>
 <%@ attribute name="referenceFieldTitle" %>
+<%@ attribute name="referenceFieldExpr" %>
 <%@ attribute name="isRequired" %>
 <%@ attribute name="isDisabled" %>
 <%@ attribute name="isHidden" %>
@@ -343,7 +344,8 @@
 
 				<c:if test="${!calculated.equals('true')}">
 					<c:set var="itemSet" scope="request" value="${itemSet}
-					    el = $('#${ft}input')[0].selectize;"/>
+					    el = $('#${ft}input')[0].selectize;
+					    el.load(${ft}LoadInitialData);"/>
 					<c:if test="${multiple.equals('true')}">
 						<c:set var="itemSet" scope="request" value="${itemSet}
 						obj.${field}.forEach(function (objItem) {"/>
@@ -353,7 +355,7 @@
 						objItem = obj.${field};"/>
 					</c:if>
 						<c:set var="itemSet" scope="request" value="${itemSet}
-							el.addOption(objItem?{id: objItem.id, ${referenceFieldTitle}: objItem.${referenceFieldTitle}}:{});"/>
+							el.addOption(objItem);"/>
 						<c:set var="itemSet" scope="request" value="${itemSet}
 							el.addItem(objItem?objItem.id:null);"/>
 					<c:if test="${multiple.equals('true')}">
@@ -362,7 +364,6 @@
 					</c:if>
 	
 					<c:set var="itemSet" scope="request" value="${itemSet}
-					    el.load(${ft}LoadInitialData);
 					    el.refreshOptions(false);
 					    el.refreshItems();"/>
 	
@@ -379,6 +380,8 @@
 				</c:if>
 
 				<script>
+				 var ${ft}Data = null;
+				 
 				 ${ft}SetConstrains = function () { 
 					  return "";};
 				
@@ -395,6 +398,7 @@
 			            	callback();
 			            },
 			            success: function(res) {
+			            	${ft}Data = res.data;
 			            	callback(res.data);
 			            }
 			        });
@@ -419,7 +423,14 @@
 			        });
 			    } 
 				
-				$("#${field.concat('input')}").selectize({
+				<c:if test="${referenceFieldExpr != null && !referenceFieldExpr.isEmpty()}">
+				${ft}Render = function (data, escape) {
+					res = ${referenceFieldExpr};
+					return '<div>' + escape(res) + '</div>';
+				}
+				</c:if>
+				
+				$("#${ft}input").selectize({
 				    valueField: 'id',
 				    labelField: '${referenceFieldTitle}',
 				    searchField: '${referenceFieldTitle}',
@@ -427,8 +438,10 @@
 				    maxOptions: 100,
 				    maxItems: ${mult},
 				    openOnFocus: true,
-				    load: ${ft}LoadData 
+				    load: ${ft}LoadData<c:if test="${referenceFieldExpr != null && !referenceFieldExpr.isEmpty()}">,
+				    render: {item : ${ft}Render, option: ${ft}Render}</c:if>
 				});
+
 				</script>
 			</c:when>
 		</c:choose>

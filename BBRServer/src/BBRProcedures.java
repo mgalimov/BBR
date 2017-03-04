@@ -11,6 +11,8 @@ import BBRClientApp.BBRContext;
 import BBRClientApp.BBRParams;
 import BBRCust.BBRProcedure;
 import BBRCust.BBRProcedure.BBRProcedureStatus;
+import BBRCust.BBRProcedureGroup;
+import BBRCust.BBRProcedureGroupManager;
 import BBRCust.BBRProcedureManager;
 import BBRCust.BBRSpecialist;
 import BBRCust.BBRSpecialistManager;
@@ -26,12 +28,12 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 	@Override
 	protected String create(BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		String title = params.get("title");
-		String posId = params.get("pos");
-		String group = params.get("procGroup");
-		BBRPoSManager mgr = new BBRPoSManager();
-		BBRPoS pos = mgr.findById(Long.parseLong(posId));
+		String groupId = params.get("procedureGroup");
+		BBRProcedureGroupManager mgr = new BBRProcedureGroupManager();
+		BBRProcedureGroup group = mgr.findById(Long.parseLong(groupId));
+		
 		BBRProcedure proc = null;
-		if (pos != null) {						
+		if (group != null && group.getPos() != null) {						
 			String length = params.get("length");
 			float lengthFloat = (float) 0.5;
 			if (!length.isEmpty())
@@ -43,7 +45,7 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 				priceFloat = Float.parseFloat(price);
 			
 			String status = params.get("status");
-			proc = manager.create(title, pos, lengthFloat, priceFloat, (int) Long.parseLong(status), group);
+			proc = manager.create(title, lengthFloat, priceFloat, (int) Long.parseLong(status), group);
 		}
 		return proc.getId().toString();
 	}
@@ -51,11 +53,11 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 	@Override
 	protected BBRProcedure beforeUpdate(BBRProcedure proc, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
 		String title = params.get("title");
-		String posId = params.get("pos");
-		String group = params.get("procGroup");
-		BBRPoSManager mgr = new BBRPoSManager();
-		BBRPoS pos = mgr.findById(Long.parseLong(posId));
-		if (pos != null) {						
+		String groupId = params.get("procedureGroup");
+		BBRProcedureGroupManager mgr = new BBRProcedureGroupManager();
+		BBRProcedureGroup group = mgr.findById(Long.parseLong(groupId));
+		
+		if (group != null && group.getPos() != null) {						
 			String length = params.get("length");
 			float lengthFloat = (float) 0.5;
 			if (!length.isEmpty())
@@ -65,14 +67,15 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 			float priceFloat = 0;
 			if (!price.isEmpty())
 				priceFloat = Float.parseFloat(price);
+			
 			String status = params.get("status");
+
 			
 			proc.setTitle(title);
-	        proc.setPos(pos);
 	        proc.setLength(lengthFloat);
 	        proc.setPrice(priceFloat);
 	        proc.setStatus((int) Long.parseLong(status));
-	        proc.setProcGroup(group);
+	        proc.setProcedureGroup(group);
 	        return proc;
 		}
 		return null;		
@@ -118,7 +121,7 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 			}
 
 			if (pos != null) {
-				String where = " pos.id = " + pos.getId() + " and status = " + BBRProcedureStatus.PROCSTATUS_APPROVED;
+				String where = " procedureGroup.pos.id = " + pos.getId() + " and status = " + BBRProcedureStatus.PROCSTATUS_APPROVED;
 				
 				if (specId != null && !specId.isEmpty()) {
 					BBRSpecialistManager smgr = new BBRSpecialistManager();
@@ -131,7 +134,7 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 				}
 				
 				try {
-					respText = manager.list(query, "procGroup, " + manager.getTitleField(), where).toJson();
+					respText = manager.list(query, "procedureGroup.title, " + manager.getTitleField(), where).toJson();
 				} catch (Exception ex) {
 					respText = "";
 				}

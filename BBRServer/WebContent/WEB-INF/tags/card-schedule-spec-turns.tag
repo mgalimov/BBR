@@ -53,10 +53,11 @@
 					 "		</div>" +
 					 "</td>";
 	
-	schOut += "<thead><tr >" + specOut;
+	schOut += "<thead><tr>" + specOut;
 	for (int i = 0; i < datesPerPage; i++) {
 		calendar.add(Calendar.DATE, 1);
-		schOut += "<th style='width: 90px; vertical-align: middle;' class='text-center' ><nobr><span id='sd" + i + "' data-date='" + sf.format(calendar.getTime()) + "'></span></nobr></th>";
+		schOut += "<th style='width: 90px; vertical-align: middle;' class='text-center'>" +
+		          "<nobr><span id='sd" + i + "' data-date='" + sf.format(calendar.getTime()) + "'></span></nobr></th>";
 	}
 	schOut += "</tr></thead><tbody>";
 
@@ -214,7 +215,7 @@
 			
 			for (i = 0; i < turns.data.length; i++) {
 				turn = turns.data[i];
-				$("td[id^='sp" + turn.specialist.id + "'][data-date='" + turn.date + "']").html("<a href='#' class='btn btn-link btn-xs' data-op='edit' data-id='"+turn.id+"'>"+turn.startTime+"&ndash;"+turn.endTime+"</a><a href='#' class='btn btn-warning btn-xs' data-op='del' data-id='"+turn.id+"'>x</a>");
+				$("td[id^='sp'][data-spec='" + turn.specialist.id + "'][data-date='" + turn.date + "']").html("<a href='#' class='btn btn-link btn-xs' data-op='edit' data-id='"+turn.id+"'>"+turn.startTime+"&ndash;"+turn.endTime+"</a><a href='#' class='btn btn-warning btn-xs' data-op='del' data-id='"+turn.id+"'>x</a>");
 			}
 			
 			$("td[id^='sp'] a").click(function () {

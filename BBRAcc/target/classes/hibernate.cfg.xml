@@ -43,6 +43,7 @@
         <mapping class="BBRAcc.BBRTransaction"/>
         <mapping class="BBRAcc.BBRJob"/>
         <mapping class="BBRCust.BBRSpecialist"/>
+        <mapping class="BBRCust.BBRProcedureGroup"/>
         <mapping class="BBRCust.BBRProcedure"/>
         <mapping class="BBRCust.BBRPromo"/>
         <mapping class="BBRCust.BBRVisit"/>

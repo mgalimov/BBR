@@ -325,14 +325,14 @@
 			for (i = 0; i < d.recordsTotal; i++) {
 				proc = d.data[i];
 				if (proc.status == 1) {
-					if (proc.procGroup != prgr) {
-						prgr = proc.procGroup;
+					if (proc.procedureGroup.title != prgr) {
+						prgr = proc.procedureGroup.title;
 						if (prgr != "")
 							html += "</div></div>";
 						html += "<div><a href='#' data-type='gheader' class='list-group-item'><h4 class='media-heading'>" + prgr + "</h4></a><div data-type='group' class='hide'>";
 					}
 					
-					media = "<div class='media'><div class='media-left pull-left media-middle pic-crop' style='padding-right: 10px;'><img class='media-object' src='images/tool.png' alt='"+proc.title+"' width='50px'></div><div class='media-body'><h4 class='media-heading'>" + proc.title + "</h4>" + procLength(proc.length) + ", ${context.gs('LBL_PRICE_FROM')} " + proc.price + " " + proc.pos.currency + "</div></div>";
+					media = "<div class='media'><div class='media-left pull-left media-middle pic-crop' style='padding-right: 10px;'><img class='media-object' src='images/tool.png' alt='"+proc.title+"' width='50px'></div><div class='media-body'><h4 class='media-heading'>" + proc.title + "</h4>" + procLength(proc.length) + ", ${context.gs('LBL_PRICE_FROM')} " + proc.price + " " + proc.procedureGroup.pos.currency + "</div></div>";
 					html += "<a href='#' class='list-group-item' id='procA" + proc.id + "' data-type='procedure' data-id='" + proc.id + "' data-name='" + proc.title + "'>" + media + "</a>";
 				}
 			}

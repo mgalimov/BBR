@@ -151,16 +151,16 @@
 		schOut += "<td><a href='manager-spec-edit.jsp?id=" + spec.getId() + "'>" + spec.getName() + ", " + spec.getPosition() + "</a></td>";
 		String sid = spec.getId().toString(); 
 		if (startWorkMin > 0) {
-			schOut += "<td id='sp"+ sid + "_oc" + hh + "_30'>&nbsp;</td>";
+			schOut += "<td id='sp"+ sid + "_oc" + hh + "_30' data-spec='" + sid + "' data-time='" + hh + ":30'>&nbsp;</td>";
 			hh++;
 		}
 		for (Integer h = hh; h <= endWorkHour - 1; h++) {
-			schOut += "<td id='sp"+ sid + "_oc" + h + "_00'>&nbsp;</td>";
-			schOut += "<td id='sp"+ sid + "_oc" + h + "_30'>&nbsp;</td>";
+			schOut += "<td id='sp"+ sid + "_oc" + h + "_00' data-spec='" + sid + "' data-time='" + h + ":00'>&nbsp;</td>";
+			schOut += "<td id='sp"+ sid + "_oc" + h + "_30' data-spec='" + sid + "' data-time='" + h + ":30'>&nbsp;</td>";
 		}
 		if (endWorkMin > 0) {
 			hh = endWorkHour;
-			schOut += "<td id='sp"+ sid + "_oc" + hh + "_00'>&nbsp;</td>";
+			schOut += "<td id='sp"+ sid + "_oc" + hh + "_00' data-spec='" + sid + "' data-time='" + hh + ":00'>&nbsp;</td>";
 		}
 		schOut += "</tr>";
 	}
@@ -514,11 +514,13 @@
 		
 		if (!objId) return;
 		
- 		timeSelected = objId.substring(objId.length - 5, objId.length).replace('_', ':');
- 		timeSelected = timeSelected.replace('c', '0');
- 		specSelected = objId.substring(2, objId.length - 8);
- 		if (specSelected == "")
- 			specSelected = objId.substring(2, objId.length - 7);
+		timeSelected = obj.attr('data-time');
+		specSelected = obj.attr('data-spec');
+ 		//timeSelected = objId.substring(objId.length - 5, objId.length).replace('_', ':');
+ 		//timeSelected = timeSelected.replace('c', '0');
+ 		//specSelected = objId.substring(2, objId.length - 8);
+ 		//if (specSelected == "")
+ 		//	specSelected = objId.substring(2, objId.length - 7);
 
  		if (!obj.hasClass('occupied')) {
  	 		$("td.selected").removeClass('selected');

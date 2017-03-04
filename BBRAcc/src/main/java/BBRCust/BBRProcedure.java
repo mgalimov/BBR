@@ -5,7 +5,6 @@ import java.sql.Blob;
 import javax.persistence.*;
 
 import BBR.BBRDataElement;
-import BBRAcc.BBRPoS;
 
 @Entity
 @Table(name="procedures")
@@ -17,10 +16,7 @@ public class BBRProcedure extends BBRDataElement {
 	
 	@Column(name="TITLE")
 	private String title;
-	
-	@ManyToOne(fetch=FetchType.EAGER)
-	private BBRPoS pos;
-	
+
 	@Column(name="LENGTH")
 	private float length;
 	
@@ -39,9 +35,6 @@ public class BBRProcedure extends BBRDataElement {
 	
 	@Column(name="PHOTO")
 	private Blob photo;
-	
-	@Column(name="PROC_GRP")
-	private String procGroup;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	BBRProcedureGroup procedureGroup;
@@ -89,14 +82,6 @@ public class BBRProcedure extends BBRDataElement {
 		this.status = status;
 	}
 
-	public BBRPoS getPos() {
-		return pos;
-	}
-
-	public void setPos(BBRPoS pos) {
-		this.pos = pos;
-	}
-
 	public Blob getPhoto() {
 		return photo;
 	}
@@ -105,11 +90,11 @@ public class BBRProcedure extends BBRDataElement {
 		this.photo = photo;
 	}
 
-	public String getProcGroup() {
-		return procGroup;
+	public BBRProcedureGroup getProcedureGroup() {
+		return procedureGroup;
 	}
 
-	public void setProcGroup(String group) {
-		this.procGroup = group;
+	public void setProcedureGroup(BBRProcedureGroup procedureGroup) {
+		this.procedureGroup = procedureGroup;
 	}
 }

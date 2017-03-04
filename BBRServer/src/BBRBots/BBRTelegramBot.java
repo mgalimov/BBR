@@ -244,7 +244,7 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
 		        
 		        for (BBRProcedure p : plist.data) {
 			        KeyboardRow krow = new KeyboardRow();
-		        	krow.add(p.getId() + ": " + p.getTitle() + " " + BBRContext.getDurationStringL(p.getLength()) + ", " + p.getPrice() + " " + p.getPos().getCurrency());
+		        	krow.add(p.getId() + ": " + p.getTitle() + " " + BBRContext.getDurationStringL(p.getLength()) + ", " + p.getPrice() + " " + p.getProcedureGroup().getPos().getCurrency());
 		        	keyboard.add(krow);
 		        }
 		        
@@ -268,9 +268,9 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
 	protected String procedureSelected(SendMessage send, BBRProcedure proc) {
 
 		BBRChatStatuses.setStatus(send.getChatId(), BBRChatStatus.CHAT_STEP_PROC_SELECTED);
-		BBRChatStatuses.setData(send.getChatId(), proc.getPos().getId(), proc.getId(), null, null, null, null);
+		BBRChatStatuses.setData(send.getChatId(), proc.getProcedureGroup().getPos().getId(), proc.getId(), null, null, null, null);
 		send.enableMarkdown(false);
-		return "Ваша услуга " + proc.getTitle() + " " + BBRContext.getDurationStringL(proc.getLength()) + ", " + proc.getPrice() + " " + proc.getPos().getCurrency();
+		return "Ваша услуга " + proc.getTitle() + " " + BBRContext.getDurationStringL(proc.getLength()) + ", " + proc.getPrice() + " " + proc.getProcedureGroup().getPos().getCurrency();
 	}
 
 	protected SendMessage chooseTime(String msg, SendMessage send) {

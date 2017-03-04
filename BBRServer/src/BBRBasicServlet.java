@@ -232,7 +232,10 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 					where = manager.wherePos(context.user.getPos().getId());
 			if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
 				if (context.user.getShop() != null)
-					where = manager.whereShop(context.user.getShop().getId());
+					if (context.filterPoS != null)
+						where = manager.wherePos(context.filterPoS.getId());
+					else
+						where = manager.whereShop(context.user.getShop().getId());
 			if (context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER)
 				if (context.filterPoS != null)
 					where = manager.wherePos(context.filterPoS.getId());

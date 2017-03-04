@@ -15,17 +15,16 @@ public class BBRProcedureManager extends BBRDataManager<BBRProcedure>{
 		classTitle = "Procedure";	
 	}
 
-	public BBRProcedure create(String title, BBRPoS pos, float length, float price, int status, String group) {
+	public BBRProcedure create(String title, float length, float price, int status, BBRProcedureGroup group) {
         boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();
 
         BBRProcedure proc = new BBRProcedure();
         proc.setTitle(title);
-        proc.setPos(pos);
         proc.setLength(length);
         proc.setPrice(price);
         proc.setStatus(status);
-        proc.setProcGroup(group);
+        proc.setProcedureGroup(group);
         session.save(proc);
 
         BBRUtil.commitTran(tr);
@@ -39,12 +38,12 @@ public class BBRProcedureManager extends BBRDataManager<BBRProcedure>{
    		if (pos != null) {
    			if (!where.isEmpty())
    				where += " and ";	
-   			where += " pos.id = " + pos.getId();		
+   			where += wherePos(pos.getId());		
    		} else
    		if (shop != null) {
    			if (!where.isEmpty())
    				where += " and ";	
-   			where += " pos.shop.id = " + shop.getId();		
+   			where += whereShop(shop.getId());		
    		}
 
 		return (BBRDataSet<BBRProcedure>)list(query, titleField, where);
@@ -52,6 +51,12 @@ public class BBRProcedureManager extends BBRDataManager<BBRProcedure>{
 	
 	@Override
     public String whereShop(Long shopId) {
-    	return "pos.shop.id = " + shopId;
+    	return "procedureGroup.pos.shop.id = " + shopId;
     };
+    
+	@Override
+    public String wherePos(Long posId) {
+    	return "procedureGroup.pos.id = " + posId;
+    };
+
 }
