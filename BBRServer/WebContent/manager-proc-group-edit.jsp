@@ -4,7 +4,7 @@
 
 <t:wrapper title="LBL_EDIT_PROC_GROUP_TITLE">
 <jsp:body>
-		<t:card title="LBL_EDIT_PROC_GROUP_TITLE" gridPage="manager-proc-list.jsp" method="BBRProcedureGroups">
+		<t:card title="LBL_EDIT_PROC_GROUP_TITLE" gridPage="manager-proc-group-list.jsp" method="BBRProcedureGroups">
 			<t:card-item label="LBL_POS" type="reference" field="pos" isRequired="required" referenceFieldTitle="title" referenceMethod="BBRPoSes" />
 			<t:card-item label="LBL_TITLE" type="text" field="title" isRequired="required" />
 			<t:card-item label="LBL_DESCRIPTION" type="text" field="description" />
