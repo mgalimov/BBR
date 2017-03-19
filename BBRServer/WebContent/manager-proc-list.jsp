@@ -4,6 +4,8 @@
 	<jsp:body>
 		<t:grid method="BBRProcedures" editPage="manager-proc-edit.jsp" createPage="manager-proc-edit.jsp" 
 				title="LBL_PROCEDURES_TITLE" paging="false">
+			<t:grid-filter label="LBL_PROC_GROUP" type="reference" field="procedureGroup" referenceFieldTitle="title" referenceMethod="BBRProcedureGroups"/> 
+			<t:grid-filter label="LBL_PROC_STATUS" type="select" field="status" options="OPT_PROC_STATUS"/> 
 			<t:grid-item label="LBL_TITLE" field="title" sort="asc"/>
 			<t:grid-item label="LBL_POS" field="procedureGroup.pos.title"/>
 			<t:grid-item label="LBL_PROC_GROUP" field="procedureGroup.title"/>

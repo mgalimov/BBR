@@ -49,5 +49,9 @@ public class BBRStockItemTranManager extends BBRDataManager<BBRStockItemTran> {
 	public BBRStockItemTran subtract(BBRStockItem item, BBRPoS pos, BBRSpecialist specialist, Float qty) throws Exception {
 		return create(item, pos, specialist, 'S', new Date(), qty);
 	}
+	
+    public String whereShop(Long shopId) {
+    	return "pos.shop.id = " + shopId;
+    };
 
 }

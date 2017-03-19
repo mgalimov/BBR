@@ -112,7 +112,9 @@ public class BBRStockItems extends
 
 		@SuppressWarnings("unchecked")
 		Hashtable<String, String> filter = (Hashtable<String, String>)context.get("filter");
-		String groupId = filter.get("group"); 
+		String groupId = "";
+		if (filter != null)
+			groupId = filter.get("group"); 
 		if (groupId != null && !groupId.isEmpty()) {
 			where += " and group.id = " + groupId; 
 		}

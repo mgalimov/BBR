@@ -1,3 +1,5 @@
+import java.util.Hashtable;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -149,4 +151,46 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 		}
 		return "";
 	};
+	
+	protected String getData(int pageNumber, int pageSize,
+			Hashtable<Integer, Hashtable<String, String>> fields,
+			Hashtable<Integer, Hashtable<String, String>> sortingFields,
+			BBRParams params, HttpServletRequest request,
+			HttpServletResponse response) {
+		BBRContext context = BBRContext.getContext(request);
+		String where = "";
+		if (context.user != null) {
+			if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN
+					|| context.user.getRole() == BBRUserRole.ROLE_POS_SPECIALIST)
+				if (context.user.getPos() != null)
+					where = manager.wherePos(context.user.getPos().getId());
+			if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
+				if (context.user.getShop() != null)
+					where = manager.whereShop(context.user.getShop().getId());
+			if (context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER)
+				if (context.filterPoS != null)
+					where = manager.wherePos(context.filterPoS.getId());
+				else if (context.filterShop != null)
+					where = manager.whereShop(context.filterShop.getId());
+		}
+
+		@SuppressWarnings("unchecked")
+		Hashtable<String, String> filter = (Hashtable<String, String>)context.get("filter");
+		String groupId = "";
+		if (filter != null)
+			groupId = filter.get("procedureGroup"); 
+		if (groupId != null && !groupId.isEmpty()) {
+			where += " and procedureGroup.id = " + groupId; 
+		}
+		String status = "";
+		if (filter != null)
+			status = filter.get("status"); 
+		if (status != null && !status.isEmpty()) {
+			where += " and status = " + status; 
+		}
+		
+		return manager.list(pageNumber, pageSize, where,
+				BBRContext.getOrderBy(sortingFields, fields)).toJson();
+	}
+
 }

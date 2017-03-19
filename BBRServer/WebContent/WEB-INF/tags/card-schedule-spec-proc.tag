@@ -266,8 +266,17 @@
 			format: 'YYYY-MM-DD',
 			locale: '<%=context.getLocaleString()%>'
         });
-
-		changeDatesOnButtons(0);
+		
+	 	ds = "<%=adf.format(initialDate)%>";
+		if (ds != null && ds != "") {
+			$('#datepicker').data("DateTimePicker").date(ds);
+			$("a[id^='sd']").each(function (i) {
+				dt = new moment(ds);
+				dt.add(i, "days");
+	 			$(this).attr("id", "sd" + dt.year() + "-" + (dt.month() + 1) + "-" + dt.date());
+	 			$(this).text(dt.date() + " " + moment.months()[dt.month()]);
+	 		}); 
+		}
 		
 		$("a[id^='sd']").click(function(e) {
 			$("a[id^='sd']").removeClass('btn-info').addClass('btn-default');
@@ -303,17 +312,14 @@
 	 		select();
 	 		getVisitsNumber();
 	 	});
-	 	
+		
 	 	$("#nextDateBtn").click(function(e) { changeDatesOnButtons(<%=datesPerPage-datesPerPage+1 %>); });
 	 	$("#prevDateBtn").click(function(e) { changeDatesOnButtons(-<%=datesPerPage-datesPerPage+1 %>); });
 	 	$("#todayDateBtn").click(function(e) { changeDatesOnButtons(0); });
 	 	
 	 	select();
 	 	
-	 	ds = "<%=adf.format(initialDate)%>";
 
-		if (ds != null && ds != "")
-			$('#datepicker').data("DateTimePicker").date(ds);
 		
 		$shopposfirstLoad = true;
 		var el = $("#shopposinput")[0].selectize;

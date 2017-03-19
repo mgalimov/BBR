@@ -117,7 +117,7 @@
 				
 				<c:set var="opts" scope="request" value="${context.gs(options)}" />
 
-				<select class="selectized" style="display: none" id="${ft}input" ${isRequired}  ${isDis}>
+				<select class="selectized input-group col-xs-12 col-sm-12 col-md-4 col-lg-4" style="display: none" id="${ft}input" ${isRequired}  ${isDis}>
 					<c:forTokens items="${opts}" delims="," var="option">
 						<c:set var="selected" value="" />
 						<c:if test="${defaultValue != null && defaultValue.equals(option.split(':')[0])}">
