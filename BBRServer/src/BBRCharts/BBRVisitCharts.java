@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import BBR.BBRChartData;
+import BBR.BBRDataSet;
 import BBR.BBRUtil;
 import BBR.BBRChartData.BBRChartDataTypes;
 import BBR.BBRChartPeriods;
@@ -19,6 +20,8 @@ import BBRAcc.BBRShop;
 import BBRAcc.BBRUser.BBRUserRole;
 import BBRClientApp.BBRContext;
 import BBRClientApp.BBRParams;
+import BBRCust.BBRSpecialist;
+import BBRCust.BBRSpecialistManager;
 import BBRCust.BBRVisitManager;
 import BBRCust.BBRVisit.BBRVisitStatus;
 
@@ -98,6 +101,10 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 
 		if (indicator.equals("visitsByWeekDays")) {
 			return visitsByWeekDays(type, options, period, shop, pos);
+		}
+
+		if (indicator.equals("visitsBySpecialists")) {
+			return visitsBySpecialists(type, options, period, shop, pos);
 		}
 
 		if (indicator.equals("visitsBySources")) {
@@ -247,6 +254,51 @@ public class BBRVisitCharts extends BBRBasicChartServlet {
 		}
 	}
 	
+	protected String visitsBySpecialists(String type, String options,
+			BBRChartPeriods period, BBRShop shop, BBRPoS pos) {
+		try {
+			BBRChartData data = new BBRChartData();
+			
+			data.addCol("Даты", BBRChartDataTypes.BBR_CHART_STRING);
+			BBRSpecialistManager spec = new BBRSpecialistManager();
+			BBRDataSet<BBRSpecialist> slist = spec.list();
+
+			BBRVisitManager mgr = new BBRVisitManager();
+		
+			List<Object[]> blist = new ArrayList<Object[]>();
+			for (BBRSpecialist s : slist.data) {
+				data.addCol(s.getName(), BBRChartDataTypes.BBR_CHART_NUMBER);
+				List<Object[]> list = mgr.getVisitsBySpecialist(period.startDate, period.endDate, period.detail, s.getId(), pos, shop);
+				list = BBRChartData.enrichDateList(list, period.startDate, period.endDate, period.detail);
+				
+				boolean found = false;
+				for (Object[] line : list) {
+					for (int i = 0; i < blist.size(); i++) {
+						Object[] o = blist.get(i);
+						if (o[0].toString().equals(line[0].toString())) {
+							Object[] bline = new Object[o.length + line.length - 1];
+							for (int j = 0; j < o.length; j++)
+								bline[j] = o[j];
+							for (int j = 1; j < line.length; j++)
+								bline[o.length + j - 1] = line[j];
+							blist.set(i, bline);
+							found = true;
+							break;
+						}
+					}
+					if (!found) {
+						blist.add(line);
+					}
+				}
+			}
+			data.importList(blist, null, period);
+			
+			return data.toJson();
+		} catch (Exception ex) {
+			return "";
+		}
+	}
+
 	protected String visitsBySources(String type, String options,
 			BBRChartPeriods period, BBRShop shop, BBRPoS pos) {
 		try {

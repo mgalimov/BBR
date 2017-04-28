@@ -868,6 +868,38 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		return list;
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getVisitsBySpecialist(Date startDate, Date endDate, int detail, Long specId, BBRPoS pos, BBRShop shop) {
+		boolean tr = BBRUtil.beginTran();
+		Session session = BBRUtil.getSession();
+		
+		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+		String pf = BBRChartPeriods.periodFunction("timeScheduled", "realTime", detail);
+	
+		String where = "";
+		if (pos != null)
+			where = " and pos.id = " + pos.getId();
+		else
+			if (shop != null)
+				where = "and pos.shop.id = " + shop.getId();
+		
+		Query query = session.createQuery("select " + pf + ", count(*) as visits" + 
+		                                  "  from BBRVisit " +  
+										  " where coalesce(realTime, timeScheduled) >= '"+df.format(BBRUtil.getStartOfDay(startDate))+"' " + 
+		                                  "   and coalesce(realTime, timeScheduled) <= '"+df.format(BBRUtil.getEndOfDay(endDate))+"' " +
+										  "   and status in (" + BBRVisitStatus.VISSTATUS_PERFORMED + "," +
+										  						 BBRVisitStatus.VISSTATUS_APPROVED + ")" +
+										  "   and spec.id = " + specId +
+										  where +
+										  " group by " + pf  + 
+										  " order by coalesce(realTime, timeScheduled) asc");
+
+		List<Object[]> list = query.list();
+		BBRUtil.commitTran(tr);
+		
+		return list;
+	}
+
     public String whereShop(Long shopId) {
     	return "pos.shop.id = " + shopId;
     }
