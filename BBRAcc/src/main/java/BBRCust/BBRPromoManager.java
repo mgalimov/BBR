@@ -76,7 +76,7 @@ public class BBRPromoManager extends BBRDataManager<BBRPromo>{
 		
    		if (pos != null) {
    			if (where.isEmpty())
-   				where = " where";
+   				where = " where ";
    			else
    				where += " and ";	
    			where += pos.getId() + " member of poses";		
@@ -85,7 +85,7 @@ public class BBRPromoManager extends BBRDataManager<BBRPromo>{
    			if (where.isEmpty())
    				where = " where ";
    			else
-   				where += " and";	
+   				where += " and ";	
    			where += " shop.id = " + shop.getId();		
    		}
 
