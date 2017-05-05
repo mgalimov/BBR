@@ -920,7 +920,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 			if (shop != null)
 				where = "and pos.shop.id = " + shop.getId();
 		
-		Query query = session.createQuery("select " + pf + ", sum(finalPrice) as income" + 
+		Query query = session.createQuery("select " + pf + ", sum(finalPrice - amountToSpecialist) as income" + 
 		                                  "  from BBRVisit " +  
 										  " where coalesce(realTime, timeScheduled) >= '"+df.format(BBRUtil.getStartOfDay(startDate))+"' " + 
 		                                  "   and coalesce(realTime, timeScheduled) <= '"+df.format(BBRUtil.getEndOfDay(endDate))+"' " +
