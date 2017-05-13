@@ -162,13 +162,18 @@
 			var vf = parseFloat(v);
 			var fp = $("#finalPriceinput").val();
 			var fpf = parseFloat(fp);
+			var pp = 0;
 
 			if (!isNaN(fpf) && !isNaN(vf)) {
 				$("#discountAmountinput").val(Math.round(fpf * vf / 100));
-				$("#pricePaidinput").val(Math.round(fpf - Math.round(fpf * vf / 100)));
+				pp = Math.round(fpf - Math.round(fpf * vf / 100));
+				$("#pricePaidinput").val(pp);
 			}
 			
-			$("#amountToSpecialistinput").val(Math.round(fpf * procedurePercent / 100));
+			var ats = Math.round(fpf * procedurePercent / 100);
+			if (ats > pp)
+				ats = pp;
+			$("#amountToSpecialistinput").val(ats);
 		}
 		
 		$("#posinput")[0].selectize.on("load", function () {

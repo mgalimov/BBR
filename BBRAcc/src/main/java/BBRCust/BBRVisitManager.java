@@ -53,6 +53,15 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 			visit.setDiscountPercent(promo.getDiscount());
         } else
         	visit.setDiscountPercent(0);
+		
+		visit.setDiscountAmount(Math.round(visit.getFinalPrice() * visit.getDiscountPercent() / 100));
+		visit.setPricePaid(Math.round(visit.getFinalPrice() - visit.getDiscountAmount()));
+		if (visit.getSpec() != null) {
+			visit.setAmountToSpecialist(Math.round(visit.getFinalPrice() * visit.getSpec().getProcedurePercent() / 100));
+			if (visit.getAmountToSpecialist() > visit.getPricePaid())
+				visit.setAmountToSpecialist(visit.getPricePaid());
+		}
+		
 		return true;
 	}
 	
@@ -149,11 +158,12 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
     }
 
 	private String generateNewBookingCode() {
-		String code="";
+		String code = "";
 		int s = BBRUtil.codeAlphabet.length();
 		boolean found = true;
 		
 		while (found) {
+			code = "";
 			for (int i = 1; i <= BBRUtil.codeLength; i++) {
 				code += BBRUtil.codeAlphabet.charAt((int)(Math.random() * s));
 			}
