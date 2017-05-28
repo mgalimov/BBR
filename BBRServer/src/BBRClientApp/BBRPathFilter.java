@@ -44,6 +44,7 @@ public class BBRPathFilter implements Filter {
 	    	}
 	    	
 	    	String book = "/book";
+	    	String selectShopPage = cont + "/general-select-shop.jsp";
 	    	String planVisitPage = cont + "/general-plan-visit.jsp";
 	    	
 	    	if (path.startsWith(book)) {
@@ -55,7 +56,7 @@ public class BBRPathFilter implements Filter {
 			    			BBRPoSManager mgr = new BBRPoSManager();
 			    			BBRPoS pos = mgr.findByUrlId(posUrlID);
 			    			if (pos == null)
-			    				response.sendRedirect(planVisitPage);
+			    				response.sendRedirect(selectShopPage);
 			    			else
 			    				response.sendRedirect(planVisitPage + "?pos=" + pos.getId());
 			    			break;

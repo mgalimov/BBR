@@ -183,6 +183,7 @@ public class BBRUtil {
     	if (timeZone.startsWith("UTC") || timeZone.startsWith("GMT"))
     		timeZone = "Etc/" + timeZone.replace("UTC", "GMT").replace("+","*").replace("-","+").replace("*","-");
     	Calendar c = Calendar.getInstance();
+    	//just to imitate real production hosting: c.setTimeZone(TimeZone.getTimeZone("EDT-0400"));
     	c.setTime(new Date());
     	int off = c.getTimeZone().getRawOffset();
     	TimeZone tz = TimeZone.getTimeZone(timeZone);

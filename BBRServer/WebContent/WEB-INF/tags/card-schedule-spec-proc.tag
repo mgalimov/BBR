@@ -489,11 +489,11 @@
 										e.html("<div class='"+schVal+"-cell visit-status-"+arr[arrIndex][6]+"'></div>");
 									<% if (mode.equals("manager-view") || mode.equals("manager-edit")) { %>
 										e.addClass('clickable');
-										title = arr[arrIndex][3] + ", " + arr[arrIndex][4];
+										title = arr[arrIndex][3] + ", " + arr[arrIndex][4] + ", " + arr[arrIndex][7];
 										e.prop("title", title);
 										e.data("visitId", arr[arrIndex][5]);
 										e.data("toggle", "tooltip");
-										e.tooltip({container: 'small'});
+										e.tooltip({container: 'body'});
 										e.on('click', function(ev) {
 											window.location.href = "manager-visit-edit.jsp?id=" + $(this).data("visitId");
 										})

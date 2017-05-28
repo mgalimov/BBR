@@ -33,7 +33,7 @@
 		<c:set var="itemReq" scope="request" value="${itemReq}
 					${ft}:${ft}String,"/>
 		<c:set var="itemVal" scope="request" value="${itemVal}
-					${ft}String = $('#${ft}input').val();"/>
+					${ft}String = $('#${ft}input').val().replace('&', '#amp#');"/>
 	</c:if>
 		
 		<c:choose>			

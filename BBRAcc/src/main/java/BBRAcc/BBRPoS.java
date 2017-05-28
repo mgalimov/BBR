@@ -57,6 +57,9 @@ public class BBRPoS extends BBRDataElement {
 
 	@Column(name="SMS_NOTIFICATION")
 	private String sms;
+	
+	@Column(name="CITY")
+	private String city;
 
 	public BBRPoS() {}
 	
@@ -162,6 +165,14 @@ public class BBRPoS extends BBRDataElement {
 
 	public void setSms(String sms) {
 		this.sms = sms;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 }

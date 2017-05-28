@@ -255,9 +255,9 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         DateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormatWithSecs);
         DateFormat sdf = new SimpleDateFormat(BBRUtil.fullDateFormat);
         
-        String select = "select coalesce(visit.realTime, visit.timeScheduled, visit.timeScheduled, visit.timeScheduled) as timeScheduled, visit.spec.id as spec, visit.length as length, "+
+        String select = "select coalesce(visit.realTime, visit.timeScheduled) as timeScheduled, visit.spec.id as spec, visit.length as length, "+
         				"visit.userName as userName, case when trim(visit.userContacts) = '' then '–' else visit.userContacts end as userContacts, " + 
-        				"visit.id, visit.status";
+        				"visit.id, visit.status, visit.procedure.title";
         String from = " from BBRVisit visit";
         String where = " where coalesce(visit.realTime, visit.timeScheduled) >= '" + df.format(startOfDay) + "' and "
         			  + " coalesce(visit.realTime, visit.timeScheduled) <= '" + df.format(endOfDay) + "'";

@@ -1,8 +1,11 @@
+<%@page import="BBR.BBRDataSet"%>
 <%@page import="BBRAcc.BBRUser.BBRUserRole"%>
 <%@page import="BBRCust.BBRVisit.BBRVisitStatus"%>
 <%@page import="BBR.BBRUtil"%>
 <%@page import="BBRAcc.BBRPoSManager"%>
+<%@page import="BBRAcc.BBRShopManager"%>
 <%@page import="BBRAcc.BBRPoS"%>
+<%@page import="BBRAcc.BBRShop"%>
 <%@page import="BBRCust.BBRVisit"%>
 <%@page import="BBRCust.BBRSpecialist"%>
 <%@page import="BBRClientApp.BBRContext"%>
@@ -18,65 +21,28 @@
 
 	String titleMod = "";
 
-	String posId = params.get("pos");
-	if (posId == null || posId.isEmpty()) {
-		if (context.user != null)
-			if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN)
-				posId = context.user.getPos().getId().toString();
-			else
-				if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN) {
-					BBRPoSManager pmgr = new BBRPoSManager();
-					posId = pmgr.list("", "", "shop.id = " + context.user.getShop().getId()).data.get(0).getId().toString();
-				}
-				else
-					if (context.user.getRole() == BBRUserRole.ROLE_BBR_OWNER || 
-						context.user.getRole() == BBRUserRole.ROLE_VISITOR) {
-						BBRPoSManager pmgr = new BBRPoSManager();
-						posId = pmgr.list("", "", "").data.get(0).getId().toString();						
-					}
-	};
+	BBRShopManager smgr = new BBRShopManager();
+	BBRDataSet<BBRShop> slist = smgr.list();
 	
 	BBRPoSManager pmgr = new BBRPoSManager();
 	BBRPoS pos = pmgr.findById(Long.parseLong(posId));
     if (pos != null) {
     	request.setAttribute("posId", posId);
     	request.setAttribute("posTitle", pos.getTitle());
-    	request.setAttribute("posDescription",pos.getLocationDescription()
-    		 .replace("[b]", "<b>")
-   			 .replace("[/b]","</b>")
-   			 .replace("[u]", "<u>")
-   			 .replace("[/u]","</u>")
-   			 .replace("[red]", "<font color='red'>")
-   			 .replace("[/red]","</font>")
-   			 .replace("[green]", "<font color='green'>")
-   			 .replace("[/green]","</font>")
-   			 .replace("[i]", "<i>")
-   			 .replace("[/i]","</i>")
-   			 .replace("[br]", "<br/>"));
+    	request.setAttribute("posAddress", pos.getLocationDescription());
     }
 
 	request.setAttribute("visitStatusCancelled", BBRVisitStatus.VISSTATUS_CANCELLED);
 		
 %>
-<t:light-wrapper title="LBL_PLAN_VISIT_TITLE">
+<t:light-wrapper title="LBL_SELECT_POS_TITLE">
 <jsp:body>
 	<div class="container-fluid"> 
 	<div class="col-md-6 col-xs-12 col-sm-12 col-lg-6">
-		<t:modal  cancelButtonLabel="BTN_CONFIRM_CANCEL_VISIT_CANCEL" 
-				  processButtonLabel="BTN_CONFIRM_CANCEL_VISIT_PROCESS" 
-				  title="LBL_CONFIRM_CANCEL_VISIT_TITLE" 
-				  id="sureToDelete">
-			${context.gs('MSG_CONFIRM_CANCEL_VISIT')} 
-		</t:modal>
 		<div class="row">
-			<h2>${posTitle}</h2>
-			<p>${posDescription}</p>
+			<h2></h2>
+			<p></p>
 			<p/>
-		</div>
-		<div class="row">
-		  <a href="#" class="btn btn-default" id="specBtn">${context.gs("LBL_GET_BY_SPEC")}</a>
-		  <a href="#" class="btn btn-default" id="procBtn">${context.gs("LBL_GET_BY_PROC")}</a>
-		  <a href="#" class="btn btn-default hide" id="checkBtn">${context.gs("LBL_CHECK_BOOKING")}</a>
 		</div>
 		<div class="row">&nbsp;</div>
 		<div class="row">

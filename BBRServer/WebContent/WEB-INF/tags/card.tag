@@ -119,6 +119,8 @@
 					${itemSet}
 					
 		    		${itemToolbarCondition}
+		    		
+		    		$(document).trigger("afterItemSet");
 				};
 			});
  		} else {

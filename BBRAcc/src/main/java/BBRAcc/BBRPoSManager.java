@@ -22,7 +22,7 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 	
 	public BBRPoS create(BBRShop shop, String title, String locationDescription, 
 								  BBRGPS locationGPS, Date startWorkHour, Date endWorkHour,
-								  String currency, String timeZone, String urlID, String email, String sms) throws Exception {
+								  String currency, String timeZone, String urlID, String email, String sms, String city) throws Exception {
 		boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();
 
@@ -38,6 +38,7 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
         pos.setUrlID(urlID);
         pos.setEmail(email);
         pos.setSms(sms);
+        pos.setCity(city);
 
         checkBeforeUpdate(pos);
         session.save(pos);
@@ -58,8 +59,7 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 
 		foundPoS = findByUrlId(pos.getUrlID());
 		if (foundPoS != null && foundPoS.getId() != pos.getId())
-			throw new Exception(BBRErrors.ERR_URLID_MUST_BE_UNIQUE);
-
+			throw new Exception(BBRErrors.ERR_URLID_MUST_BE_UNIQUE);		
 		return true;
 	}
 	
