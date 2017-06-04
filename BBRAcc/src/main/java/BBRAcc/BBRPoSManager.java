@@ -149,4 +149,31 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
         BBRUtil.commitTran(tr);
         return result;
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<String> listCities() {
+        boolean tr = BBRUtil.beginTran();
+        Session session = BBRUtil.getSession();
+        
+		Query query = session.createQuery("select distinct pos.city from BBRPoS pos order by pos.city asc");
+		List<String> list = query.list();
+		
+		BBRUtil.commitTran(tr);
+        return list;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Object[]> listInCity(String city) {
+        boolean tr = BBRUtil.beginTran();
+        Session session = BBRUtil.getSession();
+        
+		Query query = session.createQuery("select pos.id, pos.title" + 
+		                                   " from BBRPoS pos" + 
+				                           " where pos.city = '" + city + "'" + 
+		                                   " order by pos.title asc");
+		List<Object[]> list = query.list();
+		
+		BBRUtil.commitTran(tr);
+        return list;
+	}
 }

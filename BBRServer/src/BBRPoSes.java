@@ -142,6 +142,35 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 			
 			return res;
 		} else
-			return "";
+		if (operation.equals("cityList")) {
+			BBRPoSManager mgr = new BBRPoSManager();
+			List<String> list = mgr.listCities();
+
+			String res = "";
+			for (String line : list) {
+				res += ", \"" + line + "\"";
+			}
+			res = "[" + res.substring(1) + "]";
+			
+			return res;
+		} else
+		if (operation.equals("posList")) {
+			BBRPoSManager mgr = new BBRPoSManager();
+			String city = params.get("city");
+			List<Object[]> list = mgr.listInCity(city);
+
+			String res = "";
+			for (Object[] line : list) {
+				String ln = "{" +
+							"\"id\": \"" + line[0] + "\"," +  
+							"\"title\": \"" + line[1] + "\"" + 
+							"}";
+				res += ", " + ln;
+			}
+			res = "[" + res.substring(1) + "]";
+			
+			return res;
+		} else
+		return "";
 	};
 }
