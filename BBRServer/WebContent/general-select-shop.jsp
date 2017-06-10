@@ -20,33 +20,40 @@
 <t:light-wrapper title="LBL_SELECT_POS_TITLE">
 <jsp:body>
 	<div class="container-fluid">
-		<h2 id="head1">${context.gs("LBL_SELECT_CITY")}</h2> 
-		<h2 id="head2" class="hide">${context.gs("LBL_SELECT_POS")}</h2> 
-		<div class="col-md-6 col-xs-12 col-sm-12 col-lg-6">
-			<div class="row">
-				<div class="alert alert-warning alert-dismissable hide" id="alertMessage">
-	    			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	    			<div id="alertText"></div>
-				</div>
-			</div>
-		</div>
+		<a id="#"></a><h2 id="head1">${context.gs("LBL_SELECT_CITY")}</h2> 
+		<a id="#poses"></a><h2 id="head2" class="hide">${context.gs("LBL_SELECT_POS")}</h2> 
 		<div class="row">
 			<div class="col-md-6 col-xs-12 col-sm-12 col-lg-6" id="main">
 			</div>
-			<div class="col-md-6 col-xs-12 col-sm-12 col-lg-6" id="map">
+			<div class="col-md-4 col-xs-12 col-sm-12 col-lg-4" id="map">
 				<iframe id="gmap" width="100%" height="400" style="border:0" ></iframe>
 			</div>
-		</div>		
+		</div>
 	</div>
 </jsp:body>
 </t:light-wrapper>
 
 <script>
 	$(document).ready(function () {
-		fillCities();
+		selector();
 	});
 	
+	function selector() {
+		var hash = location.hash;
+		if (hash == "" || hash == "#")
+			fillCities();
+		else if (hash == "#poses")
+			fillPoses(this.text);		
+	}
+
+	window.onhashchange = function() {
+	    selector();
+	}
+	
 	function fillCities() {
+		$("#head1").removeClass("hide");
+		$("#head2").addClass("hide");
+		$("#map").addClass("hide");
 		$.ajax({
 			url: "BBRPoSes",
 			data: {
@@ -66,7 +73,7 @@
 			}
 			$("#main").html(html);
 			$("[data-city$=city]").click(function () {
-				fillPoses(this.text);
+				location.hash = "#poses";
 			});
 		});
 	}
