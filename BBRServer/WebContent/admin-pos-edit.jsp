@@ -6,6 +6,7 @@
 			<t:card-tab label="LBL_POS_TITLE" id="mainTab" combined="true" isActive="true">
 				<t:card-item label="LBL_SHOP" field="shop" type="reference" referenceMethod="BBRShops" referenceFieldTitle="title"/>
 				<t:card-item label="LBL_TITLE" field="title" type="text" isRequired="required"/>
+				<t:card-item label="LBL_POS_STATUS" type="select" field="status" options="OPT_POS_STATUS"/>
 				<t:card-item label="LBL_CITY" field="city" type="text"/>
 				<t:card-item label="LBL_START_WORKHOUR" field="startWorkHour" type="time" isRequired="required"/>
 				<t:card-item label="LBL_END_WORKHOUR" field="endWorkHour" type="time" isRequired="required"/>

@@ -61,6 +61,9 @@ public class BBRPoS extends BBRDataElement {
 	@Column(name="CITY")
 	private String city;
 
+	@Column(name="STATUS")
+	private int status;
+	
 	public BBRPoS() {}
 	
 	public void setId(Long id) {
@@ -175,4 +178,16 @@ public class BBRPoS extends BBRDataElement {
 		this.city = city;
 	}
 
+	class BBRPoSStatus {
+		public static final int POSSTATUS_ACTIVE = 1;
+		public static final int POSSTATUS_INACTIVE = 2;		
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
 }

@@ -2,6 +2,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import BBR.BBRErrors;
 import BBRAcc.BBRShop;
 import BBRAcc.BBRShopManager;
 import BBRAcc.BBRUser.BBRUserRole;
@@ -21,18 +22,36 @@ public class BBRShops extends BBRBasicServlet<BBRShop, BBRShopManager> {
 		String title = params.get("title");
 		String country = params.get("country");
 		String timeZone = params.get("timeZone");
-		BBRShop shop = manager.create(title, country, timeZone);
+		String status = params.get("status");
+		int aStatus;
+		
+		try {
+			aStatus = Integer.parseInt(status);
+		} catch (Exception ex) {
+			throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
+		}
+		BBRShop shop = manager.create(title, country, timeZone, aStatus);
 		return shop.getId().toString();
 	}
 
 	@Override
-	protected BBRShop beforeUpdate(BBRShop shop, BBRParams params, HttpServletRequest request, HttpServletResponse response) {
+	protected BBRShop beforeUpdate(BBRShop shop, BBRParams params, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String title = params.get("title");
 		String country = params.get("country");
 		String timeZone = params.get("timeZone");
+		String status = params.get("status");
+		int aStatus;
+		
+		try {
+			aStatus = Integer.parseInt(status);
+		} catch (Exception ex) {
+			throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
+		}
+
 		shop.setTitle(title);
 		shop.setCountry(country);
 		shop.setTimeZone(timeZone);
+		shop.setStatus(aStatus);
 		return shop;		
 	}
 

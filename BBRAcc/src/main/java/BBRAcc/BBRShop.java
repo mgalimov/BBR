@@ -21,6 +21,9 @@ public class BBRShop extends BBRDataElement {
 	@Column(name="TIMEZONE")
 	private String timeZone;
 	
+	@Column(name="STATUS")
+	private int status;
+	
 	public BBRShop() {}
 	
 	public void setId(Long id) {
@@ -53,5 +56,18 @@ public class BBRShop extends BBRDataElement {
 
 	public void setTimeZone(String timeZone) {
 		this.timeZone = timeZone;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	
+	class BBRShopStatus {
+		public static final int SHOPSTATUS_ACTIVE = 1;
+		public static final int SHOPSTATUS_INACTIVE = 2;
 	}
 }

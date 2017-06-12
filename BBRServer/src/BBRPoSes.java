@@ -5,6 +5,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import BBR.BBRErrors;
 import BBR.BBRGPS;
 import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
@@ -39,6 +40,14 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 		String email = params.get("email");
 		String sms = params.get("sms");
 		String city = params.get("city");
+		String status = params.get("status");
+		int aStatus;
+		
+		try {
+			aStatus = Integer.parseInt(status);
+		} catch (Exception ex) {
+			throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
+		}
 		
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullTimeFormat);
 		BBRShopManager shopMgr = new BBRShopManager();
@@ -56,7 +65,8 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 					urlID,
 					email,
 					sms,
-					city
+					city,
+					aStatus
 					);
 		return pos.getId().toString();
 	}
@@ -76,6 +86,14 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 		String email = params.get("email");
 		String sms = params.get("sms");
 		String city = params.get("city");
+		String status = params.get("status");
+		int aStatus;
+		
+		try {
+			aStatus = Integer.parseInt(status);
+		} catch (Exception ex) {
+			throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
+		}
 
 		if (locationLat.isEmpty())
 			locationLat = "0";
@@ -98,6 +116,7 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 			pos.setEmail(email);
 			pos.setSms(sms);
 			pos.setCity(city);
+			pos.setStatus(aStatus);
 			manager.update(pos);
 		}
 		return null;		

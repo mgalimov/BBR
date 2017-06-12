@@ -20,8 +20,8 @@
 <t:light-wrapper title="LBL_SELECT_POS_TITLE">
 <jsp:body>
 	<div class="container-fluid">
-		<a id="#"></a><h2 id="head1">${context.gs("LBL_SELECT_CITY")}</h2> 
-		<a id="#poses"></a><h2 id="head2" class="hide">${context.gs("LBL_SELECT_POS")}</h2> 
+		<h2 id="head">${context.gs("LBL_SELECT_CITY")}</h2> 
+		<h2 id="poses">${context.gs("LBL_SELECT_POS")}</h2> 
 		<div class="row">
 			<div class="col-md-6 col-xs-12 col-sm-12 col-lg-6" id="main">
 			</div>
@@ -35,6 +35,10 @@
 
 <script>
 	$(document).ready(function () {
+		window.addEventListener('popstate', function(e){
+			selector();
+		}, false);
+
 		selector();
 	});
 	
@@ -42,18 +46,14 @@
 		var hash = location.hash;
 		if (hash == "" || hash == "#")
 			fillCities();
-		else if (hash == "#poses")
-			fillPoses(this.text);		
+		else if (hash.substr(0, 6) == "#poses")
+			fillPoses(hash.substr(12, hash.length-12));		
 	}
 
-	window.onhashchange = function() {
-	    selector();
-	}
-	
 	function fillCities() {
-		$("#head1").removeClass("hide");
-		$("#head2").addClass("hide");
-		$("#map").addClass("hide");
+		//$("#head").removeClass("hide");
+		//$("#poses").addClass("hide");
+		//$("#map").addClass("hide");
 		$.ajax({
 			url: "BBRPoSes",
 			data: {
@@ -73,15 +73,20 @@
 			}
 			$("#main").html(html);
 			$("[data-city$=city]").click(function () {
-				location.hash = "#poses";
+				go("#poses?city=" + this.text);
 			});
 		});
 	}
 
+	function go(hash) {
+		history.pushState({}, null, hash);
+		selector();
+	}
+	
 	function fillPoses(city) {
-		$("#head1").addClass("hide");
-		$("#head2").removeClass("hide");
-		$("#map").removeClass("hide");
+		//$("#head").addClass("hide");
+		//$("#poses").removeClass("hide");
+		//$("#map").removeClass("hide");
 		$("#gmap").attr("src", "https://www.google.com/maps/embed/v1/place?key=AIzaSyBmrSOV51WWVbmOZPe-nyc-jFfkgFmLyng&q=" + city); 
 		$.ajax({
 			url: "BBRPoSes",

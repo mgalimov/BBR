@@ -6,6 +6,7 @@
 			<t:card-item label="LBL_TITLE" field="title" type="text" isRequired="required"/>
 			<t:card-item label="LBL_COUNTRY" field="country" type="text" isRequired="required"/>
 			<t:card-item label="LBL_TIMEZONE" field="timeZone" type="text" options="OPT_TIMEZONES"/>
+			<t:card-item label="LBL_SHOP_STATUS" type="select" field="status" options="OPT_SHOP_STATUS"/>
 		</t:card>
 	</jsp:body>
 </t:wrapper>

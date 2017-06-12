@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import BBR.BBRDataManager;
 import BBR.BBRDataSet;
 import BBR.BBRUtil;
+import BBRAcc.BBRShop.BBRShopStatus;
 
 public class BBRShopManager extends BBRDataManager<BBRShop>{
 	
@@ -16,7 +17,7 @@ public class BBRShopManager extends BBRDataManager<BBRShop>{
 		classTitle = "Shop";	
 	}
 	
-	public BBRShop create(String title, String country, String timeZone) {
+	public BBRShop create(String title, String country, String timeZone, int status) {
         boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();
 
@@ -24,6 +25,7 @@ public class BBRShopManager extends BBRDataManager<BBRShop>{
         shop.setTitle(title);
         shop.setCountry(country);
         shop.setTimeZone(timeZone);
+        shop.setStatus(status);
         session.save(shop);
 
         BBRUtil.commitTran(tr);
@@ -41,7 +43,7 @@ public class BBRShopManager extends BBRDataManager<BBRShop>{
    		
    		if (queryTerm != null && !queryTerm.equals("")) {
    			queryTerm.replaceAll("\\s", "%");
-   			where = " where title like '%" + queryTerm + "%'";
+   			where = " where title like '%" + queryTerm + "%' and status = " + BBRShopStatus.SHOPSTATUS_ACTIVE;
    		}
    		
    		if (shop != null) {

@@ -6,6 +6,7 @@
 			<t:grid-item label="LBL_TITLE" field="title" sort="asc"/>
 			<t:grid-item label="LBL_COUNTRY" field="country" />
 			<t:grid-item label="LBL_TIMEZONE" field="timeZone" />
+			<t:grid-item label="LBL_SHOP_STATUS" field="status" type="select" options="OPT_SHOP_STATUS"/>
 		</t:grid>
 	</jsp:body>
 </t:wrapper>

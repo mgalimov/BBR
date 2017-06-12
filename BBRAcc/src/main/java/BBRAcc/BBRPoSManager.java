@@ -12,6 +12,8 @@ import BBR.BBRErrors;
 import BBR.BBRGPS;
 import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
+import BBRAcc.BBRPoS.BBRPoSStatus;
+import BBRAcc.BBRShop.BBRShopStatus;
 
 public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 	
@@ -22,7 +24,8 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 	
 	public BBRPoS create(BBRShop shop, String title, String locationDescription, 
 								  BBRGPS locationGPS, Date startWorkHour, Date endWorkHour,
-								  String currency, String timeZone, String urlID, String email, String sms, String city) throws Exception {
+								  String currency, String timeZone, String urlID, String email, 
+								  String sms, String city, int status) throws Exception {
 		boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();
 
@@ -39,6 +42,7 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
         pos.setEmail(email);
         pos.setSms(sms);
         pos.setCity(city);
+        pos.setStatus(status);
 
         checkBeforeUpdate(pos);
         session.save(pos);
@@ -65,7 +69,9 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 	
 	public BBRPoS findByTitle(String title, BBRShop shop) {
         boolean tr = BBRUtil.beginTran();
-        BBRPoS result = (BBRPoS) BBRUtil.getSession().createQuery("from BBRPoS as pos where pos.title = '" + title + "' and pos.shop = " + shop.getId()).uniqueResult();
+        BBRPoS result = (BBRPoS) BBRUtil.getSession().createQuery("from BBRPoS as pos where pos.title = '" + title + "'" + 
+                        " and pos.shop = " + shop.getId() + 
+                        " and pos.status = " + BBRPoSStatus.POSSTATUS_ACTIVE).uniqueResult();
         BBRUtil.commitTran(tr);
         return result;
     }
@@ -74,7 +80,7 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 	public List<BBRPoS> findByTitleLike(String title) {
         boolean tr = BBRUtil.beginTran();
         title = title.replace(" ", "%").replace("\t", "%").replace("\n", "%");
-        List<BBRPoS> list = BBRUtil.getSession().createQuery("from BBRPoS as pos where pos.title like '%" + title + "%'").list();
+        List<BBRPoS> list = BBRUtil.getSession().createQuery("from BBRPoS as pos where pos.title like '%" + title + "%' and pos.status = " + BBRPoSStatus.POSSTATUS_ACTIVE).list();
         BBRUtil.commitTran(tr);
         return list;
     }
@@ -96,7 +102,8 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
  							+ "+"
  							+ "(locationGPS.lng - " + locationGPS.lng + ")*(locationGPS.lng - " + locationGPS.lng + ")"
  							+ ") <= " + radius;
-
+		where += " and status = " + BBRPoSStatus.POSSTATUS_ACTIVE;
+ 		
  		Long count = (Long)session.createQuery("Select count(*) from " + typeName + where).uniqueResult();
         Query query = session.createQuery("from " + typeName + where);
         
@@ -124,13 +131,13 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
         boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();
         
-		String where = "";
+		String where = " where pos.status = " + BBRPoSStatus.POSSTATUS_ACTIVE + 
+				       "   and pos.shop.status = "  + BBRShopStatus.SHOPSTATUS_ACTIVE; 
 		if (pos != null)
-			where = " where pos.id = " + pos.getId();
+			where += " and pos.id = " + pos.getId();
 		else
 			if (shop != null)
-				where = " where pos.shop.id = " + shop.getId();
-		
+				where += " and pos.shop.id = " + shop.getId();
 		Query query = session.createQuery("select pos.shop.id, pos.shop.title, pos.id, pos.title" + 
 										  "  from BBRPoS pos" +  
 										  	where + 
@@ -155,7 +162,10 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
         boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();
         
-		Query query = session.createQuery("select distinct pos.city from BBRPoS pos order by pos.city asc");
+		Query query = session.createQuery("select distinct pos.city " + 
+		                                  "  from BBRPoS pos " +
+				                          " where pos.status = " + BBRPoSStatus.POSSTATUS_ACTIVE + 
+		                                  " order by pos.city asc");
 		List<String> list = query.list();
 		
 		BBRUtil.commitTran(tr);
@@ -170,6 +180,7 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
 		Query query = session.createQuery("select pos.id, pos.title" + 
 		                                   " from BBRPoS pos" + 
 				                           " where pos.city = '" + city + "'" + 
+				                   		   "   and pos.status = " + BBRPoSStatus.POSSTATUS_ACTIVE + 
 		                                   " order by pos.title asc");
 		List<Object[]> list = query.list();
 		
