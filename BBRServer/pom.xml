@@ -119,9 +119,9 @@
   			<version>1.2</version>
   		</dependency>
   		<dependency>
-  			<groupId>com.github.rubenlagus</groupId>
-  			<artifactId>TelegramBots</artifactId>
-  			<version>v2.3.5</version>
+  			<groupId>org.telegram</groupId>
+  			<artifactId>telegrambots</artifactId>
+  			<version>3.2</version>
   		</dependency>
   	</dependencies>
   </dependencyManagement>
@@ -144,8 +144,8 @@
   		<artifactId>jstl</artifactId>
   	</dependency>
   	<dependency>
-	    <groupId>com.github.rubenlagus</groupId>
-	    <artifactId>TelegramBots</artifactId>
+  		<groupId>org.telegram</groupId>
+  		<artifactId>telegrambots</artifactId>
   	</dependency>
   </dependencies>
   <artifactId>BBRServer</artifactId>

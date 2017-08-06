@@ -97,7 +97,7 @@ public class BBRMailer {
         }
     }
     
-    public static void sendSMS(String phones, String text) {
+    public static void sendSMS(final String phones, final String text) {
         Thread thread = new Thread() {
 	    	public void run() {
 		       	 TimeFormatter timeFormatter = new AbsoluteTimeFormatter();

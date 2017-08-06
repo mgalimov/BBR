@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.telegram.telegrambots.TelegramApiException;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import BBR.BBRDataSet;
 import BBR.BBRUtil;
@@ -125,7 +125,7 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
 
 
 	            try {
-	                sendMessage(send);
+	                execute(send);
 	            } catch (TelegramApiException e) {
 	    			BBRUtil.log.error(e.getMessage());
 	    			BBRUtil.log.error(e.getStackTrace());
@@ -170,9 +170,9 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
         						ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         						replyKeyboardMarkup.setSelective(true);
         				        replyKeyboardMarkup.setResizeKeyboard(true);
-        				        replyKeyboardMarkup.setOneTimeKeyboad(true);
+        				        replyKeyboardMarkup.setOneTimeKeyboard(true);
         				        
-        				        List<KeyboardRow> keyboard = new ArrayList<>();
+        				        List<KeyboardRow> keyboard = new ArrayList<KeyboardRow>();
         				        
         				        for (BBRPoS pos : list) {
             				        KeyboardRow krow = new KeyboardRow();
@@ -238,9 +238,9 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
 				ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
 				replyKeyboardMarkup.setSelective(true);
 		        replyKeyboardMarkup.setResizeKeyboard(true);
-		        replyKeyboardMarkup.setOneTimeKeyboad(true);
+		        replyKeyboardMarkup.setOneTimeKeyboard(true);
 		        
-		        List<KeyboardRow> keyboard = new ArrayList<>();
+		        List<KeyboardRow> keyboard = new ArrayList<KeyboardRow>();
 		        
 		        for (BBRProcedure p : plist.data) {
 			        KeyboardRow krow = new KeyboardRow();
@@ -321,8 +321,8 @@ public class BBRTelegramBot extends TelegramLongPollingBot {
 		ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
 		replyKeyboardMarkup.setSelective(true);
         replyKeyboardMarkup.setResizeKeyboard(true);
-        replyKeyboardMarkup.setOneTimeKeyboad(true);
-        List<KeyboardRow> keyboard = new ArrayList<>();
+        replyKeyboardMarkup.setOneTimeKeyboard(true);
+        List<KeyboardRow> keyboard = new ArrayList<KeyboardRow>();
         KeyboardRow krow = new KeyboardRow();
         
 		Date date = BBRUtil.now(pos.getTimeZone());

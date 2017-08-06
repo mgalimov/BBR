@@ -16,9 +16,15 @@
         "/>
 <c:set var="infoboxmargin" value="style='margin-left: 0px;'" />
 
+<c:set var="ahrefstart" value=""/>
+<c:set var="ahrefend" value=""/>
+
 <c:if test="${href!=null&&!href.isEmpty()}">
-	<a href="${href}">
+	<c:set var="ahrefstart" value="<a href='${href}'>"/>
+	<c:set var="ahrefend" value="</a>"/>
 </c:if>
+
+${ahrefstart}
 	<div class="info-box">
 <c:if test="${icon!=null&&!icon.isEmpty()}">
 		<span class="info-box-icon bg-${color}">
@@ -31,9 +37,7 @@
 	 		<span class="info-box-number" id="${indicator}_${type}_chart"></span>
 		</div>
 	</div>
-<c:if test="${href!=null&&!href.isEmpty()}">
-	</a>
-</c:if>
+${ahrefend}
 
 <c:set var="chartoptions" scope="page" value=""/>
 <c:set var="chartpackage" scope="page" value=""/>

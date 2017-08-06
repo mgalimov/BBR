@@ -7,7 +7,6 @@ import java.sql.Blob;
 
 import javax.persistence.*;
 
-import jdk.nashorn.internal.objects.annotations.Getter;
 import BBR.BBRDataElement;
 import BBR.BBRDataSet;
 
