@@ -133,6 +133,11 @@
   			<artifactId>quartz</artifactId>
   			<version>2.3.0</version>
   		</dependency>
+  		<dependency>
+  			<groupId>org.hibernate</groupId>
+  			<artifactId>hibernate-c3p0</artifactId>
+  			<version>5.2.10.Final</version>
+  		</dependency>
   	</dependencies>
   </dependencyManagement>
 
@@ -164,6 +169,10 @@
   	<dependency>
   		<groupId>org.quartz-scheduler</groupId>
   		<artifactId>quartz</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.hibernate</groupId>
+  		<artifactId>hibernate-c3p0</artifactId>
   	</dependency>
   </dependencies>
   <artifactId>BBRServer</artifactId>
