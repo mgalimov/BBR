@@ -131,7 +131,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 			        	BBRMailer.send(em, 
 			        			"Barbiny: Новая запись в " + visit.getPos().getTitle(), 
 			        			"Время: " + df.format(visit.getTimeScheduled()) + "\n" +
-			        			"Имя: " + visit.getUserName() + "\n" +
+			        			"�?мя: " + visit.getUserName() + "\n" +
 			        			"Контакты: " + visit.getUserContacts() + "\n" +
 			        			"Услуга: " + p + "\n" +
 			        			"Мастер: " + s + "\n" + "\n" + 

@@ -9,7 +9,7 @@
 <%@ attribute name="showTabs" %>
 
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <c:set var="itemids" scope="request" value="${''}"/>
 <c:set var="itemReq" scope="request" value="${''}"/>
