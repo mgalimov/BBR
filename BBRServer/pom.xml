@@ -134,9 +134,14 @@
   			<version>2.3.0</version>
   		</dependency>
   		<dependency>
-  			<groupId>org.hibernate</groupId>
-  			<artifactId>hibernate-c3p0</artifactId>
-  			<version>5.2.10.Final</version>
+  			<groupId>org.slf4j</groupId>
+  			<artifactId>slf4j-api</artifactId>
+  			<version>1.7.7</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>org.slf4j</groupId>
+  			<artifactId>slf4j-log4j12</artifactId>
+  			<version>1.7.7</version>
   		</dependency>
   	</dependencies>
   </dependencyManagement>
@@ -171,8 +176,17 @@
   		<artifactId>quartz</artifactId>
   	</dependency>
   	<dependency>
-  		<groupId>org.hibernate</groupId>
-  		<artifactId>hibernate-c3p0</artifactId>
+  		<groupId>BBRData</groupId>
+  		<artifactId>BBRData</artifactId>
+  		<version>0.0.1</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.slf4j</groupId>
+  		<artifactId>slf4j-api</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.slf4j</groupId>
+  		<artifactId>slf4j-log4j12</artifactId>
   	</dependency>
   </dependencies>
   <artifactId>BBRServer</artifactId>

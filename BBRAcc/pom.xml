@@ -51,7 +51,7 @@
           <target>1.8</target>
         </configuration>
       </plugin>
-      <!-- plugin>
+      <plugin>
         <artifactId>maven-resources-plugin</artifactId>
         <version>2.5</version>
         <executions>
@@ -65,7 +65,7 @@
               <outputDirectory>${project.build.outputDirectory}</outputDirectory>
               <resources>
                 <resource>
-                  <directory>${project.basedir}/src/main/resources</directory>
+                  <directory>${project.basedir}/src/resources</directory>
                   <filtering>false</filtering>
                   <includes>
                     <include>**/*.*</include>
@@ -75,7 +75,7 @@
             </configuration>
           </execution>
         </executions>
-      </plugin -->
+      </plugin>
   	</plugins>   
   </build>
 
@@ -85,11 +85,6 @@
   			<groupId>jstl</groupId>
   			<artifactId>jstl</artifactId>
   			<version>1.2</version>
-  		</dependency>
-  		<dependency>
-  			<groupId>org.hibernate</groupId>
-  			<artifactId>hibernate-core</artifactId>
-  			<version>4.3.7.Final</version>
   		</dependency>
   		<dependency>
   			<groupId>com.google.code.gson</groupId>
@@ -106,16 +101,17 @@
   			<artifactId>jsmpp</artifactId>
   			<version>2.1.0-RELEASE</version>
   		</dependency>
+  		<dependency>
+  			<groupId>org.hibernate</groupId>
+  			<artifactId>hibernate-core</artifactId>
+  			<version>4.3.11.Final</version>
+  		</dependency>
   	</dependencies>
   </dependencyManagement>
   <dependencies>
   	<dependency>
   		<groupId>jstl</groupId>
   		<artifactId>jstl</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.hibernate</groupId>
-  		<artifactId>hibernate-core</artifactId>
   	</dependency>
   	  	<dependency>
   		<groupId>com.google.code.gson</groupId>
@@ -128,6 +124,10 @@
   	  	<dependency>
   	  		<groupId>com.googlecode.jsmpp</groupId>
   	  		<artifactId>jsmpp</artifactId>
+  	  	</dependency>
+  	  	<dependency>
+  	  		<groupId>org.hibernate</groupId>
+  	  		<artifactId>hibernate-core</artifactId>
   	  	</dependency>
   </dependencies>
 </project>
