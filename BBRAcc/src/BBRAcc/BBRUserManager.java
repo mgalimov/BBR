@@ -46,7 +46,9 @@ public class BBRUserManager extends BBRDataManager<BBRUser> {
     
 	public BBRUser findUserByEmail(String email) {
         boolean tr = BBRUtil.beginTran();
-        BBRUser result = (BBRUser) BBRUtil.getSession().createQuery("from BBRUser as user where user.email = '" + email + "'").uniqueResult();
+        BBRUser result = (BBRUser) BBRUtil.getSession()
+        			.createQuery("from BBRUser as user where user.email = '" + email + "'")
+        			.uniqueResult();
         BBRUtil.commitTran(tr);
         return result;
     }
