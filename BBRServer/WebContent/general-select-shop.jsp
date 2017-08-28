@@ -105,12 +105,9 @@
 					letter = pos.title.substr(0, 1);
 					html += "<h1>" + letter + "</h1>";
 				}
-				html += "<a href='#' class='list-group-item' data-type='pos' data-pos='" + pos.id + "'>" + pos.title + "</a>";
+				html += "<a href='general-plan-visit.jsp?pos=" + pos.id + "' class='list-group-item' data-type='pos'>" + pos.title + "</a>";
 			}
 			$("#main").html(html);
-			$("[data-type$=pos]").click(function () {
-				window.location.href = "general-plan-visit.jsp?pos=" + $(this).attr("data-pos");
-			});
 		});
 	}
 
