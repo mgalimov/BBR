@@ -69,10 +69,11 @@
 					letter = city.substr(0, 1);
 					html += "<h1>" + letter + "</h1>";
 				}
-				html += "<a href='#poses?city=" + city + "' class='list-group-item' data-city='city'>" + city + "</a>";
+				html += "<a href='#' class='list-group-item' data-city='city'>" + city + "</a>";
 			}
 			$("#main").html(html);
-			$("[data-city$=city]").click(function () {
+			$("[data-city$=city]").click(function (e) {
+				e.preventDefault();
 				go("#poses?city=" + this.text);
 			});
 		});
