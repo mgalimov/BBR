@@ -35,9 +35,9 @@
 
 <script>
 	$(document).ready(function () {
-		window.addEventListener('popstate', function(e){
-			selector();
-		}, false);
+ 		window.addEventListener('popstate', function(e){
+ 			selector();
+ 		}, false);
 
 		selector();
 	});
@@ -51,9 +51,9 @@
 	}
 
 	function fillCities() {
-		//$("#head").removeClass("hide");
-		//$("#poses").addClass("hide");
-		//$("#map").addClass("hide");
+		$("#head").removeClass("hide");
+		$("#poses").addClass("hide");
+		$("#map").addClass("hide");
 		$.ajax({
 			url: "BBRPoSes",
 			data: {
@@ -69,7 +69,7 @@
 					letter = city.substr(0, 1);
 					html += "<h1>" + letter + "</h1>";
 				}
-				html += "<a href='#' class='list-group-item' data-city='city'>" + city + "</a>";
+				html += "<a href='#poses?city=" + city + "' class='list-group-item' data-city='city'>" + city + "</a>";
 			}
 			$("#main").html(html);
 			$("[data-city$=city]").click(function () {
@@ -84,9 +84,9 @@
 	}
 	
 	function fillPoses(city) {
-		//$("#head").addClass("hide");
-		//$("#poses").removeClass("hide");
-		//$("#map").removeClass("hide");
+		$("#head").addClass("hide");
+		$("#poses").removeClass("hide");
+		$("#map").removeClass("hide");
 		$("#gmap").attr("src", "https://www.google.com/maps/embed/v1/place?key=AIzaSyBmrSOV51WWVbmOZPe-nyc-jFfkgFmLyng&q=" + city); 
 		$.ajax({
 			url: "BBRPoSes",
