@@ -7,6 +7,7 @@
 <%@page import="BBRCust.BBRSpecialist"%>
 <%@page import="BBRClientApp.BBRContext"%>
 <%@ page import="BBRClientApp.BBRParams"%>
+<%@ page import="java.text.SimpleDateFormat"%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
@@ -39,8 +40,13 @@
 	BBRPoSManager pmgr = new BBRPoSManager();
 	BBRPoS pos = pmgr.findById(Long.parseLong(posId));
     if (pos != null) {
+    	SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullTimeFormat);
+    	
     	request.setAttribute("posId", posId);
     	request.setAttribute("posTitle", pos.getTitle());
+    	request.setAttribute("posCity", pos.getCity());
+    	request.setAttribute("posStartWorkHour", df.format(pos.getStartWorkHour()));
+    	request.setAttribute("posEndWorkHour", df.format(pos.getEndWorkHour()));
     	request.setAttribute("posDescription",pos.getLocationDescription()
     		 .replace("[b]", "<b>")
    			 .replace("[/b]","</b>")
@@ -69,8 +75,8 @@
 			${context.gs('MSG_CONFIRM_CANCEL_VISIT')} 
 		</t:modal>
 		<div class="row">
-			<h2>${posTitle}</h2>
-			<p>${posDescription}</p>
+			<h3>${posCity} / ${posTitle}</h3>
+			<p>${posDescription}<br/>${posStartWorkHour} &#151; ${posEndWorkHour}</p>
 			<p/>
 		</div>
 		<div class="row">

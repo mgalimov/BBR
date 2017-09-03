@@ -1,4 +1,5 @@
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.annotation.WebServlet;
@@ -177,12 +178,20 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 			BBRPoSManager mgr = new BBRPoSManager();
 			String city = params.get("city");
 			List<Object[]> list = mgr.listInCity(city);
+			SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullTimeFormat);
 
 			String res = "";
 			for (Object[] line : list) {
+				String swh = df.format((Date)line[5]);
+				String ewh = df.format((Date)line[6]);
 				String ln = "{" +
 							"\"id\": \"" + line[0] + "\"," +  
-							"\"title\": \"" + line[1] + "\"" + 
+							"\"title\": \"" + line[1] + "\"," + 
+							"\"lat\": \"" + line[2] + "\"," + 
+							"\"lng\": \"" + line[3] + "\"," + 
+							"\"locationDescription\": \"" + line[4] + "\"," + 
+							"\"startWorkHour\": \"" + swh + "\"," + 
+							"\"endWorkHour\": \"" + ewh + "\"" + 
 							"}";
 				res += ", " + ln;
 			}

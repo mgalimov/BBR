@@ -177,7 +177,8 @@ public class BBRPoSManager extends BBRDataManager<BBRPoS>{
         boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();
         
-		Query query = session.createQuery("select pos.id, pos.title" + 
+		Query query = session.createQuery("select pos.id, pos.title, pos.locationGPS.lat, pos.locationGPS.lng, " + 
+										   "pos.locationDescription, pos.startWorkHour, pos.endWorkHour" + 
 		                                   " from BBRPoS pos" + 
 				                           " where pos.city = '" + city + "'" + 
 				                   		   "   and pos.status = " + BBRPoSStatus.POSSTATUS_ACTIVE + 
