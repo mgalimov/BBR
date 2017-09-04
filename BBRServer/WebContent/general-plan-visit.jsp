@@ -36,9 +36,14 @@
 						posId = pmgr.list("", "", "").data.get(0).getId().toString();						
 					}
 	};
+
+	BBRPoS pos = null;
 	
-	BBRPoSManager pmgr = new BBRPoSManager();
-	BBRPoS pos = pmgr.findById(Long.parseLong(posId));
+	if (posId != null && !posId.isEmpty()) {
+		BBRPoSManager pmgr = new BBRPoSManager();
+		pos = pmgr.findById(Long.parseLong(posId));
+	}
+	
     if (pos != null) {
     	SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullTimeFormat);
     	
@@ -146,10 +151,16 @@
 </t:light-wrapper>
 
 <script>
-	timerCodeInput = null;
-	visitGlobal = null;
+	var timerCodeInput = null;
+	var visitGlobal = null;
+	var pageState = "";
 
 	$(document).ready(function () {
+		window.addEventListener('popstate', function(e){
+			pageState = location.hash;
+ 			selector();
+ 		}, false);
+
 		specId = 0;
 		dateSelected = new Date();
 		timeSelected = "";
@@ -242,10 +253,10 @@
 					}
 				}).done(function () {
 					$('#sureToDelete').modal('hide');
-					fillCheck(visitGlobal.bookingCode);
+					fillCheck(null, visitGlobal.bookingCode);
 				}).fail(function () {
 					$('#sureToDelete').modal('hide');
-					fillCheck(visitGlobal.bookingCode);
+					fillCheck(null, visitGlobal.bookingCode);
 				});
 		});
 		
@@ -261,7 +272,10 @@
 
 	});
 	
-	function fillSpec() {
+	function fillSpec(e) {
+		if (e) 
+			e.preventDefault();
+		setState("#spec");
 		procId = "";
 		procName = "";
 		$("#specBtn").removeClass("btn-default").addClass("btn-primary");
@@ -296,18 +310,21 @@
 				}
 			}
 			$("#mainTab").html(html);
-			$("[data-type$=specialist]").click(function () {
+			$("[data-type$=specialist]").click(function (e) {
 				specId = $(this).attr('data-id');
 				specName = $(this).attr('data-name');
 				$("#dateInputDiv").removeClass("hide");
 				$("#dateBtnsDiv").removeClass("hide");
 				$("#mainTab").html("");
-				fillProc(null, specId);//fillTime();
+				fillProc(e, specId);//fillTime();
 			})
 		});
 	}
 		
 	function fillProc(e, spId) {
+		if (e) 
+			e.preventDefault();
+		setState("#proc");
 		if (!spId || spId == "")
 		{
 			specId = "";
@@ -368,18 +385,21 @@
 					el.addClass("hide");
 			});
 			$("[data-type$=gheader]").first().click();
-			$("[data-type$=procedure]").click(function () {
+			$("[data-type$=procedure]").click(function (e) {
 				procId = $(this).attr('data-id');
 				procName = $(this).attr('data-name');
 				$("#dateInputDiv").removeClass("hide");
 				$("#dateBtnsDiv").removeClass("hide");
 				$("#mainTab").html("");
-				fillTime();
+				fillTime(e);
 			})
 		});
 	}
 
-	function fillTime() {
+	function fillTime(e) {
+		if (e) 
+			e.preventDefault();
+		setState("#time");
 		dateSelected = $("#dateInput").val();
 
 		$.ajax({
@@ -428,6 +448,7 @@
 		if (!visit) return;
 		visitGlobal = visit;
 		
+		setState("#finish");
 		$("#dateInputDiv").addClass("hide");
 		$("#dateBtnsDiv").addClass("hide");
 		$("#nameGroup").addClass("hide");
@@ -447,7 +468,11 @@
 		$("#mainTab").html(html);
 	}
 	
-	function fillCheck(bookingCode) {
+	function fillCheck(e, bookingCode) {
+		if (e) 
+			e.preventDefault();
+
+		setState("#check");
 		$("#checkBtn").removeClass("btn-default").addClass("btn-primary");
 		$("#specBtn").removeClass("btn-primary").addClass("btn-default");
 		$("#procBtn").removeClass("btn-primary").addClass("btn-default");
@@ -553,6 +578,24 @@
 				else
 					return hrs + " " + mins;
 	}
-
 	
+	function selector() {
+		if (pageState == "#spec") 
+			fillSpec();
+		else if (pageState == "#proc")
+			fillProc();
+		else if (pageState == "#check")
+			fillCheck();
+		else if (pageState == "#finish")
+			fillFinish();
+		else if (pageState == "#time")
+			fillTime();
+	}
+
+	function setState(hash) {
+		if (window.location.hash != hash) {
+			history.pushState({}, null, hash);
+			pageState = hash;
+		}
+	}
 </script>
