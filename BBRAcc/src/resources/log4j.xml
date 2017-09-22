@@ -8,7 +8,7 @@
 		</layout>
 	</appender>
 	<appender name="fileAppender" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="../../logs/bbr.log" />
+		<param name="File" value="/var/log/bbr.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss,SSS} %p %C:%L %c: %m%n" />
 		</layout>

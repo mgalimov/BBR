@@ -61,14 +61,10 @@ public class BBRPathFilter implements Filter {
 			    				response.sendRedirect(planVisitPage + "?pos=" + pos.getId());
 			    			break;
 		    			} catch (Exception ex) {
-		    				try {
-								Thread.sleep(5000);
-							} catch (InterruptedException e) {
-							}
 		    			}
 	    			}
 	    		} else
-	    			response.sendRedirect(planVisitPage);
+    				response.sendRedirect(selectShopPage);
 	    	} else
 	        	chain.doFilter(request, response);
     }
