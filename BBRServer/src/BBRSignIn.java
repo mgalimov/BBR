@@ -36,13 +36,10 @@ public class BBRSignIn extends HttpServlet {
 			String password = params.get("password");
 			String rememberme = params.get("rememberme");
 			String timezone = params.get("timezone");
-			for (int i = 1; i <= 5; i++) {
-				try {
-					context.SignIn(email, password, timezone);
-					break;
-				} catch (Exception ex) {
-					Thread.sleep(5000);
-				}
+
+			try {
+				context.SignIn(email, password, timezone);
+			} catch (Exception ex) {
 			}
 			
 			if (context.user != null) {
