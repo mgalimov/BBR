@@ -356,9 +356,9 @@
 						objItem = obj.${field};"/>
 					</c:if>
 						<c:set var="itemSet" scope="request" value="${itemSet}
-							el.addOption(objItem);"/>
+							if (objItem) el.addOption(objItem);"/>
 						<c:set var="itemSet" scope="request" value="${itemSet}
-							el.addItem(objItem?objItem.id:null);"/>
+							if (objItem) el.addItem(objItem.id);"/>
 					<c:if test="${multiple.equals('true')}">
 						<c:set var="itemSet" scope="request" value="${itemSet}
 						});"/>

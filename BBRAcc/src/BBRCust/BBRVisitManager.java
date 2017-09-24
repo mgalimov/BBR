@@ -129,13 +129,13 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		        	
 		        	for (String em : emails.split(",")) {
 			        	BBRMailer.send(em, 
-			        			"Barbiny: РќРѕРІР°СЏ Р·Р°РїРёСЃСЊ РІ " + visit.getPos().getTitle(), 
-			        			"Р’СЂРµРјСЏ: " + df.format(visit.getTimeScheduled()) + "\n" +
-			        			"Р?РјСЏ: " + visit.getUserName() + "\n" +
-			        			"РљРѕРЅС‚Р°РєС‚С‹: " + visit.getUserContacts() + "\n" +
-			        			"РЈСЃР»СѓРіР°: " + p + "\n" +
-			        			"РњР°СЃС‚РµСЂ: " + s + "\n" + "\n" + 
-			        			"http://www.barbiny.ru/manager-visit-edit.jsp?id=" + visit.getId());
+			        			"Barbiny: Новая запись в " + visit.getPos().getTitle(), 
+			        			"Время: " + df.format(visit.getTimeScheduled()) + "\n" +
+			        			"Имя: " + visit.getUserName() + "\n" +
+			        			"Контакты: " + visit.getUserContacts() + "\n" +
+			        			"Услуга: " + p + "\n" +
+			        			"Мастер: " + s + "\n" + "\n" + 
+			        			"http://my.barbiny.ru/manager-visit-edit.jsp?id=" + visit.getId());
 		        	}
 		        	
 		        	String phones = visit.getPos().getSms();
@@ -256,7 +256,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
         DateFormat sdf = new SimpleDateFormat(BBRUtil.fullDateFormat);
         
         String select = "select coalesce(visit.realTime, visit.timeScheduled) as timeScheduled, visit.spec.id as spec, visit.length as length, "+
-        				"visit.userName as userName, case when trim(visit.userContacts) = '' then 'вЂ“' else visit.userContacts end as userContacts, " + 
+        				"visit.userName as userName, case when trim(visit.userContacts) = '' then '---' else visit.userContacts end as userContacts, " + 
         				"visit.id, visit.status, visit.procedure.title";
         String from = " from BBRVisit visit";
         String where = " where coalesce(visit.realTime, visit.timeScheduled) >= '" + df.format(startOfDay) + "' and "
