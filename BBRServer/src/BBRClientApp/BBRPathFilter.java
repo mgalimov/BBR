@@ -44,27 +44,30 @@ public class BBRPathFilter implements Filter {
 	    	}
 	    	
 	    	String book = "/book";
+	    	String start = "/start";
 	    	String selectShopPage = cont + "/general-select-shop.jsp";
 	    	String planVisitPage = cont + "/general-plan-visit.jsp";
+	    	String startPage = cont + "/general-start.jsp";
 	    	
 	    	if (path.startsWith(book)) {
 	    		path = path.substring(book.length());
 	    		if (path.startsWith("/")) {
-	    			for (int i = 1; i <= 5; i++) {
-		    			try {
-			    			String posUrlID = path.substring(1);
-			    			BBRPoSManager mgr = new BBRPoSManager();
-			    			BBRPoS pos = mgr.findByUrlId(posUrlID);
-			    			if (pos == null)
-			    				response.sendRedirect(selectShopPage);
-			    			else
-			    				response.sendRedirect(planVisitPage + "?pos=" + pos.getId());
-			    			break;
-		    			} catch (Exception ex) {
-		    			}
+	    			try {
+		    			String posUrlID = path.substring(1);
+		    			BBRPoSManager mgr = new BBRPoSManager();
+		    			BBRPoS pos = mgr.findByUrlId(posUrlID);
+		    			if (pos == null)
+		    				response.sendRedirect(selectShopPage);
+		    			else
+		    				response.sendRedirect(planVisitPage + "?pos=" + pos.getId());
+	    			} catch (Exception ex) {
+	    				response.sendRedirect(selectShopPage);
 	    			}
 	    		} else
     				response.sendRedirect(selectShopPage);
+	    	}
+	    	if (path.startsWith(start)) {
+				response.sendRedirect(startPage);
 	    	} else
 	        	chain.doFilter(request, response);
     }

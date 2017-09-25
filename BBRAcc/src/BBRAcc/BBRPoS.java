@@ -178,7 +178,7 @@ public class BBRPoS extends BBRDataElement {
 		this.city = city;
 	}
 
-	class BBRPoSStatus {
+	public class BBRPoSStatus {
 		public static final int POSSTATUS_ACTIVE = 1;
 		public static final int POSSTATUS_INACTIVE = 2;		
 	}

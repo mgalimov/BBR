@@ -37,4 +37,5 @@ public class BBRErrors {
 	public static final String ERR_INSUFFICIENT_RIGHTS = "ERR_INSUFFICIENT_RIGHTS";
 	public static final String ERR_GROUP_NOT_SPECIFIED = "ERR_GROUP_NOT_SPECIFIED";
 	public static final String ERR_ITEM_NOT_SPECIFIED = "ERR_ITEM_NOT_SPECIFIED";
+	public static final String ERR_PASSWORDS_DONT_MATCH = "ERR_PASSWORDS_DONT_MATCH";
 }

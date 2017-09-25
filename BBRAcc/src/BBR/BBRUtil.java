@@ -33,6 +33,8 @@ public class BBRUtil {
 	
 	public static final String codeAlphabet = "0123456789ABCDEFGHIJKLMNPQRSTUVWXYZ";
 	public static final int codeLength = 3;
+	
+	public static final int errorResponseCode = 700;
 
     public static SessionFactory buildSessionFactory() {
     	SessionFactory sessionFactory = null;

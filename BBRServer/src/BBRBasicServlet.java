@@ -26,7 +26,6 @@ import BBRClientApp.BBRParams;
 @MultipartConfig   
 public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BBRDataManager> extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final int errorResponseCode = 700;
 	protected Mgr manager;
        
     public BBRBasicServlet() {
@@ -101,14 +100,14 @@ public abstract class BBRBasicServlet<Cls extends BBRDataElement, Mgr extends BB
 			respText = ex.getMessage();
 			if (context != null)
 				respText = context.gs(respText);
-			response.setStatus(errorResponseCode);
+			response.setStatus(BBRUtil.errorResponseCode);
 		} catch (Exception ex) {
 			BBRUtil.log.error(ex.getMessage());
 			BBRUtil.log.error(ex.getStackTrace());
 			respText = ex.getMessage();
 			if (context != null)
 				respText = context.gs(respText);
-			response.setStatus(errorResponseCode);
+			response.setStatus(BBRUtil.errorResponseCode);
 		}
 		response.setContentType("text/plain");  
 		response.setCharacterEncoding("UTF-8"); 

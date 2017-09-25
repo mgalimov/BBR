@@ -66,7 +66,7 @@ public class BBRShop extends BBRDataElement {
 		this.status = status;
 	}
 	
-	class BBRShopStatus {
+	public class BBRShopStatus {
 		public static final int SHOPSTATUS_ACTIVE = 1;
 		public static final int SHOPSTATUS_INACTIVE = 2;
 	}
