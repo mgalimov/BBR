@@ -21,7 +21,11 @@
 <jsp:body>
 	<div class="container-fluid">
 		<h3 id="selection"></h3>
-		<h3 id="head">${context.gs("LBL_START")}</h3> 
+		<h3 id="head">${context.gs("LBL_START")}</h3>
+		<div class="alert alert-warning hide" id="alertMessage">
+    		<button type="button" class="close" aria-label="Close" id="alertCloseBtn"><span aria-hidden="true">&times;</span></button>
+    		<div id="alertText"></div>
+		</div> 
 		<div class="row">
 			<div class="col-md-6 col-xs-12 col-sm-12 col-lg-6" id="main">
 				<div class="form-group">
@@ -80,7 +84,7 @@
 					<input type="text" id="tzInput" class="form-control" required/>
 				</div>
 				<div class="form-group">
-					<label for="urlIDInput">${context.gs("LBL_YOUR_POS_TZ")}</label>
+					<label for="urlIDInput">${context.gs("LBL_YOUR_URL_ID")}</label>
 					<input type="text" id="urlIDInput" class="form-control" required/>
 				</div>
 				<a href="#" class="btn btn-primary hide" id="finishBtn">${context.gs("BTN_FINISH")}</a>
@@ -98,7 +102,7 @@
 
 <script>
 	var name, lastName, email, password, passwordRepeat;
-	var shop, posName, posCity, posLat, posLon, posTZ;
+	var shop, posName, posCity, posLat, posLon, posTZ, urlID, country, currency;
 	var map;
 
 	$(document).ready(function () {
@@ -107,6 +111,7 @@
  		}, false);
 
  		$("#nextBtn").click(function() {
+			$("#alertMessage").addClass("hide");
  			$("#nextBtn").addClass("disable");
  			name = $("#nameInput").val();
  			name = $("#lastNameInput").val();
@@ -120,12 +125,15 @@
  				passwordRepeat: passwordRepeat
  			}).done(function () {
  	 			go("#shop");
- 			}).fail(function () {
- 				
+ 			}).fail(function (data) {
+				$("#alertMessage").html(data.responseText); 				
+				$("#alertMessage").removeClass("hide");
+				$("#nextBtn").removeClass("disable");
  			});
  		});
 	
  		$("#finishBtn").click(function () {
+ 			$("#alertMessage").addClass("hide");
  			shop = $("#shopInput").val();
 			country = $("#countryInput").val();
 			currency = $("#currencyInput").val();
@@ -135,13 +143,70 @@
  			posLon = $("#lonInput").val();
  			posTZ = $("#tzInput").val();
 			urlID = $("#urlIDInput").val();
+ 			$.get("BBRSignUp", {
+ 				operation: "create",
+ 				name: name,
+ 				lastName: name,
+ 				email: email,
+ 				password: password,
+ 				passwordRepeat: passwordRepeat,
+ 				shop: shop,
+				country: country,
+				currency: currency,
+				urlID: urlID,
+				pos: pos,
+				city: city,
+				lat: lat,
+				lon: lon,
+				tz: tz
+ 			}).done(function () {
+ 	 			go("general-signin.jsp");
+ 			}).fail(function (data) {
+				$("#alertMessage").html(data.responseText); 				
+				$("#alertMessage").removeClass("hide");
+				$("#nextBtn").removeClass("disable");
+ 			});
  		});
+ 		
+ 		$("#posInput").change(function () {
+ 			if (!posName || urlID == convertUrlID(posName)) {
+ 				newUrlID = convertUrlID($("#posInput").val());
+ 				$("#urlIDInput").val(newUrlID);
+ 			}
+ 		});
+ 		
 		selector();
 	});
 	
+	function convertUrlID(p) {
+		var r = ['А','Б','В','Г','Д','Е','Ё','Ж','З','И','Й','К','Л','М','Н','О','П','Р','С','Т','У','Ф','Х','Ц','Ч','Ш','Щ','Ъ','Ы','Ь','Э','Ю','Я'];
+		var e = ['A','B','V','G','D','E','E','Zh','Z','I','Y','K','L','M','N','O','P','R','S','T','U','F','H','C','Ch','Sh','Sch','','Y','','E','U','A'];
+		var s = "";
+		var c, found;
+		for (i = 0; i < p.length; i++) {
+			found = false;
+			c = p.substr(i, 1);
+			for (j = 0; j < r.length; j++) {
+				if (c == r[j]) {
+					s += e[j];
+					found = true;
+					break;
+				} else
+					if (c.toLowerCase() == r[j].toLowerCase()) {
+						s += e[j].toLowerCase();
+						found = true
+						break;
+					};
+			}
+			if (!found)
+				s += c;
+		}
+		return s;
+	}
+	
 	function selector() {
 		var hash = location.hash;
-		if (hash == "" || hash == "#" || !cityName)
+		if (hash == "" || hash == "#" || email == null || email == "")
 			fillAccountInfo();
 		else if (hash.substr(0, 6) == "#shop")
 			fillShopInfo();	
@@ -157,6 +222,8 @@
 		$("#map").addClass("hide");
 		$("#main").removeClass("hide");
 		$("#nextBtn").removeClass("disable");
+		$("#nextBtn").removeClass("hide");
+		$("#finishBtn").addClass("hide");
 	}
 	
 	function fillShopInfo() {
@@ -164,6 +231,8 @@
 		$("#shop").removeClass("hide");
 		$("#map").removeClass("hide");
 		$("#finishBtn").removeClass("disable");
+		$("#nextBtn").addClass("hide");
+		$("#finishBtn").removeClass("hide");
 	}
 	
 	function initMap() {
