@@ -103,7 +103,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		        try {
 			        BBRTaskManager tmgr = new BBRTaskManager();
 			        Date dt = BBRUtil.now(visit.getPos().getTimeZone());
-			        tmgr.create("РџРѕР·РІРѕРЅРёС‚Рµ РєР»РёРµРЅС‚Сѓ, РїРѕРґС‚РІРµСЂРґРёС‚Рµ Р·Р°РїРёСЃСЊ", 
+			        tmgr.create("Позвоните клиенту, подтвердите запись", 
 			        						null, 
 			        						pos, 
 			        						dt, 
@@ -118,8 +118,8 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		        }
 		        
 		        try{
-		        	String p = "РЅРµ СѓРєР°Р·Р°РЅР°";
-		        	String s = "РЅРµ СѓРєР°Р·Р°РЅ";
+		        	String p = "не указана";
+		        	String s = "не указан";
 		        	if (visit.getProcedure() != null && visit.getProcedure().getTitle() != "")
 		        		p = visit.getProcedure().getTitle();
 		        	if (visit.getSpec() != null && visit.getSpec().getName() != "")

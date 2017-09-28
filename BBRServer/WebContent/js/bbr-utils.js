@@ -96,3 +96,30 @@ function deleteCookie(name) {
 	    expires: -1
 	  })
 }
+
+
+function convertUrlID(p) {
+	var r = ['А','Б','В','Г','Д','Е','Ё','Ж','З','И','Й','К','Л','М','Н','О','П','Р','С','Т','У','Ф','Х','Ц','Ч','Ш','Щ','Ъ','Ы','Ь','Э','Ю','Я'];
+	var e = ['A','B','V','G','D','E','E','Zh','Z','I','Y','K','L','M','N','O','P','R','S','T','U','F','H','C','Ch','Sh','Sch','','Y','','E','U','A'];
+	var s = "";
+	var c, found;
+	for (i = 0; i < p.length; i++) {
+		found = false;
+		c = p.substr(i, 1);
+		for (j = 0; j < r.length; j++) {
+			if (c == r[j]) {
+				s += e[j];
+				found = true;
+				break;
+			} else
+				if (c.toLowerCase() == r[j].toLowerCase()) {
+					s += e[j].toLowerCase();
+					found = true
+					break;
+				};
+		}
+		if (!found)
+			s += c;
+	}
+	return s;
+}
