@@ -301,3 +301,8 @@ th {
 .dataTables_wrapper > .row {
 	overflow-x: auto;
 } 
+
+.center-box {
+  width: 600px;
+  margin: 7% auto;
+}

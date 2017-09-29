@@ -15,95 +15,100 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <% 
 	BBRContext context = BBRContext.getContext(request);
-%> 
+	int picNum = (int)(Math.ceil(Math.random() * 16) + 1);
+	request.setAttribute("bk", String.format("%03d", picNum) + ".jpg");
+%>
 
 <t:login-wrapper title="LBL_SELECT_POS_TITLE">
 <jsp:body>
 
 <body class="hold-transition login-page" style="background-image: url(bks/${bk}); background-repeat: no-repeat; background-size: cover; background-position: center;">
-    <div class="login-box">
-		<div class="login-box-body" style="background: rgba(255,255,255,0.5);">
+    <div class="center-box">
+		<div class="login-box-body" style="background: rgba(255,255,255,0.7);">
 			<div style="text-align: center; padding-bottom: 10px;">
 				<img src="images/barbiny50px.png" />
 			</div>
-		</div>
-		<div class="container-fluid">
 			<h3 id="selection"></h3>
 			<h3 id="head">${context.gs("LBL_START")}</h3>
 			<div class="alert alert-warning hide" id="alertMessage">
 	    		<button type="button" class="close" aria-label="Close" id="alertCloseBtn"><span aria-hidden="true">&times;</span></button>
 	    		<div id="alertText"></div>
 			</div> 
-			<div class="row">
-				<div class="col-md-6 col-xs-12 col-sm-12 col-lg-6" id="main">
-					<div class="form-group">
-						<label for="nameInput">${context.gs("LBL_YOUR_NAME")}</label>
-						<input type="text" id="nameInput" class="form-control" required/>
-					</div>
-					<div class="form-group">
-						<label for="lastNameInput">${context.gs("LBL_YOUR_LAST_NAME")}</label>
-						<input type="text" id="lastNameInput" class="form-control" required/>
-					</div>
-					<div class="form-group">
-						<label for="emailInput">${context.gs("LBL_YOUR_EMAIL")}</label>
-						<input type="text" id="emailInput" class="form-control" required/>
-					</div>
-					<div class="form-group">
-						<label for="passwordInput">${context.gs("LBL_YOUR_PASSWORD")}</label>
-						<input type="password" id="passwordInput" class="form-control" required/>
-					</div>
-					<div class="form-group">
-						<label for="passwordRepeatInput">${context.gs("LBL_YOUR_PASSWORD_REPEAT")}</label>
-						<input type="password" id="passwordRepeatInput" class="form-control" required/>
-					</div>
-					<a href="#" class="btn btn-primary" id="nextBtn">${context.gs("BTN_NEXT")}</a>
+			<div id="main">
+				<div class="form-group">
+					<label for="nameInput">${context.gs("LBL_YOUR_NAME")}</label>
+					<input type="text" id="nameInput" class="form-control" required/>
 				</div>
-				<div class="col-md-6 col-xs-12 col-sm-12 col-lg-6" id="shop">
-					<div class="form-group">
-						<label for="shopInput">${context.gs("LBL_YOUR_SHOP_NAME")}</label>
-						<input type="text" id="shopInput" class="form-control" required/>
-					</div>
-					<div class="form-group">
-						<label for="countryInput">${context.gs("LBL_YOUR_COUNTRY")}</label>
-						<input type="text" id="countryInput" class="form-control" required/>
-					</div>
-					<div class="form-group">
-						<label for="currencyInput">${context.gs("LBL_YOUR_CURRENCY")}</label>
-						<input type="text" id="currencyInput" class="form-control" required/>
-					</div>
-					<div class="form-group">
-						<label for="posInput">${context.gs("LBL_YOUR_POS_NAME")}</label>
-						<input type="text" id="posInput" class="form-control" required/>
-					</div>
-					<div class="form-group">
-						<label for="cityInput">${context.gs("LBL_YOUR_POS_CITY")}</label>
-						<input type="text" id="cityInput" class="form-control" required/>
-					</div>
-					<div class="form-group">
-						<label for="latInput">${context.gs("LBL_YOUR_POS_LOCATION_LAT")}</label>
-						<input type="text" id="latInput" class="form-control" required/>
-					</div>
-					<div class="form-group">
-						<label for="lonInput">${context.gs("LBL_YOUR_POS_LOCATION_LON")}</label>
-						<input type="text" id="lonInput" class="form-control" required/>
-					</div>
-					<div class="form-group">
-						<label for="tzInput">${context.gs("LBL_YOUR_POS_TZ")}</label>
-						<input type="text" id="tzInput" class="form-control" required/>
-					</div>
-					<div class="form-group">
-						<label for="urlIDInput">${context.gs("LBL_YOUR_URL_ID")}</label>
-						<input type="text" id="urlIDInput" class="form-control" required/>
-					</div>
-					<a href="#" class="btn btn-primary hide" id="finishBtn">${context.gs("BTN_FINISH")}</a>
+				<div class="form-group">
+					<label for="lastNameInput">${context.gs("LBL_YOUR_LAST_NAME")}</label>
+					<input type="text" id="lastNameInput" class="form-control" required/>
 				</div>
-				<div class="col-md-4 col-xs-12 col-sm-12 col-lg-4" id="map" style="height: 400px">
+				<div class="form-group">
+					<label for="emailInput">${context.gs("LBL_YOUR_EMAIL")}</label>
+					<input type="email" id="emailInput" class="form-control" required/>
+				</div>
+				<div class="form-group">
+					<label for="passwordInput">${context.gs("LBL_YOUR_PASSWORD")}</label>
+					<input type="password" id="passwordInput" class="form-control" required/>
+				</div>
+				<div class="form-group">
+					<label for="passwordRepeatInput">${context.gs("LBL_YOUR_PASSWORD_REPEAT")}</label>
+					<input type="password" id="passwordRepeatInput" class="form-control" required/>
+				</div>
+				<a href="#" class="btn btn-primary pull-right" id="nextBtn">${context.gs("BTN_NEXT")}</a>
+				<div class="row">
 				</div>
 			</div>
-		</div>
+			<div id="shop">
+				<div class="form-group">
+					<label for="shopInput">${context.gs("LBL_YOUR_SHOP_NAME")}</label>
+					<input type="text" id="shopInput" class="form-control" required/>
+				</div>
+				<div class="form-group">
+					<label for="countryInput">${context.gs("LBL_YOUR_COUNTRY")}</label>
+					<input type="text" id="countryInput" class="form-control" required/>
+				</div>
+				<div class="form-group">
+					<label for="currencyInput">${context.gs("LBL_YOUR_CURRENCY")}</label>
+					<input type="text" id="currencyInput" class="form-control" required/>
+				</div>
+				<div class="form-group">
+					<label for="posInput">${context.gs("LBL_YOUR_POS_NAME")}</label>
+					<input type="text" id="posInput" class="form-control" required/>
+				</div>
+				<div class="form-group">
+					<label for="cityInput">${context.gs("LBL_YOUR_POS_CITY")}</label>
+					<input type="text" id="cityInput" class="form-control" required/>
+				</div>
+				<label for="latInput">${context.gs("LBL_YOUR_POS_LOCATION")}</label>
+				<form role="form" class="form-inline">
+					<div class="form-group">
+						<input type="text" id="latInput" class="form-control" style="width: 200px" required/>
+					</div>
+					<div class="form-group">
+						<input type="text" id="lonInput" class="form-control" style="width: 200px" required/>
+					</div>
+					<a href="#map" class="btn btn-info pull-right" id="mapBtn">${context.gs("BTN_MAP")}</a>
+				</form>
+				<div class="form-group">
+					<label for="tzInput">${context.gs("LBL_YOUR_POS_TZ")}</label>
+					<input type="text" id="tzInput" class="form-control" required/>
+				</div>
+				<div class="form-group">
+					<label for="urlIDInput">${context.gs("LBL_YOUR_URL_ID")}</label>
+					<input type="text" id="urlIDInput" class="form-control" required/>
+				</div>
+				<a href="#" class="btn btn-primary pull-right hide" id="finishBtn">${context.gs("BTN_FINISH")}</a>
+				</div>
+				<div class="row">
+				</div>
+			</div>
 	</div>
-	</body>
-	</jsp:body>
+	<div class="hide" style="position: absolute; top: 0px; width: 800px; height: 600px; margin: auto auto;" id="map">
+	</div>
+</body>
+
+</jsp:body>
 </t:login-wrapper>
 
 <script async defer
@@ -176,6 +181,10 @@
 				$("#alertMessage").removeClass("hide");
 				$("#nextBtn").removeClass("disable");
  			});
+ 		});
+ 		
+ 		$("#mapBtn").click(function () {
+ 			$("#map").removeClass("hide");
  		});
  		
  		$("#posInput").change(function () {
