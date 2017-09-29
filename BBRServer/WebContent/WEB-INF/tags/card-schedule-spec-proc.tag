@@ -568,7 +568,14 @@
     		if (data != null && data != "") {
     			var d = $.parseJSON(data);
     			$("#visitsNumber").removeClass("hide");
-    			$("#visitsNumber").text("${context.gs('LBL_PREVIOUS_VISITS')} " + d[1] + " : " + d[0] + ". " + d[2]);
+    			$("#visitsNumber").html("${context.gs('LBL_PREVIOUS_VISITS')} " + d[1] + 
+    									" : <a target='_blank' href='manager-visit-list.jsp?t=user&query=" + 
+    									$('#userNameinput').val() + "@@" + 
+    									$('#userContactsinput').val() + "@@" +
+    									d[4] + 
+    									"'>" + 
+    									d[0] + ". " + 
+    									d[2] + "</a>");
     		} else {
     			$("#visitsNumber").addClass("hide");
     			$("#visitsNumber").text("");

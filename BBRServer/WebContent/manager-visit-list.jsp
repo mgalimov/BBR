@@ -26,8 +26,20 @@
 			context.set("visitsPrevious", null);
 			
 			titleMod = BBRUtil.visualTitleDelimiter + userNC[0];
-			if (userNC.length == 2)
+			if (userNC.length >= 2)
 				titleMod += ", " + userNC[1];
+			if (userNC.length == 3) {
+				SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
+				Date filterDate;
+				try {
+					filterDate = df.parse(userNC[2]);
+					context.filterStartDate = filterDate;
+					context.filterEndDate = new Date();
+				} catch (Exception ex) {
+				}
+				
+			}
+				
 		}
 		
 		if (t.equals("datepos")) {

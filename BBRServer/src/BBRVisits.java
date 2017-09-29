@@ -567,16 +567,18 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				try {
 					if (promgr.isPrizeVisit(promo, l, proc))
 						prizeString = context.gs("MSG_PRIZE_VISIT");
-					String d[] = new String[3];
+					String d[] = new String[5];
+					d[2] = prizeString;
+					d[3] = l.toString();
 					if (bOT) {
 						d[0] = l.toString() + " " + context.gs("MSG_FROM_BEGINNING_OF_TIME");
 						d[1] = "";
+						d[4] = "";
 					} else {
 						d[0] = l.toString() + " " + context.gs("MSG_FROM") + " " + df.format(date);
 						d[1] = promo.getTitle();
+						d[4] = df.format(date);
 					}
-					
-					d[2] = prizeString;
 					return BBRUtil.gson().toJson(d);
 				} catch (Exception ex) {
 					return "";
