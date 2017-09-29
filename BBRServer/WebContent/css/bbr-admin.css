@@ -306,3 +306,15 @@ th {
   width: 600px;
   margin: 7% auto;
 }
+
+.center-box-map
+{
+     position: absolute;
+     margin: auto;
+     top: 0;
+     right: 0;
+     bottom: 0;
+     left: 0;
+     width: 800px;
+     height: 500px;
+}

@@ -104,7 +104,11 @@
 				</div>
 			</div>
 	</div>
-	<div class="hide" style="position: absolute; top: 0px; width: 800px; height: 600px; margin: auto auto;" id="map">
+	<div class="center-box-map" style="display: none" id="mapbox">
+		<div id="mapCtrl">
+			<a href="#shop" class="btn btn-default pull-right" id="closeMapBtn" style="z-index: 1"><span class="glyphicon glyphicon-remove"></span></a>
+		</div>
+		<div style="height: 100%; width: 100%;" id="map"></div>
 	</div>
 </body>
 
@@ -184,7 +188,18 @@
  		});
  		
  		$("#mapBtn").click(function () {
- 			$("#map").removeClass("hide");
+ 			$("#mapbox").css("display", "block");
+ 			initMap();
+ 			google.maps.event.trigger(map, 'resize');
+			$(document).keyup(function (e) {
+ 				if (e.keyCode == 27)
+ 					$("#closeMapBtn").click();
+ 			});
+ 		});
+ 		
+ 		$("#closeMapBtn").click(function () {
+ 			$("#mapbox").css("display", "none");
+			$(document).keyup(null);
  		});
  		
  		$("#posInput").change(function () {
@@ -229,7 +244,32 @@
 	}
 	
 	function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {});
-    }
+		if (!map) {
+			ll = new google.maps.LatLng(-34.397, 150.644);
+			
+	        map = new google.maps.Map(document.getElementById('map'), {
+	            center: ll,
+	            zoom: 8
+	        });
+	        
+	        marker = new google.maps.Marker({
+	            position: ll,
+	            map: map
+	          });
+	    	
+	    	map.addListener("click", function (event) {
+	    	    var lat = event.latLng.lat();
+	    	    var lon = event.latLng.lng();
+	    	    ll = new google.maps.LatLng(lat,lon);
+	    	    marker.setPosition(ll);
+	    	    $("#latInput").val(lat);
+	    	    $("#lonInput").val(lon);
+	    	    //map.panTo(ll);
+	    	});
+			
+	    	map.controls[google.maps.ControlPosition.TOP_CENTER].push(document.getElementById("mapCtrl"));
+		}
+	}
+
 
 </script>
