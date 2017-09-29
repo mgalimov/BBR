@@ -19,6 +19,7 @@
 	    	}).done(function (data) {
 	    		if (data != "") {
 		    		d = $.parseJSON(data);
+		    		prevInfo = d;
 		    		$("#openPreviousVisitsButton").text("${context.gs('LBL_PREVIOUS_VISITS')} (" + d[1] + ") : " + d[0]);
 		    		if (d[2] != "") {
 		    			$('#alertText').text(d[2]);
@@ -75,6 +76,7 @@
 	var price = 0;
 	var length = 0;
 	var procedurePercent = 0;
+	var prevInfo = null;
 
 	$(document).ready(function() {
 		posId = $("#posinput").val();
@@ -267,7 +269,10 @@
 			pos = $("#posinput").val();
 			userContacts = $('#userContactsinput').val();
     		visitId = obj.id;
-			window.location.href = "manager-visit-list.jsp?t=previous&query="+userContacts+"@@"+pos+"@@"+visitId;
+    		dt = "";
+    		if (prevInfo != null)
+    			dt = prevInfo[4];
+			window.location.href = "manager-visit-list.jsp?t=previous&query="+userContacts+"@@"+pos+"@@"+visitId+"@@"+dt;
 		});
 	});
 	

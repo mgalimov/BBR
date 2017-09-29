@@ -37,9 +37,7 @@
 					context.filterEndDate = new Date();
 				} catch (Exception ex) {
 				}
-				
 			}
-				
 		}
 		
 		if (t.equals("datepos")) {
@@ -77,6 +75,16 @@
 			context.set("visitsPosId", null);
 			context.set("visitsUserNC", null);
 			context.set("visitsPrevious", prev);
+			if (prev.length == 4) {
+				SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateFormat);
+				Date filterDate;
+				try {
+					filterDate = df.parse(prev[3]);
+					context.filterStartDate = filterDate;
+					context.filterEndDate = new Date();
+				} catch (Exception ex) {
+				}
+			}
 			titleMod += BBRUtil.visualTitleDelimiter + context.gs("LBL_PREVIOUS_VISITS");
 		}
 		
