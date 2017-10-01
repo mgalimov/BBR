@@ -30,6 +30,24 @@ public class BBRSignUp extends HttpServlet {
         super();
     }
  
+	protected String checkParams(BBRContext context, String email, String name, String lastName, String password, String passwordRepeat) {
+		String result = ""; 
+		if (!password.equals(passwordRepeat)) {
+			result += "<br/>" + context.gs(BBRErrors.ERR_PASSWORDS_DONT_MATCH); 
+		}
+		if (email.isEmpty()) 
+			result += "<br/>" + context.gs(BBRErrors.ERR_EMAIL_MUST_BE_SPECIFIED);
+		else {
+			BBRUserManager mgr = new BBRUserManager();
+	        if (mgr.findUserByEmail(email) != null) {
+	        	result += "<br/>" + context.gs(BBRErrors.ERR_DUPLICATE_EMAIL);
+	        }
+		}
+		if (name.trim().isEmpty() && lastName.trim().isEmpty()) 
+			result += "<br/>" + context.gs(BBRErrors.ERR_NAME_MUST_BE_SPECIFIED);
+		return result;
+	}
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		BBRContext context = BBRContext.getContext(request);
 		BBRParams params = new BBRParams(request.getQueryString());
@@ -38,15 +56,11 @@ public class BBRSignUp extends HttpServlet {
 		
 		if (operation.equals("test")) {
 			String email = params.get("email");
+			String name = params.get("name");
+			String lastName = params.get("lastName");
 			String password = params.get("password");
 			String passwordRepeat = params.get("passwordRepeat");
-			if (!password.equals(passwordRepeat)) {
-				result += "<br/>" + context.gs(BBRErrors.ERR_PASSWORDS_DONT_MATCH); 
-			}
-			BBRUserManager mgr = new BBRUserManager();
-	        if (mgr.findUserByEmail(email) != null) {
-	        	result += "<br/>" + context.gs(BBRErrors.ERR_DUPLICATE_EMAIL);
-	        }
+			result = checkParams(context, email, name, lastName, password, passwordRepeat);
 		} else
 		if (operation.equals("create")) {
 			String email = params.get("email");
@@ -63,28 +77,23 @@ public class BBRSignUp extends HttpServlet {
 			String lat = params.get("lat");
 			String lon = params.get("lon");
 			String tz = params.get("tz");
-			
-			
+				
 			Double flat, flon;
 			
-			if (!password.equals(passwordRepeat)) {
-				result += "<br/>" + context.gs(BBRErrors.ERR_PASSWORDS_DONT_MATCH); 
-			}
 			BBRShopManager smgr = new BBRShopManager();
 			BBRPoSManager pmgr = new BBRPoSManager();
 			BBRUserManager umgr = new BBRUserManager();
 
-			if (name.isEmpty() || 
-				email.isEmpty() || 
-				shop.isEmpty() || 
+			result = checkParams(context, email, name, lastName, password, passwordRepeat);
+
+			if (shop.isEmpty() || 
 				pos.isEmpty() || 
 				country.isEmpty() || 
 				currency.isEmpty() || 
 				tz.isEmpty() || 
 				city.isEmpty() || 
 				urlID.isEmpty()) {
-				
-				result += "<br/>" + context.gs(BBRErrors.ERR_WRONG_INPUT_FORMAT);
+				result += "<br/>" + context.gs(BBRErrors.ERR_ALL_FIELDS_MUST_BE_FILLED);
 			} else
 				if (umgr.findUserByEmail(email) != null) {
 		        	result += "<br/>" + context.gs(BBRErrors.ERR_DUPLICATE_EMAIL);
@@ -117,6 +126,8 @@ public class BBRSignUp extends HttpServlet {
 		}		
 
 		if (!result.isEmpty()) {
+			if (result.startsWith("<br/>"))
+				result = result.substring(5);
 			response.setStatus(BBRUtil.errorResponseCode);
 		}
 		response.setContentType("text/plain");  

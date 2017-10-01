@@ -38,4 +38,7 @@ public class BBRErrors {
 	public static final String ERR_GROUP_NOT_SPECIFIED = "ERR_GROUP_NOT_SPECIFIED";
 	public static final String ERR_ITEM_NOT_SPECIFIED = "ERR_ITEM_NOT_SPECIFIED";
 	public static final String ERR_PASSWORDS_DONT_MATCH = "ERR_PASSWORDS_DONT_MATCH";
+	public static final String ERR_NAME_MUST_BE_SPECIFIED =	"ERR_NAME_MUST_BE_SPECIFIED";
+	public static final String ERR_EMAIL_MUST_BE_SPECIFIED = "ERR_EMAIL_MUST_BE_SPECIFIED";
+	public static final String ERR_ALL_FIELDS_MUST_BE_FILLED = "ERR_ALL_FIELDS_MUST_BE_FILLED";
 }

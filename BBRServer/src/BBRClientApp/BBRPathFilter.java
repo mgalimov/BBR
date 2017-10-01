@@ -65,7 +65,7 @@ public class BBRPathFilter implements Filter {
 	    			}
 	    		} else
     				response.sendRedirect(selectShopPage);
-	    	}
+	    	} else
 	    	if (path.startsWith(start)) {
 				response.sendRedirect(startPage);
 	    	} else
