@@ -44,7 +44,7 @@ public class BBRPathFilter implements Filter {
 	    	}
 	    	
 	    	String book = "/book";
-	    	String start = "/start2";
+	    	String start = "/start";
 	    	String selectShopPage = cont + "/general-select-shop.jsp";
 	    	String planVisitPage = cont + "/general-plan-visit.jsp";
 	    	String startPage = cont + "/general-start.jsp";
