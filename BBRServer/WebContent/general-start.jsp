@@ -120,14 +120,16 @@
 				</div>
 			</div>
 	</div>
-	<div class="center-box-map" style="display: none; z-index: 1000" id="mapbox">
-		<div id="mapCtrl">
-			<a href="#shop" class="btn btn-default pull-right" id="closeMapBtn" style="z-index: 1">
-				<span class="glyphicon glyphicon-remove"></span> ${context.gs("BTN_CLOSE_MAP")}
-			</a>
-			&nbsp;&nbsp;
+	<div id="back" style="background-color: rgba(7,7,7,0.3); display: none; z-index: 999; position: absolute; top: 0; left: 0; width: 100%; height: 100%">
+		<div class="center-box-map" style="display: none; z-index: 1000" id="mapbox">
+			<div id="mapCtrl">
+				<a href="#shop" class="btn btn-default pull-right" id="closeMapBtn" style="z-index: 1">
+					<span class="glyphicon glyphicon-remove"></span> ${context.gs("BTN_CLOSE_MAP")}
+				</a>
+				&nbsp;&nbsp;
+			</div>
+			<div style="height: 100%; width: 100%; border: solid 3px #444;" id="map"></div>
 		</div>
-		<div style="height: 100%; width: 100%;" id="map"></div>
 	</div>
 </body>
 
@@ -224,12 +226,19 @@
  		});
  		
  		$("#mapBtn").click(function () {
+ 			$("#back").css("display", "block");
  			$("#mapbox").css("display", "block");
 			$(document).keyup(function (e) {
  				if (e.keyCode == 27)
  					$("#closeMapBtn").click();
  			});
- 			
+			$("#back").click(function () {
+				$("#closeMapBtn").click();
+			});	
+			$("#mapbox").click(function (e) {
+				e.stopPropagation();
+			});	
+			
  			$.get("http://maps.googleapis.com/maps/api/geocode/json?address="+$("#countryInput").val()+","+$("#cityInput").val(), function (r) {
  					if (r && r.results && r.results[0]) {
  						lat = r.results[0].geometry.location.lat * 1;
@@ -247,6 +256,7 @@
  		
  		$("#closeMapBtn").click(function () {
  			$("#mapbox").css("display", "none");
+ 			$("#back").css("display", "none");
 			$(document).keyup(null);
  		});
  		
@@ -303,6 +313,10 @@
 		$("#nextBtn").removeClass("disable");
 		$("#nextBtn").removeClass("hide");
 		$("#finishBtn").addClass("hide");
+		$(document).keyup(function (e) {
+				if (e.keyCode == 13)
+					$("#nextBtn").click();
+			});
 	}
 	
 	function fillShopInfo() {
@@ -312,6 +326,10 @@
 		$("#finishBtn").removeClass("disable");
 		$("#nextBtn").addClass("hide");
 		$("#finishBtn").removeClass("hide");
+		$(document).keyup(function (e) {
+			if (e.keyCode == 13)
+				$("#finishBtn").click();
+		});	
 	}
 	
 	function initMap() {
@@ -339,7 +357,7 @@
 				findTZ(lat, lon);
 	    	});
 			
-	    	map.controls[google.maps.ControlPosition.RIGHT_TOP].push(document.getElementById("mapCtrl"));
+	    	map.controls[google.maps.ControlPosition.TOP_CENTER].push(document.getElementById("mapCtrl"));
 		}
 	}		
 
