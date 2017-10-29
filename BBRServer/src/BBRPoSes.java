@@ -182,8 +182,12 @@ public class BBRPoSes extends BBRBasicServlet<BBRPoS, BBRPoSManager> {
 
 			String res = "";
 			for (Object[] line : list) {
-				String swh = df.format((Date)line[5]);
-				String ewh = df.format((Date)line[6]);
+				String swh = "";
+				String ewh = "";
+				if (line[5] != null)
+					swh = df.format((Date)line[5]);
+				if (line[6] != null)
+					ewh = df.format((Date)line[6]);
 				String ln = "{" +
 							"\"id\": \"" + line[0] + "\"," +  
 							"\"title\": \"" + line[1] + "\"," + 
