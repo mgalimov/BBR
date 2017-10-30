@@ -3,6 +3,7 @@ package BBRAcc;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.Random;
 
 import org.hibernate.Session;
@@ -10,6 +11,7 @@ import org.hibernate.Session;
 import BBR.BBRDataManager;
 import BBR.BBRErrors;
 import BBR.BBRUtil;
+import BBRAcc.BBRShop.BBRShopStatus;
 
 public class BBRUserManager extends BBRDataManager<BBRUser> {
 
@@ -38,6 +40,12 @@ public class BBRUserManager extends BBRDataManager<BBRUser> {
         user.setShop(shop);
         user.setPos(pos);
         user.setLanguage(BBRAccReg.defaultLanguage);
+        user.setApprovalDate(new Date());
+        
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        byte[] digest = md.digest((firstName+lastName+user.getApprovalDate().toString()+Math.random()).getBytes());
+        user.setApprovalCode(digest.toString());
+        
         session.save(user);
 
         BBRUtil.commitTran(tr);
@@ -90,5 +98,39 @@ public class BBRUserManager extends BBRDataManager<BBRUser> {
     	return "(shop.id = " + shopId + " or pos.id = " + shopId + ")";
     };
     
+    public void disapprove(BBRUser user) {
+        boolean tr = BBRUtil.beginTran();
 
+        try {
+	    	BBRShop shop = user.getShop();
+	    	if (shop != null) {
+	    		shop.setStatus(BBRShopStatus.SHOPSTATUS_INACTIVE);
+	    		BBRShopManager smgr = new BBRShopManager();
+	    		smgr.delete(shop);
+	    	}
+	    	delete(user);
+        } catch (Exception ex) {
+        }
+
+        BBRUtil.commitTran(tr);
+    }
+
+    public BBRUser approve(BBRUser user) {
+        boolean tr = BBRUtil.beginTran();
+        Session session = BBRUtil.getSession();
+
+    	user.setApprovalDate(null);
+        session.save(user);
+
+        BBRUtil.commitTran(tr);
+    	return user;
+    }
+
+    public BBRUser checkUserForApproval(BBRUser user, String code) {
+    	if (code.equals(user.getApprovalCode()))
+    		return approve(user);
+    	else 
+    		disapprove(user);
+    	return null;
+    }
 }

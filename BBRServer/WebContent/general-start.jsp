@@ -101,7 +101,7 @@
 					<input type="text" id="urlIDInput" class="form-control" placeholder='${context.gs("LBL_YOUR_URL_ID")}' required/>
 				</div>
 				<div class="alert alert-info" id="alertUrlID">
-	    			<div id="alertUrlIDText">www.barbiny.ru/book/URL</div>
+	    			<div id="alertUrlIDText">${BBRUtil.wwwSite}/book/URL</div>
 				</div> 
 <%-- 				<label for="latInput">${context.gs("LBL_YOUR_POS_LOCATION")}</label> --%>
 				<form role="form" class="form-inline">
@@ -269,8 +269,8 @@
  		});
  		
  		$("#urlIDInput").change(function () {
- 			var h = "www.barbiny.ru/book/"+$("#urlIDInput").val();
- 			$("#alertUrlIDText").html("<a href='http://" + h + "'>" + h + "</a>");
+ 			var h = "${BBRUtil.wwwSite}" + "/book/" + $("#urlIDInput").val();
+ 			$("#alertUrlIDText").html("<a href='" + h + "'>" + h + "</a>");
  		});
  		
  		$("#cityInput").change(function () {

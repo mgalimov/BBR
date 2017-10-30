@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import BBR.BBRErrors;
 import BBR.BBRGPS;
+import BBR.BBRMailer;
 import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
 import BBRAcc.BBRPoSManager;
@@ -113,6 +114,8 @@ public class BBRSignUp extends HttpServlet {
 					shopObj = smgr.create(shop, "RU", tz, BBRShopStatus.SHOPSTATUS_ACTIVE);
 					posObj = pmgr.create(shopObj, pos, "", new BBRGPS(flat, flon), null, null, currency, tz, urlID, email, "", city, BBRPoSStatus.POSSTATUS_ACTIVE);
 					userObj = umgr.create(email, name, lastName, passwordRepeat, BBRUserRole.ROLE_SHOP_ADMIN, shopObj, posObj);
+					String link = "general-approve.jsp?userId=" + userObj.getId() + "&code=" + userObj.getApprovalCode();
+					BBRMailer.send(userObj.getEmail(), context.gs("MSG_APPROVE_TITLE"), context.gs("MSG_APPROVE_TEXT", name, lastName, link, 2));
 				} catch (Exception ex) {
 					if (shopObj != null) smgr.delete(shopObj);
 					if (posObj != null) pmgr.delete(posObj);

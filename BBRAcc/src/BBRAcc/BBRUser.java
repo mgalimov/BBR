@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Blob;
+import java.util.Date;
 
 import javax.persistence.*;
 
@@ -60,6 +61,12 @@ public class BBRUser extends BBRDataElement {
 	@Column(name="PHOTOEXT")
 	private String photoExt;
 	
+	@Column(name="APPR_DATE")
+	private Date approvalDate;
+
+	@Column(name="APPR_CODE")
+	private String approvalCode;
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -161,5 +168,21 @@ public class BBRUser extends BBRDataElement {
 
 	public void setPhotoExt(String photoExt) {
 		this.photoExt = photoExt;
+	}
+
+	public Date getApprovalDate() {
+		return approvalDate;
+	}
+
+	public void setApprovalDate(Date approvalDate) {
+		this.approvalDate = approvalDate;
+	}
+
+	public String getApprovalCode() {
+		return approvalCode;
+	}
+
+	public void setApprovalCode(String approvalCode) {
+		this.approvalCode = approvalCode;
 	}
 }

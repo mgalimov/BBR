@@ -135,7 +135,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 			        			"Контакты: " + visit.getUserContacts() + "\n" +
 			        			"Услуга: " + p + "\n" +
 			        			"Мастер: " + s + "\n" + "\n" + 
-			        			"http://my.barbiny.ru/manager-visit-edit.jsp?id=" + visit.getId());
+			        			BBRUtil.mySite + "/manager-visit-edit.jsp?id=" + visit.getId());
 		        	}
 		        	
 		        	String phones = visit.getPos().getSms();

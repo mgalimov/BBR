@@ -35,6 +35,9 @@ public class BBRUtil {
 	public static final int codeLength = 3;
 	
 	public static final int errorResponseCode = 700;
+	
+	public static final String mySite = "http://my.barbiny.ru";
+	public static final String wwwSite = "http://www.barbiny.ru";
 
     public static SessionFactory buildSessionFactory() {
     	SessionFactory sessionFactory = null;
