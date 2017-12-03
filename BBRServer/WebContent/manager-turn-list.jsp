@@ -77,44 +77,44 @@
 	<jsp:body>
 		<ul class="nav nav-pills">
 		  <li role="presentation" id="showGridBtn"><a href="#">${context.gs("LBL_TURNS_GRID_TITLE")}</a></li>
-		  <li role="presentation" id="showListBtn"><a href="#">${context.gs("LBL_TURNS_LIST_TITLE")}</a></li>
+<%-- 		  <li role="presentation" id="showListBtn"><a href="#">${context.gs("LBL_TURNS_LIST_TITLE")}</a></li> --%>
 		</ul>
 		<div id="gridDiv">
 			<h3>${context.gs("LBL_SPEC_TURNS_TITLE").concat(titleMod)}</h3>
 			<t:card-schedule-spec-turns posId="${posId}"/>
 		</div>
-		<div class="hide" id="listDiv">
-			<t:grid method="BBRTurns" editPage="manager-turn-edit.jsp" createPage="manager-turn-create.jsp" 
-					title="LBL_SPEC_TURNS_TITLE" titleModifier="${titleMod}" customToolbar="true">
-				<t:toolbar-group>
-					<t:toolbar-item label="LBL_GRID_CREATE_RECORD_BTN" id="create" icon="glyphicon-plus"></t:toolbar-item>	
-					<t:toolbar-item label="LBL_GRID_EDIT_RECORD_BTN" id="edit" icon="glyphicon-pencil" accent="btn-info"></t:toolbar-item>	
-					<t:toolbar-item label="LBL_GRID_DELETE_RECORD_BTN" id="delete" icon="glyphicon-trash" accent="btn-warning"></t:toolbar-item>
-				</t:toolbar-group>
-				<t:toolbar-group>	
-					<t:toolbar-item label="LBL_TOGGLE_ALL_TURNS" id="toggleAllTurnsBtn" />
-					<t:toolbar-item label="LBL_TOGGLE_FUTURE_TURNS" id="toggleFutureTurnsBtn" />
-				</t:toolbar-group>
-				<t:grid-item label="LBL_SPECIALIST" field="specialist.name" sort="asc"/>
-				<t:grid-item label="LBL_DATE" field="date" sort="desc"/>
-				<t:grid-item label="LBL_START_TIME" field="startTime" type="time" />
-				<t:grid-item label="LBL_END_TIME" field="endTime" type="time" />
-			</t:grid>
-		</div>
+<!-- 		<div class="hide" id="listDiv"> -->
+<%-- 			<t:grid method="BBRTurns" editPage="manager-turn-edit.jsp" createPage="manager-turn-create.jsp"  --%>
+<%-- 					title="LBL_SPEC_TURNS_TITLE" titleModifier="${titleMod}" customToolbar="true"> --%>
+<%-- 				<t:toolbar-group> --%>
+<%-- 					<t:toolbar-item label="LBL_GRID_CREATE_RECORD_BTN" id="create" icon="glyphicon-plus"></t:toolbar-item>	 --%>
+<%-- 					<t:toolbar-item label="LBL_GRID_EDIT_RECORD_BTN" id="edit" icon="glyphicon-pencil" accent="btn-info"></t:toolbar-item>	 --%>
+<%-- 					<t:toolbar-item label="LBL_GRID_DELETE_RECORD_BTN" id="delete" icon="glyphicon-trash" accent="btn-warning"></t:toolbar-item> --%>
+<%-- 				</t:toolbar-group> --%>
+<%-- 				<t:toolbar-group>	 --%>
+<%-- 					<t:toolbar-item label="LBL_TOGGLE_ALL_TURNS" id="toggleAllTurnsBtn" /> --%>
+<%-- 					<t:toolbar-item label="LBL_TOGGLE_FUTURE_TURNS" id="toggleFutureTurnsBtn" /> --%>
+<%-- 				</t:toolbar-group> --%>
+<%-- 				<t:grid-item label="LBL_SPECIALIST" field="specialist.name" sort="asc"/> --%>
+<%-- 				<t:grid-item label="LBL_DATE" field="date" sort="desc"/> --%>
+<%-- 				<t:grid-item label="LBL_START_TIME" field="startTime" type="time" /> --%>
+<%-- 				<t:grid-item label="LBL_END_TIME" field="endTime" type="time" /> --%>
+<%-- 			</t:grid> --%>
+<!-- 		</div> -->
 	</jsp:body>
 </t:wrapper>
 
 <script>
 $(document).ready(function (){
-	$("${turnsListBtn}").addClass("active");
+// 	$("${turnsListBtn}").addClass("active");
 	
-	$("#toggleAllTurnsBtn").click(function () {
-		clickHandler("toggleAllTurns", "#toggleAllTurnsBtn");
-	})
+// 	$("#toggleAllTurnsBtn").click(function () {
+// 		clickHandler("toggleAllTurns", "#toggleAllTurnsBtn");
+// 	})
 
-	$("#toggleFutureTurnsBtn").click(function () {
-		clickHandler("toggleFutureTurns", "#toggleFutureTurnsBtn");
-	})
+// 	$("#toggleFutureTurnsBtn").click(function () {
+// 		clickHandler("toggleFutureTurns", "#toggleFutureTurnsBtn");
+// 	})
 	
 	$("#showGridBtn").click(function () {
 		$("#gridDiv").removeClass("hide");
@@ -135,6 +135,13 @@ $(document).ready(function (){
 	else
 		$("#showListBtn").click();
 
+	window.addEventListener("pageshow", function (event) {
+		var historyTraversal = event.persisted || ( typeof window.performance != "undefined" && window.performance.navigation.type === 2 );
+		if (historyTraversal) {
+		   // window.location.reload();
+			updateTurns();
+		}
+	});
 });  
 
 function clickHandler(operation, btn) {
@@ -151,5 +158,6 @@ function clickHandler(operation, btn) {
     	$(btn).addClass("active");			
     });			
 }
+
 
 </script>

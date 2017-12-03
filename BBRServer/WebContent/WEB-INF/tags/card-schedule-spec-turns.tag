@@ -213,9 +213,9 @@
 			
 			$("td[id^='sp']").html("<a href='#' class='btn btn-default btn-xs' data-op='add'>+</a>");
 			
-			for (i = 0; i < turns.data.length; i++) {
-				turn = turns.data[i];
-				$("td[id^='sp'][data-spec='" + turn.specialist.id + "'][data-date='" + turn.date + "']").html("<a href='#' class='btn btn-link btn-xs' data-op='edit' data-id='"+turn.id+"'>"+turn.startTime+"&ndash;"+turn.endTime+"</a><a href='#' class='btn btn-warning btn-xs' data-op='del' data-id='"+turn.id+"'>x</a>");
+			for (i = 0; i < turns.length; i++) {
+				turn = turns[i];
+				$("td[id^='sp'][data-spec='" + turn[1] + "'][data-date='" + turn[2].substr(0, 10) + "']").html("<a href='#' class='btn btn-link btn-xs' data-op='edit' data-id='"+turn[0]+"'>"+turn[3].substr(11,5)+"&ndash;"+turn[4].substr(11,5)+"</a><a href='#' class='btn btn-warning btn-xs' data-op='del' data-id='"+turn[0]+"'>x</a>");
 			}
 			
 			$("td[id^='sp'] a").click(function () {

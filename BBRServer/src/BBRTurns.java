@@ -1,12 +1,12 @@
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Hashtable;
+import java.util.List;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import BBR.BBRDataSet;
 import BBR.BBRErrors;
 import BBR.BBRUtil;
 import BBRAcc.BBRPoS;
@@ -137,9 +137,9 @@ public class BBRTurns extends BBRBasicServlet<BBRTurn, BBRTurnManager> {
 				String startDate = params.get("startDate");
 				String endDate = params.get("endDate");
 				try {
-					BBRDataSet<BBRTurn> turns = manager.list("", "", 
+					List<Object[]> turns = manager.listWithSpecIdOnly("", "", 
 								"specialist.pos.id = " + pos.getId() + " and date >= '"+startDate+"' and date <= '"+endDate+"'");
-					return turns.toJson();
+					return BBRUtil.gson().toJson(turns);
 				} catch (Exception ex) {
 					return "";
 				}
