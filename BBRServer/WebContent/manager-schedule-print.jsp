@@ -152,10 +152,11 @@
 				while (!d.isAfter(ed, 'day')) {
 					rowD += "<td><b>" + d.format("dd DD") + "</b></td>"
 					rowC += "<td style='height: 80px;'>";
-					for (i = 0; i < turns.data.length; i++) {
-						if (moment(turns.data[i].date).isSame(d, 'day')) {
-							rowC += turns.data[i].specialist.name + ": " + 
-								    turns.data[i].startTime + " - " + turns.data[i].endTime + "<br/>";
+					for (i = 0; i < turns.length; i++) {
+						turn = turns[i];
+						if (moment(turn[2].substr(0, 10)).isSame(d, 'day')) {
+							rowC += turn[6] + ": " + 
+								    turn[3].substr(11,5) + " - " + turn[4].substr(11,5) + "<br/>";
 						}; 
 					}
 					rowC += "</td>"
@@ -179,9 +180,10 @@
 			if ("<%=type%>" == "table") {
 				html = "<%=specsTable%>";
 				$("#printPanel").html(html);
-				for (i = 0; i < turns.data.length; i++) {
-					cell = turns.data[i].startTime + " - " + turns.data[i].endTime; 
-					$("td[data-spec='" + turns.data[i].specialist.id + "'][data-date='" + turns.data[i].date + "']").html(cell);
+				for (i = 0; i < turns.length; i++) {
+					turn = turns[i];
+					cell = turn[3].substr(11,5) + " - " + turn[4].substr(11,5); 
+					$("td[data-spec='" + turn[1] + "'][data-date='" + turn[2].substr(0,10) + "']").html(cell);
 				}
 				$("td[data-top='t']").each(function () {
 					el = $(this);

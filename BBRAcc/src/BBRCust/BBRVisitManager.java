@@ -39,7 +39,8 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	@Override
 	public boolean checkBeforeUpdate(BBRVisit visit) throws Exception {
         if (visit.getProcedure() != null) {
-        	visit.setLength(visit.getProcedure().getLength());
+        	if (visit.getLength() < 0.01)
+        		visit.setLength(visit.getProcedure().getLength());
 	        visit.setFinalPrice(visit.getProcedure().getPrice());
         }
         if (visit.getLength() < minimalLength)
@@ -337,7 +338,7 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<String> getFreeTimesBySpec(Date date, String posId, String specId) throws Exception {
+	public List<String> getFreeTimesBySpec(Date date, String posId, String specId, String procId) throws Exception {
 		if (posId == null || posId.isEmpty()) return null;
 		if (specId == null || specId.isEmpty()) return null;
 
@@ -345,15 +346,20 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		List<Object[]> visitList = null;
         BBRPoSManager pmgr = new BBRPoSManager();
         BBRSpecialistManager smgr = new BBRSpecialistManager();
+        BBRProcedureManager prmgr = new BBRProcedureManager();
         BBRPoS pos;
         BBRSpecialist spec;
+        BBRProcedure proc;
         try {
         	pos = pmgr.findById(Long.parseLong(posId));
         	spec = smgr.findById(Long.parseLong(specId));
+        	proc = prmgr.findById(Long.parseLong(procId));
         	if (pos == null)
         		throw new Exception(BBRErrors.ERR_POS_NOTFOUND);
         	if (spec == null)
         		throw new Exception(BBRErrors.ERR_SPEC_MUST_BE_SPECIFIED);
+        	if (proc == null)
+        		throw new Exception(BBRErrors.ERR_PROC_NOTFOUND);
         } catch (Exception ex) {
         	throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
         }
@@ -438,18 +444,27 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
             for (int h = halfHour; h < halfHour + (int)((Float)v[1] * 2); h++)
             	hours[h] = 1;
         }
-        
+                
+        int len = (int) Math.round(proc.getLength() * 2);
         for (int h = 0; h < 48; h++) {
         	if (hours[h] == 0) {
-        		String freeTime = "" + (int)Math.floor(h / 2);
-        		if ((int)(Math.floor(h / 2) * 2) != h)
-        			freeTime += ":30";
-        		else {
-        			freeTime += ":00";
-        			freeTimes.add(freeTime);
+        		boolean b = true;
+        		for (int i = 0; i < len; i++)
+        			if (hours[h + i] > 0) {
+        				b = false;
+        				break;
+        			}
+        		if (b) {
+	        		String freeTime = "" + (int)Math.floor(h / 2);
+	        		if ((int)(Math.floor(h / 2) * 2) != h)
+	        			freeTime += ":30";
+	        		else
+	        			freeTime += ":00";
+	        		freeTimes.add(freeTime);
         		}
         	}
         }
+        
         
         return freeTimes;
 	}
@@ -574,14 +589,22 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
             	hours[h]++;
         }
         
+        int len = (int) Math.round(proc.getLength() * 2);
         for (int h = 0; h < 48; h++) {
         	if (hours[h] < specList.size()) {
-        		String freeTime = "" + (int)Math.floor(h / 2);
-        		if ((int)(Math.floor(h / 2) * 2) != h)
-        			freeTime += ":30";
-        		else {
-        			freeTime += ":00";
-        			freeTimes.add(freeTime);
+        		boolean b = true;
+        		for (int i = 0; i < len; i++)
+        			if (hours[h + i] >= specList.size()) {
+        				b = false;
+        				break;
+        			}
+        		if (b) {
+	        		String freeTime = "" + (int)Math.floor(h / 2);
+	        		if ((int)(Math.floor(h / 2) * 2) != h)
+	        			freeTime += ":30";
+	        		else
+	        			freeTime += ":00";
+	        		freeTimes.add(freeTime);
         		}
         	}
         }

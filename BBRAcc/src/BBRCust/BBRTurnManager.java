@@ -173,7 +173,7 @@ public class BBRTurnManager extends BBRDataManager<BBRTurn>{
 	     	   where = " where " + where;
 	   		
 	        Long count = (Long)session.createQuery("Select count(*) from " + typeName + where).uniqueResult();
-	        Query query = session.createQuery("Select id, specialist.id as specialistId, date, startTime, endTime, title from " + typeName + where + orderBy);
+	        Query query = session.createQuery("Select id, specialist.id as specialistId, date, startTime, endTime, title, specialist.name from " + typeName + where + orderBy);
 	        
 	        if (maxRowsToReturn > 0)
 	        	query.setMaxResults(maxRowsToReturn);

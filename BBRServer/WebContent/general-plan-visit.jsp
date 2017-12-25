@@ -81,7 +81,7 @@
 		</t:modal>
 		<div class="row">
 			<h3>${posCity} / ${posTitle}</h3>
-			<p>${posDescription}<br/>${posStartWorkHour} &#151; ${posEndWorkHour}</p>
+			<p><c:out value="${posDescription}" escapeXml="false"/><br/>${posStartWorkHour} &#151; ${posEndWorkHour}</p>
 			<p/>
 		</div>
 		<div class="row">
@@ -423,6 +423,10 @@
 	                html += "<a href='#' class='list-group-item' data-type='time' data-time='" + time + "'>" + time + "</a>";
 				}
 			}
+			$("#nameGroup").addClass("hide");
+			$("#contactGroup").addClass("hide");
+			$("#commentGroup").addClass("hide");
+			$("#finishBtn").addClass("hide");
 			$("#mainTab").html(html);
 			$("[data-type$=time]").click(function () {
 				$("#mainTab").html("");

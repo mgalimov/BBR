@@ -77,6 +77,7 @@
 	var length = 0;
 	var procedurePercent = 0;
 	var prevInfo = null;
+	var firstTime = true;
 
 	$(document).ready(function() {
 		posId = $("#posinput").val();
@@ -189,6 +190,8 @@
 		
 		$("#procedureinput").on("change", procChange);
 		$("#proceduresinput").on("change", procChange);
+		$(document).on("click", "#procedureinput ~ .selectize-control .selectize-input", function () {firstTime = false;});
+		$(document).on("click", "#proceduresinput ~ .selectize-control .selectize-input", function () {firstTime = false;});
 			
 		
 		function procChange() {
@@ -198,7 +201,7 @@
 			var prids1 = $("#proceduresinput").val(); 
 			if (prids1 != null && prids1 != "")
 				prids = prids + "," + prids1;
-
+			
 			var procIds = prids.split(",");
 			for (i = 0; i < procIds.length; i++) {
 				procId = procIds[i];
@@ -214,7 +217,9 @@
 	        		pr += d.price;
 	        		length = len;
 	        		price = pr;
-	        		$("#lengthinput").val(len)
+        			if ($("#lengthinput").val() == "" || !firstTime) {
+        				$("#lengthinput").val(len);
+        			}
 	        		$("#finalPriceinput").val(pr);
 	        		onChange();
 	        		

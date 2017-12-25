@@ -59,7 +59,7 @@ public class BBRSchedule extends HttpServlet {
 				String procId = params.get("proc");
 				List<String> freeTimes = null;
 				if (specId != null && !specId.isEmpty()) {
-					freeTimes = mgr.getFreeTimesBySpec(dateSelected, posId, specId);
+					freeTimes = mgr.getFreeTimesBySpec(dateSelected, posId, specId, procId);
 				} else
 					if (procId != null && !procId.isEmpty()) {
 						freeTimes = mgr.getFreeTimesByProc(dateSelected, posId, procId);
