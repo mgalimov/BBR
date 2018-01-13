@@ -16,3 +16,26 @@
 		</t:grid>
 	</jsp:body>
 </t:wrapper>
+
+<script>
+	var posId; 
+
+	$(document).ready(function() {
+		posId = $("#posinput").val();
+		
+		$("#shopposinput").on("change", function () {
+			newPosId = $("#shopposinput").val();
+			if (newPosId != posId) {
+				posId = newPosId;
+				inp = $("#procedureGroupinput")[0].selectize;
+				inp.clear();
+				inp.clearOptions();
+				inp.load(procedureGroupLoadInitialData);
+			}
+		});
+	});
+	
+	procedureGroupSetConstrains = function () {
+		return $("#shopposinput").val();
+	}
+</script>

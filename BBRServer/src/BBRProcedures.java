@@ -129,10 +129,26 @@ public class BBRProcedures extends BBRBasicServlet<BBRProcedure, BBRProcedureMan
 					BBRSpecialistManager smgr = new BBRSpecialistManager();
 					BBRSpecialist s = smgr.findById(Long.parseLong(specId));
 					String procIds = "";
-					for (BBRProcedure pr : s.getProcedures())
-						procIds += "," + pr.getId();
-					procIds = procIds.substring(1);
-					where += " and id in (" + procIds + ")";
+					String procGIds = "";
+					
+					if (s.getProcedures() != null) {
+						for (BBRProcedure pr : s.getProcedures())
+							procIds += "," + pr.getId();
+						if (!procIds.equals(""))
+							procIds = "(id in (" + procIds.substring(1) + "))";
+					}
+					
+					if (s.getProcedureGroups() != null) {
+						for (BBRProcedureGroup gr : s.getProcedureGroups())
+							procGIds += "," + gr.getId();
+						if (!procGIds.equals(""))
+							procGIds = "(procedureGroup.id in (" + procGIds.substring(1) + "))";
+					}
+					
+					if (!procIds.equals("") && !procGIds.equals(""))
+						procGIds = " or " + procGIds;
+					
+					where += " and (" + procIds + procGIds + ")";
 				}
 				
 				try {

@@ -19,6 +19,8 @@ import BBRClientApp.BBRParams;
 import BBRCust.BBRSpecialist;
 import BBRCust.BBRSpecialistManager;
 import BBRCust.BBRProcedure;
+import BBRCust.BBRProcedureGroup;
+import BBRCust.BBRProcedureGroupManager;
 import BBRCust.BBRProcedureManager;
 
 @WebServlet("/BBRSpecialists")
@@ -50,6 +52,7 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 		String startWorkHour = params.get("startWorkHour");
 		String endWorkHour = params.get("endWorkHour");
 		String procs = params.get("procedures");
+		String procGroups = params.get("procedureGroups");
 		Date startWH = null;
 		Date endWH = null;
 		SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullTimeFormat);
@@ -70,10 +73,23 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 					if (procedure != null) 
 						procedures.add(procedure);
 				}
-			} else
+			}
+
+			Set<BBRProcedureGroup> procedureGroups = new HashSet<BBRProcedureGroup>();
+			BBRProcedureGroupManager pgmgr = new BBRProcedureGroupManager();
+			if (!procGroups.equals("")) {
+				for (String procGroup : procGroups.split(",")) {
+					BBRProcedureGroup procedureGroup = pgmgr.findById(Long.parseLong(procGroup));
+					if (procedureGroups != null) 
+						procedureGroups.add(procedureGroup);
+				}
+			}
+
+			if (procGroups.equals("") && procs.equals(""))
 				throw new Exception(BBRErrors.ERR_PROC_NOTSPECIFIED);
-			
-			BBRSpecialist spec = manager.create(name, position, dailyAmount, procedurePercent, null, pos, status, startWH, endWH, procedures);
+
+			BBRSpecialist spec = manager.create(name, position, dailyAmount, procedurePercent, 
+												null, pos, status, startWH, endWH, procedures, procedureGroups);
 			return spec.getId().toString();
 		}
 		return "";
@@ -87,6 +103,7 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 		String startWorkHour = params.get("startWorkHour");
 		String endWorkHour = params.get("endWorkHour");
 		String procs = params.get("procedures");
+		String procGroups = params.get("procedureGroups");
 		int status = Integer.parseInt(params.get("status"));
 		String dailyAmountS = params.get("dailyAmount");
 		String procedurePercentS = params.get("procedurePercent");
@@ -124,9 +141,23 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 					if (procedure != null) 
 						procedures.add(procedure);
 				}
-			} else
+			}
+
+			Set<BBRProcedureGroup> procedureGroups = new HashSet<BBRProcedureGroup>();
+			BBRProcedureGroupManager pgmgr = new BBRProcedureGroupManager();
+			if (!procGroups.equals("")) {
+				for (String procGroup : procGroups.split(",")) {
+					BBRProcedureGroup procedureGroup = pgmgr.findById(Long.parseLong(procGroup));
+					if (procedureGroups != null) 
+						procedureGroups.add(procedureGroup);
+				}
+			}
+
+			if (procGroups.equals("") && procs.equals(""))
 				throw new Exception(BBRErrors.ERR_PROC_NOTSPECIFIED);
+			
 			spec.setProcedures(procedures);
+			spec.setProcedureGroups(procedureGroups);
 			
 			manager.update(spec);
 		}

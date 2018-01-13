@@ -272,18 +272,29 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 		List<Object[]> list = query.list();
 		BBRUtil.log.info(list.size());
 		
-		String selProc = "";
+		String selProc = "1";
+		String selGrProc = "1";
 		
 		if (procedureId != null && !procedureId.isEmpty()) {
-			selProc = "select spc.id " + 
-	                  "  from BBRSpecialist spc" + 
-			          " where spc.status = " + BBRSpecialistState.SPECSTATE_ACTIVE +
-			          "   and spc.pos.id = " + posId + 
-			          "   and (" + procedureId + " member of spc.procedures)";
-		
-			selProc = " case when (spec.id in (" + selProc + ")) then 1 else 0 end";
-		} else
-			selProc = "1";
+			BBRProcedureManager pmgr = new BBRProcedureManager();
+			BBRProcedure proc = pmgr.findById(Long.parseLong(procedureId));
+			
+			if (proc != null) {
+				selProc = "select spc.id " + 
+		                  "  from BBRSpecialist spc" + 
+				          " where spc.status = " + BBRSpecialistState.SPECSTATE_ACTIVE +
+				          "   and spc.pos.id = " + posId + 
+				          "   and (" + procedureId + " member of spc.procedures)";
+
+				selGrProc = "select spc.id " + 
+		                  "  from BBRSpecialist spc" + 
+				          " where spc.status = " + BBRSpecialistState.SPECSTATE_ACTIVE +
+				          "   and spc.pos.id = " + posId + 
+				          "   and (" + proc.getProcedureGroup().getId() + " member of spc.procedureGroups)";
+			
+				selProc = " case when (spec.id in (" + selProc + ") or spec.id in (" + selGrProc + ")) then 1 else 0 end";
+			}
+		};
 		
 		query = session.createQuery("select spec.id, turn.startTime, turn.endTime, " + selProc + 
 								    "  from BBRTurn turn right join turn.specialist as spec"+ 
@@ -506,7 +517,8 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        String where = " where turn.date >= '" + df.format(startOfDay) + "' and "
 	        			       + " turn.date <= '" + df.format(endOfDay) + "'";
 	        where += " and turn.specialist.pos.id = " + posId;
-	        where += " and (" + procId + " member of turn.specialist.procedures)";
+	        where += " and ((" + procId + " member of turn.specialist.procedures)";
+	        where += "   or (" + proc.getProcedureGroup().getId() + " member of turn.specialist.procedureGroups))";
 	        
 	        Query query = session.createQuery(select + from + where);
 			specList = query.list();
@@ -1021,7 +1033,8 @@ public class BBRVisitManager extends BBRDataManager<BBRVisit>{
 	        String where = " where turn.date >= '" + df.format(startOfDay) + "' and "
 	        			       + " turn.date <= '" + df.format(endOfDay) + "'";
 	        where += " and turn.specialist.pos.id = " + pos.getId();
-	        where += " and (" + proc.getId() + " member of turn.specialist.procedures)";
+	        where += " and ((" + proc.getId() + " member of turn.specialist.procedures)";
+	        where += "   or (" + proc.getProcedureGroup().getId() + " member of turn.specialist.procedureGroups))";
 	        
 	        Query query = session.createQuery(select + from + where);
 			specList = query.list();

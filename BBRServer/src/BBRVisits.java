@@ -93,7 +93,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				
 				context.planningVisit.setStatus(BBRVisitStatus.VISSTATUS_APPROVED);
 				manager.update(context.planningVisit);
-				
+				context.planningVisit = null;
 			} catch (Throwable ex) {
 				throw new Exception(BBRErrors.ERR_FILL_REQUIRED_FIELDS);
 			}
@@ -488,7 +488,7 @@ public class BBRVisits extends BBRBasicServlet<BBRVisit, BBRVisitManager> {
 				if (spec == null && proc == null)
 					throw new Exception(BBRErrors.ERR_RECORD_NOTFOUND);
 
-				if (proc != null) {
+				if (proc != null && spec == null) {
 					spec = manager.findSpecByTimeAndProc(timeScheduled, proc, pos);
 				}
 				

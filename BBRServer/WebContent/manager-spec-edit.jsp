@@ -13,7 +13,8 @@
 				<t:card-item label="LBL_SPEC_STATUS" type="select" field="status" options="OPT_SPEC_STATUS"/>
 				<t:card-item label="LBL_START_WORKHOUR" field="startWorkHour" type="time"/>
 				<t:card-item label="LBL_END_WORKHOUR" field="endWorkHour" type="time"/>
-				<t:card-item label="LBL_AVAILABLE_PROCEDURES" field="procedures" type="reference" referenceFieldTitle="title" referenceMethod="BBRProcedures" multiple="true" isRequired="required"/>
+				<t:card-item label="LBL_AVAILABLE_PROCGROUPS" field="procedureGroups" type="reference" referenceFieldTitle="title" referenceMethod="BBRProcedureGroups" multiple="true"/>
+				<t:card-item label="LBL_AVAILABLE_PROCEDURES" field="procedures" type="reference" referenceFieldTitle="title" referenceMethod="BBRProcedures" multiple="true"/>
 			</t:card-tab>
 			<t:card-tab label="LBL_PHOTO" id="photoTab" combined="true">
 				<t:card-item label="LBL_PHOTO" field="photo" type="picture" />
@@ -37,11 +38,19 @@
 				inp.clear();
 				inp.clearOptions();
 				inp.load(proceduresLoadInitialData);
+				inp = $("#procedureGroupsinput")[0].selectize;
+				inp.clear();
+				inp.clearOptions();
+				inp.load(procedureGroupsLoadInitialData);
 			}
 		});
 	});
 	
 	proceduresSetConstrains = function () {
+		return $("#posinput").val();
+	}
+	
+	procedureGroupsSetConstrains = function () {
 		return $("#posinput").val();
 	}
 	

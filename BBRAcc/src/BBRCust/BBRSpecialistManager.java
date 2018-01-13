@@ -25,7 +25,8 @@ public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
 
 	public BBRSpecialist create(String name, String position, Float dailyAmount, Float procedurePercent, 
 										 BBRUser user, BBRPoS pos, int status,
-										 Date startWorkHour, Date endWorkHour, Set<BBRProcedure> procedures) {
+										 Date startWorkHour, Date endWorkHour, Set<BBRProcedure> procedures,
+										 Set<BBRProcedureGroup> procedureGroups) {
         boolean tr = BBRUtil.beginTran();
         Session session = BBRUtil.getSession();
 
@@ -40,6 +41,7 @@ public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
         spec.setStartWorkHour(startWorkHour);
         spec.setEndWorkHour(endWorkHour);
         spec.setProcedures(procedures);
+        spec.setProcedureGroups(procedureGroups);
         session.save(spec);
 
         BBRUtil.commitTran(tr);

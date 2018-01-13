@@ -61,6 +61,14 @@ public class BBRSpecialist extends BBRDataElement {
 	})
 	private Set<BBRProcedure> procedures;
 	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "SPEC_PROCGROUP", joinColumns = {
+			@JoinColumn(name = "SPEC_ID")
+	}, inverseJoinColumns = {
+			@JoinColumn(name = "PROCGROUP_ID")
+	})
+	private Set<BBRProcedureGroup> procedureGroups;
+
 	@Column(name="PHOTO", columnDefinition="LONGBLOB")
 	private Blob photo;
 
@@ -140,7 +148,16 @@ public class BBRSpecialist extends BBRDataElement {
 	public void setProcedures(Set<BBRProcedure> procedures) {
 		this.procedures = procedures;
 	}
+	
+	public Set<BBRProcedureGroup> getProcedureGroups() {
+		return procedureGroups;
+	}
 
+	public void setProcedureGroups(Set<BBRProcedureGroup> procedureGroups) {
+		this.procedureGroups = procedureGroups;
+	}
+
+	
 	public Blob getPhoto() {
 		return photo;
 	}
