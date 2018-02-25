@@ -179,12 +179,12 @@ public class BBRSpecialists extends BBRBasicServlet<BBRSpecialist, BBRSpecialist
 				pos = pmgr.findById(Long.parseLong(constrains));
 			}
 		if (pos == null)
-			if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN || context.user.getRole() == BBRUserRole.ROLE_POS_SPECIALIST )
+			if (context.user.getRole() == BBRUserRole.ROLE_POS_ADMIN || context.user.getRole() == BBRUserRole.ROLE_POS_SPECIALIST)
 				pos = context.user.getPos();
 			else
 				if (context.user.getRole() == BBRUserRole.ROLE_SHOP_ADMIN)
 					shop = context.user.getShop();
 		
-		return manager.list(query, manager.getTitleField(), pos, shop).toJson();
+		return manager.list(query, manager.getTitleField(), pos, shop, true).toJson();
 	}
 }

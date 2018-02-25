@@ -31,6 +31,7 @@ public class BBRStockItemTranManager extends BBRDataManager<BBRStockItemTran> {
         tran.setPos(pos);
         tran.setType(type);
         tran.setDate(date);
+        tran.setQty(qty);
         session.save(tran);
 
         BBRUtil.commitTran(tr);

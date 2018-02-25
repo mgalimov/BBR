@@ -112,7 +112,7 @@ public class BBRStockItemTrans extends
 		
 		BBRStockItemTran tran = new BBRStockItemTran();
 		tran = parseParams(tran, params);
-		manager.create(tran.getItem(), tran.getPos(), tran.getSpecialist(), tran.getType(), tran.getDate(), tran.getQty());
+		tran = manager.create(tran.getItem(), tran.getPos(), tran.getSpecialist(), tran.getType(), tran.getDate(), tran.getQty());
 		return tran.getId().toString();
 	}
 

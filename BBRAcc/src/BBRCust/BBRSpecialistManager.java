@@ -51,6 +51,11 @@ public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
 	
     @SuppressWarnings({ "unchecked", "unused" })
 	public BBRDataSet<BBRSpecialist> list(String queryTerm, String sortBy, BBRPoS pos, BBRShop shop) {
+        return list(queryTerm, sortBy, pos, shop, false);
+    }
+
+    @SuppressWarnings({ "unchecked", "unused" })
+	public BBRDataSet<BBRSpecialist> list(String queryTerm, String sortBy, BBRPoS pos, BBRShop shop, boolean onlyActive) {
         boolean tr = BBRUtil.beginTran();
         
         Session session = BBRUtil.getSession();
@@ -62,6 +67,14 @@ public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
    			where = " where spec.name like '%" + queryTerm + "%'";
    		}
    		
+   		if (onlyActive) {
+   			if (where.equals(""))
+   				where = " where";
+   			else
+   				where += " and";	
+   			where += " spec.status = " + BBRSpecialistState.SPECSTATE_ACTIVE;
+   		}
+
    		if (pos != null) {
    			if (where.equals(""))
    				where = " where";
@@ -89,6 +102,7 @@ public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
 
         return new BBRDataSet<BBRSpecialist>(list, count);
     }
+
     
     @SuppressWarnings({ "unchecked", "unused" })
 	public BBRDataSet<BBRSpecialist> list(String queryTerm, String sortBy) {

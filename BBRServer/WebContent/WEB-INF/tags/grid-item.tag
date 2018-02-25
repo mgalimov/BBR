@@ -20,7 +20,7 @@
 	<c:set var="optarrK" value="" />
 	<c:set var="optarrV" value="" />
 	<c:forTokens items="${context.gs(options)}" delims="," var="option">
-		<c:set var="optarrK" value="${optarrK.concat(option.split(':')[0]).concat(',')}" />
+		<c:set var="optarrK" value="${optarrK.concat('\"').concat(option.split(':')[0]).concat('\",')}" />
 		<c:set var="optarrV" value="${optarrV.concat('\"').concat(option.split(':')[1]).concat('\",')}" />
 	</c:forTokens>
 	<c:set var="p1" value="" />
@@ -31,8 +31,14 @@
 			index = optarrK.indexOf(data);
 			if (index != -1)
 				return optarrV[index]; 
-			else 
-				return data;
+			else { 
+				dt = ').concat('\"\"').concat(' + data').concat(';
+				index = optarrK.indexOf(dt);
+				if (index != -1)
+					return optarrV[index]; 
+				else 
+					return data;
+			}
 		}
 	')}"/>
 </c:if>
