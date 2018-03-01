@@ -41,4 +41,5 @@ public class BBRErrors {
 	public static final String ERR_NAME_MUST_BE_SPECIFIED =	"ERR_NAME_MUST_BE_SPECIFIED";
 	public static final String ERR_EMAIL_MUST_BE_SPECIFIED = "ERR_EMAIL_MUST_BE_SPECIFIED";
 	public static final String ERR_ALL_FIELDS_MUST_BE_FILLED = "ERR_ALL_FIELDS_MUST_BE_FILLED";
+	public static final String ERR_BALANCE_EXCEEDED = "ERR_BALANCE_EXCEEDED";
 }

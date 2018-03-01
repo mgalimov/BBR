@@ -9,7 +9,9 @@
 			<t:card-item label="LBL_POS" type="reference" field="pos" referenceFieldTitle="title" referenceMethod="BBRPoSes" isRequired="true"/>
 			<t:card-item label="LBL_SPECIALIST" type="reference" field="specialist" referenceFieldTitle="name" referenceMethod="BBRSpecialists" />
 			<t:card-item label="LBL_QTY" field="qty" type="number" isRequired="true"/>
-			<t:card-item label="LBL_PARTY" field="party" type="reference" referenceFieldTitle="title" referenceMethod="BBRStockItemParties" isRequired="true"/>
+			<t:card-item label="LBL_PRICE" field="price" type="number" isRequired="true"/>
+			<t:card-item label="LBL_BESTBEFORE" field="bestBefore" type="date" isRequired="false"/>
+			<t:card-item label="LBL_DOC" field="doc" type="text" isRequired="false"/>
 		</t:card>
 	</jsp:body>
 </t:wrapper>

@@ -17,6 +17,8 @@ import BBRCust.BBRSpecialist;
 import BBRCust.BBRSpecialistManager;
 import BBRCust.BBRStockItem;
 import BBRCust.BBRStockItemManager;
+import BBRCust.BBRStockItemParty;
+import BBRCust.BBRStockItemPartyManager;
 import BBRCust.BBRStockItemTran;
 import BBRCust.BBRStockItemTranManager;
 
@@ -37,7 +39,8 @@ public class BBRStockItemTrans extends
 		String sDate = params.get("date");
 		String sType = params.get("type");
 		String sQty = params.get("qty");
-
+		String partyId = params.get("partyId");
+		
 		BBRStockItem item = null;
 		try {
 			BBRStockItemManager mgr = new BBRStockItemManager();
@@ -96,12 +99,22 @@ public class BBRStockItemTrans extends
 			}
 		}	
 		
+		BBRStockItemParty party = null;
+		if (partyId != null && !partyId.isEmpty())
+			try {
+				BBRStockItemPartyManager mgr = new BBRStockItemPartyManager();
+				party = mgr.findById(Long.parseLong(partyId));
+			} catch (Exception ex) {
+				throw new Exception(BBRErrors.ERR_BALANCE_EXCEEDED);
+			}
+
 		tran.setDate(date);
 		tran.setItem(item);
 		tran.setPos(pos);
 		tran.setQty(qty);
 		tran.setSpecialist(spec);
 		tran.setType(type);
+		tran.setParty(party);
 		
 		return tran;
 	}
@@ -112,8 +125,39 @@ public class BBRStockItemTrans extends
 		
 		BBRStockItemTran tran = new BBRStockItemTran();
 		tran = parseParams(tran, params);
-		tran = manager.create(tran.getItem(), tran.getPos(), tran.getSpecialist(), tran.getType(), tran.getDate(), tran.getQty());
-		return tran.getId().toString();
+
+		if (tran.getType() == 'A') {
+			String sPrice = params.get("price");
+			String sBestBefore = params.get("bestBefore");
+			String sDoc = params.get("doc");
+
+			Float price = null;
+			if (sPrice != null && !sPrice.isEmpty()) {
+				try {
+					price = Float.parseFloat(sPrice);
+				} catch (Exception ex) {
+					throw new Exception(BBRErrors.ERR_WRONG_INPUT_FORMAT);
+				}
+			}
+			
+			Date bestBefore = null;
+			if (sBestBefore != null && !sBestBefore.isEmpty()) {
+				try {
+					SimpleDateFormat df = new SimpleDateFormat(BBRUtil.fullDateTimeFormat);
+					bestBefore = df.parse(sBestBefore);
+				} catch (Exception ex) {
+					throw new Exception(BBRErrors.ERR_DATE_INCORRECT);
+				}
+			}	
+			tran = manager.create(tran.getItem(), tran.getPos(), tran.getSpecialist(), tran.getDate(), tran.getQty(), price, bestBefore, sDoc);
+		} else if (tran.getType() == 'S') {
+			tran = manager.create(tran.getItem(), tran.getPos(), tran.getSpecialist(), tran.getDate(), tran.getQty(), tran.getParty());
+		}
+
+		if (tran != null)
+			return tran.getId().toString();
+		else
+			return null;
 	}
 
 	@Override

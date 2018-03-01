@@ -34,6 +34,9 @@ public class BBRStockItemTran extends BBRDataElement {
 	@Column(name="QTY")
 	private Float qty;
 
+	@Column(name="PARTY")
+	private BBRStockItemParty party;
+
 	public Long getId() {
 		return id;
 	}
@@ -88,6 +91,14 @@ public class BBRStockItemTran extends BBRDataElement {
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public BBRStockItemParty getParty() {
+		return party;
+	}
+
+	public void setParty(BBRStockItemParty party) {
+		this.party = party;
 	}
 
 }
