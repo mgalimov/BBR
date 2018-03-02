@@ -60,6 +60,7 @@
 		<mapping class="BBRCust.BBRStockItemGroup"/>
 		<mapping class="BBRCust.BBRStockItem"/>
 		<mapping class="BBRCust.BBRStockItemTran"/>
+		<mapping class="BBRCust.BBRStockItemParty"/>
     </session-factory>
 
 </hibernate-configuration>
