@@ -34,7 +34,7 @@ public class BBRStockItemTran extends BBRDataElement {
 	@Column(name="QTY")
 	private Float qty;
 
-	@Column(name="PARTY")
+	@ManyToOne(fetch=FetchType.EAGER)
 	private BBRStockItemParty party;
 
 	public Long getId() {

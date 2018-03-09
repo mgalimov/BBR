@@ -49,7 +49,6 @@ public class BBRSpecialistManager extends BBRDataManager<BBRSpecialist>{
         return spec;
     }
 	
-    @SuppressWarnings({ "unused" })
 	public BBRDataSet<BBRSpecialist> list(String queryTerm, String sortBy, BBRPoS pos, BBRShop shop) {
         return list(queryTerm, sortBy, pos, shop, false);
     }

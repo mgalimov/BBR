@@ -19,10 +19,10 @@ public class BBRStockItemParty extends BBRDataElement {
 	@Column(name="TITLE")
 	private String title;
 
-	@Column(name="ITEM")
+	@ManyToOne(fetch=FetchType.EAGER)
 	private BBRStockItem item;
 
-	@Column(name="POS")
+	@ManyToOne(fetch=FetchType.EAGER)
 	private BBRPoS pos;
 
 	@Column(name="DATE")
